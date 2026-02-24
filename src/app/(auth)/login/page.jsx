@@ -3,7 +3,7 @@ import Login from "@/src/components/Auth/Login";
 
 export default function LoginPage() {
   return (
-    <section className="py-20">
+    <section className="">
        <Login></Login>
     </section>
   );
