@@ -9,12 +9,17 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "firebase": "^12.9.0",
+    "firebase-admin": "^13.6.1",
     "framer-motion": "^12.34.2",
     "leaflet": "^1.9.4",
+    "lucide-react": "^0.575.0",
     "next": "16.1.6",
+    "next-auth": "^4.24.13",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-dropzone": "^15.0.0",
+    "react-hot-toast": "^2.6.0",
     "react-leaflet": "^5.0.0"
   },
   "devDependencies": {
