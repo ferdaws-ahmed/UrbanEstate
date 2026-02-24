@@ -9,7 +9,7 @@ import {
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast"; // টোস্ট ইম্পোর্ট করুন
+import toast from "react-hot-toast";
 
 export const useRegisterLogic = () => {
   const [role, setRole] = useState(null); 
@@ -17,26 +17,21 @@ export const useRegisterLogic = () => {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  // ১. সোশ্যাল রেজিস্ট্রেশন (Google/GitHub)
+  // social registration (Google/GitHub)
   const handleSocialRegister = async (provider) => {
     if (!role) {
-      toast.error("Please select your role (Buyer/Seller) first! ✨", {
-        duration: 4000,
-        style: { borderRadius: '10px', background: '#333', color: '#fff' }
-      });
+      toast.error("Please select a role first!");
       return;
     }
 
     setLoading(true);
-    setError("");
-    
-    // লোডিং টোস্ট শুরু
-    const toastId = toast.loading("Connecting to social account...");
+    const toastId = toast.loading("Verifying with Google...");
 
     try {
       const result = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken();
-      
+
+      // direct send data: NextAuth 
       const response = await signIn("credentials", {
         idToken,
         role,
@@ -45,54 +40,44 @@ export const useRegisterLogic = () => {
         redirect: false,
       });
 
-      if (response?.error) throw new Error("Verification failed");
-      
-      // সাকসেস টোস্ট
-      toast.success(`Welcome ${result.user.displayName}! Redirecting...`, { id: toastId });
-      
-      router.push(role === "seller" ? "/sellproperty" : "/");
+      if (response?.error) throw new Error("NextAuth session failed");
+
+      toast.success("Login Successful!", { id: toastId });
+
+      router.refresh(); 
+      setTimeout(() => {
+        router.push(role === "seller" ? "/sellproperty" : "/");
+      }, 500);
+
     } catch (error) {
-      console.error("Social Error:", error);
-      toast.error("Registration failed. Please try again.", { id: toastId });
-      setError("Registration failed.");
+      console.error("Login Error:", error);
+      toast.error("Login failed! Please try again.", { id: toastId });
     } finally {
       setLoading(false);
     }
   };
 
-  // ২. ইমেইল রেজিস্ট্রেশন
+  // email register
   const handleEmailRegister = async (name, email, password) => {
-    if (!role) return toast.error("Choose a role (Buyer/Seller)!");
+    if (!role) return toast.error("Choose a role!");
     
     setLoading(true);
-    setError("");
-    
     const toastId = toast.loading("Creating your account...");
 
     try {
-      // ফায়ারবেসে একাউন্ট তৈরি
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
-      // প্রোফাইলে নাম সেভ
+      // name update
       await updateProfile(userCredential.user, { displayName: name });
 
-      // ইমেইল ভেরিফিকেশন পাঠানো
+      // send email verification
       await sendEmailVerification(userCredential.user);
       
-      // ইউনিক ডিজাইনড টোস্ট ফর ভেরিফিকেশন
-      toast.success(
-        (t) => (
-          <span>
-            <b>Verification email sent!</b> ✉️ <br />
-            Please check your inbox to activate account.
-          </span>
-        ), 
-        { id: toastId, duration: 6000 }
-      );
+      toast.success("Verification email sent! ✉️", { id: toastId });
 
       const idToken = await userCredential.user.getIdToken();
 
-      // NextAuth সেশন তৈরি
+      // Create NextAuth session (with roles that the backend developer will save in Mongo)
       const response = await signIn("credentials", {
         idToken,
         role,
@@ -103,16 +88,11 @@ export const useRegisterLogic = () => {
       if (!response.error) {
         setTimeout(() => {
           router.push(role === "seller" ? "/sellproperty" : "/");
-        }, 3000); // ইউজারকে টোস্ট পড়ার সময় দিতে সামান্য ডিলে
+        }, 2000);
       }
     } catch (err) {
-      let errorMessage = "Registration failed. Please try again.";
-      
-      if (err.code === "auth/email-already-in-use") {
-        errorMessage = "This email is already registered! 🛑";
-      } else if (err.code === "auth/weak-password") {
-        errorMessage = "Password is too weak! (Min 6 chars) 🔑";
-      }
+      let errorMessage = err.message;
+      if (err.code === "auth/email-already-in-use") errorMessage = "Email already in use! 🛑";
       
       toast.error(errorMessage, { id: toastId });
       setError(errorMessage);
@@ -121,12 +101,5 @@ export const useRegisterLogic = () => {
     }
   };
 
-  return { 
-    role, 
-    setRole, 
-    handleSocialRegister, 
-    handleEmailRegister, 
-    loading, 
-    error 
-  };
+  return { role, setRole, handleSocialRegister, handleEmailRegister, loading, error };
 };

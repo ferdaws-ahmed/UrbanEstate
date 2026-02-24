@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Mail, Lock, User, Github, Chrome, Building, UserCircle, Loader2 } from "lucide-react";
-// টোস্ট ইম্পোর্ট করার দরকার নেই এখানে, যদি আপনি লজিক ফাইল থেকে হ্যান্ডেল করেন
+
 
 const RegisterForm = ({ role, setRole, onSocialRegister, onEmailRegister, loading, error }) => {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
@@ -14,10 +14,10 @@ const RegisterForm = ({ role, setRole, onSocialRegister, onEmailRegister, loadin
   return (
     <div className="min-h-screen w-full bg-slate-50 dark:bg-[#0f172a] flex items-center justify-center p-4 sm:p-6 lg:p-8 transition-colors duration-500">
       
-      {/* মেইন কার্ড - Added Subtle Animation */}
+      {/* Main card - Added Subtle Animation */}
       <div className="w-full max-w-[1100px] bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col md:flex-row min-h-[600px] border border-slate-100 dark:border-slate-800 animate-in fade-in zoom-in duration-700">
         
-        {/* বাম পাশের ইমেজ সেকশন */}
+        {/* left side image section */}
         <div className="hidden md:flex md:w-1/2 bg-slate-900 dark:bg-slate-950 relative p-12 flex-col justify-between overflow-hidden">
           <div className="absolute inset-0 opacity-50 bg-[url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')] bg-cover bg-center hover:scale-110 transition-transform duration-[10s]"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent"></div>
@@ -38,7 +38,7 @@ const RegisterForm = ({ role, setRole, onSocialRegister, onEmailRegister, loadin
           </div>
         </div>
 
-        {/* ডান পাশের ফর্ম সেকশন */}
+        {/* right side form section */}
         <div className="w-full md:w-1/2 p-6 sm:p-10 lg:p-14 flex flex-col justify-center bg-white dark:bg-slate-900">
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Create Account</h2>
