@@ -1,6 +1,7 @@
 // app/api/auth/login/route.js
+
 import { connect } from "@/src/lib/dbConnect";
-const bcrypt = require("bcryptjs");
+import bcrypt from "bcryptjs";
 
 const userCollection = connect("users");
 

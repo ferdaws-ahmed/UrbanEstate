@@ -14,7 +14,7 @@ import SpaceReimaginer from "../components/home/SpaceReimaginer";
 import LiveSupportChat from "../components/home/LiveSupportChat";
 import BeforeAfterSlider from "../components/home/BeforeAfterSlider";
 import AIDecorator from "../components/home/AIDecorator";
-import FAQSection from "../Components/home/FAQSection";
+import FAQSection from "../components/home/FAQSection";
 
 // --- Dynamic Imports 
 
