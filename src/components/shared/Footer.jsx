@@ -82,7 +82,7 @@ const Footer = () => {
             
             <div className="grid grid-cols-1 gap-4 p-6 bg-white/[0.02] border border-white/5 rounded-[2rem] backdrop-blur-md font-light text-sm">
               <div className="flex items-center gap-4">
-                <FaMapMarkerAlt className="text-emerald-500" /> Baipayl, Dhaka Division, Bangladesh
+                <FaMapMarkerAlt className="text-emerald-500" /> Banani, Dhaka , Bangladesh
               </div>
               <div className="flex items-center gap-4">
                 <FaPhoneAlt className="text-emerald-500" /> +880 1234 567890
@@ -112,11 +112,11 @@ const Footer = () => {
           {/* 3. Newsletter & Socials */}
           <div className="lg:col-span-4 flex flex-col items-end">
             <div className="w-full space-y-10">
-              <div className="text-right">
+              <div className="text-right flex flex-col items-end">
                 <h3 className="text-white font-bold text-xl mb-4 flex items-center justify-end gap-2">
                   Join the Ecosystem
                 </h3>
-                <form className="relative" onSubmit={handleSubmit}>
+                <form className="relative w-full" onSubmit={handleSubmit}>
                   <input 
                     type="email" 
                     value={email}
@@ -129,7 +129,16 @@ const Footer = () => {
                     Submit <IoSend size={16} />
                   </button>
                 </form>
-                {isSubmitted && <p className="text-emerald-400 text-[10px] mt-2 animate-pulse font-bold tracking-widest uppercase">SUBMITTED!</p>}
+
+                {/* Updated Success Message */}
+                {isSubmitted && (
+                  <div className="mt-4 flex items-center gap-3 bg-emerald-900/40 border border-emerald-500/50 text-emerald-300 px-5 py-3 rounded-xl shadow-[0_0_15px_rgba(16,185,129,0.15)] transition-all animate-pulse">
+                    <IoShieldCheckmarkOutline size={20} className="text-[#cddfa0]" />
+                    <span className="text-sm font-medium tracking-wide">
+                      Successfully joined the ecosystem!
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-3 gap-3 w-fit ml-auto">
@@ -153,14 +162,12 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-[0.3em] font-bold">
           <span className="text-emerald-500/40">© {new Date().getFullYear()} Urban Estate Unit</span>
-          <div className="flex gap-6">
+          <div className="flex gap-6 mt-4 md:mt-0">
             <a href="#" className="hover:text-emerald-400 transition-colors">Privacy Protocol</a>
             <a href="#" className="hover:text-emerald-400 transition-colors">Terms of Unit</a>
           </div>
         </div>
       </div>
-
-    
     </footer>
   );
 };

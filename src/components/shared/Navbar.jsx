@@ -42,17 +42,22 @@ const Navbar = () => {
         { name: "Dashboard", path: "/dashboard" },
         { name: "Add Property", path: "/add-property" },
         { name: "My Listings", path: "/my-listings" },
+        { name: "Profile", path: "/profile" },
       ];
-    } else if (user?.role === "user") {
+    } 
+    
+
+    else if (user?.role === "user") {
       return [
         commonHome,
         { name: "Explore", path: "/properties" },
         { name: "Wishlist", path: "/wishlist" },
         { name: "My Bookings", path: "/bookings" },
+        { name: "Profile", path: "/profile" },
       ];
     }
     
-    // Default features if not logged in
+
     return [
       commonHome,
       { name: "Features", path: "/features" },
@@ -99,14 +104,18 @@ const Navbar = () => {
         <div className="hidden lg:flex items-center gap-5">
           {!user ? (
             <>
-              <Link href="/login" className="text-white font-bold text-[16px] hover:text-[#cddfa0] transition duration-300">Login</Link>
+              <Link href="/login" className="text-white font-bold text-[16px] hover:text-[#cddfa0] transition duration-300">Get Started</Link>
               <Link href="/signup" className="bg-[#cddfa0] text-[#0f2e28] px-7 py-2.5 rounded-md font-bold text-[16px] hover:bg-[#b8cc89] transition shadow-lg">Signup</Link>
             </>
           ) : (
             <div className="flex items-center gap-4">
-               <div className="text-right border-r border-white/10 pr-4">
-                  <p className="text-white font-bold text-sm leading-none">Dashboard</p>
-                  <p className="text-[#cddfa0] text-[10px] uppercase font-mono mt-1 tracking-tighter">{user.role} Access</p>
+               <div className="text-right border-r border-white/10 pr-4 flex flex-col items-end">
+                  <Link href="/profile" className="text-white font-bold text-sm leading-none hover:text-[#cddfa0] transition duration-300">
+                    My Profile
+                  </Link>
+                  <p className="text-[#cddfa0] text-[10px] uppercase font-mono mt-1 tracking-tighter">
+                    {user.role} Access
+                  </p>
                </div>
                <button 
                   onClick={() => setUser(null)}
@@ -127,13 +136,13 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Glass Design Mobile Sidebar (Dynamic) */}
-      <div className={`fixed top-0 right-0 h-screen w-full sm:w-80 bg-[#0f2e28]/60 backdrop-blur-[25px] border-l border-white/20 z-[105] transform transition-transform duration-500 ease-in-out lg:hidden
+      {/* Mobile Sidebar (Dynamic) */}
+      <div className={`fixed top-0 right-0 h-screen w-full sm:w-80 bg-[#0f2e28]/95 backdrop-blur-[25px] border-l border-white/20 z-[105] transform transition-transform duration-500 ease-in-out lg:hidden
         ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
         
         <div className="flex flex-col h-full p-10 justify-center relative">
           <button 
-            className="absolute top-8 right-8 text-4xl text-[#cddfa0] hover:rotate-90 transition-transform duration-300"
+            className="absolute top-8 right-8 text-4xl text-[#cddfa0]"
             onClick={() => setIsMenuOpen(false)}
           >
              <HiX />
@@ -153,25 +162,29 @@ const Navbar = () => {
             {!user ? (
               <>
                 <Link href="/login" onClick={() => setIsMenuOpen(false)} className="text-[#cddfa0] text-center font-bold text-xl py-3 border border-[#cddfa0]/30 rounded-xl">
-                  Login
+                  Get Started
                 </Link>
                 <Link href="/signup" onClick={() => setIsMenuOpen(false)} className="bg-[#cddfa0] text-[#0f2e28] text-center font-black text-xl py-4 rounded-xl shadow-lg">
                   Signup
                 </Link>
               </>
             ) : (
-              <button 
-                onClick={() => {setUser(null); setIsMenuOpen(false);}}
-                className="bg-red-500/20 text-red-500 border border-red-500/40 font-black text-xl py-4 rounded-xl"
-              >
-                Logout
-              </button>
+              <>
+                <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="text-[#cddfa0] text-center font-bold text-xl py-3 border border-[#cddfa0]/30 rounded-xl">
+                  My Profile
+                </Link>
+                <button 
+                  onClick={() => {setUser(null); setIsMenuOpen(false);}}
+                  className="bg-red-500/20 text-red-500 border border-red-500/40 font-black text-xl py-4 rounded-xl"
+                >
+                  Logout
+                </button>
+              </>
             )}
           </div>
         </div>
       </div>
 
-      {/* Mobile Backdrop Overlay */}
       {isMenuOpen && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-[4px] lg:hidden z-[102]" onClick={() => setIsMenuOpen(false)}></div>
       )}
