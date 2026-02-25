@@ -158,7 +158,7 @@ export default function PropertyMap() {
         <div className="inline-flex items-center gap-2 text-[#0f2e28] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-gray-200 mb-3 pointer-events-auto shadow-sm">
           <Navigation size={12} /> Live Real-Time View
         </div>
-        <h2 className="text-4xl lg:text-6xl font-black text-[#0f2e28] leading-tight drop-shadow-sm">
+        <h2 className="text-4xl lg:text-5xl font-black text-[#0f2e28] leading-tight drop-shadow-sm">
           Properties <span className="text-green-600 italic font-light">Near You</span>
         </h2>
       </div>
@@ -171,7 +171,6 @@ export default function PropertyMap() {
           >
             <div className="bg-white border border-gray-200 rounded-[2rem] overflow-hidden shadow-2xl">
               
-              {/* ফিক্সড: X বাটন এখন সবুজ (green-600) */}
               <button 
                 onClick={() => setSelectedProperty(null)} 
                 className="absolute top-4 right-4 z-40 w-8 h-8 bg-white/80 text-green-600 rounded-full flex items-center justify-center hover:bg-green-600 hover:text-white transition-all shadow-md border border-green-100"

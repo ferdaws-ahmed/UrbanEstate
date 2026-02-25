@@ -69,9 +69,7 @@ export default function TestimonialSlider() {
           </p>
         </div>
 
-        {/* 1. কন্টেইনারের হাইট একটু বাড়ানো হয়েছে
-          2. উপরের মার্জিন (mt-16) দেওয়া হয়েছে যাতে এভাটার ওভারল্যাপ না করে 
-        */}
+     
         <div className="relative h-[480px] w-full max-w-5xl mx-auto perspective-1000 flex items-center justify-center mt-16">
           
           <AnimatePresence initial={false}>
@@ -84,7 +82,7 @@ export default function TestimonialSlider() {
                   initial={false}
                   animate={style}
                   transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-                  // 3. કાર્ડের ভেতরের প্যাডিং ঠিক করা হয়েছে
+        
                   className="absolute w-[320px] md:w-[420px] bg-[#13332c]/90 backdrop-blur-2xl border border-[#cddfa0]/20 rounded-[2.5rem] px-10 pb-10 pt-14 text-center shadow-[0_30px_70px_rgba(15,46,40,0.5)] origin-center group overflow-visible"
                   style={{ transformStyle: "preserve-3d" }}
                 >
@@ -93,9 +91,7 @@ export default function TestimonialSlider() {
 
                   <Quote size={40} className="text-[#cddfa0]/30 absolute top-8 left-8" />
                   
-                  {/* 4. এভাটারের পজিশন ফিক্সড করা হয়েছে (top-0 এবং -translate-y-1/2) 
-                    যাতে এটি কার্ডের বর্ডারের ঠিক মাঝখানে থাকে এবং স্ট্রেচ না করে। 
-                  */}
+               
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 z-20">
                     <div className="absolute inset-0 bg-[#cddfa0] rounded-full animate-pulse blur-md opacity-80 shadow-[0_0_20px_#cddfa0]"></div>
                     <img src={t.avatar} alt={t.name} className="relative w-full h-full rounded-full border-4 border-[#13332c] object-cover shadow-xl" />

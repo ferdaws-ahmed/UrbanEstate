@@ -4,43 +4,47 @@ import React, { useState, useEffect, useRef } from "react";
 import properties from "../../data/properties";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Massive Knowledge Base (Expanded to cover 1100+ deep logic combinations)
+// Massive Smart Knowledge Base 
 const knowledgeBase = {
   greetings: {
-    keywords: ["hello", "hi", "hey", "greetings", "good morning", "how are you", "hru", "yo", "anyone there", "hey assistant", "support", "help me", "hi there"],
-    reply: "Hello! Welcome to the Urban Estate Support Hub. I am your AI concierge. How can I assist you with your property inquiry today?"
+    keywords: ["hello", "hi", "hey", "greetings", "good morning", "how are you", "hru", "yo", "anyone there", "hey assistant", "support", "help me", "hi there", "good evening", "good afternoon", "morning", "night", "whats up", "buddy"],
+    reply: "Hello! Welcome to the Urban Estate Support Hub. I'm doing great, thank you for asking! How can I assist you with your property inquiry today?"
   },
-  identity: {
-    keywords: ["who are you", "your name", "what is this", "bot", "ai", "robot", "automated", "developer", "platform", "agency"],
-    reply: "I am Urban Estate AI. I specialize in deep-market analysis, verified property discovery, and legal compliance insights for global real estate seekers."
+  personal: {
+    keywords: ["what are you doing", "what is your name", "who are you", "your name", "who made you", "where are you from", "are you human", "are you a robot", "what is your job", "what can you do", "doing now", "developer", "creator", "owner", "built you", "programmed", "founder"],
+    reply: "I am Urban Estate AI, your dedicated real estate concierge. Right now, I'm analyzing market trends to help you find your dream home! I was developed by a specialized MERN Stack engineer based in Baipayl, Dhaka."
+  },
+  location_personal: {
+    keywords: ["where do you live", "where are you", "your office", "where are you living", "where is your home", "address", "location", "place", "area", "baipayl", "dhaka", "bangladesh", "visit", "office address", "map", "direction"],
+    reply: "I live in the digital cloud, but my heart (and our main office) is in Baipayl, Dhaka Division, Bangladesh! You can also find us at our corporate unit in Banani, Road 11."
   },
   complex_buying: {
-    keywords: ["buy", "steps", "process", "procedure", "purchase", "guide", "method", "documentation", "agreement", "stamping", "notary", "handover", "possession", "closure", "book now", "how to buy", "requirements"],
-    reply: "Complex purchase flow: 1. Asset selection. 2. Chain-of-title verification. 3. MOU/Sales Agreement drafting. 4. Escrow or staged payment setup. 5. Government registration and physical possession handover."
+    keywords: ["buy", "steps", "process", "procedure", "purchase", "guide", "method", "how to buy", "requirements", "booking", "handover", "possession", "closure", "agreement", "rules", "policy"],
+    reply: "Our purchase flow is seamless: 1. Asset selection. 2. Title verification. 3. MOU drafting. 4. Escrow setup. 5. Registration and physical possession handover. We handle the paperwork for you!"
   },
-  hard_legal: {
-    keywords: ["legal", "document", "paper", "verified", "khatian", "mutation", "registration", "deed", "authentic", "title", "ownership", "dispute", "litigation", "verification", "encumbrance", "chain of title", "power of attorney", "poa", "succession", "heir", "land office", "tax record"],
-    reply: "Safety is paramount. We analyze CS, SA, RS, and BS Khatians, plus verify Succession Certificates and Power of Attorney (PoA) validity. Our experts ensure zero encumbrances and a 100% dispute-free title."
+  legal: {
+    keywords: ["legal", "document", "paper", "verified", "khatian", "mutation", "registration", "deed", "authentic", "title", "ownership", "dispute", "scam", "safe", "papers", "cs", "sa", "rs", "bs", "porcha", "dakhila"],
+    reply: "Safety is our priority. We verify all CS, SA, RS, and BS Khatians, Mutation records, and PoA validity to ensure every property is 100% dispute-free and authentic."
   },
-  financial_complex: {
-    keywords: ["loan", "emi", "bank", "installment", "interest", "finance", "mortgage", "price", "cost", "budget", "down payment", "funding", "monthly", "payment plan", "valuation", "tax", "vat", "stamp duty", "hidden cost", "ait", "registration fee", "equity"],
-    reply: "We facilitate 70-80% financing via major banks. Beyond the price, budget 10-12% for taxes, stamp duty, and registration fees. We provide full transparent cost-breakdowns including AIT and VAT."
+  finance: {
+    keywords: ["loan", "emi", "bank", "installment", "interest", "finance", "mortgage", "price", "cost", "budget", "down payment", "tax", "vat", "stamp duty", "hidden cost", "ait", "registration fee", "total amount"],
+    reply: "We facilitate 70-80% bank financing via major partners. Beyond the property price, budget an extra 10-12% for government taxes, stamp duty, and registration fees."
   },
-  investment_risk: {
-    keywords: ["investment", "roi", "return", "market", "trend", "future", "profit", "appreciation", "risk", "bubble", "inflation", "recession", "valuation", "yield", "capital gain", "rental income", "projection"],
-    reply: "Our AI predicts high appreciation (12-18%) in emerging hubs. We mitigate risks by avoiding overpriced zones and focusing on high-yield rental markets and infrastructure-growth corridors."
+  investment: {
+    keywords: ["investment", "roi", "return", "market", "trend", "future", "profit", "appreciation", "risk", "bubble", "valuation", "yield", "capital gain", "income", "growth"],
+    reply: "Real estate is a shield against inflation. Our AI predicts 12-18% annual appreciation in emerging infrastructure corridors like Dhaka and Miami. It's a high-yield choice."
   },
-  technical_specs: {
-    keywords: ["structural", "piling", "quality", "material", "architect", "engineer", "soil test", "building code", "safety", "earthquake", "fire safety", "generator", "substation", "lift", "cement", "steel", "fittings"],
-    reply: "Our listed properties adhere to strict building codes. We review structural designs, soil test reports, and ensure high-end specs like fire suppression systems, high-speed lifts, and heavy-load substations."
+  technical: {
+    keywords: ["structural", "piling", "quality", "material", "architect", "engineer", "soil test", "building code", "safety", "earthquake", "cement", "steel", "fittings", "substation", "generator", "lift"],
+    reply: "All listed properties adhere to strict building codes. We review soil tests, structural designs, and ensure high-end specs like earthquake resistance and heavy-load substations."
   },
-  market_comparison: {
-    keywords: ["compare", "better", "best area", "premium", "luxury vs affordable", "location choice", "where to stay", "area analysis", "neighbor", "environment"],
-    reply: "We provide side-by-side area comparisons. Whether you prioritize ROI, serenity, or connectivity, we analyze neighborhood security, accessibility, and utility stability to find your best fit."
+  support: {
+    keywords: ["contact", "phone", "email", "number", "human", "talk", "expert", "agent", "complain", "issue", "sa9079600@gmail.com", "manager", "whatsapp", "call", "helpdesk"],
+    reply: "For high-priority human intervention or direct help, reach our senior team at sa9079600@gmail.com or visit our Road 11, Banani office directly."
   },
-  support_fallback: {
-    keywords: ["contact", "phone", "email", "address", "office", "support", "help", "number", "human", "talk", "expert", "agent", "complain", "issue", "sa9079600@gmail.com", "manager"],
-    reply: "For high-priority human intervention or legal escalations, reach our senior team at sa9079600@gmail.com or visit our corporate office at Road 11, Banani, Dhaka."
+  real_estate_general: {
+    keywords: ["house", "villa", "apartment", "flat", "land", "plot", "commercial", "shop", "office space", "residential", "luxury", "affordable", "ready", "under construction"],
+    reply: "We have a vast collection of verified residential and commercial assets. Tell me your preferred area, budget, or bedroom count, and I will find the best match for you instantly."
   }
 };
 
@@ -82,14 +86,16 @@ export default function Chatbot() {
       let botReply = { type: "bot", text: "", data: [] };
       let foundKnowledge = false;
 
+      // Smart Context matching that finds keywords within any sentence structure
       for (let category in knowledgeBase) {
         if (knowledgeBase[category].keywords.some(key => userMsg.includes(key))) {
           botReply.text = knowledgeBase[category].reply;
           foundKnowledge = true;
-          break;
+          break; 
         }
       }
 
+      // Special logic for property search integration
       const query = parseQuery(userMsg);
       if (query.beds || query.maxPrice || query.city) {
         let matches = properties.slice();
@@ -98,14 +104,14 @@ export default function Chatbot() {
         if (query.city) matches = matches.filter((p) => p.title.toLowerCase().includes(query.city.toLowerCase()));
         
         if (matches.length > 0) {
-          botReply.text = `AI Search complete. I found ${matches.length} matching properties:`;
+          botReply.text = `AI Intelligence Scan complete. I found ${matches.length} premium properties matching your criteria:`;
           botReply.data = matches.slice(0, 2);
           foundKnowledge = true;
         }
       }
 
       if (!foundKnowledge) {
-        botReply.text = "This query requires expert analysis. I've logged this for our human consultants. Please contact us at sa9079600@gmail.com.";
+        botReply.text = "I'm specializing in Real Estate Intelligence, Legal Papers, and Market Analytics. Could you please specify your query? For example: 'Where is your home office?'";
       }
 
       setMessages((prev) => [...prev, botReply]);
@@ -115,7 +121,6 @@ export default function Chatbot() {
 
   return (
     <>
-      {/* Refined Floating Button */}
       <div className="fixed right-6 bottom-6 z-[9999]">
         <motion.button 
           onClick={() => setOpen(!open)} 
@@ -138,7 +143,6 @@ export default function Chatbot() {
             style={{ height: dynamicHeight }}
             className="fixed right-6 bottom-24 z-[9999] w-[310px] bg-[#f8fafc] dark:bg-slate-900 rounded-[1.5rem] shadow-2xl border border-gray-200 dark:border-slate-700 flex flex-col overflow-hidden max-h-[500px]"
           >
-            {/* Header */}
             <div className="bg-[#0f2e28] p-3 text-white flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center">
@@ -147,18 +151,17 @@ export default function Chatbot() {
                 <div>
                   <div className="font-bold text-[12px] leading-tight text-emerald-50 uppercase tracking-widest">Support Hub</div>
                   <div className="flex items-center gap-1.5 text-[8px] text-emerald-400/80 uppercase font-bold">
-                    <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span> Expert Active
+                    <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span> AI Expert Active
                   </div>
                 </div>
               </div>
               <button onClick={() => setOpen(false)} className="text-xl opacity-60 hover:opacity-100 transition-opacity">×</button>
             </div>
 
-            {/* Chat Body */}
             <div className="flex-1 p-4 overflow-y-auto bg-emerald-50/10 dark:bg-slate-800 flex flex-col gap-4 min-h-0">
               {messages.length === 0 && (
                 <div className="bg-white dark:bg-slate-700 p-4 rounded-2xl text-[12px] text-gray-600 dark:text-gray-300 border border-emerald-100 dark:border-slate-600 shadow-sm italic text-center">
-                   Verified real estate support is active. <br/> Ask about: <b>"Legal Docs"</b> or <b>"Market Trends"</b>
+                    Verified real estate support is active. <br/> Ask: <b>"Who made you?"</b> or <b>"Where is your office?"</b>
                 </div>
               )}
               
@@ -192,7 +195,6 @@ export default function Chatbot() {
               <div ref={chatEndRef} />
             </div>
 
-            {/* Input Section */}
             <div className="p-4 bg-white dark:bg-slate-900 border-t border-emerald-50 dark:border-slate-700 shrink-0">
               <div className="relative flex items-center">
                 <input 

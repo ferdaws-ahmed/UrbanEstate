@@ -22,15 +22,15 @@ export default function PricePredictor() {
     offset: ["start end", "end start"]
   });
   
-  // एकदम আলট্রা স্মুথ (Ultra Smooth) করার জন্য ফিজিক্স আপডেট করা হয়েছে
+  
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 40,   // অনেক সফট করা হয়েছে
-    damping: 20,     // বাউন্স কমানো হয়েছে
-    mass: 0.5,       // একটু ভারী করা হয়েছে যাতে ধীরে মুভ করে
+    stiffness: 40,  
+    damping: 20,   
+    mass: 0.5,       
     restDelta: 0.001
   });
 
-  // মুভমেন্টের রেঞ্জ কমিয়ে আনা হয়েছে যাতে চোখে আরাম লাগে
+
   const yParallax = useTransform(smoothProgress, [0, 1], ["-10%", "10%"]);
 
   const loadChart = () => {
@@ -185,7 +185,7 @@ export default function PricePredictor() {
   return (
     <section ref={containerRef} className={`w-full relative py-24 px-6 lg:px-12 overflow-hidden ${manrope.className}`}>
       
-      {/* Parallax Background Image - willChange: "transform" যোগ করা হয়েছে GPU অ্যাক্সিলারেশনের জন্য */}
+      {/* Parallax Background Image - willChange */}
       <motion.div 
         style={{ y: yParallax, willChange: "transform" }}
         className="absolute inset-[-10%] w-[120%] h-[120%] -z-20 pointer-events-none"

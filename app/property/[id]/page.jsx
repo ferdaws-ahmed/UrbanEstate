@@ -1,328 +1,188 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 import properties from "../../../src/data/properties";
-import { useParams } from "next/navigation";
+import { 
+  Bed, Bath, Maximize, MapPin, 
+  Heart, Share2, ChevronLeft, 
+  ShieldCheck, Star, Calendar, MessageSquare, Radar, Activity
+} from "lucide-react";
+
+import Navbar from "../../../src/components/shared/Navbar"; 
+
 
 export default function PropertyPage() {
   const params = useParams();
+  const router = useRouter();
   const propertyId = Number(params.id);
   const property = properties.find((p) => p.id === propertyId);
+  
   const [selectedImage, setSelectedImage] = useState(0);
-  const [bookingModal, setBookingModal] = useState(false);
-  const [contactModal, setContactModal] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
-  if (!property) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Property Not Found</h1>
-          <p className="text-gray-600 mb-8">Sorry, the property you're looking for doesn't exist.</p>
-          <a href="/" className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">
-            Back to Home
-          </a>
-        </div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-  // Enhanced property data for display
-  const propertyDetails = {
-    ...property,
-    description: "Experience the pinnacle of luxury living in this exquisite property. Featuring modern architecture, premium finishes, and a spacious layout, this home is perfect for those who seek comfort and elegance.",
-    amenities: [
-      { icon: "⚙", label: "Smart Home System" },
-      { icon: "🏊", label: "Private Swimming Pool" },
-      { icon: "🔒", label: "24/7 Security" },
-      { icon: "💪", label: "Gym & Spa" },
-      { icon: "🌿", label: "Garden Access" },
-      { icon: "🚗", label: "Garage" },
-      { icon: "🎬", label: "Theater Room" },
-      { icon: "☕", label: "Luxury Kitchen" },
-    ],
-    highlights: [
-      "Modern architectural design",
-      "Premium quality finishes",
-      "Energy-efficient systems",
-      "Smart home automation",
-      "Scenic views",
-      "Master bedroom suite",
-    ],
-    gallery: [property.image, property.image, property.image, property.image],
-  };
+  if (!property) return <div className="h-screen bg-[#061510] flex items-center justify-center text-[#cddfa0] font-mono text-[10px] tracking-[0.4em]">INITIALIZING_DATA...</div>;
 
-  const similarProperties = properties
-    .filter((p) => p.id !== propertyId && Math.abs(p.price - property.price) < 500000)
-    .slice(0, 3);
+  const gallery = [
+    property?.image,
+    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80",
+    "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?w=800&q=80",
+    "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80"
+  ];
 
   return (
-    <main className="w-full bg-white">
-      {/* Navigation Bar */}
-      <nav className="bg-white shadow-sm sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <a href="/" className="text-2xl font-bold text-emerald-600">
-            RealEstate
-          </a>
-          <div className="flex items-center gap-4">
-            <button onClick={() => setSaved(!saved)} className={`px-4 py-2 rounded-lg font-medium transition-all ${saved ? "bg-red-100 text-red-600" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}>
-              {saved ? "❤ Saved" : "🤍 Save"}
-            </button>
-            <a href="/" className="text-gray-600 hover:text-gray-900">
-              Back to Listings
-            </a>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-gradient-to-b from-[#0a2e26] to-[#061510] text-white selection:bg-[#cddfa0] selection:text-[#061510]">
+ 
+      <Navbar />
 
-      {/* Image Gallery */}
-      <section className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="md:col-span-3">
-            <div className="relative rounded-xl overflow-hidden bg-gray-200 h-96 md:h-[500px]">
-              <img
-                src={propertyDetails.gallery[selectedImage]}
-                alt={`Property view ${selectedImage + 1}`}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute top-4 left-4 px-4 py-2 bg-emerald-500 text-white rounded-full font-semibold text-sm">
-                Featured Property
+      <main className="max-w-7xl mx-auto px-6 pt-32 pb-20 relative">
+        
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#cddfa0]/5 blur-[150px] rounded-full pointer-events-none"></div>
+
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 relative z-10">
+          <div className="space-y-3">
+            <button 
+              onClick={() => router.back()}
+              className="flex items-center gap-2 text-[#cddfa0]/40 font-bold text-[9px] uppercase tracking-[0.3em] hover:text-[#cddfa0] transition-all group"
+            >
+              <ChevronLeft size={12} className="group-hover:-translate-x-1 transition-transform" /> Back to Grid
+            </button>
+            
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.2em] text-[8px] uppercase bg-white/5 px-3 py-1 rounded-full border border-white/10 shadow-[0_0_15px_rgba(205,223,160,0.1)]">
+                <Radar size={10} className="animate-pulse" /> Asset ID: {property.id} // Verified
               </div>
+              <h1 className="text-3xl md:text-5xl font-black tracking-tighter leading-tight">
+                {property.title.split(' ')[0]} <span className="text-[#cddfa0] italic font-light">{property.title.split(' ').slice(1).join(' ')}</span>
+              </h1>
+            </div>
+
+            <div className="flex items-center gap-5 text-white/30 font-mono text-[9px] tracking-widest uppercase">
+              <span className="flex items-center gap-1.5"><MapPin size={12} className="text-[#cddfa0]" /> Sector 7, Dhaka [cite: 2026-02-25]</span>
+              <span className="flex items-center gap-1.5 text-emerald-400/50"><Activity size={12} /> Live Status: Available</span>
             </div>
           </div>
 
-          {/* Thumbnail Gallery */}
-          <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto">
-            {propertyDetails.gallery.map((img, idx) => (
-              <button
-                key={idx}
-                onClick={() => setSelectedImage(idx)}
-                className={`min-w-24 md:min-w-0 h-24 rounded-lg overflow-hidden border-2 transition-all ${
-                  selectedImage === idx ? "border-emerald-500 shadow-lg" : "border-gray-300"
-                }`}
+          <div className="flex items-center gap-3">
+            <button className="w-9 h-9 rounded-xl border border-white/5 bg-white/5 flex items-center justify-center hover:bg-[#cddfa0] hover:text-[#061510] transition-all">
+              <Share2 size={14} />
+            </button>
+            <button 
+              onClick={() => setIsSaved(!isSaved)}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-[9px] uppercase tracking-widest transition-all ${isSaved ? "bg-red-500 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)]" : "bg-[#cddfa0] text-[#061510] shadow-[0_10px_30px_rgba(205,223,160,0.2)] hover:scale-105"}`}
+            >
+              <Heart size={14} fill={isSaved ? "currentColor" : "none"} /> {isSaved ? "Secured" : "Bookmark Asset"}
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-16 relative z-10">
+          <div className="lg:col-span-9 h-[350px] md:h-[500px] rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl relative group bg-[#040f0c]">
+            <img 
+              src={gallery[selectedImage]} 
+              className="w-full h-full object-cover opacity-90 transition-all duration-[1.5s] group-hover:scale-105" 
+              alt="Architecture Scan"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#061510] via-transparent to-transparent opacity-60"></div>
+            
+            <div className="absolute top-6 right-6">
+                <span className="bg-black/60 backdrop-blur-md text-[#cddfa0] text-[7px] font-mono border border-white/10 px-2.5 py-1 rounded tracking-widest uppercase shadow-2xl">Camera Unit 0{selectedImage + 1} // ACTIVE</span>
+            </div>
+            <div className="absolute bottom-6 left-6 bg-[#061510]/80 backdrop-blur-2xl px-5 py-2.5 rounded-2xl border border-white/10 text-white flex items-center gap-3 shadow-2xl">
+               <ShieldCheck className="text-[#cddfa0]" size={14} />
+               <span className="text-[8px] font-black tracking-[0.3em] uppercase opacity-70">Structural scan complete</span>
+            </div>
+          </div>
+          
+          <div className="lg:col-span-3 flex lg:flex-col gap-4 overflow-x-auto">
+            {gallery.map((img, i) => (
+              <button 
+                key={i}
+                onClick={() => setSelectedImage(i)}
+                className={`flex-shrink-0 lg:flex-1 h-20 lg:h-auto rounded-[1.5rem] overflow-hidden border-2 transition-all duration-500 ${selectedImage === i ? "border-[#cddfa0] scale-95 shadow-[0_0_30px_rgba(205,223,160,0.2)]" : "border-white/5 opacity-30 hover:opacity-100"}`}
               >
-                <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                <img src={img} className="w-full h-full object-cover grayscale group-hover:grayscale-0" alt={`Angle 0${i+1}`} />
               </button>
             ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="md:col-span-2">
-            {/* Price & Title */}
-            <div className="mb-6">
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">{propertyDetails.title}</h1>
-              <div className="flex items-center justify-between">
-                <div className="text-4xl font-bold text-emerald-600">${propertyDetails.price.toLocaleString()}</div>
-                <div className="text-gray-500 flex items-center gap-2">
-                  📍 {property.lat.toFixed(4)}, {property.lng.toFixed(4)}
-                </div>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-10">
+          <div className="lg:col-span-8 space-y-12">
+            <div className="grid grid-cols-3 gap-4 md:gap-6">
+               {[
+                 { icon: Bed, label: "Sleep Units", val: property.beds },
+                 { icon: Bath, label: "Bath Systems", val: property.baths },
+                 { icon: Maximize, label: "Spatial Area", val: property.size }
+               ].map((spec, i) => (
+                 <div key={i} className="bg-white/[0.03] backdrop-blur-md p-6 md:p-8 rounded-[2rem] border border-white/5 hover:border-[#cddfa0]/20 transition-all group relative overflow-hidden">
+                    <spec.icon className="text-[#cddfa0]/60 mb-3 group-hover:scale-110 transition-transform" size={18} strokeWidth={1.5} />
+                    <div className="text-2xl font-black mb-1 tracking-tight">{spec.val}</div>
+                    <div className="text-[8px] font-bold text-white/20 uppercase tracking-widest">{spec.label}</div>
+                 </div>
+               ))}
             </div>
 
-            {/* Key Features - Large Cards */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
-              <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-lg p-6 border border-emerald-200">
-                <div className="text-3xl font-bold text-emerald-600">{propertyDetails.beds}</div>
-                <div className="text-sm text-gray-600 mt-1">Bedrooms</div>
-              </div>
-              <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-6 border border-blue-200">
-                <div className="text-3xl font-bold text-blue-600">{propertyDetails.baths}</div>
-                <div className="text-sm text-gray-600 mt-1">Bathrooms</div>
-              </div>
-              <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-6 border border-purple-200">
-                <div className="text-3xl font-bold text-purple-600">{propertyDetails.size}</div>
-                <div className="text-sm text-gray-600 mt-1">Area</div>
-              </div>
+            <div className="space-y-4">
+              <h3 className="text-md font-bold flex items-center gap-2.5 text-[#cddfa0] uppercase tracking-[0.2em]">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#cddfa0] animate-pulse"></div> Architectural Narrative
+              </h3>
+              <p className="text-lg text-white/50 leading-relaxed font-light italic">
+                Experience the pinnacle of modern intelligence in this <span className="text-white font-medium italic underline underline-offset-4 decoration-emerald-500/30">{property.title} in Sector 7</span>. This space integrates geospatial precision with unparalleled luxury aesthetics.
+              </p>
             </div>
 
-            {/* Description */}
-            <div className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">About This Property</h2>
-              <p className="text-gray-700 leading-relaxed text-lg mb-4">{propertyDetails.description}</p>
-              <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded">
-                <p className="text-emerald-900 font-medium">💡 Pro Tip: Schedule a virtual tour or arrange an in-person viewing to experience this property firsthand.</p>
-              </div>
-            </div>
-
-            {/* Highlights */}
-            <div className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Key Highlights</h2>
-              <ul className="grid grid-cols-2 gap-3">
-                {propertyDetails.highlights.map((highlight, idx) => (
-                  <li key={idx} className="flex items-center gap-3">
-                    <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
-                    <span className="text-gray-700">{highlight}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Amenities */}
-            <div className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Amenities & Features</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {propertyDetails.amenities.map((amenity, idx) => (
-                  <div key={idx} className="p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md hover:border-emerald-500 transition-all text-center">
-                    <div className="text-3xl mb-2">{amenity.icon}</div>
-                    <div className="text-xs font-medium text-gray-700">{amenity.label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Specifications Table */}
-            <div className="mb-8">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">Specifications</h2>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <tbody>
-                    <tr className="border-b">
-                      <td className="py-3 px-4 font-medium text-gray-700 bg-gray-50 w-1/3">Property Type</td>
-                      <td className="py-3 px-4 text-gray-600">Luxury Villa</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="py-3 px-4 font-medium text-gray-700 bg-gray-50">Year Built</td>
-                      <td className="py-3 px-4 text-gray-600">2023</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="py-3 px-4 font-medium text-gray-700 bg-gray-50">Parking</td>
-                      <td className="py-3 px-4 text-gray-600">2-Car Garage</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="py-3 px-4 font-medium text-gray-700 bg-gray-50">Heating</td>
-                      <td className="py-3 px-4 text-gray-600">Central HVAC</td>
-                    </tr>
-                    <tr>
-                      <td className="py-3 px-4 font-medium text-gray-700 bg-gray-50">Utilities</td>
-                      <td className="py-3 px-4 text-gray-600">Smart Metering</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          {/* Sidebar - Actions */}
-          <div className="md:col-span-1">
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24 border border-gray-200">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Get in Touch</h3>
-
-              {/* Contact Agent Card */}
-              <div className="mb-6 p-4 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-lg border border-emerald-200">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 mb-3"></div>
-                <div className="font-semibold text-gray-900">Emma Johnson</div>
-                <div className="text-sm text-gray-600">Senior Agent</div>
-                <div className="text-sm text-emerald-600 font-medium mt-2">📞 +1 (555) 123-4567</div>
-              </div>
-
-              {/* CTA Buttons */}
-              <button
-                onClick={() => setBookingModal(true)}
-                className="w-full px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg mb-3 transition-colors flex items-center justify-center gap-2"
-              >
-                📅 Schedule Tour
-              </button>
-
-              <button
-                onClick={() => setContactModal(true)}
-                className="w-full px-4 py-3 border-2 border-emerald-600 text-emerald-600 font-semibold rounded-lg hover:bg-emerald-50 transition-colors flex items-center justify-center gap-2 mb-3"
-              >
-                💬 Send Message
-              </button>
-
-              <button className="w-full px-4 py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors">
-                📞 Call Agent
-              </button>
-
-              {/* Property Stats */}
-              <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Price/sqft</span>
-                  <span className="font-semibold text-gray-900">${Math.round(propertyDetails.price / 500)}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Est. Monthly</span>
-                  <span className="font-semibold text-gray-900">${Math.round(propertyDetails.price / 360)}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Similar Properties */}
-        {similarProperties.length > 0 && (
-          <section className="mt-16 pt-16 border-t border-gray-200">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">Similar Properties</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {similarProperties.map((prop) => (
-                <a
-                  key={prop.id}
-                  href={`/property/${prop.id}`}
-                  className="rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all group"
-                >
-                  <div className="relative h-48 overflow-hidden bg-gray-200">
-                    <img src={prop.image} alt={prop.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-semibold text-lg text-gray-900 group-hover:text-emerald-600">{prop.title}</h3>
-                    <div className="text-emerald-600 font-bold text-xl mt-2">{prop.priceLabel}</div>
-                    <div className="text-sm text-gray-500 mt-2">
-                      {prop.beds} bed • {prop.baths} bath • {prop.size}
+            <div className="space-y-6">
+               <h3 className="text-md font-bold flex items-center gap-2.5 uppercase tracking-[0.2em]">
+                <div className="w-1.5 h-1.5 rounded-full bg-white/20"></div> Smart Infrastructure
+               </h3>
+               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                  {["Quantum Security", "AI Climate Control", "HEPA Filtration", "Solar Grid", "EV Interface", "Biometric Access"].map((item, i) => (
+                    <div key={i} className="flex items-center gap-3 p-3.5 bg-white/[0.01] rounded-xl border border-white/5 hover:bg-white/[0.03] transition-all">
+                       <ShieldCheck className="text-[#cddfa0]/50" size={12} />
+                       <span className="text-[9px] font-bold uppercase tracking-wider text-white/60">{item}</span>
                     </div>
-                  </div>
-                </a>
-              ))}
+                  ))}
+               </div>
             </div>
-          </section>
-        )}
-      </section>
+          </div>
 
-      {/* Booking Modal */}
-      {bookingModal && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Schedule a Tour</h2>
-              <button onClick={() => setBookingModal(false)} className="text-gray-400 hover:text-gray-600 text-2xl">
-                ✕
-              </button>
+          <div className="lg:col-span-4">
+            <div className="sticky top-32 bg-white/[0.02] backdrop-blur-3xl rounded-[2.5rem] p-8 md:p-10 border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.4)] space-y-10">
+              <div className="space-y-2">
+                <span className="text-[#cddfa0] text-[8px] font-bold uppercase tracking-[0.4em] opacity-40">Acquisition Value</span>
+                <div className="text-4xl md:text-5xl font-black tracking-tighter text-white">
+                  {property.priceLabel || `$${property.price.toLocaleString()}`}
+                </div>
+              </div>
+
+              <div className="space-y-3.5">
+                <button className="w-full bg-[#cddfa0] text-[#061510] py-4.5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white transition-all shadow-lg flex items-center justify-center gap-2.5 active:scale-95">
+                  <Calendar size={14} /> Schedule Intelligence Tour
+                </button>
+                <button className="w-full bg-transparent border border-white/10 text-white py-4.5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white/5 transition-all flex items-center justify-center gap-2.5 active:scale-95">
+                  <MessageSquare size={14} /> Connect with Unit
+                </button>
+              </div>
+
+              <div className="pt-8 border-t border-white/5 flex items-center gap-4">
+                 <div className="w-11 h-11 rounded-xl bg-[#cddfa0]/5 flex items-center justify-center text-[#cddfa0] border border-[#cddfa0]/10">
+                    <ShieldCheck size={18} />
+                 </div>
+                 <div className="space-y-0.5">
+                    <p className="font-bold text-white text-[9px] uppercase tracking-widest leading-none">Secured Protocol</p>
+                    <p className="text-[8px] text-white/20 font-bold uppercase tracking-widest mt-1">End-to-End Encryption</p>
+                 </div>
+              </div>
             </div>
-            <form className="space-y-4">
-              <input type="text" placeholder="Full Name" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-              <input type="email" placeholder="Email Address" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-              <input type="date" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-              <input type="time" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-              <button type="submit" className="w-full px-4 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700 transition-colors">
-                Confirm Tour
-              </button>
-            </form>
           </div>
         </div>
-      )}
+      </main>
 
-      {/* Contact Modal */}
-      {contactModal && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Send Message</h2>
-              <button onClick={() => setContactModal(false)} className="text-gray-400 hover:text-gray-600 text-2xl">
-                ✕
-              </button>
-            </div>
-            <form className="space-y-4">
-              <input type="text" placeholder="Full Name" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-              <input type="email" placeholder="Email Address" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500" />
-              <textarea placeholder="Your Message" rows="4" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
-              <button type="submit" className="w-full px-4 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700 transition-colors">
-                Send Message
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-    </main>
+    </div>
   );
 }

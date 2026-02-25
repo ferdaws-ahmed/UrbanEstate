@@ -7,7 +7,7 @@ import { Manrope } from "next/font/google";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
-// ১১ নম্বর ইমেজটি ফিক্স করা হয়েছে এবং অন্যান্য ডাটা ঠিক রাখা হয়েছে
+
 const localProperties = [
   { id: 1, title: "Azure Skyline Villa", price: "$2.5M", location: "Beverly Hills, CA", beds: 4, baths: 3, size: "3,200 sqft", image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80" },
   { id: 2, title: "Emerald Mansion", price: "$1.8M", location: "Miami, FL", beds: 5, baths: 4, size: "4,100 sqft", image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80" },
@@ -31,6 +31,7 @@ export default function SwipeDeck() {
   const [saved, setSaved] = useState([]);
   
   // Framer Motion Values for dragging
+
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-10, 10]);
   const opacityRight = useTransform(x, [50, 150], [0, 1]);
@@ -44,7 +45,7 @@ export default function SwipeDeck() {
     if (direction === "right") {
       setSaved((prev) => [...prev, current]);
     }
-    // right, left, বা skip যাই হোক না কেন, পরের কার্ডে চলে যাবে
+
     setIndex((prev) => Math.min(prev + 1, localProperties.length));
   };
 
@@ -89,7 +90,7 @@ export default function SwipeDeck() {
           <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-white/10 mb-6">
             <Fingerprint size={14} /> AI Property Match
           </div>
-          <h2 className="text-4xl lg:text-6xl font-black text-white mb-4 tracking-tight leading-tight">
+          <h2 className="text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight leading-tight">
             Discover Your <br /> <span className="text-[#cddfa0] italic font-light">Dream Home</span>
           </h2>
           <p className="text-white/60 font-medium text-lg mb-10 max-w-md mx-auto lg:mx-0">
