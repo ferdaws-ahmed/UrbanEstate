@@ -20,7 +20,7 @@ export default function AdminLayout({ children }) {
         >
           {children}
         </motion.main>
-      </div>
+      </div> 
     </div>
   );
 }
