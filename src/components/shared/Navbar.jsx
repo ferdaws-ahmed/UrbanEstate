@@ -104,8 +104,8 @@ const Navbar = () => {
         <div className="hidden lg:flex items-center gap-5">
           {!user ? (
             <>
-              <Link href="/login" className="text-white font-bold text-[16px] hover:text-[#cddfa0] transition duration-300">Get Started</Link>
-              <Link href="/signup" className="bg-[#cddfa0] text-[#0f2e28] px-7 py-2.5 rounded-md font-bold text-[16px] hover:bg-[#b8cc89] transition shadow-lg">Signup</Link>
+              <Link href="/register" className="text-white font-bold text-[16px] hover:text-[#cddfa0] transition duration-300">Get Started</Link>
+              <Link href="/login" className="bg-[#cddfa0] text-[#0f2e28] px-7 py-2.5 rounded-md font-bold text-[16px] hover:bg-[#b8cc89] transition shadow-lg">Login</Link>
             </>
           ) : (
             <div className="flex items-center gap-4">
@@ -161,11 +161,11 @@ const Navbar = () => {
           <div className="flex flex-col gap-4 mt-12 pt-10 border-t border-white/10">
             {!user ? (
               <>
-                <Link href="/login" onClick={() => setIsMenuOpen(false)} className="text-[#cddfa0] text-center font-bold text-xl py-3 border border-[#cddfa0]/30 rounded-xl">
+                <Link href="/register" onClick={() => setIsMenuOpen(false)} className="text-[#cddfa0] text-center font-bold text-xl py-3 border border-[#cddfa0]/30 rounded-xl">
                   Get Started
                 </Link>
-                <Link href="/signup" onClick={() => setIsMenuOpen(false)} className="bg-[#cddfa0] text-[#0f2e28] text-center font-black text-xl py-4 rounded-xl shadow-lg">
-                  Signup
+                <Link href="/login" onClick={() => setIsMenuOpen(false)} className="bg-[#cddfa0] text-[#0f2e28] text-center font-black text-xl py-4 rounded-xl shadow-lg">
+                  Login
                 </Link>
               </>
             ) : (
