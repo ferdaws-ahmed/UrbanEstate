@@ -54,7 +54,7 @@ const Navbar = () => {
     if (user?.role === "seller") {
       return [
         commonHome,
-        { name: "Add Property", path: "/add-property" },
+        { name: "Add Property", path: "/sellproperty" },
         allProperty,
       ];
     } 
@@ -136,13 +136,24 @@ const Navbar = () => {
                     <p className="text-[#cddfa0] text-[10px] font-mono mt-0.5 capitalize">{user.role} </p>
                   </div>
                   
-                  <Link href="/profile" onClick={() => setIsDropdownOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:text-white hover:bg-[#cddfa0]/10 transition-colors">
-                    <HiUser className="text-[#cddfa0]" /> <span className="text-sm font-medium">My Profile</span>
-                  </Link>
-                  
-                  <Link href="/dashboard" onClick={() => setIsDropdownOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:text-white hover:bg-[#cddfa0]/10 transition-colors">
-                    <HiCog className="text-[#cddfa0]" /> <span className="text-sm font-medium">Dashboard</span>
-                  </Link>
+                 <Link 
+      href={`/dashboard/${user?.role}/profile`} 
+      onClick={() => setIsDropdownOpen(false)} 
+      className="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:text-white hover:bg-[#cddfa0]/10 transition-colors"
+    >
+      <HiUser className="text-[#cddfa0]" /> 
+      <span className="text-sm font-medium">My Profile</span>
+    </Link>
+    
+    {/* Dynamic Dashboard Link */}
+    <Link 
+      href={`/dashboard/${user?.role}`} 
+      onClick={() => setIsDropdownOpen(false)} 
+      className="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:text-white hover:bg-[#cddfa0]/10 transition-colors"
+    >
+      <HiCog className="text-[#cddfa0]" /> 
+      <span className="text-sm font-medium">Dashboard</span>
+    </Link>
 
                   <div className="mt-2 pt-2 border-t border-white/5 px-2">
                     <button 

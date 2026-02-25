@@ -1,16 +1,17 @@
 "use client";
 
-import AdminSidebar from "@/components/dashboard/admin/AdminSidebar";
-import AdminTopbar from "@/components/dashboard/admin/AdminTopbar";
+import SellerSidebar from "@/src/components/dashboard/seller/SellerSidebar";
+import SellerTopbar from "@/src/components/dashboard/seller/SellerTopbar";
 import { motion } from "framer-motion";
 
-export default function AdminLayout({ children }) {
+
+export default function SellerLayout({ children }) {
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <AdminSidebar />
+    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-950 transition-all">
+      <SellerSidebar />
 
       <div className="flex-1 flex flex-col">
-        <AdminTopbar userName="Admin Khaled" />
+        <SellerTopbar />
 
         <motion.main
           initial={{ opacity: 0, y: 15 }}

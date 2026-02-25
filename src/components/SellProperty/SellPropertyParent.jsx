@@ -14,7 +14,7 @@ const SellPropertyParent = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mt-20 mx-auto">
         {/* Header Section */}
         <div className="mb-10 text-center md:text-left">
           <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
