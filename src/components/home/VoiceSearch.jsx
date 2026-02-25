@@ -7,7 +7,6 @@ import { Manrope } from "next/font/google";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
-// ১০০% ওয়ার্কিং রিয়েল এস্টেট ডামি ডাটা
 const localProperties = [
   { id: 1, title: "Azure Skyline Villa", price: "$2.5M", location: "Beverly Hills, CA", beds: 4, baths: 3, size: "3,200 sqft", image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80" },
   { id: 2, title: "Emerald Mansion", price: "$1.8M", location: "Miami, FL", beds: 5, baths: 4, size: "4,100 sqft", image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80" },
@@ -21,12 +20,46 @@ const localProperties = [
   { id: 10, title: "Serene Pine Villa", price: "$1.5M", location: "Portland, OR", beds: 3, baths: 2, size: "2,600 sqft", image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80" },
 ];
 
-const parsePriceToNumber = (priceStr) => {
-  if (!priceStr) return 0;
-  let num = parseFloat(priceStr.replace(/[^0-9.]/g, ""));
-  if (priceStr.toLowerCase().includes("m")) num *= 1000000;
-  if (priceStr.toLowerCase().includes("k")) num *= 1000;
-  return num;
+const aiKnowledgeBase = {
+  greetings: ["hello", "hi", "hey", "good morning", "good evening", "whatsapp", "yo"],
+  farewells: ["bye", "goodbye", "see you", "take care"],
+  identity: ["who are you", "your name", "what is this", "creator", "developer", "made you"],
+  status: ["how are you", "what's up", "you okay", "are you human"],
+  location_qst: ["where are you living", "where is your home", "location", "address", "baipayl", "dhaka"],
+  time: ["time", "date", "day", "today"],
+  property_buying: ["how to buy", "buying process", "purchase house", "can i buy", "step to buy"],
+  pricing: ["price", "cost", "cheap", "expensive", "how much", "value"],
+  mortgage: ["loan", "mortgage", "interest", "finance", "emi", "bank"],
+  amenities: ["bed", "bath", "swimming pool", "garage", "garden", "gym", "sqft", "size"],
+  locations: ["city", "area", "miami", "new york", "beverly hills", "london", "austin"],
+  features: ["features", "urban estate", "what can you do", "website", "technology", "react", "nextjs", "geospatial"],
+  security: ["safe", "secure", "verified", "ai scanning", "is it safe"],
+  contact: ["agent", "support", "help", "email", "phone", "contact"],
+};
+
+const getResponse = (text) => {
+  const t = text.toLowerCase();
+
+  if (aiKnowledgeBase.location_qst.some(k => t.includes(k))) return "I currently live within the Urban Estate digital cloud, but my roots and development are based in Baipayl, Dhaka Division, Bangladesh.";
+  if (aiKnowledgeBase.identity.some(k => t.includes(k))) return "I am the Urban Estate Intelligent Assistant, built by a passionate MERN Stack developer to redefine real estate.";
+  if (aiKnowledgeBase.greetings.some(k => t.includes(k))) return "Hello! I'm your Real Estate Assistant. I'm ready to find your dream home or answer any property questions. How can I help you today?";
+  if (aiKnowledgeBase.status.some(k => t.includes(k))) return "I'm functioning at peak efficiency! Analyzing properties and markets is what I do best. How are you doing?";
+  if (aiKnowledgeBase.time.some(k => t.includes(k))) return `The current system time is ${new Date().toLocaleTimeString()}. It's a great time to invest in property! [cite: 2026-02-25]`;
+  if (aiKnowledgeBase.farewells.some(k => t.includes(k))) return "Goodbye! Hope to see you back at Urban Estate soon. Have a wonderful day!";
+
+
+  if (t.includes("mortgage") || t.includes("loan") || t.includes("finance")) return "Mortgages are complex, but generally, you need a 20% down payment for the best rates. You can use our integrated EMI calculator for precise calculations.";
+  if (t.includes("buy") && t.includes("how")) return "Buying is simple: 1. Explore verified listings, 2. Check the structural integrity via our scanner, 3. Contact the assigned agent directly.";
+  if (t.includes("invest") || t.includes("wealth")) return "Real estate is a top-tier asset class for wealth building. Properties in Beverly Hills and New York are currently stable high-value options.";
+  if (t.includes("sell") || t.includes("listing")) return "If you want to sell, you can register as a Seller on our dashboard and list your property with AI-verified badges.";
+
+ 
+  if (t.includes("urban estate") || t.includes("this project") || t.includes("this website")) return "Urban Estate is a premium marketplace featuring AI-verified listings, geospatial micro-climate scanning, and intelligent voice search.";
+  if (t.includes("scanner") || t.includes("topo") || t.includes("integrity")) return "Our Aero-Topo Scanner analyzes terrain stability, flood risk, and micro-climate airflow for every property.";
+  if (t.includes("security") || t.includes("verified") || t.includes("safe")) return "Every property on Urban Estate undergoes a structural integrity scan. We ensure a secure transaction protocol.";
+  if (t.includes("tech") || t.includes("nextjs") || t.includes("mern")) return "This platform is built using the latest Next.js 14, Tailwind CSS, and Framer Motion for a seamless user experience.";
+
+  return `That's an interesting question about "${text}". While I'm specialized in Real Estate, I can help you find a 4-bed villa or explain our scanning technology. What would you like to explore?`;
 };
 
 export default function VoiceSearch() {
@@ -36,9 +69,24 @@ export default function VoiceSearch() {
   const [results, setResults] = useState([]);
   const [aiResponse, setAiResponse] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
   
   const recognitionRef = useRef(null);
+
+  const speak = (text) => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel(); 
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      utterance.volume = 1;
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        utterance.voice = voices.find(v => v.name.includes("Google US English")) || voices[0];
+      }
+      window.speechSynthesis.speak(utterance);
+    }
+  };
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -46,267 +94,162 @@ export default function VoiceSearch() {
       setSupported(false);
       return;
     }
-
     const recog = new SpeechRecognition();
     recog.lang = "en-US";
     recog.interimResults = true;
-    recog.maxAlternatives = 1;
-
     recog.onresult = (e) => {
-      let interim = "";
       let final = "";
       for (let i = e.resultIndex; i < e.results.length; ++i) {
-        const r = e.results[i];
-        if (r.isFinal) final += r[0].transcript;
-        else interim += r[0].transcript;
+        if (e.results[i].isFinal) final += e.results[i][0].transcript;
       }
-      
-      const currentText = final ? final : interim;
-      setTranscript(currentText);
-      
       if (final) {
+        setTranscript(final);
         processQuery(final);
       }
     };
-
     recog.onend = () => setListening(false);
     recognitionRef.current = recog;
+    if (typeof window !== "undefined" && window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
   }, []);
 
   const toggleListen = () => {
     if (listening) {
       recognitionRef.current?.stop();
-      setListening(false);
-      if (transcript) processQuery(transcript);
     } else {
+      window.speechSynthesis.cancel(); 
       setTranscript("");
-      setResults([]);
       setAiResponse("");
-      setHasSearched(false);
-      try {
-        recognitionRef.current?.start();
-        setListening(true);
-      } catch (e) {
-        console.error("Speech recognition error", e);
-      }
+      setResults([]);
+      recognitionRef.current?.start();
+      setListening(true);
     }
-  };
-
-  const parsePropertyQuery = (text) => {
-    const parsed = {};
-    const bedMatch = text.match(/(?:(\d+|one|two|three|four|five|six))\s*(?:bed|bedroom)/);
-    if (bedMatch) {
-      const numMap = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6 };
-      parsed.beds = isNaN(bedMatch[1]) ? numMap[bedMatch[1]] : Number(bedMatch[1]);
-    }
-
-    const priceMatch = text.match(/(?:under|below|max|maximum|cheap|less than)\s*(?:\$|of)?\s*(\d+(?:\.\d+)?)\s*(k|m|million|thousand)?/);
-    if (priceMatch) {
-      let rawNum = parseFloat(priceMatch[1]);
-      const multiplier = priceMatch[2];
-      if (multiplier === 'm' || multiplier === 'million') rawNum *= 1000000;
-      else if (multiplier === 'k' || multiplier === 'thousand') rawNum *= 1000;
-      else if (rawNum < 100) rawNum *= 1000000; 
-      parsed.maxPrice = rawNum;
-    }
-
-    const cities = ["beverly hills", "miami", "san francisco", "seattle", "new york", "austin", "london", "denver", "chicago", "portland"];
-    const foundCity = cities.find(city => text.includes(city));
-    if (foundCity) parsed.city = foundCity;
-
-    return parsed;
   };
 
   const processQuery = (queryText) => {
-    if (!queryText.trim()) return;
     setIsAnalyzing(true);
-    setHasSearched(true);
-    setResults([]);
-    
     setTimeout(() => {
       const text = queryText.toLowerCase();
-      
-      // Property Search Logic
-      const parsed = parsePropertyQuery(text);
-      let isPropertySearch = parsed.beds || parsed.maxPrice || parsed.city || text.includes("house") || text.includes("property") || text.includes("home");
+      const bedMatch = text.match(/(\d+)\s*(bed|bedroom)/);
+      const beds = bedMatch ? parseInt(bedMatch[1]) : null;
+      const cities = ["beverly hills", "miami", "san francisco", "seattle", "new york", "austin", "london"];
+      const city = cities.find(c => text.includes(c));
 
-      if (isPropertySearch) {
-        let list = [...localProperties];
-        let isStrictMatch = false;
+      const filtered = localProperties.filter(p => {
+        const matchesBed = beds ? p.beds >= beds : true;
+        const matchesCity = city ? p.location.toLowerCase().includes(city) : true;
+        return matchesBed && matchesCity;
+      });
 
-        if (parsed.beds) { list = list.filter((p) => p.beds >= parsed.beds); isStrictMatch = true; }
-        if (parsed.maxPrice) { list = list.filter((p) => parsePriceToNumber(p.price) <= parsed.maxPrice); isStrictMatch = true; }
-        if (parsed.city) { list = list.filter((p) => p.location.toLowerCase().includes(parsed.city)); isStrictMatch = true; }
-
-        if (!isStrictMatch) {
-          const keywords = text.split(" ");
-          list = localProperties.filter(p => keywords.some(kw => kw.length > 3 && (p.title.toLowerCase().includes(kw) || p.location.toLowerCase().includes(kw))));
-        }
-
-        setResults(list.slice(0, 6));
-        setAiResponse(list.length > 0 
-          ? `I found ${list.length} properties that match your request. Take a look below.` 
-          : "I couldn't find exact matches for that criteria right now. Could you broaden your search?");
-      } 
-      // General AI Q&A Logic (যেকোনো প্রশ্নের উত্তর)
-      else {
-        let reply = "";
-        if (text.includes("hello") || text.includes("hi ") || text === "hi") reply = "Hello! I'm your AI Real Estate Assistant. How can I help you today?";
-        else if (text.includes("who are you")) reply = "I am an advanced AI assistant built to help you find your dream home and answer your real estate questions.";
-        else if (text.includes("how are you")) reply = "I'm functioning perfectly! Ready to help you discover amazing properties.";
-        else if (text.includes("time")) reply = `The current time is ${new Date().toLocaleTimeString()}. A perfect time to look for a new home!`;
-        else if (text.includes("real estate")) reply = "Real estate is property consisting of land and the buildings on it. Investing in it is one of the best ways to build wealth!";
-        else if (text.includes("mortgage")) reply = "A mortgage is a loan used to purchase or maintain a home, where the property serves as collateral. Need help calculating one?";
-        else reply = `That's an interesting question about "${queryText}". As an AI, I specialize in real estate. Try asking me to find a "3 bed house in Miami under 2 million".`;
-        
-        setAiResponse(reply);
+      let finalResponse = "";
+      if (beds || city || text.includes("house") || text.includes("villa") || text.includes("property")) {
+        setResults(filtered.slice(0, 6));
+        finalResponse = filtered.length > 0 
+          ? `Searching assets... I've found ${filtered.length} properties matching your request. See the results below.` 
+          : "I couldn't find an exact match for that specific request. Would you like to try a different location?";
+      } else {
+        finalResponse = getResponse(queryText);
       }
-      
+
+      setAiResponse(finalResponse);
+      speak(finalResponse); 
       setIsAnalyzing(false);
-    }, 1500); // AI Thinking Delay
+    }, 1500);
   };
 
-  if (!supported) {
-    return (
-      <div className="w-full text-center py-10 bg-[#0f2e28] text-[#cddfa0]">
-        <p className="font-bold">⚠️ Voice Search is not supported in this browser. Try Chrome or Edge.</p>
-      </div>
-    );
-  }
+  if (!supported) return <div className="p-10 text-center bg-[#0f2e28] text-white">Browser not supported. Use Chrome or Edge.</div>;
 
   return (
-    <section className={`w-full py-24 px-6 lg:px-12 bg-[#0f2e28] min-h-screen flex flex-col items-center relative overflow-hidden ${manrope.className}`}>
-      
-      {/* Background ambient light */}
-      <div className={`absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] blur-[150px] rounded-full pointer-events-none transition-all duration-1000 ${listening ? 'bg-[#cddfa0]/10 scale-110' : 'bg-[#13332c]/50 scale-100'}`}></div>
+    <section className={`w-full py-24 px-6 lg:px-12 bg-[#0f2e28] min-h-screen relative overflow-hidden ${manrope.className}`}>
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] blur-[150px] rounded-full pointer-events-none bg-[#cddfa0]/5"></div>
 
       <div className="max-w-5xl mx-auto w-full relative z-10 flex flex-col items-center">
-        
-        {/* Header */}
         <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-white/10 mb-8">
-          <Sparkles size={14} /> AI Voice Assistant
+          <Sparkles size={14} /> Intelligence Voice Search
         </div>
 
-        <h2 className="text-4xl lg:text-6xl font-black text-white mb-4 tracking-tight text-center">
-          Ask Me <span className="text-[#cddfa0] italic font-light">Anything</span>
+        <h2 className="text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight text-center leading-none">
+          Urban Estate <span className="text-[#cddfa0] italic font-light">AI Voice</span>
         </h2>
         
-        <p className="text-white/60 text-center mb-12 max-w-md">
-          Talk to me like a real person. Ask for houses, or ask general questions!
+        <p className="text-white/60 text-center mb-12 max-w-lg">
+          Ask about the market, mortgage, our technology, or find your next home.
         </p>
 
-        {/* Big Interactive Mic Button */}
-        <div className="relative mb-16 flex justify-center items-center h-40">
+        <div className="w-full max-w-md h-16 flex items-center justify-center gap-1 mb-8 overflow-hidden">
+          {listening ? (
+            [...Array(25)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="w-1.5 bg-[#cddfa0] rounded-full shadow-[0_0_10px_#cddfa0]"
+                animate={{ height: [8, Math.random() * 50 + 15, 8] }}
+                transition={{ duration: 0.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.02 }}
+              />
+            ))
+          ) : (
+            <div className="flex items-center gap-1 opacity-20">
+              {[...Array(25)].map((_, i) => (
+                <div key={i} className="w-1.5 h-1.5 bg-[#cddfa0] rounded-full" />
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="relative mb-16 h-32 flex items-center justify-center">
           <AnimatePresence>
             {listening && (
-              <>
-                <motion.div initial={{ scale: 1, opacity: 0.8 }} animate={{ scale: 2.5, opacity: 0 }} transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut" }} className="absolute w-24 h-24 bg-[#cddfa0]/30 rounded-full" />
-                <motion.div initial={{ scale: 1, opacity: 0.8 }} animate={{ scale: 2, opacity: 0 }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.4, ease: "easeOut" }} className="absolute w-24 h-24 bg-[#cddfa0]/20 rounded-full" />
-              </>
+              <motion.div initial={{ scale: 1, opacity: 0.5 }} animate={{ scale: 3, opacity: 0 }} transition={{ repeat: Infinity, duration: 1.5 }} className="absolute w-20 h-20 bg-[#cddfa0]/20 rounded-full" />
             )}
           </AnimatePresence>
-
-          <button 
-            onClick={toggleListen}
-            className={`relative z-10 w-24 h-24 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 ${listening ? 'bg-[#cddfa0] text-[#0f2e28] scale-110 shadow-[0_0_40px_rgba(205,223,160,0.5)]' : 'bg-[#13332c] text-[#cddfa0] border border-white/10 hover:bg-white/10 hover:scale-105'}`}
-          >
+          <button onClick={toggleListen} className={`relative z-10 w-24 h-24 rounded-full flex items-center justify-center shadow-2xl transition-all ${listening ? 'bg-[#cddfa0] text-[#0f2e28] scale-110 shadow-[0_0_40px_rgba(205,223,160,0.5)]' : 'bg-[#13332c] text-[#cddfa0] hover:bg-white/10'}`}>
             {listening ? <Mic size={40} className="animate-pulse" /> : <MicOff size={40} />}
           </button>
         </div>
 
-        {/* Chat Interface Container */}
         <div className="w-full max-w-3xl space-y-6">
-          
-          {/* User's Input Box */}
-          <div className="w-full bg-[#13332c]/80 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl min-h-[100px] flex items-center justify-between mb-8">
-            <div className="flex-1">
-              <p className="text-sm text-[#cddfa0] font-bold uppercase tracking-widest mb-2 flex items-center gap-2">You <Mic size={14} /></p>
-              {transcript ? (
-                <p className="text-xl font-medium text-white leading-relaxed">{transcript}</p>
-              ) : (
-                <p className="text-lg font-medium text-white/30 italic">Click the mic and start speaking...</p>
-              )}
+          {transcript && (
+            <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10">
+              <span className="text-[10px] font-bold text-[#cddfa0] uppercase tracking-widest block mb-2 opacity-50">User Input</span>
+              <p className="text-xl text-white font-medium italic">"{transcript}"</p>
             </div>
-            {transcript && !listening && !isAnalyzing && (
-               <button onClick={() => processQuery(transcript)} className="ml-4 bg-[#cddfa0]/10 text-[#cddfa0] p-4 rounded-full hover:bg-[#cddfa0] hover:text-[#0f2e28] transition-all border border-[#cddfa0]/30">
-                  <Search size={24} />
-               </button>
-            )}
-          </div>
-
-          {/* AI Thinking State */}
-          {isAnalyzing && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
-              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-6 py-4 text-[#cddfa0] font-bold tracking-widest uppercase text-sm shadow-lg backdrop-blur-md">
-                <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
-                  <Loader2 size={20} />
-                </motion.div>
-                AI Analyzing Request...
-              </div>
-            </motion.div>
           )}
 
-          {/* AI Text Response */}
-          {!isAnalyzing && aiResponse && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex justify-start w-full">
-              <div className="w-full bg-[#cddfa0]/10 border border-[#cddfa0]/30 rounded-2xl p-6 shadow-xl backdrop-blur-md relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1 h-full bg-[#cddfa0]"></div>
-                <p className="text-sm text-[#cddfa0] font-black uppercase tracking-widest mb-3 flex items-center gap-2">
-                  <MessageSquareText size={16} /> AI Assistant
-                </p>
-                <p className="text-lg font-medium text-white leading-relaxed">{aiResponse}</p>
-              </div>
+          {isAnalyzing ? (
+            <div className="flex items-center gap-3 text-[#cddfa0] font-mono text-sm animate-pulse">
+              <Loader2 className="animate-spin" size={18} /> PROCESSING_NEURAL_DATA...
+            </div>
+          ) : aiResponse && (
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="bg-[#cddfa0]/10 border-l-4 border-[#cddfa0] p-6 rounded-r-2xl shadow-2xl backdrop-blur-md">
+               <p className="text-sm text-[#cddfa0] font-black uppercase tracking-widest mb-2 flex items-center gap-2">
+                <MessageSquareText size={16} /> AI Assistant Response
+              </p>
+              <p className="text-lg text-white leading-relaxed">{aiResponse}</p>
             </motion.div>
           )}
-
         </div>
 
-        {/* Property Search Results Grid */}
         {!isAnalyzing && results.length > 0 && (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full mt-12">
-            <h3 className="text-white/60 font-bold tracking-widest uppercase text-xs mb-6 border-b border-white/10 pb-4">
-              Found {results.length} Properties
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-              {results.map((r, i) => (
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.1 }} key={r.id} 
-                  className="bg-[#13332c] rounded-2xl overflow-hidden border border-white/10 shadow-xl group hover:border-[#cddfa0]/50 transition-all cursor-pointer"
-                >
-                  <div className="h-44 overflow-hidden relative">
-                    <img src={r.image} alt={r.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute top-3 left-3 bg-[#0f2e28]/90 backdrop-blur-md text-[#cddfa0] px-3 py-1.5 rounded-lg text-xs font-black shadow-lg">
-                      {r.price}
-                    </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 w-full">
+            {results.map((r) => (
+              <div key={r.id} className="bg-[#13332c] rounded-2xl overflow-hidden border border-white/10 group hover:border-[#cddfa0]/50 transition-all">
+                <div className="h-40 overflow-hidden relative">
+                  <img src={r.image} className="w-full h-full object-cover group-hover:scale-110 transition-duration-700" alt={r.title} />
+                  <div className="absolute top-2 left-2 bg-[#0f2e28] text-[#cddfa0] px-3 py-1 rounded-lg text-[10px] font-black">{r.price}</div>
+                </div>
+                <div className="p-5">
+                  <h4 className="text-white font-bold mb-1 truncate text-sm">{r.title}</h4>
+                  <p className="text-white/40 text-[9px] uppercase mb-4 flex items-center gap-1"><MapPin size={10} /> {r.location}</p>
+                  <div className="flex justify-between border-t border-white/5 pt-3">
+                    <div className="flex items-center gap-1 text-[9px] text-white/60"><BedDouble size={14}/> {r.beds}</div>
+                    <div className="flex items-center gap-1 text-[9px] text-white/60"><Bath size={14}/> {r.baths}</div>
+                    <div className="flex items-center gap-1 text-[9px] text-white/60"><Maximize size={14}/> {r.size.split(' ')[0]}</div>
                   </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-1 text-[#cddfa0] text-[10px] font-bold uppercase tracking-widest mb-2">
-                      <MapPin size={12} /> {r.location}
-                    </div>
-                    <h4 className="font-black text-white text-lg mb-4 truncate">{r.title}</h4>
-                    
-                    <div className="flex items-center justify-between border-t border-white/10 pt-4">
-                      <div className="flex items-center gap-1.5">
-                        <BedDouble size={16} className="text-white/40" />
-                        <span className="text-xs text-white/80 font-bold">{r.beds}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <Bath size={16} className="text-white/40" />
-                        <span className="text-xs text-white/80 font-bold">{r.baths}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <Maximize size={16} className="text-white/40" />
-                        <span className="text-xs text-white/80 font-bold">{r.size.split(" ")[0]}</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
-
       </div>
     </section>
   );

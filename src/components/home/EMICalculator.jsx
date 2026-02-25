@@ -20,7 +20,7 @@ export default function EMICalculator() {
   
   const [showModal, setShowModal] = useState(false);
 
-  // লজিক: লোন অ্যামাউন্ট ক্যালকুলেশন
+  
   const loanAmount = useMemo(() => {
     const p = Number(price) || 0;
     return Math.max(0, p * (1 - Number(downPercent) / 100));
@@ -29,7 +29,8 @@ export default function EMICalculator() {
   const monthlyRate = useMemo(() => Number(rate) / 100 / 12, [rate]);
   const months = useMemo(() => Number(years) * 12, [years]);
 
-  // লজিক: EMI ক্যালকুলেশন (০ ভ্যালু হ্যান্ডেল করার জন্য)
+  // EMI calculation
+  
   const emi = useMemo(() => {
     if (months <= 0) return 0;
     if (monthlyRate === 0) return loanAmount / months;
@@ -40,11 +41,8 @@ export default function EMICalculator() {
   const totalPayable = emi * months;
   const totalInterest = Math.max(0, totalPayable - loanAmount);
 
-  // বাটন ক্লিক হ্যান্ডলার
   const handleApplyLoan = () => {
     setShowModal(true);
-    
-    // আপনার চাহিদা অনুযায়ী সবগুলো ভ্যালু ০ করে দেওয়া হচ্ছে
     setDownPercent(0);
     setRate(0);
     setYears(0);
@@ -89,7 +87,7 @@ export default function EMICalculator() {
                 onClick={() => setShowModal(false)}
                 className="bg-[#0f2e28] text-[#cddfa0] px-10 py-4 rounded-full font-bold hover:scale-105 transition-transform"
               >
-               Apply
+                Apply
               </button>
             </motion.div>
           </div>
@@ -101,7 +99,7 @@ export default function EMICalculator() {
           <div className="inline-flex items-center gap-2 text-[#0f2e28] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/40 px-5 py-2 rounded-full border border-[#0f2e28]/10 mb-4">
             <Calculator size={14} /> Financial Planner
           </div>
-          <h2 className="text-4xl lg:text-6xl font-extrabold text-[#0f2e28] mb-4 tracking-tight">Smart EMI Calculator</h2>
+          <h2 className="text-4xl lg:text-5xl font-extrabold text-[#0f2e28] mb-4 tracking-tight">Smart EMI Calculator</h2>
           <p className="text-[#0f2e28]/70 font-medium text-lg">Calculate your monthly mortgage payments with precision.</p>
         </div>
 
@@ -181,7 +179,7 @@ export default function EMICalculator() {
                   key={emi}
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  className="text-4xl lg:text-5xl font-black relative z-10"
+                  className="text-4xl lg:text-6xl font-black relative z-10"
                 >
                   {formatCurrency(Math.round(emi))}
                 </motion.p>
@@ -222,7 +220,13 @@ export default function EMICalculator() {
               <h3 className="text-2xl font-black text-[#0f2e28] uppercase tracking-tight">Amortization Schedule</h3>
             </div>
             <div className="w-full overflow-hidden">
-               <AmortizationChart loanAmount={loanAmount} annualRate={rate} years={years} />
+             
+               <AmortizationChart 
+                 key={`${loanAmount}-${rate}-${years}`} 
+                 loanAmount={loanAmount} 
+                 annualRate={rate} 
+                 years={years} 
+               />
             </div>
           </div>
         </div>

@@ -4,23 +4,20 @@ import React, { useCallback, useMemo, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Polygon, Circle, Tooltip } from "react-leaflet";
 import L from "leaflet";
 
-// LifestyleTriangulation
-// - Left: interactive map with 3 draggable markers
-// - Right: list of properties filtered by distance to triangle centroid
-// Uses Haversine formula to compute distances (meters)
+
 
 export default function LifestyleTriangulation() {
-  // Center map on Dhaka
+
   const initialCenter = { lat: 23.7949, lng: 90.4043 };
 
-  // Initial marker positions (offset slightly from city center)
+  // Initial marker positions 
   const [markers, setMarkers] = useState([
     { id: "office", label: "My Office", lat: 23.7958, lng: 90.4043, color: "#1e40af" },
     { id: "partner", label: "Partner's Office", lat: 23.7939, lng: 90.4085, color: "#047857" },
     { id: "school", label: "Kid's School", lat: 23.7925, lng: 90.4012, color: "#b91c1c" },
   ]);
 
-  // Dummy property data (10 items around Dhaka)
+  // property data 
   const properties = useMemo(() => [
     { id: 1, title: "Gulshan Apartment", price: "$250,000", lat: 23.7975, lng: 90.405, image: "https://images.unsplash.com/photo-1560185007-5c3b5f9f7b35?q=80&w=800&auto=format&fit=crop" },
     { id: 2, title: "Banani Condo", price: "$350,000", lat: 23.7960, lng: 90.410, image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=800&auto=format&fit=crop" },
@@ -52,8 +49,6 @@ export default function LifestyleTriangulation() {
   // Compute triangle polygon coordinates from markers
   const triangleLatLngs = useMemo(() => markers.map((m) => [m.lat, m.lng]), [markers]);
 
-  // Compute centroid of triangle (average of vertices)
-  // For a triangle with vertices (x1,y1), (x2,y2), (x3,y3), centroid = ((x1+x2+x3)/3, (y1+y2+y3)/3)
   const centroid = useMemo(() => {
     const lat = (markers[0].lat + markers[1].lat + markers[2].lat) / 3;
     const lng = (markers[0].lng + markers[1].lng + markers[2].lng) / 3;
@@ -63,7 +58,7 @@ export default function LifestyleTriangulation() {
   // Haversine formula to compute distance between two lat/lng points in meters
   function haversineDistance(lat1, lon1, lat2, lon2) {
     const toRad = (v) => (v * Math.PI) / 180;
-    const R = 6371000; // Earth radius in meters
+    const R = 6371000; 
     const dLat = toRad(lat2 - lat1);
     const dLon = toRad(lon2 - lon1);
     const a =
@@ -98,7 +93,7 @@ export default function LifestyleTriangulation() {
                 draggable={true}
                 icon={createDivIcon(m.color, m.label)}
                 eventHandlers={{
-                  // update during drag for real-time position
+                
                   drag: (e) => {
                     const latlng = e.target.getLatLng();
                     handleMarkerDrag(m.id, latlng);

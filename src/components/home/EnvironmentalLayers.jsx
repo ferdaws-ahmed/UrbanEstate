@@ -9,10 +9,9 @@ import "leaflet/dist/leaflet.css";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
-// Default Center: Baipayl, Dhaka Division (Apnar Current Location)
 const defaultCenter = { lat: 23.9452, lng: 90.2706 };
 
-// --- Updated Dummy Data (Around Baipayl) ---
+
 const noiseAreas = [
   { id: 1, name: "Baipayl Intersection", lat: 23.9465, lng: 90.2715, intensity: 0.9, level: "High (90dB+)" },
   { id: 2, name: "Baipayl Bus Stand", lat: 23.9440, lng: 90.2700, intensity: 0.7, level: "Moderate (75dB)" },
@@ -49,9 +48,10 @@ function MapOverlays({ showNoise, showCrime, showAQI }) {
 
   // Live Location Tracking
   useEffect(() => {
-    map.flyTo(userLocation, 14, { duration: 1.5 });
 
-    if (!navigator.geolocation) return;
+    if (typeof window === "undefined" || !navigator.geolocation) return;
+
+    map.flyTo(userLocation, 14, { duration: 1.5 });
 
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
@@ -59,7 +59,7 @@ function MapOverlays({ showNoise, showCrime, showAQI }) {
         setUserLocation([latitude, longitude]);
         map.flyTo([latitude, longitude], map.getZoom(), { duration: 1.0 });
       },
-      (error) => console.error("Error getting location: ", error),
+      (error) => console.warn("Location error: ", error),
       { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
     );
 
@@ -146,7 +146,6 @@ export default function EnvironmentalLayers() {
   const [showCrime, setShowCrime] = useState(false);
   const [showAQI, setShowAQI] = useState(false);
 
-  // Custom Modern Toggle Switch
   const ToggleSwitch = ({ checked, onChange }) => (
     <button
       onClick={onChange}
@@ -165,12 +164,9 @@ export default function EnvironmentalLayers() {
   return (
     <section className={`w-full py-24 px-6 lg:px-12 bg-[#0f2e28] relative overflow-hidden ${manrope.className}`}>
       
-      {/* Background Decorative Glow */}
       <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] bg-[#cddfa0]/5 blur-[150px] rounded-full pointer-events-none z-0"></div>
 
-      {/* CSS For Popup, Live Pulse Dot & Zoom Controls */}
       <style dangerouslySetInnerHTML={{__html: `
-        /* Custom Zoom Controls Theme */
         .leaflet-bar a {
           background-color: #081d19 !important;
           color: #cddfa0 !important;
@@ -190,7 +186,6 @@ export default function EnvironmentalLayers() {
           margin-right: 20px !important;
         }
 
-        /* Popups */
         .leaflet-popup-content-wrapper, .leaflet-popup-tip {
           background-color: #081d19 !important;
           color: white !important;
@@ -205,7 +200,6 @@ export default function EnvironmentalLayers() {
         }
         .leaflet-container { font-family: inherit; background-color: #e5e7eb !important; }
         
-        /* Red Pulse Animation for Live Location */
         .pulse-dot {
           width: 24px;
           height: 24px;
@@ -224,12 +218,11 @@ export default function EnvironmentalLayers() {
 
       <div className="container mx-auto max-w-7xl relative z-10">
         
-        {/* Header Section */}
         <div className="flex flex-col items-center text-center mb-16">
           <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-white/10 mb-6">
             <Layers size={14} /> Intelligent Mapping
           </div>
-          <h2 className="text-4xl lg:text-6xl font-black text-white mb-6 tracking-tight leading-[1.1]">
+          <h2 className="text-4xl lg:text-5xl font-black text-white mb-6 tracking-tight leading-[1.1]">
             Neighborhood <span className="text-[#cddfa0] italic font-light">Insights</span>
           </h2>
           <p className="text-white/60 text-lg leading-relaxed max-w-2xl mx-auto">
@@ -237,10 +230,8 @@ export default function EnvironmentalLayers() {
           </p>
         </div>
 
-        {/* Main Content Card */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 bg-[#081d19]/80 backdrop-blur-xl rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.5)] border border-white/10 overflow-hidden">
           
-          {/* Left: Map Area */}
           <div className="lg:col-span-8 h-[500px] lg:h-[650px] relative z-0 border-r border-white/10">
             <MapContainer 
               center={[defaultCenter.lat, defaultCenter.lng]} 
@@ -248,22 +239,17 @@ export default function EnvironmentalLayers() {
               style={{ height: "100%", width: "100%", zIndex: 10 }}
               zoomControl={false} 
             >
-              {/* Voyager Map Tiles (Evabe nam gulo onnek clear dekha jabe) */}
               <TileLayer 
                 url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" 
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' 
               />
               <MapOverlays showNoise={showNoise} showCrime={showCrime} showAQI={showAQI} />
-              
-              {/* Custom Positioned Zoom Controls (+ / -) -> Top Right */}
               <ZoomControl position="topright" />
             </MapContainer>
             
-            {/* Inner Shadow for Map depth */}
             <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_40px_rgba(8,29,25,0.8)] z-20"></div>
           </div>
 
-          {/* Right: Control Panel */}
           <div className="lg:col-span-4 p-8 lg:p-10 flex flex-col justify-between bg-white/5 z-10">
             <div>
               <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
@@ -272,8 +258,6 @@ export default function EnvironmentalLayers() {
               <p className="text-sm text-white/50 mb-10">Toggle the layers to visualize specific area data.</p>
 
               <div className="space-y-5">
-                
-                {/* Noise Toggle Card */}
                 <div className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 cursor-pointer hover:bg-white/5 ${showNoise ? 'border-[#ef4444]/50 bg-[#ef4444]/10' : 'border-white/10'}`} onClick={() => setShowNoise(!showNoise)}>
                   <div className="flex items-start gap-4">
                     <div className={`p-3 rounded-xl transition-colors ${showNoise ? 'bg-[#ef4444] text-white shadow-[0_0_15px_rgba(239,68,68,0.5)]' : 'bg-white/10 text-white/60'}`}>
@@ -287,7 +271,6 @@ export default function EnvironmentalLayers() {
                   <ToggleSwitch checked={showNoise} onChange={() => setShowNoise(!showNoise)} />
                 </div>
 
-                {/* Crime Toggle Card */}
                 <div className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 cursor-pointer hover:bg-white/5 ${showCrime ? 'border-[#10b981]/50 bg-[#10b981]/10' : 'border-white/10'}`} onClick={() => setShowCrime(!showCrime)}>
                   <div className="flex items-start gap-4">
                     <div className={`p-3 rounded-xl transition-colors ${showCrime ? 'bg-[#10b981] text-white shadow-[0_0_15px_rgba(16,185,129,0.5)]' : 'bg-white/10 text-white/60'}`}>
@@ -301,7 +284,6 @@ export default function EnvironmentalLayers() {
                   <ToggleSwitch checked={showCrime} onChange={() => setShowCrime(!showCrime)} />
                 </div>
 
-                {/* AQI Toggle Card */}
                 <div className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 cursor-pointer hover:bg-white/5 ${showAQI ? 'border-[#facc15]/50 bg-[#facc15]/10' : 'border-white/10'}`} onClick={() => setShowAQI(!showAQI)}>
                   <div className="flex items-start gap-4">
                     <div className={`p-3 rounded-xl transition-colors ${showAQI ? 'bg-[#facc15] text-[#0f2e28] shadow-[0_0_15px_rgba(250,204,21,0.5)]' : 'bg-white/10 text-white/60'}`}>
@@ -314,11 +296,9 @@ export default function EnvironmentalLayers() {
                   </div>
                   <ToggleSwitch checked={showAQI} onChange={() => setShowAQI(!showAQI)} />
                 </div>
-
               </div>
             </div>
 
-            {/* Legend (Bottom) */}
             <div className="mt-10 pt-6 border-t border-white/10">
               <div className="text-sm font-bold text-[#cddfa0] mb-4 uppercase tracking-widest">Map Legend</div>
               <div className="grid grid-cols-2 gap-4 text-xs text-white/70 font-medium">

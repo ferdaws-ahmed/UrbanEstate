@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
-// ১০০% ফ্রেশ এবং কাজ করা ৩৫টি ইমেজের ডাটাবেস (৭টি স্লাইডের জন্য)
 const allLocations = [
   // --- Slide 1: Bangladesh & South Asia ---
   { id: 1, name: "Gulshan, Dhaka", subtitle: "250+ Premium Villas", image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80" },
@@ -64,7 +63,6 @@ export default function ExploreLocations() {
   const itemsPerPage = 5; 
   const totalPages = Math.ceil(allLocations.length / itemsPerPage);
 
-  // অটো স্লাইডার লজিক (৫ সেকেন্ড পর পর পেজ চেঞ্জ হবে)
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentPage((prev) => (prev + 1) % totalPages);
@@ -72,13 +70,12 @@ export default function ExploreLocations() {
     return () => clearInterval(timer);
   }, [totalPages]);
 
-  // নেক্সট স্লাইডে যাওয়ার জন্য ফাংশন
+
   const handleNextSlide = (e) => {
-    e.stopPropagation(); // কার্ডের অন্যান্য ক্লিক ইভেন্ট থেকে আলাদা রাখার জন্য
+    e.stopPropagation();
     setCurrentPage((prev) => (prev + 1) % totalPages);
   };
 
-  // বর্তমান পেজের ৫টি ডাটা বের করা
   const currentLocations = allLocations.slice(
     currentPage * itemsPerPage,
     (currentPage + 1) * itemsPerPage
@@ -117,7 +114,7 @@ export default function ExploreLocations() {
               className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-12 gap-6 auto-rows-[250px] absolute inset-0 w-full"
             >
               
-              {/* Main Large Card (১ম ইমেজ) */}
+              {/* Main Large Card */}
               {currentLocations[0] && (
                 <motion.div 
                   whileHover={{ y: -5 }}
@@ -152,12 +149,12 @@ export default function ExploreLocations() {
                 </motion.div>
               )}
 
-              {/* Small Cards (বাকি ৪টি ইমেজ) */}
+              {/* Small Cards  */}
               {currentLocations.slice(1).map((loc) => (
                 <motion.div 
                   key={loc.id}
                   whileHover={{ y: -5 }}
-                  onClick={handleNextSlide} // ছোট কার্ডে ক্লিক করলেও নেক্সট স্লাইডে যাবে
+                  onClick={handleNextSlide}
                   className="col-span-1 md:col-span-2 lg:col-span-4 row-span-1 relative rounded-3xl overflow-hidden group cursor-pointer shadow-lg"
                 >
                   <div className="absolute inset-0 bg-[#0f2e28]/40 group-hover:bg-transparent transition-colors duration-500 z-10"></div>

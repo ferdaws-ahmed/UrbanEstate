@@ -6,7 +6,6 @@ import { Zap, Fingerprint, Thermometer, Wifi, Activity, Crosshair } from "lucide
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
-// স্মার্ট হোম সিস্টেমের ডেটা
 const smartSystems = [
   { 
     id: 'energy', 
@@ -51,7 +50,7 @@ export default function SmartHomeCommandCenter() {
   const [isScanning, setIsScanning] = useState(false);
   const [randomData, setRandomData] = useState("SYNCING...");
 
-  // রিয়েল-টাইম হ্যাকার/সাই-ফাই ডেটা ইফেক্ট জেনারেটর
+ 
   useEffect(() => {
     const interval = setInterval(() => {
       const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -64,15 +63,13 @@ export default function SmartHomeCommandCenter() {
     return () => clearInterval(interval);
   }, []);
 
-  // স্ক্যানিং অ্যানিমেশন ট্রিগার
   const handleSystemChange = (system) => {
     if (activeSystem.id === system.id) return;
     setIsScanning(true);
     setActiveSystem(system);
-    setTimeout(() => setIsScanning(false), 800); // 800ms স্ক্যান টাইম
+    setTimeout(() => setIsScanning(false), 800); 
   };
 
-  // Modern Architectural Building Image
   const buildingImg = "https://media.istockphoto.com/id/506903162/photo/luxurious-villa-with-pool.jpg?s=612x612&w=0&k=20&c=Ek2P0DQ9nHQero4m9mdDyCVMVq3TLnXigxNPcZbgX2E="; 
 
   return (
@@ -132,7 +129,7 @@ export default function SmartHomeCommandCenter() {
             <Activity size={14} className="animate-pulse" /> Core Infrastructure
           </div>
           <h2 className="text-4xl lg:text-5xl font-black text-white mb-6 tracking-tight leading-[1.1]">
-            Smart Space <span className="text-[#cddfa0] italic font-light">Command Center</span>
+          Space Command  <span className="text-[#cddfa0] italic font-light">Center</span>
           </h2>
           <p className="text-white/60 text-lg leading-relaxed max-w-2xl mx-auto">
             Interact with the holographic blueprint to explore the invisible cutting-edge technology powering this modern estate.

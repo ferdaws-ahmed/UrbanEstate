@@ -6,7 +6,6 @@ import { Sun, CloudSun, Sunset, Moon, Thermometer, Zap, ShieldCheck, Wind } from
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
-// 4 Different Time States Data
 const timeStates = [
   {
     id: "morning",
@@ -14,7 +13,7 @@ const timeStates = [
     label: "Morning Breeze",
     icon: <CloudSun size={24} />,
     image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=1600&auto=format&fit=crop", // Bright morning villa
-    glow: "rgba(253, 224, 71, 0.15)", // Soft Yellow
+    glow: "rgba(253, 224, 71, 0.15)",
     stats: {
       temp: "22°C",
       power: "Solar Charging (2kW)",
@@ -28,7 +27,7 @@ const timeStates = [
     label: "Peak Daylight",
     icon: <Sun size={24} />,
     image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1600&auto=format&fit=crop", // Full bright daylight
-    glow: "rgba(255, 255, 255, 0.1)", // Bright White
+    glow: "rgba(255, 255, 255, 0.1)", 
     stats: {
       temp: "28°C",
       power: "Max Solar (15kW)",
@@ -42,7 +41,7 @@ const timeStates = [
     label: "Golden Hour",
     icon: <Sunset size={24} />,
     image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1600&auto=format&fit=crop", // Warm sunset lighting
-    glow: "rgba(249, 115, 22, 0.2)", // Orange/Warm
+    glow: "rgba(249, 115, 22, 0.2)", 
     stats: {
       temp: "25°C",
       power: "Battery Optimized",
@@ -56,7 +55,7 @@ const timeStates = [
     label: "Midnight Serenity",
     icon: <Moon size={24} />,
     image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1600&auto=format&fit=crop", // Night time luxury villa
-    glow: "rgba(59, 130, 246, 0.15)", // Deep Blue
+    glow: "rgba(59, 130, 246, 0.15)", 
     stats: {
       temp: "19°C",
       power: "Grid Independence",
@@ -76,7 +75,7 @@ export default function AtmosphericSimulator() {
     setTimeout(() => {
       setActiveState(state);
       setIsTransitioning(false);
-    }, 400); // Sync with CSS fade
+    }, 400); 
   };
 
   return (
@@ -95,7 +94,7 @@ export default function AtmosphericSimulator() {
           <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-white/10 mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]">
             <Wind size={14} className="animate-pulse" /> 4D Experience
           </div>
-          <h2 className="text-4xl lg:text-6xl font-black text-white mb-6 tracking-tight leading-[1.1]">
+          <h2 className="text-4xl lg:text-5xl font-black text-white mb-6 tracking-tight leading-[1.1]">
             Atmospheric <span className="text-[#cddfa0] italic font-light">Simulator</span>
           </h2>
           <p className="text-white/60 text-lg leading-relaxed max-w-2xl mx-auto">

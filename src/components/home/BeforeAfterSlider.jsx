@@ -116,7 +116,7 @@ export default function FuturisticAIStaging() {
           <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-white/10 mb-6 shadow-[0_0_20px_rgba(205,223,160,0.1)]">
             <Cpu size={14} /> Neural Staging Engine
           </div>
-          <h2 className="text-4xl lg:text-6xl font-black text-white mb-6 tracking-tight leading-[1.1]">
+          <h2 className="text-4xl lg:text-5xl font-black text-white mb-6 tracking-tight leading-[1.1]">
             Unveil the <span className="text-[#cddfa0] italic font-light">Future</span>
           </h2>
           <p className="text-white/60 text-lg leading-relaxed max-w-2xl mx-auto">

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { X, ArrowRight, ShieldCheck, DollarSign, Bed, Bath, Maximize } from "lucide-react"; // প্রয়োজনীয় আইকন
+import { X, ArrowRight, ShieldCheck, DollarSign, Bed, Bath, Maximize } from "lucide-react"; 
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function CompareModal({ open, items, onClose }) {
@@ -10,7 +10,7 @@ export default function CompareModal({ open, items, onClose }) {
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-        {/* ব্লার ব্যাকড্রপ ওভারলে */}
+       
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -19,14 +19,13 @@ export default function CompareModal({ open, items, onClose }) {
           onClick={onClose} 
         />
 
-        {/* মেইন মডাল কন্টেন্ট - সাইজ ছোট করা হয়েছে (max-w-3xl) */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 10 }}
           className="relative bg-[#13332c] border border-white/10 rounded-[1.5rem] shadow-2xl max-w-3xl w-full overflow-hidden"
         >
-          {/* হেডার - ছোট প্যাডিং */}
+       
           <div className="p-5 border-b border-white/5 flex items-center justify-between bg-white/5">
             <div className="flex items-center gap-3">
               <div className="bg-[#cddfa0] p-1.5 rounded-lg text-[#0f2e28]">
@@ -42,7 +41,7 @@ export default function CompareModal({ open, items, onClose }) {
             </button>
           </div>
 
-          {/* টেবিল সেকশন - কম্প্যাক্ট ডিজাইন */}
+     
           <div className="p-6 overflow-x-auto">
             <table className="w-full text-left">
               <thead>
@@ -107,7 +106,6 @@ export default function CompareModal({ open, items, onClose }) {
             </table>
           </div>
 
-          {/* ফুটার - ছোট বাটন */}
           <div className="p-4 bg-[#0f2e28] flex justify-end gap-3 border-t border-white/5">
             <button 
               onClick={onClose} 
