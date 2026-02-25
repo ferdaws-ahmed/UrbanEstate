@@ -23,7 +23,7 @@ const LoginForm = ({ onGoogleClick, onGithubClick, onEmailLogin, onForgotPasswor
     <div className="min-h-screen w-full bg-slate-50 dark:bg-[#0f172a] flex items-center justify-center p-4 sm:p-6 lg:p-8 transition-colors duration-500">
       
       {/* Main Card - */}
-      <div className="w-full max-w-[480px] bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden border border-slate-100 dark:border-slate-800 animate-in fade-in zoom-in duration-700 relative">
+      <div className="w-full max-w-[480px] mt-10 bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden border border-slate-100 dark:border-slate-800 animate-in fade-in zoom-in duration-700 relative">
         
         {/* top section design */}
         <div className="relative h-32 bg-blue-600 flex items-center justify-center overflow-hidden">

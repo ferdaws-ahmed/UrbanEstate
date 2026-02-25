@@ -3,6 +3,7 @@ import AuthProvider from "../components/Auth/AuthProvider";
 import Footer from "../components/shared/Footer"; 
 import "./globals.css";
 import { Toaster } from 'react-hot-toast';
+import Navbar from "../components/shared/Navbar";
 
 // font settings (from tamim_new)
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -20,6 +21,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
         <AuthProvider>
+          <Navbar></Navbar>
           {/* Main content wrapper */}
           <div className="flex-grow">
             <main>{children}</main>

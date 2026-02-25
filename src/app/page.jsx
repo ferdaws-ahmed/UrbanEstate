@@ -28,7 +28,7 @@ const VoiceSearch = dynamic(() => import("../components/home/VoiceSearch"), { ss
 export default function Home() {
   return (
     <main>
-  <Navbar />
+  
   <Hero /> 
   <Features />
   <VoiceSearch /> 

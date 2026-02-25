@@ -38,10 +38,10 @@ const RegisterForm = ({ role, setRole, onSocialRegister, onEmailRegister, loadin
 
 
   return (
-    <div className="min-h-screen w-full bg-slate-50 dark:bg-[#0f172a] flex items-center justify-center p-4 sm:p-6 lg:p-8 transition-colors duration-500">
+    <div className="min-h-screen w-full  bg-slate-50 dark:bg-[#0f172a] flex items-center justify-center p-4 sm:p-6 lg:p-8 transition-colors duration-500">
       
       {/* Main card - Added Subtle Animation */}
-      <div className="w-full max-w-[1100px] bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col md:flex-row min-h-[600px] border border-slate-100 dark:border-slate-800 animate-in fade-in zoom-in duration-700">
+      <div className="w-full max-w-[1100px] mt-14 bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col md:flex-row min-h-[600px] border border-slate-100 dark:border-slate-800 animate-in fade-in zoom-in duration-700">
         
         {/* left side image section */}
         <div className="hidden md:flex md:w-1/2 bg-slate-900 dark:bg-slate-950 relative p-12 flex-col justify-between overflow-hidden">

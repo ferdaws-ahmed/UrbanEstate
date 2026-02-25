@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react"; // Added useRef
 import { Manrope } from "next/font/google";
-import { HiMenuAlt3, HiX } from "react-icons/hi"; 
+import { HiMenuAlt3, HiX, HiChevronDown, HiLogout, HiUser, HiCog } from "react-icons/hi"; 
+import { useSession, signOut } from "next-auth/react";
 
 const manrope = Manrope({ 
   subsets: ["latin"], 
@@ -15,9 +16,22 @@ const Navbar = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Dropdown State
+  const dropdownRef = useRef(null);
 
-  // User state
-  const [user, setUser] = useState(null); 
+  const { data: session } = useSession();
+  const user = session?.user || null;
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,37 +46,20 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollPos]);
 
-
+  // Updated Navigation Items as per your requirement
   const getNavItems = () => {
     const commonHome = { name: "Home", path: "/" };
+    const allProperty = { name: "All Property", path: "/all-properties" };
 
     if (user?.role === "seller") {
       return [
         commonHome,
-        { name: "Dashboard", path: "/dashboard" },
         { name: "Add Property", path: "/add-property" },
-        { name: "My Listings", path: "/my-listings" },
-        { name: "Profile", path: "/profile" },
+        allProperty,
       ];
     } 
     
-
-    else if (user?.role === "user") {
-      return [
-        commonHome,
-        { name: "Explore", path: "/properties" },
-        { name: "Wishlist", path: "/wishlist" },
-        { name: "My Bookings", path: "/bookings" },
-        { name: "Profile", path: "/profile" },
-      ];
-    }
-    
-
-    return [
-      commonHome,
-      { name: "Features", path: "/features" },
-      { name: "Demo Preview", path: "/demo" },
-    ];
+    return [commonHome, allProperty];
   };
 
   const navItems = getNavItems();
@@ -89,7 +86,7 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Desktop Menu (Dynamic) */}
+        {/* Desktop Menu */}
         <ul className="hidden lg:flex gap-10 text-white font-bold text-[17px] tracking-wide items-center">
           {navItems.map((item, index) => (
             <li key={index}>
@@ -100,29 +97,63 @@ const Navbar = () => {
           ))}
         </ul>
 
-        {/* Desktop Buttons */}
+        {/* Desktop Buttons / Unique Dropdown */}
         <div className="hidden lg:flex items-center gap-5">
           {!user ? (
             <>
-              <Link href="/register" className="text-white font-bold text-[16px] hover:text-[#cddfa0] transition duration-300">Get Started</Link>
-              <Link href="/login" className="bg-[#cddfa0] text-[#0f2e28] px-7 py-2.5 rounded-md font-bold text-[16px] hover:bg-[#b8cc89] transition shadow-lg">Login</Link>
+              <Link href="/register" className="text-white font-bold text-[16px] hover:text-[#cddfa0] transition duration-300">
+                Get Started
+              </Link>
+              <Link href="/login" className="bg-[#cddfa0] text-[#0f2e28] px-7 py-2.5 rounded-md font-bold text-[16px] hover:bg-[#b8cc89] transition shadow-lg">
+                Login
+              </Link>
             </>
           ) : (
-            <div className="flex items-center gap-4">
-               <div className="text-right border-r border-white/10 pr-4 flex flex-col items-end">
-                  <Link href="/profile" className="text-white font-bold text-sm leading-none hover:text-[#cddfa0] transition duration-300">
-                    My Profile
+            <div className="relative" ref={dropdownRef}>
+              <button 
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 p-1.5 pr-4 rounded-full transition-all duration-300"
+              >
+                {user.image ? (
+                  <img src={user.image} alt="Profile" className="w-9 h-9 rounded-full border-2 border-[#cddfa0]" />
+                ) : (
+                  <div className="w-9 h-9 rounded-full bg-[#cddfa0] flex items-center justify-center text-[#0f2e28] font-bold">
+                    {user.name ? user.name[0] : "U"}
+                  </div>
+                )}
+                <div className="text-left hidden xl:block">
+                  <p className="text-white text-xs font-bold leading-tight">{user.name || "User"}</p>
+                  <p className="text-[#cddfa0] text-[10px] uppercase tracking-tighter">{user.role}</p>
+                </div>
+                <HiChevronDown className={`text-white transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              {/* Unique Dropdown Menu */}
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-3 w-56 bg-[#0f2e28] border border-white/10 rounded-2xl shadow-2xl py-2 overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in duration-200">
+                  <div className="px-4 py-3 border-b border-white/5 bg-white/5 mb-2">
+                    <p className="text-white text-sm font-bold truncate">{user.email}</p>
+                    <p className="text-[#cddfa0] text-[10px] font-mono mt-0.5 capitalize">{user.role} </p>
+                  </div>
+                  
+                  <Link href="/profile" onClick={() => setIsDropdownOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:text-white hover:bg-[#cddfa0]/10 transition-colors">
+                    <HiUser className="text-[#cddfa0]" /> <span className="text-sm font-medium">My Profile</span>
                   </Link>
-                  <p className="text-[#cddfa0] text-[10px] uppercase font-mono mt-1 tracking-tighter">
-                    {user.role} Access
-                  </p>
-               </div>
-               <button 
-                  onClick={() => setUser(null)}
-                  className="bg-red-500/10 text-red-400 border border-red-500/30 px-4 py-1.5 rounded text-xs font-bold hover:bg-red-500 hover:text-white transition duration-300"
-               >
-                  Logout
-               </button>
+                  
+                  <Link href="/dashboard" onClick={() => setIsDropdownOpen(false)} className="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:text-white hover:bg-[#cddfa0]/10 transition-colors">
+                    <HiCog className="text-[#cddfa0]" /> <span className="text-sm font-medium">Dashboard</span>
+                  </Link>
+
+                  <div className="mt-2 pt-2 border-t border-white/5 px-2">
+                    <button 
+                      onClick={() => signOut()}
+                      className="flex items-center gap-3 w-full px-4 py-2.5 text-red-400 hover:bg-red-500/10 rounded-xl transition-colors text-sm font-bold"
+                    >
+                      <HiLogout /> Sign Out
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -136,7 +167,7 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Sidebar (Dynamic) */}
+      {/* Mobile Sidebar */}
       <div className={`fixed top-0 right-0 h-screen w-full sm:w-80 bg-[#0f2e28]/95 backdrop-blur-[25px] border-l border-white/20 z-[105] transform transition-transform duration-500 ease-in-out lg:hidden
         ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
         
@@ -174,7 +205,7 @@ const Navbar = () => {
                   My Profile
                 </Link>
                 <button 
-                  onClick={() => {setUser(null); setIsMenuOpen(false);}}
+                  onClick={() => {signOut(); setIsMenuOpen(false);}}
                   className="bg-red-500/20 text-red-500 border border-red-500/40 font-black text-xl py-4 rounded-xl"
                 >
                   Logout
