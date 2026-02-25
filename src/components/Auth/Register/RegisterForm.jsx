@@ -6,10 +6,36 @@ import { Mail, Lock, User, Github, Chrome, Building, UserCircle, Loader2 } from 
 const RegisterForm = ({ role, setRole, onSocialRegister, onEmailRegister, loading, error }) => {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+     try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          role,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error);
+      }
+
+      alert("Registration successful!");
+    } catch (error) {
+      console.error(error.message);
+    }
     onEmailRegister(formData.name, formData.email, formData.password);
   };
+
+
 
   return (
     <div className="min-h-screen w-full bg-slate-50 dark:bg-[#0f172a] flex items-center justify-center p-4 sm:p-6 lg:p-8 transition-colors duration-500">
