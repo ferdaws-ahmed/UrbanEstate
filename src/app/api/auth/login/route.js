@@ -1,9 +1,7 @@
-// app/api/auth/login/route.js
-
 import { connect } from "@/src/lib/dbConnect";
 import bcrypt from "bcryptjs";
 
-const userCollection = connect("users");
+export const runtime = "nodejs";
 
 export async function POST(request) {
   const { email, password } = await request.json();
@@ -11,9 +9,11 @@ export async function POST(request) {
   if (!email || !password) {
     return Response.json(
       { error: "Email and password are required" },
-      { status: 400 },
+      { status: 400 }
     );
   }
+
+  const userCollection = await connect("users"); // ✅ move inside function
 
   const user = await userCollection.findOne({ email });
   if (!user) {
