@@ -1,4 +1,3 @@
-
 import { adminAuth } from "@/src/lib/firebase-admin-config";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -10,6 +9,12 @@ export const authOptions = {
       credentials: {},
       async authorize(credentials) {
         const { idToken, role } = credentials;
+
+        // Safety Check: বিল্ড টাইমে adminAuth না থাকলে এরর আটকাবে
+        if (!adminAuth) {
+          console.error("Firebase Admin SDK is not initialized. Check your Environment Variables.");
+          return null;
+        }
 
         try {
           // Verify the Firebase ID Token using Admin SDK
@@ -34,7 +39,6 @@ export const authOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      // Transfer the role and id to the JWT token
       if (user) {
         token.role = user.role;
         token.id = user.id;
@@ -42,7 +46,6 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      // Transfer the role and id from JWT to the Session object
       if (token) {
         session.user.role = token.role;
         session.user.id = token.id;
