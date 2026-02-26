@@ -20,7 +20,7 @@ import FAQSection from "../components/home/FAQSection";
 
 const EnvironmentalLayers = dynamic(() => import("../components/home/EnvironmentalLayers"), { ssr: false });
 const PropertyMap = dynamic(() => import("../components/home/PropertyMap"), { ssr: false });
-const AeroTopoScanner = dynamic(() => import("../../src/components/home/AeroTopoScanner"), { ssr: false });
+const AeroTopoScanner = dynamic(() => import("../components/home/AeroTopoScanner"), { ssr: false });
 const Property3D = dynamic(() => import("../components/home/Property3D"), { ssr: false });
 const SwipeDeck = dynamic(() => import("../components/home/SwipeDeck"), { ssr: false });
 const VoiceSearch = dynamic(() => import("../components/home/VoiceSearch"), { ssr: false });
