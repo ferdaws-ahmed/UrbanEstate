@@ -1,7 +1,7 @@
 "use client";
 
-import AdminSidebar from "@/components/dashboard/admin/AdminSidebar";
-import AdminTopbar from "@/components/dashboard/admin/AdminTopbar";
+import AdminSidebar from "../../../components/dashboard/admin/AdminSidebar";
+import AdminTopbar from "../../../components/dashboard/admin/AdminTopbar";
 import { motion } from "framer-motion";
 
 export default function AdminLayout({ children }) {
