@@ -131,7 +131,7 @@ export default function SmartHomeCommandCenter() {
             <Activity size={14} className="animate-pulse" /> Core Infrastructure
           </div>
           <h2 className="text-4xl lg:text-5xl font-black text-white mb-6 tracking-tight leading-[1.1]">
-          Space Command  <span className="text-[#cddfa0] italic font-light">Center</span>
+          Space Commands  <span className="text-[#cddfa0] italic font-light">Center</span>
           </h2>
           <p className="text-white/60 text-lg leading-relaxed max-w-2xl mx-auto">
             Interact with the holographic blueprint to explore the invisible cutting-edge technology powering this modern estate.
