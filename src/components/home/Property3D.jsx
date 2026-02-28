@@ -8,65 +8,65 @@ import { Box, Rotate3d, ZoomIn, Sparkles, MousePointer2, CheckCircle2 } from "lu
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
-
+// --- প্রফেশনাল ও মডার্ন ৩ডি মডেল কম্পোনেন্ট ---
 const HouseModel = () => {
   return (
     <group position={[0, -1.5, 0]}>
-      {/*  (Dark Floor Base) */}
+      {/* বেইজ বা প্লিন্থ (Dark Floor Base) */}
       <mesh position={[0, 0.1, 0]} receiveShadow>
         <boxGeometry args={[7, 0.2, 5]} />
         <meshStandardMaterial color="#2a2a2a" roughness={0.9} />
       </mesh>
 
-      {/* (Modern White Plaster) */}
+      {/* মেইন বিল্ডিং বডি (Modern White Plaster) */}
       <mesh position={[0.5, 1.6, 0]} castShadow receiveShadow>
         <boxGeometry args={[4.2, 2.8, 3.5]} />
         <meshStandardMaterial color="#fdfdfd" roughness={0.3} metalness={0.1} />
       </mesh>
 
-      {/*  (Wooden Accent Wall) */}
+      {/* বাম দিকের কাঠের ওয়াল ডিজাইন (Wooden Accent Wall) */}
       <mesh position={[-1.8, 1.6, 0]} castShadow receiveShadow>
         <boxGeometry args={[0.6, 2.8, 3.6]} />
         <meshStandardMaterial color="#5c4033" roughness={0.8} />
       </mesh>
 
-      {/*(Flat Modern Roof) */}
+      {/* মডার্ন ফ্ল্যাট ছাদ (Flat Modern Roof) */}
       <mesh position={[0, 3.1, 0]} castShadow receiveShadow>
         <boxGeometry args={[6.5, 0.2, 4.5]} />
         <meshStandardMaterial color="#151515" roughness={0.8} />
       </mesh>
 
-      {/* (Large Glass Facade) */}
+      {/* সামনের বড় কাঁচের প্যানেল (Large Glass Facade) */}
       <mesh position={[0.5, 1.6, 1.76]}>
         <boxGeometry args={[3.8, 2.6, 0.05]} />
         <meshPhysicalMaterial color="#9fd3e6" transmission={0.9} opacity={0.4} transparent roughness={0.1} metalness={0.6} />
       </mesh>
 
-      {/* (Glass Window Frame) */}
+      {/* কাঁচের ফ্রেম / গ্রিল (Glass Window Frame) */}
       <mesh position={[0.5, 1.6, 1.78]} castShadow>
         <boxGeometry args={[3.9, 2.7, 0.05]} />
         <meshStandardMaterial color="#1a1a1a" wireframe={true} />
       </mesh>
 
-      {/*  (Modern Wood Door) */}
+      {/* মেইন দরজা (Modern Wood Door) */}
       <mesh position={[-0.8, 1.1, 1.8]} castShadow>
         <boxGeometry args={[1.2, 1.8, 0.1]} />
         <meshStandardMaterial color="#2c1e16" roughness={0.8} />
       </mesh>
 
-      {/*  (Pathway) */}
+      {/* দরজার সামনের হাঁটার রাস্তা (Pathway) */}
       <mesh position={[-0.8, 0.15, 3.2]} receiveShadow>
         <boxGeometry args={[1.5, 0.1, 2.5]} />
         <meshStandardMaterial color="#444444" roughness={0.9} />
       </mesh>
 
-      {/*  (Decorative Bush 1) */}
+      {/* ডেকোরেটিভ গাছ ১ (Decorative Bush 1) */}
       <mesh position={[2.2, 0.5, 2.0]} castShadow>
         <sphereGeometry args={[0.4, 32, 32]} />
         <meshStandardMaterial color="#2d4c1e" roughness={0.9} />
       </mesh>
 
-      {/*  (Decorative Bush 2) */}
+      {/* ডেকোরেটিভ গাছ ২ (Decorative Bush 2) */}
       <mesh position={[2.8, 0.4, 1.5]} castShadow>
         <sphereGeometry args={[0.3, 32, 32]} />
         <meshStandardMaterial color="#2d4c1e" roughness={0.9} />
@@ -85,12 +85,12 @@ export default function Property3D() {
       <div className="container mx-auto max-w-7xl relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           
-          {/* Left Text Content  */}
+          {/* Left Text Content (আপনার দেওয়া অরিজিনাল লেআউট) */}
           <div className="lg:col-span-5">
             <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-white/10 mb-8">
               <Rotate3d size={14} /> 360° Visual Tour
             </div>
-            <h2 className="text-4xl lg:text-5xl font-black text-white mb-8 tracking-tight leading-[1.1]">
+            <h2 className="text-5xl lg:text-7xl font-black text-white mb-8 tracking-tight leading-[1.1]">
               Reimagine <span className="text-[#cddfa0] italic font-light">Space</span> in 3D
             </h2>
             <p className="text-white/60 text-lg mb-10 leading-relaxed max-w-lg">

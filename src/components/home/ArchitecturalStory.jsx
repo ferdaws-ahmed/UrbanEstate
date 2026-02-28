@@ -6,6 +6,7 @@ import { PenTool, Layers, Cuboid, Gem, ChevronRight } from "lucide-react";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
+// স্টোরি চ্যাপ্টার ডেটা
 const storyChapters = [
   {
     id: 1,
@@ -21,7 +22,7 @@ const storyChapters = [
     subtitle: "Unshakable core.",
     icon: <Cuboid size={20} />,
     desc: "Anchored deep using advanced geo-polymer piling that strengthens over time, adapting to sub-surface shifts rather than resisting them.",
-    image: "https://theartisaninterior.com/wp-content/uploads/2024/01/artisan-19.jpeg" // Foundation/Concrete texture
+    image: "https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?q=80&w=1600&auto=format&fit=crop" // Foundation/Concrete texture
   },
   {
     id: 3,
@@ -37,7 +38,7 @@ const storyChapters = [
     subtitle: "Curated perfection.",
     icon: <Gem size={20} />,
     desc: "Interiors feature imported Italian Carrara marble and sustainable bamboo accents, hand-finished by master craftsmen for flawless luxury.",
-    image: "https://mgdesignsinteriors.co.uk/cdn/shop/collections/artisan_large_dining_table.jpg?v=1731863254" // Luxury marble texture
+    image: "https://images.unsplash.com/photo-1599696848652-f0813462762e?q=80&w=1600&auto=format&fit=crop" // Luxury marble texture
   }
 ];
 
@@ -58,7 +59,7 @@ export default function ArchitecturalOriginStory() {
            <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-[#cddfa0]/20 mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]">
             <PenTool size={14} /> The Blueprint Narrative
           </div>
-          <h2 className="text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.1]">
+          <h2 className="text-4xl lg:text-6xl font-black text-white tracking-tight leading-[1.1]">
             Architectural <span className="text-[#cddfa0] italic font-light">Origin Story</span>
           </h2>
         </div>
@@ -163,4 +164,5 @@ export default function ArchitecturalOriginStory() {
   );
 }
 
+// Need to import Crosshair for the visual part
 import { Crosshair } from "lucide-react";
