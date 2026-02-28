@@ -33,10 +33,14 @@ const generateNearbyData = (centerLat, centerLng, count) => {
 export default function PropertyMap() {
   const mapRef = useRef(null);
   const containerRef = useRef(null);
-  const [userLocation, setUserLocation] = useState(null);
-  const [selectedProperty, setSelectedProperty] = useState(null);
-  const [properties, setProperties] = useState([]);
   const router = useRouter(); 
+
+  const defaultLat = 23.9450;
+  const defaultLng = 90.2785;
+  
+  const [userLocation, setUserLocation] = useState([defaultLat, defaultLng]);
+  const [properties, setProperties] = useState(() => generateNearbyData(defaultLat, defaultLng, 40));
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   useEffect(() => {
     if ("geolocation" in navigator) {
@@ -45,12 +49,10 @@ export default function PropertyMap() {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
           setUserLocation([lat, lng]);
-          setProperties(generateNearbyData(lat, lng, 30));
+          setProperties(generateNearbyData(lat, lng, 40));  
         },
-        () => {
-          const defaultLat = 23.9450, defaultLng = 90.2785; // Baipayl
-          setUserLocation([defaultLat, defaultLng]);
-          setProperties(generateNearbyData(defaultLat, defaultLng, 30));
+        (error) => {
+          console.warn("Location permission denied or failed. Showing default location.");
         }, 
         { enableHighAccuracy: true }
       );
@@ -58,7 +60,9 @@ export default function PropertyMap() {
   }, []);
 
   useEffect(() => {
-    if (!userLocation || !containerRef.current) return;
+    if (!containerRef.current) return;
+
+    let isMounted = true;
 
     const initMap = async () => {
       if (!document.getElementById('leaflet-css')) {
@@ -76,8 +80,20 @@ export default function PropertyMap() {
         await new Promise((resolve) => { script.onload = resolve; });
       }
 
+      if (!isMounted) return;
+
       const L = window.L;
-      if (mapRef.current) { mapRef.current.remove(); }
+
+
+      if (mapRef.current) { 
+        mapRef.current.remove(); 
+        mapRef.current = null;
+      }
+
+   
+      if (containerRef.current) {
+        containerRef.current._leaflet_id = null;
+      }
 
       const map = L.map(containerRef.current, {
         zoomControl: false,
@@ -116,11 +132,24 @@ export default function PropertyMap() {
       });
 
       mapRef.current = map;
-      setTimeout(() => map.invalidateSize(), 500);
+      setTimeout(() => {
+        if (mapRef.current) mapRef.current.invalidateSize();
+      }, 500);
     };
 
     initMap();
-    return () => { if (mapRef.current) mapRef.current.remove(); };
+    
+    
+    return () => { 
+      isMounted = false;
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+      if (containerRef.current) {
+        containerRef.current._leaflet_id = null;
+      }
+    };
   }, [userLocation, properties]);
 
   const handleZoom = (type) => {
@@ -136,13 +165,6 @@ export default function PropertyMap() {
   return (
     <section className={`w-full h-screen relative bg-gray-100 overflow-hidden ${manrope.className}`}>
       
-      {!userLocation && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white z-[9999] text-[#0f2e28]">
-          <div className="w-12 h-12 border-4 border-[#0f2e28] border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="font-bold uppercase tracking-widest animate-pulse">Initializing Map View...</p>
-        </div>
-      )}
-
       <div ref={containerRef} style={{ height: '100vh', width: '100vw', position: 'absolute', top: 0, left: 0, zIndex: 1 }} />
 
       <div className="absolute top-10 right-10 z-[20] flex flex-col gap-4">
@@ -158,7 +180,7 @@ export default function PropertyMap() {
         <div className="inline-flex items-center gap-2 text-[#0f2e28] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-gray-200 mb-3 pointer-events-auto shadow-sm">
           <Navigation size={12} /> Live Real-Time View
         </div>
-        <h2 className="text-4xl lg:text-6xl font-black text-[#0f2e28] leading-tight drop-shadow-sm">
+        <h2 className="text-4xl lg:text-5xl font-black text-[#0f2e28] leading-tight drop-shadow-sm">
           Properties <span className="text-green-600 italic font-light">Near You</span>
         </h2>
       </div>
@@ -171,7 +193,6 @@ export default function PropertyMap() {
           >
             <div className="bg-white border border-gray-200 rounded-[2rem] overflow-hidden shadow-2xl">
               
-              {/* ফিক্সড: X বাটন এখন সবুজ (green-600) */}
               <button 
                 onClick={() => setSelectedProperty(null)} 
                 className="absolute top-4 right-4 z-40 w-8 h-8 bg-white/80 text-green-600 rounded-full flex items-center justify-center hover:bg-green-600 hover:text-white transition-all shadow-md border border-green-100"

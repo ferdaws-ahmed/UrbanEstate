@@ -6,6 +6,7 @@ import { Zap, Fingerprint, Thermometer, Wifi, Activity, Crosshair } from "lucide
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
+
 const smartSystems = [
   { 
     id: 'energy', 
@@ -62,6 +63,7 @@ export default function SmartHomeCommandCenter() {
     }, 150);
     return () => clearInterval(interval);
   }, []);
+
 
   const handleSystemChange = (system) => {
     if (activeSystem.id === system.id) return;
@@ -129,7 +131,7 @@ export default function SmartHomeCommandCenter() {
             <Activity size={14} className="animate-pulse" /> Core Infrastructure
           </div>
           <h2 className="text-4xl lg:text-5xl font-black text-white mb-6 tracking-tight leading-[1.1]">
-          Space Command  <span className="text-[#cddfa0] italic font-light">Center</span>
+          Space Commands  <span className="text-[#cddfa0] italic font-light">Center</span>
           </h2>
           <p className="text-white/60 text-lg leading-relaxed max-w-2xl mx-auto">
             Interact with the holographic blueprint to explore the invisible cutting-edge technology powering this modern estate.
