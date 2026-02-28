@@ -9,11 +9,11 @@ export async function POST(request) {
   if (!email || !password) {
     return Response.json(
       { error: "Email and password are required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
-  const userCollection = await connect("users"); // ✅ move inside function
+  const userCollection = await connect("users");
 
   const user = await userCollection.findOne({ email });
   if (!user) {
