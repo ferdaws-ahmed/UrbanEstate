@@ -14,7 +14,7 @@ const storyChapters = [
     subtitle: "Philosophy beyond concrete.",
     icon: <PenTool size={20} />,
     desc: "Conceptualized not just as a structure, but as a living organism designed to breathe with the environment. The core idea was 'Biophilic Futurism'.",
-    image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1600&auto=format&fit=crop" // Blueprint/Sketch image
+    image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1600&auto=format&fit=crop" 
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ const storyChapters = [
     subtitle: "Unshakable core.",
     icon: <Cuboid size={20} />,
     desc: "Anchored deep using advanced geo-polymer piling that strengthens over time, adapting to sub-surface shifts rather than resisting them.",
-    image: "https://theartisaninterior.com/wp-content/uploads/2024/01/artisan-19.jpeg" // Foundation/Concrete texture
+    image: "https://i0.wp.com/www.hcn.org/wp-content/uploads/2015/07/molycorp_mine_030_042315.jpg?fit=1500%2C1000&ssl=1" 
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ const storyChapters = [
     subtitle: "Responsive exterior.",
     icon: <Layers size={20} />,
     desc: "Wrapped in a dynamic glass exoskeleton that adjusts tint based on UV intensity, regulating internal temperature without energy usage.",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1600&auto=format&fit=crop" // Modern facade/glass
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1600&auto=format&fit=crop" 
   },
   {
     id: 4,

@@ -33,24 +33,29 @@ const generateNearbyData = (centerLat, centerLng, count) => {
 export default function PropertyMap() {
   const mapRef = useRef(null);
   const containerRef = useRef(null);
-  const [userLocation, setUserLocation] = useState(null);
-  const [selectedProperty, setSelectedProperty] = useState(null);
-  const [properties, setProperties] = useState([]);
   const router = useRouter(); 
 
+
+  const defaultLat = 23.9450;
+  const defaultLng = 90.2785;
+  
+  const [userLocation, setUserLocation] = useState([defaultLat, defaultLng]);
+  const [properties, setProperties] = useState(() => generateNearbyData(defaultLat, defaultLng, 40));
+  const [selectedProperty, setSelectedProperty] = useState(null);
+
   useEffect(() => {
+
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
           setUserLocation([lat, lng]);
-          setProperties(generateNearbyData(lat, lng, 30));
+          setProperties(generateNearbyData(lat, lng, 40));  
         },
-        () => {
-          const defaultLat = 23.9450, defaultLng = 90.2785; // Baipayl
-          setUserLocation([defaultLat, defaultLng]);
-          setProperties(generateNearbyData(defaultLat, defaultLng, 30));
+        (error) => {
+          console.warn("Location permission denied or failed. Showing default location.");
+        
         }, 
         { enableHighAccuracy: true }
       );
@@ -58,7 +63,7 @@ export default function PropertyMap() {
   }, []);
 
   useEffect(() => {
-    if (!userLocation || !containerRef.current) return;
+    if (!containerRef.current) return;
 
     const initMap = async () => {
       if (!document.getElementById('leaflet-css')) {
@@ -136,12 +141,7 @@ export default function PropertyMap() {
   return (
     <section className={`w-full h-screen relative bg-gray-100 overflow-hidden ${manrope.className}`}>
       
-      {!userLocation && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white z-[9999] text-[#0f2e28]">
-          <div className="w-12 h-12 border-4 border-[#0f2e28] border-t-transparent rounded-full animate-spin mb-4"></div>
-          <p className="font-bold uppercase tracking-widest animate-pulse">Initializing Map View...</p>
-        </div>
-      )}
+    
 
       <div ref={containerRef} style={{ height: '100vh', width: '100vw', position: 'absolute', top: 0, left: 0, zIndex: 1 }} />
 

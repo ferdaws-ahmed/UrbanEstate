@@ -11,7 +11,7 @@ const scanModes = [
     id: "elevation",
     label: "Elevation & Flood Risk",
     icon: <Mountain size={18} />,
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2OhjS9W2jT0rIOeBb6lD12UlgLevt-hSM3Q&s", 
+    image: "https://miro.medium.com/1*PDr78op_WYIm22bOKSo-4g.png", 
     data: { MeanSeaLevel: "+18.5m", RiskStatus: "LOW (Safe)", SlopeGradient: "2.4°" },
     desc: "Laser-derived terrain mapping indicates the property sits significantly above regional flood lines."
   },
@@ -27,7 +27,7 @@ const scanModes = [
     id: "stability",
     label: "Terra-Stability Matrix",
     icon: <ShieldCheck size={18} />,
-    image: "https://thumbs.dreamstime.com/b/d-rendered-cross-section-soil-layers-illustrating-different-geological-strata-diagram-showcases-topsoil-sand-silt-clay-407500304.jpg", 
+    image: "https://cdn.corporatefinanceinstitute.com/assets/what-happened-terra-1-1024x808.png", 
     data: { FoundationDepth: "32m Piling", SeismicZone: "Zone 2", SoilDensity: "High" },
     desc: "Sub-surface ultrasonic scans verify a dense rock-base foundation, ensuring maximum structural stability."
   }

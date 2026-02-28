@@ -1,10 +1,11 @@
 "use client";
 
-import React, { Suspense } from "react";
+import React, { Suspense, useState, useRef, useEffect } from "react";
 import { Manrope } from "next/font/google";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment, ContactShadows, PresentationControls } from "@react-three/drei";
-import { Box, Rotate3d, ZoomIn, Sparkles, MousePointer2, CheckCircle2 } from "lucide-react";
+import { Box, Rotate3d, ZoomIn, Sparkles, MousePointer2, CheckCircle2, Upload, XCircle } from "lucide-react";
+import * as THREE from "three";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
@@ -12,7 +13,7 @@ const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700
 const HouseModel = () => {
   return (
     <group position={[0, -1.5, 0]}>
-      {/*  (Dark Floor Base) */}
+      {/* (Dark Floor Base) */}
       <mesh position={[0, 0.1, 0]} receiveShadow>
         <boxGeometry args={[7, 0.2, 5]} />
         <meshStandardMaterial color="#2a2a2a" roughness={0.9} />
@@ -24,7 +25,7 @@ const HouseModel = () => {
         <meshStandardMaterial color="#fdfdfd" roughness={0.3} metalness={0.1} />
       </mesh>
 
-      {/*  (Wooden Accent Wall) */}
+      {/* (Wooden Accent Wall) */}
       <mesh position={[-1.8, 1.6, 0]} castShadow receiveShadow>
         <boxGeometry args={[0.6, 2.8, 3.6]} />
         <meshStandardMaterial color="#5c4033" roughness={0.8} />
@@ -48,25 +49,25 @@ const HouseModel = () => {
         <meshStandardMaterial color="#1a1a1a" wireframe={true} />
       </mesh>
 
-      {/*  (Modern Wood Door) */}
+      {/* (Modern Wood Door) */}
       <mesh position={[-0.8, 1.1, 1.8]} castShadow>
         <boxGeometry args={[1.2, 1.8, 0.1]} />
         <meshStandardMaterial color="#2c1e16" roughness={0.8} />
       </mesh>
 
-      {/*  (Pathway) */}
+      {/* (Pathway) */}
       <mesh position={[-0.8, 0.15, 3.2]} receiveShadow>
         <boxGeometry args={[1.5, 0.1, 2.5]} />
         <meshStandardMaterial color="#444444" roughness={0.9} />
       </mesh>
 
-      {/*  (Decorative Bush 1) */}
+      {/* (Decorative Bush 1) */}
       <mesh position={[2.2, 0.5, 2.0]} castShadow>
         <sphereGeometry args={[0.4, 32, 32]} />
         <meshStandardMaterial color="#2d4c1e" roughness={0.9} />
       </mesh>
 
-      {/*  (Decorative Bush 2) */}
+      {/* (Decorative Bush 2) */}
       <mesh position={[2.8, 0.4, 1.5]} castShadow>
         <sphereGeometry args={[0.3, 32, 32]} />
         <meshStandardMaterial color="#2d4c1e" roughness={0.9} />
@@ -75,7 +76,51 @@ const HouseModel = () => {
   );
 };
 
+
+const UploadedImageModel = ({ url }) => {
+  const [texture, setTexture] = useState(null);
+
+  useEffect(() => {
+    if (url) {
+      new THREE.TextureLoader().load(url, (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        setTexture(tex);
+      });
+    }
+  }, [url]);
+
+  if (!texture) return null;
+
+  return (
+    <mesh position={[0, 0, 0]} castShadow receiveShadow>
+   
+      <boxGeometry args={[5, 4, 0.2]} />
+      <meshStandardMaterial map={texture} roughness={0.4} metalness={0.1} />
+    </mesh>
+  );
+};
+
 export default function Property3D() {
+  const [imgSrc, setImgSrc] = useState(null);
+  const fileInputRef = useRef(null);
+
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setImgSrc(url);
+    }
+  };
+
+
+  const clearImage = () => {
+    setImgSrc(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""; 
+    }
+  };
+
   return (
     <section className={`w-full py-24 px-6 lg:px-12 bg-[#0f2e28] relative overflow-hidden ${manrope.className}`}>
       
@@ -124,9 +169,41 @@ export default function Property3D() {
 
             <div className="relative w-full aspect-square md:aspect-video rounded-[3rem] overflow-hidden border border-white/10 bg-[#081d19] shadow-[0_40px_100px_rgba(0,0,0,0.5)]">
               
-              {/* Instruction Badge */}
-              <div className="absolute top-8 left-8 z-20 flex items-center gap-2 bg-[#0f2e28]/80 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10 text-white/90 text-[10px] font-black uppercase tracking-[0.2em]">
-                <MousePointer2 size={14} className="text-[#cddfa0]" /> Click & Drag to Explore
+            
+              <input 
+                type="file" 
+                accept="image/*" 
+                onChange={handleImageUpload} 
+                ref={fileInputRef} 
+                className="hidden" 
+              />
+
+              {/* Instruction Badge & Action Buttons */}
+              <div className="absolute top-8 left-8 z-20 flex flex-col gap-3">
+                
+                {/* Upload Trigger Button */}
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="cursor-pointer flex items-center gap-2 bg-[#0f2e28]/80 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10 text-white/90 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white/10 transition-colors"
+                >
+                  <Upload size={14} className="text-[#cddfa0]" /> Upload Image to 3D
+                </div>
+
+                {/* Clear Image Button (Only visible if image is selected) */}
+                {imgSrc && (
+                  <div 
+                    onClick={clearImage}
+                    className="cursor-pointer flex items-center gap-2 bg-red-500/80 backdrop-blur-md px-5 py-2.5 rounded-full border border-red-400 text-white/90 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-red-600 transition-colors shadow-lg"
+                  >
+                    <XCircle size={14} /> Clear Image
+                  </div>
+                )}
+                
+                {/* Hint Badge */}
+                <div className="flex items-center gap-2 bg-[#0f2e28]/50 backdrop-blur-sm px-4 py-1.5 rounded-full text-white/60 text-[9px] font-bold uppercase tracking-[0.1em]">
+                  <MousePointer2 size={12} /> Drag to Rotate
+                </div>
+
               </div>
 
               {/* --- React Three Fiber Canvas --- */}
@@ -150,14 +227,14 @@ export default function Property3D() {
                       azimuth={[-Math.PI / 1.5, Math.PI / 1.5]}
                       config={{ mass: 2, tension: 400 }}
                     >
-                      <HouseModel />
+                     
+                      {imgSrc ? <UploadedImageModel url={imgSrc} /> : <HouseModel />}
                     </PresentationControls>
 
                     <OrbitControls 
                       enableZoom={true} 
                       enablePan={false} 
-                      autoRotate 
-                      autoRotateSpeed={1} 
+                      autoRotate={!imgSrc} 
                       maxPolarAngle={Math.PI / 2} 
                       minDistance={5} 
                       maxDistance={15} 
@@ -173,7 +250,7 @@ export default function Property3D() {
               {/* Ready Badge */}
               <div className="absolute bottom-8 right-8 z-20">
                 <div className="bg-[#cddfa0] text-[#0f2e28] px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_10px_20px_rgba(205,223,160,0.3)]">
-                  <CheckCircle2 size={14} /> 3D Engine Active
+                  <CheckCircle2 size={14} /> {imgSrc ? "Image Viewer Active" : "3D Engine Active"}
                 </div>
               </div>
 

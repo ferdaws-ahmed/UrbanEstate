@@ -22,14 +22,12 @@ export default function PricePredictor() {
     offset: ["start end", "end start"]
   });
   
-  
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 40,  
     damping: 20,   
     mass: 0.5,       
     restDelta: 0.001
   });
-
 
   const yParallax = useTransform(smoothProgress, [0, 1], ["-10%", "10%"]);
 
@@ -63,44 +61,32 @@ export default function PricePredictor() {
           currentPrice = parseInt(priceStr, 10) || 300000;
         }
 
+        const now = new Date().getFullYear(); 
         const histYears = 5;
-        const histReturns = [];
-        const mean = 0.04 + (Math.random() - 0.5) * 0.02;
-        for (let i = 0; i < histYears; i++) {
-          const u1 = Math.random();
-          const u2 = Math.random();
-          const randStdNormal = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
-          const r = mean + randStdNormal * volatility; 
-          histReturns.push(r);
-        }
-
-        const histPrices = [];
-        let price = currentPrice;
-        for (let i = histYears - 1; i >= 0; i--) {
-          const ret = histReturns[i];
-          const prev = price / (1 + ret);
-          histPrices.unshift(Math.round(prev));
-          price = prev;
-        }
-
-        const avgHist = histReturns.reduce((a, b) => a + b, 0) / histReturns.length;
         const projYears = 5;
-        const projPrices = [];
-        let projPrice = currentPrice;
-        for (let y = 1; y <= projYears; y++) {
-          const noise = (Math.random() - 0.5) * volatility * 0.5;
-          const growth = avgHist + noise;
-          projPrice = projPrice * (1 + growth);
-          projPrices.push(Math.round(projPrice));
-        }
+
+        const propertySeed = String(selectedId).charCodeAt(0) || 1;
+        const baseGrowth = 0.04 + (propertySeed % 5) * 0.01;
 
         const labels = [];
-        const now = new Date().getFullYear();
-        for (let i = histYears; i >= 1; i--) labels.push(String(now - i));
-        labels.push(String(now));
-        for (let i = 1; i <= projYears; i++) labels.push(String(now + i));
+        const fullPrices = [];
 
-        const fullPrices = [...histPrices, Math.round(currentPrice), ...projPrices];
+        for (let i = histYears; i >= 1; i--) {
+          labels.push(String(now - i));
+          const histPrice = currentPrice / Math.pow(1 + baseGrowth - (volatility * 0.2), i);
+          fullPrices.push(Math.round(histPrice));
+        }
+
+
+        labels.push(String(now));
+        fullPrices.push(Math.round(currentPrice));
+
+        for (let i = 1; i <= projYears; i++) {
+          labels.push(String(now + i));
+          const projectedPrice = currentPrice * Math.pow(1 + baseGrowth + (volatility * 0.5), i);
+          fullPrices.push(Math.round(projectedPrice));
+        }
+
         return { labels, fullPrices };
       };
 
@@ -116,7 +102,7 @@ export default function PricePredictor() {
           labels,
           datasets: [
             {
-              label: "Predicted Value",
+              label: "Market Forecast",
               data: fullPrices,
               borderColor: "#cddfa0",
               backgroundColor: gradient,
@@ -134,10 +120,7 @@ export default function PricePredictor() {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          interaction: {
-            mode: 'index',
-            intersect: false,
-          },
+          interaction: { mode: 'index', intersect: false },
           plugins: { 
             legend: { display: false },
             tooltip: {
@@ -185,7 +168,6 @@ export default function PricePredictor() {
   return (
     <section ref={containerRef} className={`w-full relative py-24 px-6 lg:px-12 overflow-hidden ${manrope.className}`}>
       
-      {/* Parallax Background Image - willChange */}
       <motion.div 
         style={{ y: yParallax, willChange: "transform" }}
         className="absolute inset-[-10%] w-[120%] h-[120%] -z-20 pointer-events-none"

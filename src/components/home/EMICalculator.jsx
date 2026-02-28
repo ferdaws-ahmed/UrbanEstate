@@ -17,36 +17,37 @@ export default function EMICalculator() {
   const [downPercent, setDownPercent] = useState(20);
   const [rate, setRate] = useState(2.5);
   const [years, setYears] = useState(10);
-  
   const [showModal, setShowModal] = useState(false);
 
-  
+
   const loanAmount = useMemo(() => {
-    const p = Number(price) || 0;
-    return Math.max(0, p * (1 - Number(downPercent) / 100));
+    const p = Math.max(0, Number(price) || 0);
+    const d = Math.min(100, Math.max(0, Number(downPercent) || 0));
+    return p * (1 - d / 100);
   }, [price, downPercent]);
 
-  const monthlyRate = useMemo(() => Number(rate) / 100 / 12, [rate]);
-  const months = useMemo(() => Number(years) * 12, [years]);
+  const monthlyRate = useMemo(() => (Number(rate) || 0) / 100 / 12, [rate]);
+  const months = useMemo(() => Math.max(0, (Number(years) || 0) * 12), [years]);
 
-  // EMI calculation
-  
+
   const emi = useMemo(() => {
-    if (months <= 0) return 0;
+    if (loanAmount <= 0 || months <= 0) return 0;
     if (monthlyRate === 0) return loanAmount / months;
+    
     const x = Math.pow(1 + monthlyRate, months);
-    return (loanAmount * monthlyRate * x) / (x - 1);
+    const emiValue = (loanAmount * monthlyRate * x) / (x - 1);
+    
+    return isFinite(emiValue) ? emiValue : 0;
   }, [loanAmount, monthlyRate, months]);
 
-  const totalPayable = emi * months;
-  const totalInterest = Math.max(0, totalPayable - loanAmount);
+  const totalPayable = useMemo(() => (emi > 0 ? emi * months : 0), [emi, months]);
+  const totalInterest = useMemo(() => Math.max(0, totalPayable - loanAmount), [totalPayable, loanAmount]);
 
   const handleApplyLoan = () => {
+    if (loanAmount <= 0) return; 
     setShowModal(true);
-    setDownPercent(0);
-    setRate(0);
-    setYears(0);
     
+  
     setTimeout(() => {
       setShowModal(false);
     }, 4000);
@@ -55,7 +56,6 @@ export default function EMICalculator() {
   return (
     <section className={`w-full py-20 px-6 lg:px-12 bg-[#b3d1c5] relative overflow-hidden ${manrope.className}`}>
       
-      {/* Success Modal */}
       <AnimatePresence>
         {showModal && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
@@ -79,15 +79,15 @@ export default function EMICalculator() {
               </div>
               <h3 className="text-3xl font-extrabold text-[#0f2e28] mb-4">Application Sent!</h3>
               <p className="text-gray-600 mb-8 leading-relaxed">
-                Thank you! Your application has been processed. 
+                Thank you! Your application for <b>{formatCurrency(loanAmount)}</b> has been processed. 
                 <br />
-                <span className="font-bold text-[#0f2e28]">Your apply is successfully done.</span>
+                <span className="font-bold text-[#0f2e28]">Your application is successfully submitted.</span>
               </p>
               <button 
                 onClick={() => setShowModal(false)}
                 className="bg-[#0f2e28] text-[#cddfa0] px-10 py-4 rounded-full font-bold hover:scale-105 transition-transform"
               >
-                Apply
+                Close
               </button>
             </motion.div>
           </div>
@@ -104,8 +104,6 @@ export default function EMICalculator() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          
-          {/* Left: Inputs */}
           <div className="bg-white/80 backdrop-blur-md p-8 rounded-[32px] shadow-xl border border-white relative overflow-hidden">
             <div className="absolute top-0 right-0 w-40 h-40 bg-[#cddfa0]/30 blur-3xl rounded-full -mr-10 -mt-10"></div>
             
@@ -115,7 +113,7 @@ export default function EMICalculator() {
               <input
                 type="number"
                 value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
+                onChange={(e) => setPrice(Math.max(0, Number(e.target.value)))}
                 className="w-full bg-white border-2 border-[#0f2e28]/5 rounded-2xl pl-10 pr-4 py-5 focus:outline-none focus:ring-4 focus:ring-[#cddfa0]/30 focus:border-[#0f2e28] transition-all font-black text-[#0f2e28] text-2xl"
               />
             </div>
@@ -129,7 +127,7 @@ export default function EMICalculator() {
                 <input
                   type="range"
                   min={0}
-                  max={100}
+                  max={90}
                   value={downPercent}
                   onChange={(e) => setDownPercent(Number(e.target.value))}
                   className="w-full accent-[#0f2e28] h-2 bg-[#0f2e28]/10 rounded-lg cursor-pointer"
@@ -143,8 +141,8 @@ export default function EMICalculator() {
                 </div>
                 <input
                   type="range"
-                  min={0}
-                  max={20}
+                  min={0.1}
+                  max={25}
                   step={0.1}
                   value={rate}
                   onChange={(e) => setRate(Number(e.target.value))}
@@ -159,7 +157,7 @@ export default function EMICalculator() {
                 </div>
                 <input
                   type="range"
-                  min={0}
+                  min={1}
                   max={40}
                   value={years}
                   onChange={(e) => setYears(Number(e.target.value))}
@@ -169,7 +167,6 @@ export default function EMICalculator() {
             </div>
           </div>
 
-          {/* Right: Result Card */}
           <div className="sticky top-10">
             <div className="rounded-[40px] shadow-2xl overflow-hidden border border-white/20">
               <div className="bg-[#0f2e28] text-[#cddfa0] p-12 text-center relative overflow-hidden">
@@ -204,7 +201,8 @@ export default function EMICalculator() {
 
                 <button 
                   onClick={handleApplyLoan}
-                  className="w-full bg-[#0f2e28] text-[#cddfa0] py-6 rounded-[24px] font-black uppercase tracking-[0.2em] hover:bg-[#1a4a40] transition-all duration-300 shadow-2xl flex justify-center items-center gap-3 group"
+                  disabled={loanAmount <= 0}
+                  className="w-full bg-[#0f2e28] text-[#cddfa0] py-6 rounded-[24px] font-black uppercase tracking-[0.2em] hover:bg-[#1a4a40] disabled:bg-gray-400 transition-all duration-300 shadow-2xl flex justify-center items-center gap-3 group"
                 >
                   <CheckCircle size={22} className="group-hover:rotate-12 transition-transform" /> 
                   Apply for Loan
@@ -213,14 +211,12 @@ export default function EMICalculator() {
             </div>
           </div>
           
-          {/* Chart Section */}
           <div className="col-span-1 lg:col-span-2 bg-white/90 backdrop-blur-md p-10 rounded-[40px] shadow-xl border border-white mt-4">
             <div className="mb-8 flex items-center gap-4">
               <span className="w-12 h-2 bg-[#0f2e28] rounded-full"></span>
               <h3 className="text-2xl font-black text-[#0f2e28] uppercase tracking-tight">Amortization Schedule</h3>
             </div>
             <div className="w-full overflow-hidden">
-             
                <AmortizationChart 
                  key={`${loanAmount}-${rate}-${years}`} 
                  loanAmount={loanAmount} 
