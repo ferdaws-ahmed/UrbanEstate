@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic"; 
 
 import { adminAuth } from "@/src/lib/firebase-admin-config";
 import NextAuth from "next-auth";
@@ -11,6 +12,12 @@ export const authOptions = {
       async authorize(credentials) {
         const { idToken, role } = credentials;
 
+        // Safety Check: যদি adminAuth ইনিশিয়ালাইজ না হয়, তবে বিল্ড ক্র্যাশ করবে না
+        if (!adminAuth) {
+          console.warn("Firebase Admin SDK not initialized during build/runtime.");
+          return null;
+        }
+
         try {
           // Verify the Firebase ID Token using Admin SDK
           const decodedToken = await adminAuth.verifyIdToken(idToken);
@@ -21,7 +28,7 @@ export const authOptions = {
               email: decodedToken.email,
               name: decodedToken.name || "",
               image: decodedToken.picture || "",
-              role: role, // 'user' or 'seller'
+              role: role, 
             };
           }
           return null;
@@ -34,7 +41,6 @@ export const authOptions = {
   ],
   callbacks: {
     async jwt({ token, user }) {
-      // Transfer the role and id to the JWT token
       if (user) {
         token.role = user.role;
         token.id = user.id;
@@ -42,7 +48,6 @@ export const authOptions = {
       return token;
     },
     async session({ session, token }) {
-      // Transfer the role and id from JWT to the Session object
       if (token) {
         session.user.role = token.role;
         session.user.id = token.id;
