@@ -35,7 +35,6 @@ export default function PropertyMap() {
   const containerRef = useRef(null);
   const router = useRouter(); 
 
-
   const defaultLat = 23.9450;
   const defaultLng = 90.2785;
   
@@ -44,7 +43,6 @@ export default function PropertyMap() {
   const [selectedProperty, setSelectedProperty] = useState(null);
 
   useEffect(() => {
-
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -55,7 +53,6 @@ export default function PropertyMap() {
         },
         (error) => {
           console.warn("Location permission denied or failed. Showing default location.");
-        
         }, 
         { enableHighAccuracy: true }
       );
@@ -64,6 +61,8 @@ export default function PropertyMap() {
 
   useEffect(() => {
     if (!containerRef.current) return;
+
+    let isMounted = true;
 
     const initMap = async () => {
       if (!document.getElementById('leaflet-css')) {
@@ -81,8 +80,20 @@ export default function PropertyMap() {
         await new Promise((resolve) => { script.onload = resolve; });
       }
 
+      if (!isMounted) return;
+
       const L = window.L;
-      if (mapRef.current) { mapRef.current.remove(); }
+
+
+      if (mapRef.current) { 
+        mapRef.current.remove(); 
+        mapRef.current = null;
+      }
+
+   
+      if (containerRef.current) {
+        containerRef.current._leaflet_id = null;
+      }
 
       const map = L.map(containerRef.current, {
         zoomControl: false,
@@ -121,11 +132,24 @@ export default function PropertyMap() {
       });
 
       mapRef.current = map;
-      setTimeout(() => map.invalidateSize(), 500);
+      setTimeout(() => {
+        if (mapRef.current) mapRef.current.invalidateSize();
+      }, 500);
     };
 
     initMap();
-    return () => { if (mapRef.current) mapRef.current.remove(); };
+    
+    
+    return () => { 
+      isMounted = false;
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+      if (containerRef.current) {
+        containerRef.current._leaflet_id = null;
+      }
+    };
   }, [userLocation, properties]);
 
   const handleZoom = (type) => {
@@ -141,8 +165,6 @@ export default function PropertyMap() {
   return (
     <section className={`w-full h-screen relative bg-gray-100 overflow-hidden ${manrope.className}`}>
       
-    
-
       <div ref={containerRef} style={{ height: '100vh', width: '100vw', position: 'absolute', top: 0, left: 0, zIndex: 1 }} />
 
       <div className="absolute top-10 right-10 z-[20] flex flex-col gap-4">
