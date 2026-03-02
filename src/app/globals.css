@@ -1,30 +1,93 @@
 @import "tailwindcss";
 
 @layer base {
+  /* Light Theme Variables */
   :root {
     --background: #ffffff;
     --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --popover: #ffffff;
+    --popover-foreground: #0f172a;
+    --primary: #0f2e28;
+    --primary-foreground: #ffffff;
+    --secondary: #f1f5f9;
+    --secondary-foreground: #0f172a;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --accent: #cddfa0;
+    --accent-foreground: #0f2e28;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: #e2e8f0;
+    --input: #e2e8f0;
+    --ring: #0f2e28;
+    --radius: 0.5rem;
   }
 
-  /* .dark ক্লাস থাকলে নিচের ভ্যালুগুলো কাজ করবে */
+  /* টেলউইন্ডের ডার্ক মোড ক্লাস হ্যান্ডেল করার জন্য */
   .dark {
-    --background: #0f2e28; /* আপনার প্রজেক্টের ডার্ক গ্রিন কালার */
+    --background: #0f172a;
     --foreground: #f8fafc;
+    --card: #1e293b;
+    --card-foreground: #f8fafc;
+    --popover: #0f172a;
+    --popover-foreground: #f8fafc;
+    --primary: #cddfa0;
+    --primary-foreground: #0f2e28;
+    --secondary: #334155;
+    --secondary-foreground: #f8fafc;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --accent: #0f2e28;
+    --accent-foreground: #cddfa0;
+    --destructive: #7f1d1d;
+    --destructive-foreground: #fecaca;
+    --border: #334155;
+    --input: #334155;
+    --ring: #cddfa0;
+    --radius: 0.5rem;
+  }
+
+  /* UrbanEstate Custom Theme Variables */
+  .light {
+    --ue-primary: #0f2e28;
+    --ue-secondary: #cddfa0;
+    --ue-background: #ffffff;
+    --ue-foreground: #0f172a;
+    --ue-card: #ffffff;
+    --ue-border: #e2e8f0;
+    --ue-navbar: #0f2e28;
+    --ue-navbar-text: #ffffff;
+    --ue-accent: #cddfa0;
+    --ue-accent-text: #0f2e28;
+  }
+
+  .dark {
+    --ue-primary: #cddfa0;
+    --ue-secondary: #0f2e28;
+    --ue-background: #0f172a;
+    --ue-foreground: #f8fafc;
+    --ue-card: #1e293b;
+    --ue-border: #334155;
+    --ue-navbar: #0f2e28;
+    --ue-navbar-text: #cddfa0;
+    --ue-accent: #cddfa0;
+    --ue-accent-text: #0f2e28;
   }
 }
-
-body {
-  /* background-color এর বদলে টেলউইন্ডের ডিফল্ট ক্লাস ব্যবহার করা ভালো, 
-     তবে এখানে ভ্যারিয়েবল রাখলে transition যোগ করুন */
-  background-color: var(--background);
-  color: var(--foreground);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-
 
 @layer base {
   body {
-    @apply bg-white text-slate-900 dark:bg-[#0f2e28] dark:text-white transition-colors duration-300;
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+
+  /* Smooth transitions for theme changes */
+  *,
+  *::before,
+  *::after {
+    transition: background-color 0.3s ease, border-color 0.3s ease,
+      color 0.3s ease;
   }
 }

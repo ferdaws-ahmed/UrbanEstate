@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Manrope } from "next/font/google";
 import { MapPin, ArrowRight, Building2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "../Theme/ThemeContext";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
@@ -59,6 +60,7 @@ const allLocations = [
 ];
 
 export default function ExploreLocations() {
+  const { isDark } = useTheme();
   const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 5; 
   const totalPages = Math.ceil(allLocations.length / itemsPerPage);
@@ -82,22 +84,22 @@ export default function ExploreLocations() {
   );
 
   return (
-    <section className={`w-full py-24 px-6 lg:px-12 bg-[#0d2b25] relative overflow-hidden ${manrope.className}`}>
+    <section className={`w-full py-24 px-6 lg:px-12  ${isDark ? "bg-[#0d2b25]" : "bg-white"} relative overflow-hidden ${manrope.className}`}>
       
       {/* Background Blurs for Theme */}
-      <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-[#cddfa0]/5 blur-[150px] rounded-full pointer-events-none"></div>
+      <div className={`absolute top-1/4 left-1/4 w-[400px] h-[400px] ${isDark ? "bg-[#cddfa0]/5" : "bg-[#cddfa0]/5"} blur-[150px] rounded-full pointer-events-none`}></div>
       
       <div className="container mx-auto max-w-6xl relative z-10">
         
         {/* Section Header - Centered */}
         <div className="flex flex-col items-center text-center mb-16">
-          <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-white/10 mb-4 backdrop-blur-md">
+          <div className={`inline-flex items-center gap-2  ${isDark?"text-[#cddfa0]":"text-[#13332c]"} font-bold tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[#cddfa0]/10"}  px-5 py-2 rounded-full border ${isDark ? "border-white/10" : "border-[#0f2e28]/10"} mb-4 backdrop-blur-md`}>
             <MapPin size={14} /> Prime Neighborhoods
           </div>
-          <h2 className="text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+          <h2 className={`text-4xl lg:text-5xl font-black ${isDark ? "text-white" : "text-black"} tracking-tight leading-tight`}>
             Explore Popular <span className="text-[#cddfa0] italic font-light">Locations</span>
           </h2>
-          <p className="text-white/60 font-medium mt-4 max-w-xl">
+          <p className={` ${isDark ? "text-white/60" : "text-black/60"} font-medium mt-4 max-w-xl`}>
             Discover the most sought-after neighborhoods and premium real estate markets around the globe.
           </p>
         </div>
