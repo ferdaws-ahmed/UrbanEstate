@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Manrope } from "next/font/google";
 import { Quote, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "../Theme/ThemeContext";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
@@ -29,7 +30,7 @@ export default function TestimonialSlider() {
     }, 3500); 
     return () => clearInterval(t);
   }, []);
-
+  const { isDark } = useTheme();
   const getCardStyle = (i) => {
     const offset = i - index;
     const isCenter = offset === 0 || (offset === testimonials.length && index === 0);
@@ -48,23 +49,23 @@ export default function TestimonialSlider() {
   };
 
   return (
-    <section className={`w-full py-24 px-6 lg:px-12 bg-[#0f2e28] overflow-hidden relative ${manrope.className}`}>
+    <section className={`w-full py-24 px-6 lg:px-12 ${isDark ? "bg-[#0f2e28]" : "bg-white"} overflow-hidden relative ${manrope.className}`}>
       
       {/* Background Glows */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#cddfa0]/10 blur-[150px] rounded-full pointer-events-none"></div>
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#13332c]/50 blur-[120px] rounded-full pointer-events-none"></div>
+      <div className={`absolute bottom-0 right-1/4 w-[400px] h-[400px] ${isDark?"bg-[#13332c]/50 blur-[120px]":"bg-white/10 blur-[120px]"} rounded-full pointer-events-none`}></div>
 
       <div className="container mx-auto max-w-6xl relative z-10">
         
         {/* Header Section */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-[#cddfa0]/20 mb-4 backdrop-blur-md shadow-[0_0_15px_rgba(205,223,160,0.2)]">
+          <div className={`inline-flex items-center gap-2 ${isDark ? "text-[#cddfa0]" : "text-[#13332c]"} ${isDark ? "font-bold" : "font-light"} tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[#cddfa0]/10"} px-5 py-2 rounded-full border ${isDark ? "border-white/10" : "border-[#0f2e28]/10"} mb-4 backdrop-blur-md shadow-[0_0_15px_rgba(205,223,160,0.2)]`}>
             <Sparkles size={14} /> AI-Powered Success
           </div>
-          <h2 className="text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight">
+          <h2 className={`text-4xl lg:text-5xl font-black ${isDark ? "text-white" : "text-black"} mb-4 tracking-tight`}>
             Trusted by <span className="text-[#cddfa0] italic font-light drop-shadow-[0_0_10px_rgba(205,223,160,0.5)]">Thousands</span>
           </h2>
-          <p className="text-white/60 font-medium max-w-xl mx-auto">
+          <p className={` font-medium max-w-xl mx-auto ${isDark ? "text-white/60" : "text-black/60"}`}>
             See how our AI-powered real estate platform is changing lives through cutting-edge technology.
           </p>
         </div>
@@ -107,7 +108,7 @@ export default function TestimonialSlider() {
                   
                   <div className="border-t border-white/10 pt-5 relative z-20">
                     <p className="font-black text-white text-lg tracking-wide">{t.name}</p>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#cddfa0] mt-1 drop-shadow-[0_0_5px_rgba(205,223,160,0.3)]">{t.title}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#cddfa0] mt-1 ">{t.title}</p>
                   </div>
                 </motion.div>
               );

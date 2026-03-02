@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Manrope } from "next/font/google";
 import { PenTool, Layers, Cuboid, Gem, ChevronRight } from "lucide-react";
+import { useTheme } from "../Theme/ThemeContext";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
@@ -43,9 +44,10 @@ const storyChapters = [
 
 export default function ArchitecturalOriginStory() {
   const [activeChapter, setActiveChapter] = useState(storyChapters[0]);
+  const { isDark } = useTheme();
 
   return (
-    <section className={`w-full py-28 px-6 lg:px-12 bg-[#0f2e28] relative overflow-hidden ${manrope.className}`}>
+    <section className={`w-full py-28 px-6 lg:px-12 ${isDark ? "bg-[#0f2e28]" : "bg-white"} relative overflow-hidden ${manrope.className}`}>
       
       {/* Background Blueprint Pattern Overlay */}
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/blueprint-grid.png')] opacity-10 pointer-events-none z-0"></div>
@@ -55,11 +57,11 @@ export default function ArchitecturalOriginStory() {
         
         {/* Header */}
         <div className="text-center mb-20">
-           <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-[#cddfa0]/20 mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]">
+          <div className={`inline-flex items-center gap-2 ${isDark?"text-[#cddfa0]":"text-[#13332c]"} ${isDark?"font-bold":"font-light"} tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[#cddfa0]/10"}  px-5 py-2 rounded-full border  ${isDark ? "border-white/10" : "border-[#0f2e28]/10"} mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]`}>
             <PenTool size={14} /> The Blueprint Narrative
           </div>
-          <h2 className="text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.1]">
-            Architectural <span className="text-[#cddfa0] italic font-light">Origin Story</span>
+          <h2 className={`text-4xl lg:text-5xl font-black ${isDark ? "text-white" : "text-[#13332c]"} tracking-tight leading-[1.1]`}>
+            Architectural <span className={`text-[#cddfa0] italic font-light ${isDark ? "text-[#cddfa0]" : "text-[#13332c]"}`}>Origin Story</span>
           </h2>
         </div>
 
@@ -69,9 +71,9 @@ export default function ArchitecturalOriginStory() {
           <div className="lg:col-span-5 relative pl-8">
             
             {/* Glowing Vertical Timeline Bar */}
-            <div className="absolute left-0 top-4 bottom-4 w-0.5 bg-white/10">
+            <div className={`absolute left-0 top-4 bottom-4 w-0.5 bg-white/10 ${isDark ? "bg-[#cddfa0]/10" : "bg-white/10"}`}>
               <div 
-                className="absolute top-0 w-0.5 bg-[#cddfa0] shadow-[0_0_15px_#cddfa0] transition-all duration-700 ease-in-out"
+                className={`absolute top-0 w-0.5 ${isDark ? "bg-[#cddfa0]" : "bg-white"} shadow-[0_0_15px_#cddfa0] transition-all duration-700 ease-in-out`}
                 style={{ height: `${(activeChapter.id / storyChapters.length) * 100}%` }}
               ></div>
             </div>
@@ -85,20 +87,20 @@ export default function ArchitecturalOriginStory() {
                 >
                   {/* Timeline Node Indicator */}
                   <div className={`absolute -left-[33px] top-1 w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${activeChapter.id === chapter.id ? 'bg-[#0f2e28] border-[#cddfa0] shadow-[0_0_20px_#cddfa0] text-[#cddfa0]' : 'bg-[#0f2e28] border-white/20 text-white/40'}`}>
-                    {activeChapter.id === chapter.id ? chapter.icon : <div className="w-2 h-2 bg-white/40 rounded-full"></div>}
+                    {activeChapter.id === chapter.id ? chapter.icon : <div className={`w-2 h-2 ${isDark ? "bg-white/40" : "bg-black"} rounded-full`}></div>}
                   </div>
 
                   {/* Chapter Text */}
                   <div>
-                    <span className={`text-[10px] font-bold uppercase tracking-widest mb-1 block ${activeChapter.id === chapter.id ? 'text-[#cddfa0]' : 'text-white/40'}`}>
+                    <span className={`text-[10px] font-bold uppercase tracking-widest mb-1 block ${activeChapter.id === chapter.id ? isDark ? "text-[#cddfa0]" : "text-black" : isDark ? "text-[#cddfa0]" : "text-black"}`}>
                       Chapter 0{chapter.id}
                     </span>
-                    <h3 className={`text-2xl font-black mb-2 transition-colors ${activeChapter.id === chapter.id ? 'text-white' : 'text-white/60'}`}>
+                    <h3 className={`text-2xl font-black mb-2 transition-colors ${activeChapter.id === chapter.id ? isDark ? "text-[#cddfa0]" : "text-black" : isDark ? "text-[#cddfa0]" : "text-black"}`}>
                       {chapter.title}
                     </h3>
                      {/* Expandable Details for Active Item (Mobile friendly approach) */}
                      <div className={`lg:hidden overflow-hidden transition-all duration-500 ${activeChapter.id === chapter.id ? 'max-h-40 opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
-                        <p className="text-white/60 text-sm leading-relaxed border-l-2 border-[#cddfa0]/30 pl-4">
+                        <p className={` text-sm leading-relaxed border-l-2 border-[#cddfa0]/30 pl-4 ${isDark ? "text-white/60" : "text-black/60"}`}>
                           {chapter.desc}
                         </p>
                      </div>
@@ -118,7 +120,7 @@ export default function ArchitecturalOriginStory() {
                 className={`absolute inset-0 transition-all duration-700 ease-in-out transform ${activeChapter.id === chapter.id ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-12 scale-95 pointer-events-none'}`}
               >
                 {/* Glassmorphism Content Card */}
-                <div className="relative h-full bg-[#081d19]/80 backdrop-blur-xl rounded-[2.5rem] border border-[#cddfa0]/20 shadow-[0_40px_100px_rgba(0,0,0,0.6)] overflow-hidden group">
+                <div className={`relative h-full bg-[#081d19]/80 backdrop-blur-xl rounded-[2.5rem] border border-[#cddfa0]/20 ${isDark ? "shadow-[0_40px_100px_rgba(0,0,0,0.6)]" : ""} overflow-hidden group`}>
                   
                   {/* Image Section (Top Half) */}
                   <div className="h-2/3 relative overflow-hidden">

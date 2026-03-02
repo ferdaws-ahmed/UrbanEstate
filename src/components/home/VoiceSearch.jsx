@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MicOff, Search, MapPin, BedDouble, Bath, Maximize, Loader2, Sparkles, MessageSquareText } from "lucide-react";
 import { Manrope } from "next/font/google";
+import { useTheme } from "../Theme/ThemeContext";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
@@ -69,7 +70,7 @@ export default function VoiceSearch() {
   const [results, setResults] = useState([]);
   const [aiResponse, setAiResponse] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  
+  const { isDark } = useTheme();
   const recognitionRef = useRef(null);
 
   const speak = (text) => {
@@ -161,19 +162,19 @@ export default function VoiceSearch() {
   if (!supported) return <div className="p-10 text-center bg-[#0f2e28] text-white">Browser not supported. Use Chrome or Edge.</div>;
 
   return (
-    <section className={`w-full py-24 px-6 lg:px-12 bg-[#0f2e28] min-h-screen relative overflow-hidden ${manrope.className}`}>
+    <section className={`w-full py-24 px-6 lg:px-12 ${isDark ? "bg-[#0f2e28]" : "bg-white"} min-h-screen relative overflow-hidden ${manrope.className}`}>
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] blur-[150px] rounded-full pointer-events-none bg-[#cddfa0]/5"></div>
 
       <div className="max-w-5xl mx-auto w-full relative z-10 flex flex-col items-center">
-        <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-white/10 mb-8">
+        <div className={`inline-flex items-center gap-2 ${isDark?"text-[#cddfa0]":"text-[#13332c]"} font-bold tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[#cddfa0]/10"} px-5 py-2 rounded-full border ${isDark ? "border-white/10" : "border-[#0f2e28]/10"} mb-8`}>
           <Sparkles size={14} /> Intelligence Voice Search
         </div>
 
-        <h2 className="text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight text-center leading-none">
-          Urban Estate <span className="text-[#cddfa0] italic font-light">AI Voice</span>
+        <h2 className={`text-4xl lg:text-5xl font-black ${isDark?"text-white":"text-black"} mb-4 tracking-tight text-center leading-none`}>
+          Urban Estate <span className={`text-[#cddfa0] italic font-light ${isDark?"text-[#cddfa0]":"text-[#1a3d36]"}`}>AI Voice</span>
         </h2>
         
-        <p className="text-white/60 text-center mb-12 max-w-lg">
+        <p className={` text-center mb-12 max-w-lg ${isDark?"text-white/60":"text-black/60"}`}>
           Ask about the market, mortgage, our technology, or find your next home.
         </p>
 
@@ -182,7 +183,7 @@ export default function VoiceSearch() {
             [...Array(25)].map((_, i) => (
               <motion.div
                 key={i}
-                className="w-1.5 bg-[#cddfa0] rounded-full shadow-[0_0_10px_#cddfa0]"
+                className={`w-1.5 h-1.5 ${isDark?"bg-[#cddfa0]":"bg-[#13332c]"} rounded-full shadow-[0_0_10px_#cddfa0]`}
                 animate={{ height: [8, Math.random() * 50 + 15, 8] }}
                 transition={{ duration: 0.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.02 }}
               />
@@ -190,7 +191,7 @@ export default function VoiceSearch() {
           ) : (
             <div className="flex items-center gap-1 opacity-20">
               {[...Array(25)].map((_, i) => (
-                <div key={i} className="w-1.5 h-1.5 bg-[#cddfa0] rounded-full" />
+                <div key={i} className={`w-1.5 h-1.5 ${isDark?"bg-[#cddfa0]":"bg-[#13332c]"} rounded-full`} />
               ))}
             </div>
           )}

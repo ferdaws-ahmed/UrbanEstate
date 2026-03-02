@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Manrope } from "next/font/google";
 import { Sun, CloudSun, Sunset, Moon, Thermometer, Zap, ShieldCheck, Wind } from "lucide-react";
-
+import { useTheme } from "../Theme/ThemeContext";
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
 const timeStates = [
@@ -68,6 +68,7 @@ const timeStates = [
 export default function AtmosphericSimulator() {
   const [activeState, setActiveState] = useState(timeStates[0]);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const { isDark } = useTheme();
 
   const handleTimeChange = (state) => {
     if (activeState.id === state.id) return;
@@ -79,7 +80,7 @@ export default function AtmosphericSimulator() {
   };
 
   return (
-    <section className={`relative w-full py-24 px-6 lg:px-12 bg-[#0f2e28] overflow-hidden ${manrope.className} transition-colors duration-1000`}>
+    <section className={`relative w-full py-24 px-6 lg:px-12 ${isDark ? "bg-[#0f2e28]" : "bg-white"} overflow-hidden ${manrope.className} transition-colors duration-1000`}>
       
       {/* Dynamic Ambient Glow matching the time of day */}
       <div 
@@ -91,19 +92,19 @@ export default function AtmosphericSimulator() {
         
         {/* Header Section */}
         <div className="flex flex-col items-center text-center mb-16">
-          <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-white/10 mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]">
+          <div className={`inline-flex items-center gap-2 ${isDark?"text-[#cddfa0]":"text-[#13332c]"} ${isDark?"font-bold":"font-light"} tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[#cddfa0]/10"}  px-5 py-2 rounded-full border  ${isDark ? "border-white/10" : "border-[#0f2e28]/10"} mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]`}>
             <Wind size={14} className="animate-pulse" /> 4D Experience
           </div>
-          <h2 className="text-4xl lg:text-5xl font-black text-white mb-6 tracking-tight leading-[1.1]">
+          <h2 className={`text-4xl lg:text-5xl font-black ${isDark ? "text-white" : "text-[#13332c]"} mb-6 tracking-tight leading-[1.1]`}>
             Atmospheric <span className="text-[#cddfa0] italic font-light">Simulator</span>
           </h2>
-          <p className="text-white/60 text-lg leading-relaxed max-w-2xl mx-auto">
+          <p className={`text-lg leading-relaxed max-w-2xl mx-auto ${isDark ? "text-white/60" : "text-black/60"}`}>
             Experience the property's aura at any hour. Watch how the architecture, lighting, and smart systems adapt seamlessly from dawn till dusk.
           </p>
         </div>
 
         {/* Main Simulator Layout */}
-        <div className="relative bg-[#081d19]/80 backdrop-blur-2xl rounded-[2.5rem] border border-[#cddfa0]/20 shadow-[0_40px_100px_rgba(0,0,0,0.8)] overflow-hidden">
+        <div className={`relative bg-[#081d19]/80 backdrop-blur-2xl rounded-[2.5rem] border border-[#cddfa0]/20 ${isDark ? "shadow-[0_40px_100px_rgba(0,0,0,0.8)]" : ""} overflow-hidden`}>
           
           <div className="grid grid-cols-1 lg:grid-cols-12">
             

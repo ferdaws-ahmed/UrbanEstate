@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion, useMotionValue, useTransform, AnimatePresence } from "framer-motion";
 import { X, Heart, Undo2, Fingerprint, Sparkles, MapPin, BedDouble, Bath, Maximize, ArrowRight } from "lucide-react";
 import { Manrope } from "next/font/google";
+import { useTheme } from "../Theme/ThemeContext";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
@@ -28,6 +29,7 @@ const localProperties = [
 export default function SwipeDeck() {
   const [index, setIndex] = useState(0);
   const [saved, setSaved] = useState([]);
+  const { isDark } = useTheme();
   
   // Framer Motion Values for dragging
   const x = useMotionValue(0);
@@ -63,7 +65,7 @@ export default function SwipeDeck() {
 
   if (!current && localProperties.length > 0) {
     return (
-      <section className={`w-full py-24 px-6 bg-[#0f2e28] text-white flex flex-col items-center justify-center min-h-[80vh] ${manrope.className}`}>
+      <section className={`w-full py-24 px-6 ${isDark ? 'bg-[#0f2e28]' : 'bg-white'} ${isDark ? 'text-white' : 'text-black'} flex flex-col items-center justify-center min-h-[80vh] ${manrope.className}`}>
         <Sparkles size={64} className="text-[#cddfa0] mb-6 animate-bounce" />
         <h2 className="text-4xl lg:text-5xl font-black mb-4 tracking-tight">You're All Caught Up!</h2>
         <p className="text-white/60 mb-10 text-lg">We'll notify you when new properties match your profile.</p>
@@ -75,41 +77,41 @@ export default function SwipeDeck() {
   }
 
   return (
-    <section className={`w-full py-24 px-6 lg:px-12 bg-[#0f2e28] overflow-hidden relative min-h-screen flex flex-col justify-center ${manrope.className}`}>
+    <section className={`w-full py-24 px-6 lg:px-12 ${isDark ? 'bg-[#0f2e28]' : 'bg-white'}  overflow-hidden relative min-h-screen flex flex-col justify-center ${manrope.className}`}>
       
       {/* Background ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#cddfa0]/5 blur-[150px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] ${isDark ? 'bg-[#cddfa0]/5' : 'bg-white/5'} blur-[150px] rounded-full pointer-events-none"></div>
 
       <div className="max-w-6xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         
         {/* Left Side: Header & Info */}
         <div className="lg:col-span-5 text-center lg:text-left">
-          <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-white/10 mb-6">
+          <div className={`inline-flex items-center gap-2 ${isDark?"text-[#cddfa0]":"text-[#13332c]"}  font-bold tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[#cddfa0]/10"} px-5 py-2 rounded-full border ${isDark ? "border-white/10" : "border-[#0f2e28]/10"} mb-6`}>
             <Fingerprint size={14} /> AI Property Match
           </div>
-          <h2 className="text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight leading-tight">
-            Discover Your <br /> <span className="text-[#cddfa0] italic font-light">Dream Home</span>
+          <h2 className={`text-4xl lg:text-5xl font-black ${isDark?"text-white":"text-black"} mb-4 tracking-tight leading-tight`}>
+            Discover Your <br /> <span className={`text-[#cddfa0] ${isDark?"text-[#cddfa0]":"text-[#13332c]"} italic font-light`}>Dream Home</span>
           </h2>
-          <p className="text-white/60 font-medium text-lg mb-10 max-w-md mx-auto lg:mx-0">
+          <p className={`font-medium text-lg mb-10 max-w-md mx-auto lg:mx-0 ${isDark?"text-white/60":"text-black/60"}`}>
             Swipe right to shortlist properties you love, or swipe left to pass. You can also skip to the next property directly.
           </p>
 
           {/* Desktop Controls (With Arrow Right) */}
           <div className="hidden lg:flex items-center gap-5">
-            <button onClick={() => handleSwipe("left")} className="w-16 h-16 flex items-center justify-center bg-white/5 border border-white/10 rounded-full text-white/50 hover:bg-red-500/20 hover:text-red-500 hover:border-red-500/50 hover:scale-110 transition-all shadow-xl group">
+            <button onClick={() => handleSwipe("left")} className={`w-16 h-16 flex items-center justify-center ${isDark ? 'bg-white/5 text-white/20 border border-white/5' : 'bg-black/5 border border-black/5 text-black/20'} rounded-full  hover:bg-red-500/20 hover:text-red-500 hover:border-red-500/50 hover:scale-110 transition-all shadow-xl group`}>
               <X size={28} strokeWidth={3} className="group-active:scale-90 transition-transform" />
             </button>
             
-            <button onClick={undoSwipe} disabled={index === 0} className={`w-12 h-12 flex items-center justify-center rounded-full transition-all shadow-xl ${index === 0 ? 'bg-white/5 text-white/20 cursor-not-allowed border border-white/5' : 'bg-white/10 border border-white/20 text-white hover:bg-white/20 hover:scale-110 active:scale-95'}`}>
+            <button onClick={undoSwipe} disabled={index === 0} className={`w-12 h-12 flex items-center justify-center rounded-full transition-all shadow-xl ${index === 0 ? `${isDark ? "bg-white/5 text-white/20" : "bg-black/5 text-black/20"} cursor-not-allowed border border-white/5` : `${isDark ? "bg-white/10 border border-white/20 text-white hover:bg-white/20 hover:scale-110 active:scale-95" : "bg-black/10 border border-black/10 text-black/20 hover:bg-black/20 hover:scale-110 active:scale-95"}`}`}>
               <Undo2 size={20} strokeWidth={2.5} />
             </button>
             
-            <button onClick={() => handleSwipe("right")} className="w-16 h-16 flex items-center justify-center bg-[#cddfa0]/10 border border-[#cddfa0]/30 rounded-full text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[#0f2e28] hover:scale-110 transition-all shadow-[0_0_20px_rgba(205,223,160,0.2)] group">
+            <button onClick={() => handleSwipe("right")} className={`w-16 h-16 flex items-center justify-center ${isDark?"bg-[#cddfa0]/10":"bg-white"} border ${isDark ? "border-[#cddfa0]/30" : "border-white/10"} rounded-full text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[#0f2e28] hover:scale-110 transition-all shadow-[0_0_20px_rgba(205,223,160,0.2)] group`}>
               <Heart size={28} strokeWidth={3} fill="currentColor" className="group-active:scale-90 transition-transform" />
             </button>
 
             {/* New Skip/Next Arrow Button */}
-            <button onClick={() => handleSwipe("skip")} className="w-14 h-14 flex items-center justify-center bg-white/5 border border-white/10 rounded-full text-white/70 hover:bg-white/10 hover:text-white hover:scale-110 transition-all shadow-xl group ml-2">
+            <button onClick={() => handleSwipe("skip")} className={`w-14 h-14 flex items-center justify-center ${isDark ? 'bg-white/5 text-white/20 border border-white/5' : 'bg-black/5 border border-black/5 text-black/20'} rounded-full hover:bg-white/10 ${isDark ? 'hover:text-white' : 'hover:text-black'} hover:scale-110 transition-all shadow-xl group ml-2`}>
               <ArrowRight size={24} strokeWidth={3} className="group-active:scale-90 transition-transform" />
             </button>
           </div>
