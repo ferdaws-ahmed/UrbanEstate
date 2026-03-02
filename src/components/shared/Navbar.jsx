@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react"; // Added useRef
+import { useState, useEffect, useRef } from "react";
 import { Manrope } from "next/font/google";
-import { HiMenuAlt3, HiX, HiChevronDown, HiLogout, HiUser, HiCog } from "react-icons/hi"; 
+import { HiMenuAlt3, HiX, HiChevronDown, HiLogout, HiUser, HiCog, HiMoon, HiSun } from "react-icons/hi"; 
 import { useSession, signOut } from "next-auth/react";
+import { useTheme } from "next-themes"; // Added for Theme
 
 const manrope = Manrope({ 
   subsets: ["latin"], 
@@ -16,13 +17,17 @@ const Navbar = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Dropdown State
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [mounted, setMounted] = useState(false); // To avoid hydration mismatch
   const dropdownRef = useRef(null);
 
+  const { theme, setTheme } = useTheme();
   const { data: session } = useSession();
   const user = session?.user || null;
 
-  // Close dropdown when clicking outside
+  // Avoid hydration mismatch by waiting for mount
+  useEffect(() => setMounted(true), []);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -46,7 +51,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollPos]);
 
-  // Updated Navigation Items as per your requirement
   const getNavItems = () => {
     const commonHome = { name: "Home", path: "/" };
     const allProperty = { name: "All Property", path: "/all-properties" };
@@ -58,17 +62,20 @@ const Navbar = () => {
         allProperty,
       ];
     } 
-    
     return [commonHome, allProperty];
   };
 
   const navItems = getNavItems();
 
+  if (!mounted) return null; // Prevent UI glitch on load
+
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${manrope.className}
       ${visible ? "translate-y-0" : "-translate-y-full"} 
-      ${scrolled ? "bg-[#0f2e28]/95 backdrop-blur-md py-3 shadow-md" : "bg-transparent py-6"}`}
+      ${scrolled 
+        ? "bg-[#0f2e28]/95 dark:bg-black/90 backdrop-blur-md py-3 shadow-md" 
+        : "bg-transparent py-6"}`}
     >
       <div className="container mx-auto flex justify-between items-center px-6 lg:px-12">
         
@@ -87,15 +94,25 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Menu */}
-        <ul className="hidden lg:flex gap-10 text-white font-bold text-[17px] tracking-wide items-center">
-          {navItems.map((item, index) => (
-            <li key={index}>
-              <Link href={item.path} className="hover:text-[#cddfa0] transition duration-300">
-                {item.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="hidden lg:flex items-center gap-10">
+          <ul className="flex gap-10 text-white font-bold text-[17px] tracking-wide items-center">
+            {navItems.map((item, index) => (
+              <li key={index}>
+                <Link href={item.path} className="hover:text-[#cddfa0] transition duration-300">
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* Theme Toggle Button (Desktop) */}
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="p-2 rounded-full bg-white/10 text-[#cddfa0] hover:bg-white/20 transition-all border border-white/10"
+          >
+            {theme === "dark" ? <HiSun size={20} /> : <HiMoon size={20} />}
+          </button>
+        </div>
 
         {/* Desktop Buttons / Unique Dropdown */}
         <div className="hidden lg:flex items-center gap-5">
@@ -128,32 +145,31 @@ const Navbar = () => {
                 <HiChevronDown className={`text-white transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`} />
               </button>
 
-              {/* Unique Dropdown Menu */}
+              {/* Dropdown Menu */}
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-3 w-56 bg-[#0f2e28] border border-white/10 rounded-2xl shadow-2xl py-2 overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in duration-200">
+                <div className="absolute right-0 mt-3 w-56 bg-[#0f2e28] dark:bg-zinc-900 border border-white/10 rounded-2xl shadow-2xl py-2 overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in duration-200">
                   <div className="px-4 py-3 border-b border-white/5 bg-white/5 mb-2">
                     <p className="text-white text-sm font-bold truncate">{user.email}</p>
                     <p className="text-[#cddfa0] text-[10px] font-mono mt-0.5 capitalize">{user.role} </p>
                   </div>
                   
-                 <Link 
-      href={`/dashboard/${user?.role}/profile`} 
-      onClick={() => setIsDropdownOpen(false)} 
-      className="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:text-white hover:bg-[#cddfa0]/10 transition-colors"
-    >
-      <HiUser className="text-[#cddfa0]" /> 
-      <span className="text-sm font-medium">My Profile</span>
-    </Link>
-    
-    {/* Dynamic Dashboard Link */}
-    <Link 
-      href={`/dashboard/${user?.role}`} 
-      onClick={() => setIsDropdownOpen(false)} 
-      className="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:text-white hover:bg-[#cddfa0]/10 transition-colors"
-    >
-      <HiCog className="text-[#cddfa0]" /> 
-      <span className="text-sm font-medium">Dashboard</span>
-    </Link>
+                  <Link 
+                    href={`/dashboard/${user?.role}/profile`} 
+                    onClick={() => setIsDropdownOpen(false)} 
+                    className="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:text-white hover:bg-[#cddfa0]/10 transition-colors"
+                  >
+                    <HiUser className="text-[#cddfa0]" /> 
+                    <span className="text-sm font-medium">My Profile</span>
+                  </Link>
+                  
+                  <Link 
+                    href={`/dashboard/${user?.role}`} 
+                    onClick={() => setIsDropdownOpen(false)} 
+                    className="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:text-white hover:bg-[#cddfa0]/10 transition-colors"
+                  >
+                    <HiCog className="text-[#cddfa0]" /> 
+                    <span className="text-sm font-medium">Dashboard</span>
+                  </Link>
 
                   <div className="mt-2 pt-2 border-t border-white/5 px-2">
                     <button 
@@ -169,17 +185,25 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Toggle Button */}
-        <button 
-          className={`lg:hidden text-white text-3xl relative z-[110] transition-opacity duration-300 ${isMenuOpen ? "opacity-0 pointer-events-none" : "opacity-100"}`}
-          onClick={() => setIsMenuOpen(true)}
-        >
-          <HiMenuAlt3 />
-        </button>
+        {/* Mobile Toggle & Theme Button */}
+        <div className="flex items-center gap-4 lg:hidden relative z-[110]">
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="p-2 rounded-full bg-white/10 text-[#cddfa0]"
+          >
+            {theme === "dark" ? <HiSun size={24} /> : <HiMoon size={24} />}
+          </button>
+          <button 
+            className={`text-white text-3xl transition-opacity duration-300 ${isMenuOpen ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+            onClick={() => setIsMenuOpen(true)}
+          >
+            <HiMenuAlt3 />
+          </button>
+        </div>
       </div>
 
       {/* Mobile Sidebar */}
-      <div className={`fixed top-0 right-0 h-screen w-full sm:w-80 bg-[#0f2e28]/95 backdrop-blur-[25px] border-l border-white/20 z-[105] transform transition-transform duration-500 ease-in-out lg:hidden
+      <div className={`fixed top-0 right-0 h-screen w-full sm:w-80 bg-[#0f2e28]/95 dark:bg-black/95 backdrop-blur-[25px] border-l border-white/20 z-[105] transform transition-transform duration-500 ease-in-out lg:hidden
         ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}>
         
         <div className="flex flex-col h-full p-10 justify-center relative">

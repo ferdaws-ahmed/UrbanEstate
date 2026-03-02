@@ -6,14 +6,25 @@
     --foreground: #0f172a;
   }
 
-  /* টেলউইন্ডের ডার্ক মোড ক্লাস হ্যান্ডেল করার জন্য */
+  /* .dark ক্লাস থাকলে নিচের ভ্যালুগুলো কাজ করবে */
   .dark {
-    --background: #0f172a;
+    --background: #0f2e28; /* আপনার প্রজেক্টের ডার্ক গ্রিন কালার */
     --foreground: #f8fafc;
   }
 }
 
 body {
+  /* background-color এর বদলে টেলউইন্ডের ডিফল্ট ক্লাস ব্যবহার করা ভালো, 
+     তবে এখানে ভ্যারিয়েবল রাখলে transition যোগ করুন */
   background-color: var(--background);
   color: var(--foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+
+@layer base {
+  body {
+    @apply bg-white text-slate-900 dark:bg-[#0f2e28] dark:text-white transition-colors duration-300;
+  }
 }

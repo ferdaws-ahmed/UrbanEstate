@@ -70,7 +70,6 @@ const getResponse = (text) => {
   if (aiKnowledgeBase.tour.some(k => t.includes(k))) return "You can schedule a virtual 3D tour or an in-person viewing directly from any property's details page.";
   if (aiKnowledgeBase.negotiation.some(k => t.includes(k))) return "While prices are set by sellers, our platform allows you to submit custom offers and negotiate directly through your user dashboard.";
 
-
   return `I don't have the exact answer to this question right now. For more information regarding this, please contact us at sa9079600@gmail.com.`;
 };
 
@@ -170,39 +169,42 @@ export default function VoiceSearch() {
     }, 1500);
   };
 
-  if (!supported) return <div className="p-10 text-center bg-[#0f2e28] text-white">Browser not supported. Use Chrome or Edge.</div>;
+  if (!supported) return <div className="p-10 text-center bg-white dark:bg-[#0f2e28] text-slate-900 dark:text-white transition-colors duration-300">Browser not supported. Use Chrome or Edge.</div>;
 
   return (
-    <section className={`w-full py-24 px-6 lg:px-12 bg-[#0f2e28] min-h-screen relative overflow-hidden ${manrope.className}`}>
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] blur-[150px] rounded-full pointer-events-none bg-[#cddfa0]/5"></div>
+    <section className={`w-full py-24 px-6 lg:px-12 bg-slate-50 dark:bg-[#0f2e28] min-h-screen relative overflow-hidden transition-colors duration-500 ${manrope.className}`}>
+      {/* Background Glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] blur-[150px] rounded-full pointer-events-none bg-emerald-500/5 dark:bg-[#cddfa0]/5 transition-colors duration-500"></div>
 
       <div className="max-w-5xl mx-auto w-full relative z-10 flex flex-col items-center">
-        <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-white/10 mb-8">
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 text-emerald-600 dark:text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white dark:bg-white/5 px-5 py-2 rounded-full border border-slate-200 dark:border-white/10 mb-8 shadow-sm transition-all duration-300">
           <Sparkles size={14} /> Intelligence Voice Search
         </div>
 
-        <h2 className="text-4xl lg:text-5xl font-black text-white mb-4 tracking-tight text-center leading-none">
-          Urban Estate <span className="text-[#cddfa0] italic font-light">AI Voice</span>
+        {/* Title */}
+        <h2 className="text-4xl lg:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight text-center leading-none transition-colors duration-300">
+          Urban Estate <span className="text-emerald-500 dark:text-[#cddfa0] italic font-light transition-colors duration-300">AI Voice</span>
         </h2>
         
-        <p className="text-white/60 text-center mb-12 max-w-lg">
+        {/* Description */}
+        <p className="text-slate-500 dark:text-white/60 text-center mb-12 max-w-lg transition-colors duration-300">
           Ask about the market, mortgage, our technology, or find your next home.
         </p>
 
-        {/* Updated Visualizer Line Section with Drop-down and Glow */}
+        {/* Visualizer Section */}
         <div className="relative w-full max-w-md h-16 flex items-center justify-center gap-1.5 mb-8">
-         
           <motion.div 
             animate={{ opacity: [0.1, 0.3, 0.1], scale: [0.95, 1.05, 0.95] }} 
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} 
-            className="absolute w-2/3 h-full bg-[#cddfa0]/10 blur-2xl rounded-full pointer-events-none"
+            className="absolute w-2/3 h-full bg-emerald-500/10 dark:bg-[#cddfa0]/10 blur-2xl rounded-full pointer-events-none"
           />
 
           {listening ? (
             [...Array(25)].map((_, i) => (
               <motion.div
                 key={i}
-                className="w-1.5 bg-[#cddfa0] rounded-full shadow-[0_0_15px_#cddfa0] relative z-10"
+                className="w-1.5 bg-emerald-500 dark:bg-[#cddfa0] rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] dark:shadow-[0_0_15px_#cddfa0] relative z-10"
                 animate={{ 
                   height: [8, Math.random() * 50 + 15, 8],
                   y: [0, (Math.random() * 6) - 3, 0] 
@@ -215,7 +217,7 @@ export default function VoiceSearch() {
               {[...Array(25)].map((_, i) => (
                 <motion.div 
                   key={i} 
-                  className="w-1.5 h-1.5 bg-[#cddfa0] rounded-full shadow-[0_0_10px_#cddfa0]" 
+                  className="w-1.5 h-1.5 bg-emerald-500 dark:bg-[#cddfa0] rounded-full shadow-[0_0_10px_rgba(16,185,129,0.3)] dark:shadow-[0_0_10px_#cddfa0]" 
                   animate={{ 
                     y: [0, 4, 0], 
                     opacity: [0.4, 1, 0.4] 
@@ -227,22 +229,22 @@ export default function VoiceSearch() {
           )}
         </div>
 
+        {/* Mic Button Section */}
         <div className="relative mb-16 h-32 flex items-center justify-center">
-          {/* Continuous Glow Effect for Mic */}
           <motion.div 
             animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }} 
             transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }} 
-            className="absolute w-28 h-28 bg-[#cddfa0]/20 rounded-full blur-md" 
+            className="absolute w-28 h-28 bg-emerald-500/20 dark:bg-[#cddfa0]/20 rounded-full blur-md" 
           />
           <motion.div 
             animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.4, 0.1] }} 
             transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }} 
-            className="absolute w-32 h-32 bg-[#cddfa0]/10 rounded-full blur-xl" 
+            className="absolute w-32 h-32 bg-emerald-500/10 dark:bg-[#cddfa0]/10 rounded-full blur-xl" 
           />
 
           <AnimatePresence>
             {listening && (
-              <motion.div initial={{ scale: 1, opacity: 0.8 }} animate={{ scale: 2.5, opacity: 0 }} transition={{ repeat: Infinity, duration: 1 }} className="absolute w-20 h-20 bg-[#cddfa0]/50 rounded-full" />
+              <motion.div initial={{ scale: 1, opacity: 0.8 }} animate={{ scale: 2.5, opacity: 0 }} transition={{ repeat: Infinity, duration: 1 }} className="absolute w-20 h-20 bg-emerald-500/50 dark:bg-[#cddfa0]/50 rounded-full" />
             )}
           </AnimatePresence>
           
@@ -250,51 +252,53 @@ export default function VoiceSearch() {
             onClick={toggleListen} 
             className={`relative z-10 w-24 h-24 rounded-full flex items-center justify-center transition-all duration-300 ${
               listening 
-                ? 'bg-[#cddfa0] text-[#0f2e28] scale-110 shadow-[0_0_50px_rgba(205,223,160,0.8)]' 
-                : 'bg-[#13332c] text-[#cddfa0] shadow-[0_0_25px_rgba(205,223,160,0.5)] hover:shadow-[0_0_35px_rgba(205,223,160,0.7)] hover:bg-[#1a4038]'
+                ? 'bg-emerald-500 dark:bg-[#cddfa0] text-white dark:text-[#0f2e28] scale-110 shadow-xl' 
+                : 'bg-white dark:bg-[#13332c] text-emerald-500 dark:text-[#cddfa0] shadow-lg hover:bg-slate-50 dark:hover:bg-[#1a4038] border border-slate-100 dark:border-transparent'
             }`}
           >
             {listening ? <Mic size={40} className="animate-pulse" /> : <Mic size={40} />}
           </button>
         </div>
 
+        {/* Interaction Results */}
         <div className="w-full max-w-3xl space-y-6">
           {transcript && (
-            <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-white/10">
-              <span className="text-[10px] font-bold text-[#cddfa0] uppercase tracking-widest block mb-2 opacity-50">User Input</span>
-              <p className="text-xl text-white font-medium italic">"{transcript}"</p>
+            <div className="bg-white dark:bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm transition-colors duration-300">
+              <span className="text-[10px] font-bold text-emerald-600 dark:text-[#cddfa0] uppercase tracking-widest block mb-2 opacity-70">User Input</span>
+              <p className="text-xl text-slate-800 dark:text-white font-medium italic">"{transcript}"</p>
             </div>
           )}
 
           {isAnalyzing ? (
-            <div className="flex items-center gap-3 text-[#cddfa0] font-mono text-sm animate-pulse">
+            <div className="flex items-center gap-3 text-emerald-600 dark:text-[#cddfa0] font-mono text-sm animate-pulse">
               <Loader2 className="animate-spin" size={18} /> PROCESSING_NEURAL_DATA...
             </div>
           ) : aiResponse && (
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="bg-[#cddfa0]/10 border-l-4 border-[#cddfa0] p-6 rounded-r-2xl shadow-2xl backdrop-blur-md">
-               <p className="text-sm text-[#cddfa0] font-black uppercase tracking-widest mb-2 flex items-center gap-2">
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="bg-white dark:bg-[#cddfa0]/10 border-l-4 border-emerald-500 dark:border-[#cddfa0] p-6 rounded-r-2xl shadow-lg backdrop-blur-md border-y border-r border-slate-100 dark:border-transparent transition-all duration-300">
+               <p className="text-sm text-emerald-600 dark:text-[#cddfa0] font-black uppercase tracking-widest mb-2 flex items-center gap-2">
                 <MessageSquareText size={16} /> AI Assistant Response
               </p>
-              <p className="text-lg text-white leading-relaxed">{aiResponse}</p>
+              <p className="text-lg text-slate-700 dark:text-white leading-relaxed">{aiResponse}</p>
             </motion.div>
           )}
         </div>
 
+        {/* Property Grid */}
         {!isAnalyzing && results.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 w-full">
             {results.map((r) => (
-              <div key={r.id} className="bg-[#13332c] rounded-2xl overflow-hidden border border-white/10 group hover:border-[#cddfa0]/50 transition-all">
+              <div key={r.id} className="bg-white dark:bg-[#13332c] rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10 group hover:border-emerald-500 dark:hover:border-[#cddfa0]/50 transition-all shadow-sm hover:shadow-xl transition-colors duration-300">
                 <div className="h-40 overflow-hidden relative">
                   <img src={r.image} className="w-full h-full object-cover group-hover:scale-110 transition-duration-700" alt={r.title} />
-                  <div className="absolute top-2 left-2 bg-[#0f2e28] text-[#cddfa0] px-3 py-1 rounded-lg text-[10px] font-black">{r.price}</div>
+                  <div className="absolute top-2 left-2 bg-emerald-600 dark:bg-[#0f2e28] text-white dark:text-[#cddfa0] px-3 py-1 rounded-lg text-[10px] font-black shadow-lg transition-colors duration-300">{r.price}</div>
                 </div>
                 <div className="p-5">
-                  <h4 className="text-white font-bold mb-1 truncate text-sm">{r.title}</h4>
-                  <p className="text-white/40 text-[9px] uppercase mb-4 flex items-center gap-1"><MapPin size={10} /> {r.location}</p>
-                  <div className="flex justify-between border-t border-white/5 pt-3">
-                    <div className="flex items-center gap-1 text-[9px] text-white/60"><BedDouble size={14}/> {r.beds}</div>
-                    <div className="flex items-center gap-1 text-[9px] text-white/60"><Bath size={14}/> {r.baths}</div>
-                    <div className="flex items-center gap-1 text-[9px] text-white/60"><Maximize size={14}/> {r.size.split(' ')[0]}</div>
+                  <h4 className="text-slate-800 dark:text-white font-bold mb-1 truncate text-sm transition-colors duration-300">{r.title}</h4>
+                  <p className="text-slate-500 dark:text-white/40 text-[9px] uppercase mb-4 flex items-center gap-1 transition-colors duration-300"><MapPin size={10} /> {r.location}</p>
+                  <div className="flex justify-between border-t border-slate-100 dark:border-white/5 pt-3 transition-colors duration-300">
+                    <div className="flex items-center gap-1 text-[9px] text-slate-500 dark:text-white/60"><BedDouble size={14}/> {r.beds}</div>
+                    <div className="flex items-center gap-1 text-[9px] text-slate-500 dark:text-white/60"><Bath size={14}/> {r.baths}</div>
+                    <div className="flex items-center gap-1 text-[9px] text-slate-500 dark:text-white/60"><Maximize size={14}/> {r.size.split(' ')[0]}</div>
                   </div>
                 </div>
               </div>

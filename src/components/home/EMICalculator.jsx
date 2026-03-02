@@ -54,7 +54,7 @@ export default function EMICalculator() {
   };
 
   return (
-    <section className={`w-full py-20 px-6 lg:px-12 bg-[#b3d1c5] relative overflow-hidden ${manrope.className}`}>
+    <section className={`w-full py-20 px-6 lg:px-12 bg-[#0d2b25] relative overflow-hidden ${manrope.className}`}>
       
       <AnimatePresence>
         {showModal && (

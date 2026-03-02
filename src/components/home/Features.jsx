@@ -54,30 +54,34 @@ const Features = () => {
   const clearSelection = () => setSelected([]);
 
   return (
-    <section className={`w-full py-24 px-4 lg:px-10 bg-[#0f2e28] ${manrope.className}`}>
+    <section className={`w-full py-24 px-4 lg:px-10 bg-[var(--background)] transition-colors duration-500 ${manrope.className}`}>
       <div className="container mx-auto max-w-7xl">
         
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-16 space-y-4">
-          <div className="flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-white/10">
+          <div className="flex items-center gap-2 text-[#0f2e28] dark:text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-slate-100 dark:bg-white/5 px-5 py-2 rounded-full border border-slate-200 dark:border-white/10">
             <ShieldCheck size={14} /> AI-Verified Premium Properties
           </div>
-          <h2 className="text-4xl lg:text-5xl font-bold text-white leading-tight">
-            Featured <span className="text-[#cddfa0] italic font-light tracking-tight">Properties</span>
+          <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white leading-tight">
+            Featured <span className="text-[#0a2e26] dark:text-[#cddfa0] italic font-light tracking-tight">Properties</span>
           </h2>
         </div>
 
-        
+        {/* Property Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
           {properties.map((p) => {
             const isSelected = !!selected.find((s) => s.id === p.id);
             return (
               <div 
                 key={p.id}
-                className={`group relative bg-[#13332c] rounded-[2.2rem] overflow-hidden border transition-all duration-200 shadow-xl ${isSelected ? "border-[#cddfa0] ring-1 ring-[#cddfa0]/30" : "border-white/5 hover:border-[#cddfa0]/40"}`}
+                className={`group relative bg-white dark:bg-[#13332c] rounded-[2.2rem] overflow-hidden border transition-all duration-300 shadow-xl 
+                ${isSelected 
+                  ? "border-[#0f2e28] dark:border-[#cddfa0] ring-1 ring-[#cddfa0]/30" 
+                  : "border-slate-100 dark:border-white/5 hover:border-slate-300 dark:hover:border-[#cddfa0]/40"
+                }`}
               >
-     
-                <div className="relative h-56 w-full overflow-hidden bg-[#1a3d36]">
+                {/* Image Section */}
+                <div className="relative h-56 w-full overflow-hidden bg-slate-100 dark:bg-[#1a3d36]">
                   <img 
                     src={p.image} 
                     alt={p.title} 
@@ -85,42 +89,44 @@ const Features = () => {
                     loading="eager" 
                   />
                   <div className="absolute top-4 left-4">
-                    <div className="bg-[#0f2e28]/90 backdrop-blur-md text-[#cddfa0] text-[8px] font-bold px-3 py-1 rounded-full border border-white/10 tracking-widest uppercase">Featured</div>
+                    <div className="bg-white/90 dark:bg-[#0f2e28]/90 backdrop-blur-md text-[#0f2e28] dark:text-[#cddfa0] text-[8px] font-bold px-3 py-1 rounded-full border border-slate-200 dark:border-white/10 tracking-widest uppercase">Featured</div>
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#13332c]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-white/40 dark:from-[#13332c]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
                 </div>
 
+                {/* Content Section */}
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-bold text-[15px] text-white group-hover:text-[#cddfa0] transition-colors truncate pr-2">{p.title}</h3>
+                    <h3 className="font-bold text-[15px] text-slate-900 dark:text-white group-hover:text-[#0a2e26] dark:group-hover:text-[#cddfa0] transition-colors truncate pr-2">{p.title}</h3>
                     <button onClick={() => toggleSelect(p)} className="flex items-center gap-2 cursor-pointer outline-none bg-transparent border-none">
-                      <span className={`text-[10px] font-black uppercase tracking-wider transition-colors ${isSelected ? "text-[#cddfa0]" : "text-white/40 group-hover:text-[#cddfa0]"}`}>COMPARE</span>
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${isSelected ? "bg-[#cddfa0] border-[#cddfa0] shadow-[0_0_10px_rgba(205,223,160,0.5)]" : "border-white/20"}`}>
-                        {isSelected && <Check size={14} className="text-[#0f2e28] stroke-[4]" />}
+                      <span className={`text-[10px] font-black uppercase tracking-wider transition-colors ${isSelected ? "text-[#0f2e28] dark:text-[#cddfa0]" : "text-slate-400 dark:text-white/40 group-hover:text-[#0f2e28] dark:group-hover:text-[#cddfa0]"}`}>COMPARE</span>
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${isSelected ? "bg-[#0f2e28] dark:bg-[#cddfa0] border-transparent shadow-md" : "border-slate-200 dark:border-white/20"}`}>
+                        {isSelected && <Check size={12} className="text-white dark:text-[#0f2e28] stroke-[4]" />}
                       </div>
                     </button>
                   </div>
 
-                  <div className="text-xl font-black text-[#cddfa0] mb-5 tracking-tight">{p.price}</div>
+                  <div className="text-xl font-black text-[#0f2e28] dark:text-[#cddfa0] mb-5 tracking-tight">{p.price}</div>
 
-                  <div className="flex items-center justify-between border-y border-white/5 py-4 mb-6 px-1">
-                    <div className="flex flex-col items-center gap-1 text-white/40">
+                  {/* Amenities */}
+                  <div className="flex items-center justify-between border-y border-slate-100 dark:border-white/5 py-4 mb-6 px-1">
+                    <div className="flex flex-col items-center gap-1 text-slate-400 dark:text-white/40">
                       <Bed size={14} />
-                      <span className="text-[9px] text-white/80 font-extrabold uppercase tracking-tighter">{p.beds} Beds</span>
+                      <span className="text-[9px] text-slate-600 dark:text-white/80 font-extrabold uppercase tracking-tighter">{p.beds} Beds</span>
                     </div>
-                    <div className="w-px h-5 bg-white/10" />
-                    <div className="flex flex-col items-center gap-1 text-white/40">
+                    <div className="w-px h-5 bg-slate-200 dark:bg-white/10" />
+                    <div className="flex flex-col items-center gap-1 text-slate-400 dark:text-white/40">
                       <Bath size={14} />
-                      <span className="text-[9px] text-white/80 font-extrabold uppercase tracking-tighter">{p.baths} Baths</span>
+                      <span className="text-[9px] text-slate-600 dark:text-white/80 font-extrabold uppercase tracking-tighter">{p.baths} Baths</span>
                     </div>
-                    <div className="w-px h-5 bg-white/10" />
-                    <div className="flex flex-col items-center gap-1 text-white/40">
+                    <div className="w-px h-5 bg-slate-200 dark:bg-white/10" />
+                    <div className="flex flex-col items-center gap-1 text-slate-400 dark:text-white/40">
                       <Maximize size={14} />
-                      <span className="text-[9px] text-white/80 font-extrabold uppercase tracking-tighter">{p.size.split(" ")[0]} Sqft</span>
+                      <span className="text-[9px] text-slate-600 dark:text-white/80 font-extrabold uppercase tracking-tighter">{p.size.split(" ")[0]} Sqft</span>
                     </div>
                   </div>
 
-              
+                  {/* CTA Button */}
                   <Link href={`/property/${p.id}`} prefetch={true}>
                     <div className="w-full flex items-center justify-center gap-2 bg-[#0f2e28] text-white py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest border border-white/10 transition-all duration-200 group/btn shadow-lg active:scale-95 cursor-pointer">
                       <span className="group-hover/btn:text-[#cddfa0] transition-colors">View Details</span>
