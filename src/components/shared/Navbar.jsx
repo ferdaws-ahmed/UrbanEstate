@@ -59,13 +59,25 @@ const Navbar = () => {
   const getNavItems = () => {
     const commonHome = { name: "Home", path: "/" };
     const allProperty = { name: "All Property", path: "/all-properties" };
+    const pricePredictor = { name: "Price Predictor", path : "/price-predictor"};
+    const EMICalculator = { name : "EMI Calculator", path: "/emi-calculator"}
 
     if (user?.role === "seller") {
       return [
         commonHome,
-        { name: "Add Property", path: "/sellproperty" },
         allProperty,
+        pricePredictor,
+        { name: "Add Property", path: "/sellproperty" },
       ];
+    }
+    else if(user?.role === "user"){
+      return[
+        commonHome,
+        allProperty,
+        pricePredictor,
+        EMICalculator
+        
+      ]
     }
 
     return [commonHome, allProperty];

@@ -5,6 +5,7 @@ import { Manrope } from "next/font/google";
 import { Calculator, CheckCircle, BadgeCheck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import AmortizationChart from "./AmortizationChart";
+import { useTheme } from "../Theme/ThemeContext";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
@@ -19,7 +20,7 @@ export default function EMICalculator() {
   const [years, setYears] = useState(10);
   
   const [showModal, setShowModal] = useState(false);
-
+  const { isDark } = useTheme();
   
   const loanAmount = useMemo(() => {
     const p = Number(price) || 0;
@@ -53,7 +54,7 @@ export default function EMICalculator() {
   };
 
   return (
-    <section className={`w-full py-20 px-6 lg:px-12 bg-[#b3d1c5] relative overflow-hidden ${manrope.className}`}>
+    <section className={`w-full py-20 px-6 lg:px-12 ${isDark ? "bg-[#0f2e28] text-white" : "bg-[#f4f4f4] text-[#0f2e28]"} relative overflow-hidden ${manrope.className}`}>
       
       {/* Success Modal */}
       <AnimatePresence>
@@ -87,7 +88,7 @@ export default function EMICalculator() {
                 onClick={() => setShowModal(false)}
                 className="bg-[#0f2e28] text-[#cddfa0] px-10 py-4 rounded-full font-bold hover:scale-105 transition-transform"
               >
-                Apply
+                Okey!
               </button>
             </motion.div>
           </div>
@@ -96,17 +97,17 @@ export default function EMICalculator() {
 
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 text-[#0f2e28] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/40 px-5 py-2 rounded-full border border-[#0f2e28]/10 mb-4">
+          <div className="inline-flex items-center gap-2  font-bold tracking-[0.4em] text-[10px] uppercase bg-white/40 px-5 py-2 rounded-full border border-[#0f2e28]/10 mb-4">
             <Calculator size={14} /> Financial Planner
           </div>
-          <h2 className="text-4xl lg:text-5xl font-extrabold text-[#0f2e28] mb-4 tracking-tight">Smart EMI Calculator</h2>
-          <p className="text-[#0f2e28]/70 font-medium text-lg">Calculate your monthly mortgage payments with precision.</p>
+          <h2 className="text-4xl lg:text-5xl font-extrabold mb-4 tracking-tight">Smart EMI Calculator</h2>
+          <p className=" font-medium text-lg">Calculate your monthly mortgage payments with precision.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           
           {/* Left: Inputs */}
-          <div className="bg-white/80 backdrop-blur-md p-8 rounded-[32px] shadow-xl border border-white relative overflow-hidden">
+          <div className="bg-white/80 backdrop-blur-md p-8 h-full rounded-[32px] shadow-xl border border-white relative overflow-hidden">
             <div className="absolute top-0 right-0 w-40 h-40 bg-[#cddfa0]/30 blur-3xl rounded-full -mr-10 -mt-10"></div>
             
             <label className="block text-sm font-bold text-[#0f2e28] mb-3 uppercase tracking-wider">Property Price</label>

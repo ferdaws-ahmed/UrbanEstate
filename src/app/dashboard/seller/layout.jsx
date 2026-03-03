@@ -4,7 +4,6 @@ import SellerSidebar from "@/src/components/dashboard/seller/SellerSidebar";
 import SellerTopbar from "@/src/components/dashboard/seller/SellerTopbar";
 import { motion } from "framer-motion";
 
-
 export default function SellerLayout({ children }) {
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-950 transition-all">
