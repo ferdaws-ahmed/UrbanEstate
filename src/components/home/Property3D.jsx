@@ -9,7 +9,6 @@ import * as THREE from "three";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
-
 const HouseModel = () => {
   return (
     <group position={[0, -1.5, 0]}>
@@ -76,7 +75,7 @@ const HouseModel = () => {
   );
 };
 
-
+// --- Updated 3D Image Box Model ---
 const UploadedImageModel = ({ url }) => {
   const [texture, setTexture] = useState(null);
 
@@ -84,6 +83,7 @@ const UploadedImageModel = ({ url }) => {
     if (url) {
       new THREE.TextureLoader().load(url, (tex) => {
         tex.colorSpace = THREE.SRGBColorSpace;
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
         setTexture(tex);
       });
     }
@@ -92,18 +92,25 @@ const UploadedImageModel = ({ url }) => {
   if (!texture) return null;
 
   return (
-    <mesh position={[0, 0, 0]} castShadow receiveShadow>
-   
-      <boxGeometry args={[5, 4, 0.2]} />
-      <meshStandardMaterial map={texture} roughness={0.4} metalness={0.1} />
-    </mesh>
+    <group position={[0, 0, 0]}>
+      {/* 3D Box Geometry (Looks like a room/house block) */}
+      <mesh castShadow receiveShadow>
+        <boxGeometry args={[4.5, 3.5, 3.5]} /> 
+        <meshStandardMaterial map={texture} roughness={0.4} metalness={0.1} />
+      </mesh>
+
+      {/* Base shadow/floor for better 3D depth feeling */}
+      <mesh position={[0, -1.76, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        <planeGeometry args={[8, 8]} />
+        <meshStandardMaterial color="#000000" transparent opacity={0.2} />
+      </mesh>
+    </group>
   );
 };
 
 export default function Property3D() {
   const [imgSrc, setImgSrc] = useState(null);
   const fileInputRef = useRef(null);
-
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -112,7 +119,6 @@ export default function Property3D() {
       setImgSrc(url);
     }
   };
-
 
   const clearImage = () => {
     setImgSrc(null);
@@ -227,7 +233,7 @@ export default function Property3D() {
                       azimuth={[-Math.PI / 1.5, Math.PI / 1.5]}
                       config={{ mass: 2, tension: 400 }}
                     >
-                     
+                      
                       {imgSrc ? <UploadedImageModel url={imgSrc} /> : <HouseModel />}
                     </PresentationControls>
 

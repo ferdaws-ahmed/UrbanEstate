@@ -19,7 +19,6 @@ export default function EMICalculator() {
   const [years, setYears] = useState(10);
   const [showModal, setShowModal] = useState(false);
 
-
   const loanAmount = useMemo(() => {
     const p = Math.max(0, Number(price) || 0);
     const d = Math.min(100, Math.max(0, Number(downPercent) || 0));
@@ -28,7 +27,6 @@ export default function EMICalculator() {
 
   const monthlyRate = useMemo(() => (Number(rate) || 0) / 100 / 12, [rate]);
   const months = useMemo(() => Math.max(0, (Number(years) || 0) * 12), [years]);
-
 
   const emi = useMemo(() => {
     if (loanAmount <= 0 || months <= 0) return 0;
@@ -47,14 +45,13 @@ export default function EMICalculator() {
     if (loanAmount <= 0) return; 
     setShowModal(true);
     
-  
     setTimeout(() => {
       setShowModal(false);
     }, 4000);
   };
 
   return (
-    <section className={`w-full py-20 px-6 lg:px-12 bg-[#b3d1c5] relative overflow-hidden ${manrope.className}`}>
+    <section className={`w-full py-20 px-6 lg:px-12 bg-[#0f2e28] relative overflow-hidden ${manrope.className}`}>
       
       <AnimatePresence>
         {showModal && (
@@ -96,11 +93,12 @@ export default function EMICalculator() {
 
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 text-[#0f2e28] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/40 px-5 py-2 rounded-full border border-[#0f2e28]/10 mb-4">
+          {/* Header text colors updated for dark background */}
+          <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/5 px-5 py-2 rounded-full border border-white/10 mb-4">
             <Calculator size={14} /> Financial Planner
           </div>
-          <h2 className="text-4xl lg:text-5xl font-extrabold text-[#0f2e28] mb-4 tracking-tight">Smart EMI Calculator</h2>
-          <p className="text-[#0f2e28]/70 font-medium text-lg">Calculate your monthly mortgage payments with precision.</p>
+          <h2 className="text-4xl lg:text-5xl font-extrabold text-white mb-4 tracking-tight">Smart <span className="text-[#cddfa0] italic font-light">EMI Calculator</span></h2>
+          <p className="text-white/70 font-medium text-lg">Calculate your monthly mortgage payments with precision.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">

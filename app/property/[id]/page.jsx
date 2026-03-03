@@ -11,7 +11,6 @@ import {
 
 import Navbar from "../../../src/components/shared/Navbar"; 
 
-
 export default function PropertyPage() {
   const params = useParams();
   const router = useRouter();
@@ -41,6 +40,7 @@ export default function PropertyPage() {
 
       <main className="max-w-7xl mx-auto px-6 pt-32 pb-20 relative">
         
+        {/* Decorative Blob */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#cddfa0]/5 blur-[150px] rounded-full pointer-events-none"></div>
 
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 relative z-10">
@@ -56,19 +56,19 @@ export default function PropertyPage() {
               <div className="inline-flex items-center gap-2 text-[#cddfa0] font-bold tracking-[0.2em] text-[8px] uppercase bg-white/5 px-3 py-1 rounded-full border border-white/10 shadow-[0_0_15px_rgba(205,223,160,0.1)]">
                 <Radar size={10} className="animate-pulse" /> Asset ID: {property.id} // Verified
               </div>
-              <h1 className="text-3xl md:text-5xl font-black tracking-tighter leading-tight">
+              <h1 className="text-3xl md:text-5xl font-black tracking-tighter leading-tight text-white">
                 {property.title.split(' ')[0]} <span className="text-[#cddfa0] italic font-light">{property.title.split(' ').slice(1).join(' ')}</span>
               </h1>
             </div>
 
             <div className="flex items-center gap-5 text-white/30 font-mono text-[9px] tracking-widest uppercase">
               <span className="flex items-center gap-1.5"><MapPin size={12} className="text-[#cddfa0]" /> Sector 7, Dhaka [cite: 2026-02-25]</span>
-              <span className="flex items-center gap-1.5 text-emerald-400/50"><Activity size={12} /> Live Status: Available</span>
+              <span className="flex items-center gap-1.5 text-emerald-400/50 font-normal"><Activity size={12} /> Live Status: Available</span>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <button className="w-9 h-9 rounded-xl border border-white/5 bg-white/5 flex items-center justify-center hover:bg-[#cddfa0] hover:text-[#061510] transition-all">
+            <button className="w-9 h-9 rounded-xl border border-white/5 bg-white/5 flex items-center justify-center text-white hover:bg-[#cddfa0] hover:text-[#061510] hover:border-transparent transition-all">
               <Share2 size={14} />
             </button>
             <button 
@@ -90,7 +90,7 @@ export default function PropertyPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-[#061510] via-transparent to-transparent opacity-60"></div>
             
             <div className="absolute top-6 right-6">
-                <span className="bg-black/60 backdrop-blur-md text-[#cddfa0] text-[7px] font-mono border border-white/10 px-2.5 py-1 rounded tracking-widest uppercase shadow-2xl">Camera Unit 0{selectedImage + 1} // ACTIVE</span>
+                <span className="bg-black/60 backdrop-blur-md text-[#cddfa0] text-[7px] font-normal font-mono border border-white/10 px-2.5 py-1 rounded tracking-widest uppercase shadow-2xl">Camera Unit 0{selectedImage + 1} // ACTIVE</span>
             </div>
             <div className="absolute bottom-6 left-6 bg-[#061510]/80 backdrop-blur-2xl px-5 py-2.5 rounded-2xl border border-white/10 text-white flex items-center gap-3 shadow-2xl">
                <ShieldCheck className="text-[#cddfa0]" size={14} />
@@ -121,7 +121,7 @@ export default function PropertyPage() {
                ].map((spec, i) => (
                  <div key={i} className="bg-white/[0.03] backdrop-blur-md p-6 md:p-8 rounded-[2rem] border border-white/5 hover:border-[#cddfa0]/20 transition-all group relative overflow-hidden">
                     <spec.icon className="text-[#cddfa0]/60 mb-3 group-hover:scale-110 transition-transform" size={18} strokeWidth={1.5} />
-                    <div className="text-2xl font-black mb-1 tracking-tight">{spec.val}</div>
+                    <div className="text-2xl font-black mb-1 tracking-tight text-white">{spec.val}</div>
                     <div className="text-[8px] font-bold text-white/20 uppercase tracking-widest">{spec.label}</div>
                  </div>
                ))}
@@ -137,7 +137,7 @@ export default function PropertyPage() {
             </div>
 
             <div className="space-y-6">
-               <h3 className="text-md font-bold flex items-center gap-2.5 uppercase tracking-[0.2em]">
+               <h3 className="text-md font-bold flex items-center gap-2.5 text-white uppercase tracking-[0.2em]">
                 <div className="w-1.5 h-1.5 rounded-full bg-white/20"></div> Smart Infrastructure
                </h3>
                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
