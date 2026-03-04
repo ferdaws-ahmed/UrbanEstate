@@ -6,7 +6,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import CardWrapper from "./CardWrapper";
+import CardWrapper from "../CardWrapper";
 
 const data = [
   { name: "Jan", value: 4000 },

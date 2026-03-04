@@ -1,30 +1,31 @@
 "use client";
 import CardWrapper from "./CardWrapper";
 
-const agents = [
-  { name: "Jahid", value: 80 },
-  { name: "Sakib", value: 65 },
-  { name: "Rafi", value: 45 },
+const data = [
+  { type: "Apartment", days: 39 },
+  { type: "Villa", days: 26 },
+  { type: "Commercial", days: 19 },
+  { type: "Other", days: 13 },
 ];
 
-export default function SellerPerformance() {
+export default function AverageDaysOnMarket() {
   return (
     <CardWrapper>
-      <h3 className="font-semibold mb-6">Agent Performance</h3>
+      <h3 className="font-semibold mb-6">Average Days on Market</h3>
 
       <div className="space-y-5">
-        {agents.map((agent, i) => (
+        {data.map((item, i) => (
           <div key={i}>
             <div className="flex justify-between text-sm mb-2">
-              <span>{agent.name}</span>
-              <span>{agent.value}%</span>
+              <span>{item.type}</span>
+              <span>{item.days} days</span>
             </div>
 
             <div className="h-2 bg-white/10 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-indigo-500 to-purple-500
-                rounded-full transition-all duration-700"
-                style={{ width: `${agent.value}%` }}
+                transition-all duration-700"
+                style={{ width: `${item.days * 2}%` }}
               />
             </div>
           </div>
