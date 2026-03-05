@@ -13,6 +13,7 @@ import {
 } from "react-icons/hi";
 import { useSession, signOut } from "next-auth/react";
 import ThemeToggle from "../Theme/ThemeToggle";
+import Translation from "./Translation";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -61,6 +62,8 @@ const Navbar = () => {
     const allProperty = { name: "All Property", path: "/all-properties" };
     const pricePredictor = { name: "Price Predictor", path : "/price-predictor"};
     const EMICalculator = { name : "EMI Calculator", path: "/emi-calculator"}
+    const translation = <Translation></Translation>
+  
 
     if (user?.role === "seller") {
       return [
@@ -69,6 +72,7 @@ const Navbar = () => {
         pricePredictor,
         
         { name: "Add Property", path: "/sellproperty" },
+        
       ];
     }
     else if(user?.role === "user"){
@@ -81,7 +85,7 @@ const Navbar = () => {
       ]
     }
 
-    return [commonHome, allProperty];
+    return [commonHome, allProperty,];
   };
 
   const navItems = getNavItems();
@@ -151,6 +155,7 @@ const Navbar = () => {
 
         {/* Desktop Buttons / Unique Dropdown */}
         <div className="hidden lg:flex items-center gap-5">
+          <Translation></Translation>
           <ThemeToggle size="md" />
           {!user ? (
             <>
