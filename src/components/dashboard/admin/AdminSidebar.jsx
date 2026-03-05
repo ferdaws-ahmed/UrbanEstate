@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
+  //HousePlus,
   Users,
   UserCog,
   ShieldCheck,
@@ -11,6 +12,7 @@ import {
   BadgeDollarSign,
   Settings,
   BarChart3,
+  HousePlusIcon,
 } from "lucide-react";
 
 export default function AdminSidebar() {
@@ -18,6 +20,7 @@ export default function AdminSidebar() {
 
   const menuItems = [
     { name: "Dashboard", path: "/dashboard/admin", icon: LayoutDashboard },
+    { name: "Properties", path: "/dashboard/admin/all-properties", icon: HousePlusIcon },
     { name: "User Management", path: "/dashboard/admin/user-management", icon: Users },
     { name: "Seller Management", path: "/dashboard/admin/seller-management", icon: UserCog },
     { name: "Property Approvals", path: "/dashboard/admin/property-approvals", icon: Building },

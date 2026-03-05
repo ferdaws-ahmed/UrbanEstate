@@ -8,7 +8,7 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-import CardWrapper from "./CardWrapper";
+import CardWrapper from "../CardWrapper";
 
 const data = [
   { name: "Jan", value: 200 },

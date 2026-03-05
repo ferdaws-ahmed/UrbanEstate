@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import CardWrapper from "./CardWrapper";
+import CardWrapper from "../CardWrapper";
 
 const stats = [
   { title: "Total Listings", value: 1254, color: "from-indigo-500 to-purple-500" },

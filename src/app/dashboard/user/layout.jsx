@@ -1,8 +1,9 @@
 "use client";
 
+import UserSidebar from "@/src/components/dashboard/user/UserSidebar";
+import UserTopbar from "@/src/components/dashboard/user/UserTopbar";
 import { motion } from "framer-motion";
-import UserSidebar from "@/components/dashboard/user/UserSidebar";
-import UserTopbar from "@/components/dashboard/user/UserTopbar";
+
 
 export default function UserLayout({ children }) {
   return (

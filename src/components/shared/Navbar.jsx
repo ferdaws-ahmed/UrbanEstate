@@ -13,7 +13,7 @@ import {
 } from "react-icons/hi";
 import { useSession, signOut } from "next-auth/react";
 import ThemeToggle from "../Theme/ThemeToggle";
-import Translation from "./Translation";
+import Translation, { TranslationInit } from "../shared/Translation";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -91,7 +91,9 @@ const Navbar = () => {
   const navItems = getNavItems();
 
   return (
-    <nav
+    <>
+    <TranslationInit />
+     <nav
       className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${
         manrope.className
       }
@@ -340,6 +342,8 @@ const Navbar = () => {
         ></div>
       )}
     </nav>
+    </>
+   
   );
 };
 

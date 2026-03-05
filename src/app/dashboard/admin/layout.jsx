@@ -1,7 +1,6 @@
 "use client";
 
 
-
 import AdminSidebar from "@/src/components/dashboard/admin/AdminSidebar";
 import AdminTopbar from "@/src/components/dashboard/admin/AdminTopbar";
 import { motion } from "framer-motion";

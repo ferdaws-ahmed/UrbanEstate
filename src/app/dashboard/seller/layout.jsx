@@ -1,8 +1,8 @@
 "use client";
 
-import SellerSidebar from "@/src/components/dashboard/seller/SellerSidebar";
-import SellerTopbar from "@/src/components/dashboard/seller/SellerTopbar";
 import { motion } from "framer-motion";
+import SellerSidebar from "@/components/dashboard/seller/SellerSidebar";
+import SellerTopbar from "@/components/dashboard/seller/SellerTopbar";
 
 export default function SellerLayout({ children }) {
   return (

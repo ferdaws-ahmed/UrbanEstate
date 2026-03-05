@@ -1,5 +1,5 @@
 "use client";
-import CardWrapper from "./CardWrapper";
+import CardWrapper from "../CardWrapper";
 
 export default function RecentListings() {
   return (
