@@ -15,7 +15,7 @@
     "bcryptjs": "^3.0.3",
     "firebase": "^12.9.0",
     "firebase-admin": "^13.6.1",
-    "framer-motion": "^12.34.3",
+    "framer-motion": "^12.35.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.575.0",
     "mongodb": "^7.1.0",
