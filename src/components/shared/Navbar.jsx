@@ -67,6 +67,7 @@ const Navbar = () => {
         commonHome,
         allProperty,
         pricePredictor,
+        
         { name: "Add Property", path: "/sellproperty" },
       ];
     }
@@ -174,6 +175,7 @@ const Navbar = () => {
               >
                 {user.image ? (
                   <img
+                   referrerPolicy="no-referrer"
                     src={user.image}
                     alt="Profile"
                     className="w-9 h-9 rounded-full border-2 border-[#cddfa0]"
