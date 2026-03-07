@@ -81,3 +81,23 @@ export async function POST(request) {
     return Response.json({ error: "Server error" }, { status: 500 });
   }
 }
+
+export async function GET() {
+  try {
+    const sellerPropertyCollection = await connect("sellerProperty");
+
+    // Fetch all properties, sorted by newest first
+    const properties = await sellerPropertyCollection
+      .find({})
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    return Response.json(properties, { status: 200 });
+  } catch (err) {
+    console.error("Fetch Error:", err);
+    return Response.json(
+      { error: "Failed to fetch properties" },
+      { status: 500 },
+    );
+  }
+}
