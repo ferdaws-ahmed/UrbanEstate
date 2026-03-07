@@ -1,17 +1,80 @@
-'use client';
+"use client";
 
 import BasicInfo from "./BasicInfo";
 import PropertyDetails from "./PropertyDetails";
 import PropertyLocation from "./PropertyLocation";
 import Amenities from "./Amenities";
 import MediaUpload from "./MediaUpload";
+import { useState } from "react";
 
 const SellPropertyParent = () => {
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitting property...");
-  };
+  const [property, setProperty] = useState({
+    basicInformation: {
+      title: "",
+      price: 0,
+      category: "",
+      listingStatus: "",
+      propertyType: "",
+      description: "",
+    },
+    propertyDetails: {
+      bedrooms: 0,
+      bathrooms: 0,
+      totalArea: 0,
+      floorLevel: "",
+      furnishing: "",
+      yearBuilt: new Date().getFullYear(),
+    },
+    location: {
+      address: "",
+      city: "",
+      coordinates: {
+        type: "Point",
+        coordinates: [23.8103, 90.4125],
+      },
+      formattedAddress: "",
+    },
+    fetaures: [],
+    imageUrl: [],
+  });
 
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const address = property?.location?.address || "";
+    const cityValue = address.includes(", ") ? address.split(", ")[0] : address;
+    const finalData = {
+      ...property,
+      location: {
+        ...property.location,
+        city: cityValue,
+      },
+      features: [...property.fetaures],
+      imageUrl: [...property.imageUrl],
+    };
+    console.log(property.imageUrl);
+    try {
+      const res = await fetch("/api/seller-property", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(finalData),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.error("Error submitting property:", data.error);
+        alert(`Error: ${data.error}`);
+        return;
+      }
+
+      console.log("Property submitted successfully:", data);
+      alert("Property submitted successfully!");
+    } catch (err) {
+      console.error("Server error:", err);
+      alert("Server error, try again later.");
+    }
+  };
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mt-20 mx-auto">
@@ -21,47 +84,94 @@ const SellPropertyParent = () => {
             List Your Property
           </h1>
           <p className="mt-2 text-base md:text-lg text-slate-600 dark:text-slate-400">
-            Fill in the details below to list your property on our global marketplace.
+            Fill in the details below to list your property on our global
+            marketplace.
           </p>
         </div>
 
         {/* Form Content */}
-        <form onSubmit={handleFormSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <form
+          onSubmit={handleFormSubmit}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
+        >
           {/* Main Input Sections (Left Side) */}
           <div className="lg:col-span-2 space-y-8">
-            <BasicInfo />
-            <PropertyDetails />
-            <PropertyLocation />
-            <Amenities />
-            <MediaUpload />
+            <BasicInfo
+              basicInfo={property.basicInformation}
+              setBasicInfo={(newData) =>
+                setProperty({ ...property, basicInformation: newData })
+              }
+            ></BasicInfo>
+            <PropertyDetails
+              propertyDetails={property.propertyDetails}
+              setPropertyDetails={(newData) =>
+                setProperty({ ...property, propertyDetails: newData })
+              }
+            ></PropertyDetails>
+            <PropertyLocation
+              propertyLocation={property.location}
+              setPropertyLocation={(newData) =>
+                setProperty((prev) => ({
+                  ...prev,
+                  location: newData,
+                }))
+              }
+            />
+            <Amenities
+              feature={property.fetaures}
+              setFeatures={(newData) =>
+                setProperty({ ...property, fetaures: newData })
+              }
+            />
+            <MediaUpload
+              imageUrl={property.imageUrl}
+              setImageUrl={(updateFn) =>
+                setProperty((prev) => ({
+                  ...prev,
+                  imageUrl:
+                    typeof updateFn === "function"
+                      ? updateFn(prev.imageUrl)
+                      : updateFn,
+                }))
+              }
+            />
           </div>
 
           {/* Sticky Sidebar / Action Panel (Right Side) */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
               <div className="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Submission Summary</h3>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">
+                  Submission Summary
+                </h3>
                 <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-400">
-                  <li className="flex justify-between"><span>Status:</span> <span className="text-blue-600 font-medium">Draft</span></li>
-                  <li className="flex justify-between"><span>Visibility:</span> <span className="text-green-600 font-medium">Public</span></li>
+                  <li className="flex justify-between">
+                    <span>Status:</span>{" "}
+                    <span className="text-blue-600 font-medium">Draft</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span>Visibility:</span>{" "}
+                    <span className="text-green-600 font-medium">Public</span>
+                  </li>
                 </ul>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="w-full mt-6 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 dark:shadow-none transition transform active:scale-95"
                 >
                   Publish Property
                 </button>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="w-full mt-3 py-3 bg-transparent border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-medium rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 transition"
                 >
                   Save as Draft
                 </button>
               </div>
-              
+
               <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl">
                 <p className="text-xs text-amber-700 dark:text-amber-400 leading-relaxed">
-                  Tip: Properties with high-quality photos and detailed descriptions get 70% more inquiries.
+                  Tip: Properties with high-quality photos and detailed
+                  descriptions get 70% more inquiries.
                 </p>
               </div>
             </div>
