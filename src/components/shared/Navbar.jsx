@@ -30,6 +30,7 @@ const Navbar = () => {
 
   const { data: session } = useSession();
   const user = session?.user || null;
+  console.log(user)
 
   // Close dropdown when clicking outside
   useEffect(() => {

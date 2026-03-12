@@ -1,10 +1,10 @@
 "use client";
 import { auth } from "@/src/lib/firebase-config";
-import { 
-  signInWithPopup, 
-  createUserWithEmailAndPassword, 
+import {
+  signInWithPopup,
+  createUserWithEmailAndPassword,
   updateProfile,
-  sendEmailVerification 
+  sendEmailVerification,
 } from "firebase/auth";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export const useRegisterLogic = () => {
-  const [role, setRole] = useState(null); 
+  const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -31,7 +31,7 @@ export const useRegisterLogic = () => {
       const result = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken();
 
-      // direct send data: NextAuth 
+      // direct send data: NextAuth
       const response = await signIn("credentials", {
         idToken,
         role,
@@ -39,16 +39,27 @@ export const useRegisterLogic = () => {
         uid: result.user.uid,
         redirect: false,
       });
+      // send social data to mongodb
+      await fetch("/api/auth/social-register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: result.user.displayName,
+          email: result.user.email,
+          uid: result.user.uid,
+          role,
+          provider: provider.providerId, // google.com or github.com
+        }),
+      });
 
       if (response?.error) throw new Error("NextAuth session failed");
 
       toast.success("Login Successful!", { id: toastId });
 
-      router.refresh(); 
+      router.refresh();
       setTimeout(() => {
         router.push(role === "seller" ? "/sellproperty" : "/");
       }, 500);
-
     } catch (error) {
       console.error("Login Error:", error);
       toast.error("Login failed! Please try again.", { id: toastId });
@@ -60,19 +71,23 @@ export const useRegisterLogic = () => {
   // email register
   const handleEmailRegister = async (name, email, password) => {
     if (!role) return toast.error("Choose a role!");
-    
+
     setLoading(true);
     const toastId = toast.loading("Creating your account...");
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
       // name update
       await updateProfile(userCredential.user, { displayName: name });
 
       // send email verification
       await sendEmailVerification(userCredential.user);
-      
+
       toast.success("Verification email sent! ✉️", { id: toastId });
 
       const idToken = await userCredential.user.getIdToken();
@@ -92,8 +107,9 @@ export const useRegisterLogic = () => {
       }
     } catch (err) {
       let errorMessage = err.message;
-      if (err.code === "auth/email-already-in-use") errorMessage = "Email already in use! 🛑";
-      
+      if (err.code === "auth/email-already-in-use")
+        errorMessage = "Email already in use! 🛑";
+
       toast.error(errorMessage, { id: toastId });
       setError(errorMessage);
     } finally {
@@ -101,5 +117,12 @@ export const useRegisterLogic = () => {
     }
   };
 
-  return { role, setRole, handleSocialRegister, handleEmailRegister, loading, error };
+  return {
+    role,
+    setRole,
+    handleSocialRegister,
+    handleEmailRegister,
+    loading,
+    error,
+  };
 };
