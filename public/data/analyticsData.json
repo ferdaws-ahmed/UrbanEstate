@@ -1,0 +1,110 @@
+{
+  "marketValuation": {
+    "value": "$42.8M",
+    "description": "Portfolio market value",
+    "trend": "↑ 18.5%"
+  },
+  "listingConversionRate": {
+    "value": "52.4%",
+    "description": "Percentage of properties listed that go under contract",
+    "trend": "↑ 5.2%"
+  },
+  "salesByPropertyType": [
+    { "region": "Gulshan", "Apartment": 85, "Villa": 45, "Commercial": 30 },
+    { "region": "Banani", "Apartment": 72, "Villa": 38, "Commercial": 25 },
+    { "region": "Dhanmondi", "Apartment": 95, "Villa": 20, "Commercial": 35 },
+    { "region": "Uttara", "Apartment": 110, "Villa": 55, "Commercial": 20 },
+    { "region": "Bashundhara", "Apartment": 130, "Villa": 85, "Commercial": 15 },
+    { "region": "Mirpur", "Apartment": 150, "Villa": 15, "Commercial": 22 },
+    { "region": "Badda", "Apartment": 80, "Villa": 10, "Commercial": 45 },
+    { "region": "Purbachal", "Apartment": 40, "Villa": 95, "Commercial": 10 },
+    { "region": "Baridhara", "Apartment": 50, "Villa": 60, "Commercial": 18 },
+    { "region": "Motijheel", "Apartment": 20, "Villa": 5, "Commercial": 120 }
+  ],
+  "agentPerformance": [
+    { "id": 1, "name": "Sabikun Nahar", "conversionRate": "68%", "avgCommissionEarned": "$24.5K", "rating": 4.9 },
+    { "id": 2, "name": "Tanvir Ahmed", "conversionRate": "62%", "avgCommissionEarned": "$21.2K", "rating": 4.7 },
+    { "id": 3, "name": "Farhana Islam", "conversionRate": "59%", "avgCommissionEarned": "$19.8K", "rating": 4.8 },
+    { "id": 4, "name": "Rafiqul Islam", "conversionRate": "55%", "avgCommissionEarned": "$18.5K", "rating": 4.5 },
+    { "id": 5, "name": "Mehedi Hasan", "conversionRate": "51%", "avgCommissionEarned": "$16.4K", "rating": 4.4 },
+    { "id": 6, "name": "Nusrat Jahan", "conversionRate": "48%", "avgCommissionEarned": "$15.1K", "rating": 4.2 },
+    { "id": 7, "name": "Kamal Hossain", "conversionRate": "45%", "avgCommissionEarned": "$14.2K", "rating": 4.1 },
+    { "id": 8, "name": "Anisur Rahman", "conversionRate": "42%", "avgCommissionEarned": "$12.8K", "rating": 4.0 },
+    { "id": 9, "name": "Sadia Afrin", "conversionRate": "38%", "avgCommissionEarned": "$11.5K", "rating": 3.9 },
+    { "id": 10, "name": "Tariqul Zia", "conversionRate": "35%", "avgCommissionEarned": "$10.2K", "rating": 3.8 }
+  ],
+  "marketTrends": [
+    { "month": "Jan", "avgPrice": 2800 },
+    { "month": "Feb", "avgPrice": 2850 },
+    { "month": "Mar", "avgPrice": 2750 },
+    { "month": "Apr", "avgPrice": 2900 },
+    { "month": "May", "avgPrice": 3100 },
+    { "month": "Jun", "avgPrice": 3050 },
+    { "month": "Jul", "avgPrice": 3250 },
+    { "month": "Aug", "avgPrice": 3400 },
+    { "month": "Sep", "avgPrice": 3350 },
+    { "month": "Oct", "avgPrice": 3500 },
+    { "month": "Nov", "avgPrice": 3700 },
+    { "month": "Dec", "avgPrice": 3900 }
+  ],
+  "inventoryLevels": [
+    { "month": "Jan", "inventory": 1850 },
+    { "month": "Feb", "inventory": 1720 },
+    { "month": "Mar", "inventory": 1650 },
+    { "month": "Apr", "inventory": 1580 },
+    { "month": "May", "inventory": 1620 },
+    { "month": "Jun", "inventory": 1450 },
+    { "month": "Jul", "inventory": 1380 },
+    { "month": "Aug", "inventory": 1250 },
+    { "month": "Sep", "inventory": 1300 },
+    { "month": "Oct", "inventory": 1150 },
+    { "month": "Nov", "inventory": 1080 },
+    { "month": "Dec", "inventory": 950 }
+  ],
+  "transactionVolume": [
+    { "month": "Jan", "volume": 420 },
+    { "month": "Feb", "volume": 480 },
+    { "month": "Mar", "volume": 550 },
+    { "month": "Apr", "volume": 510 },
+    { "month": "May", "volume": 630 },
+    { "month": "Jun", "volume": 690 },
+    { "month": "Jul", "volume": 750 },
+    { "month": "Aug", "volume": 820 },
+    { "month": "Sep", "volume": 780 },
+    { "month": "Oct", "volume": 890 },
+    { "month": "Nov", "volume": 940 },
+    { "month": "Dec", "volume": 1050 }
+  ],
+  "marketShare": [
+    { "name": "Luxury Apartments", "value": 35 },
+    { "name": "Mid-Range Flats", "value": 40 },
+    { "name": "Commercial Space", "value": 15 },
+    { "name": "Villas & Duplex", "value": 10 }
+  ],
+  "marketPosition": {
+    "minPrice": 450000,
+    "maxPrice": 15500000,
+    "medianPrice": 3200000,
+    "pricePerSqft": 485
+  },
+  "underperformingListings": [
+    { "id": 1, "agentName": "Kamal Hossain", "listed": "120 Days", "status": "Critical" },
+    { "id": 2, "agentName": "Sadia Afrin", "listed": "95 Days", "status": "At Risk" },
+    { "id": 3, "agentName": "Tariqul Zia", "listed": "88 Days", "status": "Review" },
+    { "id": 4, "agentName": "Anisur Rahman", "listed": "82 Days", "status": "Warning" },
+    { "id": 5, "agentName": "Mehedi Hasan", "listed": "75 Days", "status": "Review" },
+    { "id": 6, "agentName": "Nusrat Jahan", "listed": "70 Days", "status": "Warning" },
+    { "id": 7, "agentName": "Rafiqul Islam", "listed": "65 Days", "status": "Action Needed" },
+    { "id": 8, "agentName": "Farhana Islam", "listed": "60 Days", "status": "Action Needed" }
+  ],
+  "newHighValueLeads": [
+    { "id": 1, "agentName": "Sabikun Nahar", "leads": 24, "value": "$1.2M" },
+    { "id": 2, "agentName": "Tanvir Ahmed", "leads": 18, "value": "$950K" },
+    { "id": 3, "agentName": "Farhana Islam", "leads": 15, "value": "$820K" },
+    { "id": 4, "agentName": "Sabikun Nahar", "leads": 14, "value": "$750K" },
+    { "id": 5, "agentName": "Rafiqul Islam", "leads": 12, "value": "$680K" },
+    { "id": 6, "agentName": "Mehedi Hasan", "leads": 10, "value": "$550K" },
+    { "id": 7, "agentName": "Tanvir Ahmed", "leads": 9, "value": "$480K" },
+    { "id": 8, "agentName": "Nusrat Jahan", "leads": 8, "value": "$420K" }
+  ]
+}
