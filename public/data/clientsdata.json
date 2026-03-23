@@ -1,0 +1,367 @@
+{
+  "stats": {
+    "newLeads": {
+      "value": 45,
+      "trend": "+ 18%"
+    }
+  },
+  "clients": [
+    {
+      "id": 1,
+      "name": "Arif Hossain",
+      "type": "Buyer",
+      "email": "arif.hossain@example.com",
+      "phone": "+880 1711-111111",
+      "avatar": "https://i.pravatar.cc/150?u=arif1",
+      "assignedAgent": "S. Islam",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent1",
+      "status": "Active"
+    },
+    {
+      "id": 2,
+      "name": "Sarah Johnson",
+      "type": "Seller",
+      "email": "sarah.j@example.com",
+      "phone": "+1 212-555-0198",
+      "avatar": "https://i.pravatar.cc/150?u=sarah2",
+      "assignedAgent": "D. Mann",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent2",
+      "status": "Active"
+    },
+    {
+      "id": 3,
+      "name": "Rakib Khan",
+      "type": "Investor",
+      "email": "rakib.invest@example.com",
+      "phone": "+880 1811-222222",
+      "avatar": "https://i.pravatar.cc/150?u=rakib3",
+      "assignedAgent": "J. Lee",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent3",
+      "status": "Active"
+    },
+    {
+      "id": 4,
+      "name": "Emma Wilson",
+      "type": "Buyer",
+      "email": "emma.w@example.com",
+      "phone": "+44 20-7946-0958",
+      "avatar": "https://i.pravatar.cc/150?u=emma4",
+      "assignedAgent": "R. Taylor",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent4",
+      "status": "Inactive"
+    },
+    {
+      "id": 5,
+      "name": "Tania Akter",
+      "type": "Seller",
+      "email": "tania.akter@example.com",
+      "phone": "+880 1911-333333",
+      "avatar": "https://i.pravatar.cc/150?u=tania5",
+      "assignedAgent": "S. Islam",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent1",
+      "status": "Active"
+    },
+    {
+      "id": 6,
+      "name": "Michael Chen",
+      "type": "Investor",
+      "email": "m.chen@example.com",
+      "phone": "+1 415-555-0134",
+      "avatar": "https://i.pravatar.cc/150?u=chen6",
+      "assignedAgent": "A. Narno",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent5",
+      "status": "Active"
+    },
+    {
+      "id": 7,
+      "name": "Jahid Hasan",
+      "type": "Buyer",
+      "email": "jahid.h@example.com",
+      "phone": "+880 1711-444444",
+      "avatar": "https://i.pravatar.cc/150?u=jahid7",
+      "assignedAgent": "D. Mann",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent2",
+      "status": "Active"
+    },
+    {
+      "id": 8,
+      "name": "David Martinez",
+      "type": "Buyer",
+      "email": "david.m@example.com",
+      "phone": "+1 305-555-0176",
+      "avatar": "https://i.pravatar.cc/150?u=david8",
+      "assignedAgent": "J. Lee",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent3",
+      "status": "Active"
+    },
+    {
+      "id": 9,
+      "name": "Nusrat Jahan",
+      "type": "Seller",
+      "email": "nusrat.j@example.com",
+      "phone": "+880 1811-555555",
+      "avatar": "https://i.pravatar.cc/150?u=nusrat9",
+      "assignedAgent": "R. Taylor",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent4",
+      "status": "Active"
+    },
+    {
+      "id": 10,
+      "name": "James Smith",
+      "type": "Investor",
+      "email": "james.s@example.com",
+      "phone": "+1 312-555-0143",
+      "avatar": "https://i.pravatar.cc/150?u=james10",
+      "assignedAgent": "S. Islam",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent1",
+      "status": "Inactive"
+    },
+    {
+      "id": 11,
+      "name": "Fahim Rahman",
+      "type": "Buyer",
+      "email": "fahim.r@example.com",
+      "phone": "+880 1911-666666",
+      "avatar": "https://i.pravatar.cc/150?u=fahim11",
+      "assignedAgent": "A. Narno",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent5",
+      "status": "Active"
+    },
+    {
+      "id": 12,
+      "name": "Olivia Davis",
+      "type": "Seller",
+      "email": "olivia.d@example.com",
+      "phone": "+44 161-496-0123",
+      "avatar": "https://i.pravatar.cc/150?u=olivia12",
+      "assignedAgent": "D. Mann",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent2",
+      "status": "Active"
+    },
+    {
+      "id": 13,
+      "name": "Mehedi Chowdhury",
+      "type": "Other",
+      "email": "mehedi.c@example.com",
+      "phone": "+880 1711-777777",
+      "avatar": "https://i.pravatar.cc/150?u=mehedi13",
+      "assignedAgent": "J. Lee",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent3",
+      "status": "Active"
+    },
+    {
+      "id": 14,
+      "name": "William Brown",
+      "type": "Buyer",
+      "email": "william.b@example.com",
+      "phone": "+1 404-555-0188",
+      "avatar": "https://i.pravatar.cc/150?u=william14",
+      "assignedAgent": "S. Islam",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent1",
+      "status": "Active"
+    },
+    {
+      "id": 15,
+      "name": "Sadia Islam",
+      "type": "Investor",
+      "email": "sadia.i@example.com",
+      "phone": "+880 1811-888888",
+      "avatar": "https://i.pravatar.cc/150?u=sadia15",
+      "assignedAgent": "R. Taylor",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent4",
+      "status": "Active"
+    },
+    {
+      "id": 16,
+      "name": "Sophia Garcia",
+      "type": "Buyer",
+      "email": "sophia.g@example.com",
+      "phone": "+1 713-555-0155",
+      "avatar": "https://i.pravatar.cc/150?u=sophia16",
+      "assignedAgent": "D. Mann",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent2",
+      "status": "Inactive"
+    },
+    {
+      "id": 17,
+      "name": "Imran Mahmud",
+      "type": "Seller",
+      "email": "imran.m@example.com",
+      "phone": "+880 1911-999999",
+      "avatar": "https://i.pravatar.cc/150?u=imran17",
+      "assignedAgent": "A. Narno",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent5",
+      "status": "Active"
+    },
+    {
+      "id": 18,
+      "name": "Lucas Miller",
+      "type": "Investor",
+      "email": "lucas.m@example.com",
+      "phone": "+1 206-555-0111",
+      "avatar": "https://i.pravatar.cc/150?u=lucas18",
+      "assignedAgent": "J. Lee",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent3",
+      "status": "Active"
+    },
+    {
+      "id": 19,
+      "name": "Kamrul Islam",
+      "type": "Buyer",
+      "email": "kamrul.i@example.com",
+      "phone": "+880 1711-101010",
+      "avatar": "https://i.pravatar.cc/150?u=kamrul19",
+      "assignedAgent": "S. Islam",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent1",
+      "status": "Active"
+    },
+    {
+      "id": 20,
+      "name": "Isabella Wilson",
+      "type": "Other",
+      "email": "isabella.w@example.com",
+      "phone": "+44 113-496-0177",
+      "avatar": "https://i.pravatar.cc/150?u=isabella20",
+      "assignedAgent": "R. Taylor",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent4",
+      "status": "Active"
+    },
+    {
+      "id": 21,
+      "name": "Ayesha Siddiqa",
+      "type": "Seller",
+      "email": "ayesha.s@example.com",
+      "phone": "+880 1811-202020",
+      "avatar": "https://i.pravatar.cc/150?u=ayesha21",
+      "assignedAgent": "D. Mann",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent2",
+      "status": "Active"
+    },
+    {
+      "id": 22,
+      "name": "Ethan Taylor",
+      "type": "Buyer",
+      "email": "ethan.t@example.com",
+      "phone": "+1 617-555-0199",
+      "avatar": "https://i.pravatar.cc/150?u=ethan22",
+      "assignedAgent": "A. Narno",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent5",
+      "status": "Inactive"
+    },
+    {
+      "id": 23,
+      "name": "Rubel Mia",
+      "type": "Investor",
+      "email": "rubel.m@example.com",
+      "phone": "+880 1911-303030",
+      "avatar": "https://i.pravatar.cc/150?u=rubel23",
+      "assignedAgent": "S. Islam",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent1",
+      "status": "Active"
+    },
+    {
+      "id": 24,
+      "name": "Mia Anderson",
+      "type": "Seller",
+      "email": "mia.a@example.com",
+      "phone": "+1 480-555-0122",
+      "avatar": "https://i.pravatar.cc/150?u=mia24",
+      "assignedAgent": "J. Lee",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent3",
+      "status": "Active"
+    },
+    {
+      "id": 25,
+      "name": "Habibullah Bahar",
+      "type": "Buyer",
+      "email": "habib.b@example.com",
+      "phone": "+880 1711-404040",
+      "avatar": "https://i.pravatar.cc/150?u=habib25",
+      "assignedAgent": "R. Taylor",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent4",
+      "status": "Active"
+    },
+    {
+      "id": 26,
+      "name": "Alexander Thomas",
+      "type": "Investor",
+      "email": "alex.t@example.com",
+      "phone": "+1 310-555-0166",
+      "avatar": "https://i.pravatar.cc/150?u=alex26",
+      "assignedAgent": "D. Mann",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent2",
+      "status": "Active"
+    },
+    {
+      "id": 27,
+      "name": "Sumaia Fariha",
+      "type": "Other",
+      "email": "sumaia.f@example.com",
+      "phone": "+880 1811-505050",
+      "avatar": "https://i.pravatar.cc/150?u=sumaia27",
+      "assignedAgent": "A. Narno",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent5",
+      "status": "Inactive"
+    },
+    {
+      "id": 28,
+      "name": "Charlotte White",
+      "type": "Seller",
+      "email": "charlotte.w@example.com",
+      "phone": "+44 28-9649-0111",
+      "avatar": "https://i.pravatar.cc/150?u=charlotte28",
+      "assignedAgent": "S. Islam",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent1",
+      "status": "Active"
+    },
+    {
+      "id": 29,
+      "name": "Tariqul Islam",
+      "type": "Buyer",
+      "email": "tariqul.i@example.com",
+      "phone": "+880 1911-606060",
+      "avatar": "https://i.pravatar.cc/150?u=tariqul29",
+      "assignedAgent": "J. Lee",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent3",
+      "status": "Active"
+    },
+    {
+      "id": 30,
+      "name": "Benjamin Harris",
+      "type": "Investor",
+      "email": "ben.h@example.com",
+      "phone": "+1 214-555-0187",
+      "avatar": "https://i.pravatar.cc/150?u=benjamin30",
+      "assignedAgent": "R. Taylor",
+      "agentAvatar": "https://i.pravatar.cc/150?u=agent4",
+      "status": "Active"
+    }
+  ],
+  "clientActivity": [
+    {
+      "id": 1,
+      "description": "Arif Hossain viewed an apartment in Gulshan.",
+      "timestamp": "Today, 10:16 AM"
+    },
+    {
+      "id": 2,
+      "description": "Sarah Johnson signed the property listing agreement.",
+      "timestamp": "Today, 09:45 AM"
+    },
+    {
+      "id": 3,
+      "description": "Rakib Khan requested an ROI report for Dhanmondi condo.",
+      "timestamp": "Yesterday, 04:30 PM"
+    },
+    {
+      "id": 4,
+      "description": "Emma Wilson scheduled a virtual tour.",
+      "timestamp": "Yesterday, 02:15 PM"
+    },
+    {
+      "id": 5,
+      "description": "Michael Chen transferred the initial deposit.",
+      "timestamp": "Oct 24, 2024, 11:00 AM"
+    }
+  ]
+}

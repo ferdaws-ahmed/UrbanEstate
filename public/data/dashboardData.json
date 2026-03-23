@@ -1,0 +1,872 @@
+
+
+{
+  "aiPrediction": {
+    "trend": "Upward",
+    "percentage": "+12.5%",
+    "forecastArea": "Gulshan & Banani",
+    "topLeadScore": 98,
+    "hotPropertyId": "#APT-402"
+  },
+  "smartInventory": [
+    { "id": "#PR-101", "name": "Skyview Tower", "status": "Stagnant", "daysOnMarket": 45, "roi": "4.5%" },
+    { "id": "#PR-102", "name": "Green Valley Villa", "status": "Hot", "daysOnMarket": 5, "roi": "8.2%" },
+    { "id": "#PR-103", "name": "Lakefront Duplex", "status": "Stagnant", "daysOnMarket": 32, "roi": "5.1%" }
+  ],
+  "liveActivities": [
+    { "id": 1, "time": "2 mins ago", "action": "New Booking", "details": "Mr. Rahman booked #APT-402", "type": "success" },
+    { "id": 2, "time": "15 mins ago", "action": "Payment Cleared", "details": "Tk 50,000 received for #PR-102", "type": "info" },
+    { "id": 3, "time": "1 hour ago", "action": "Lead Converted", "details": "Agent Naron closed a deal", "type": "success" },
+    { "id": 4, "time": "2 hours ago", "action": "Listing Expiring", "details": "#PR-101 requires attention", "type": "warning" }
+  ],
+  "agentEfficiency": {
+    "avgResponseTime": "12 Mins",
+    "conversionRate": "24%",
+    "funnel": {
+      "leads": 1250,
+      "contacted": 850,
+      "negotiation": 320,
+      "closed": 85
+    }
+  },
+
+
+"marketingCampaigns": [
+    { "id": 1, "platform": "Google Ads", "spent": "$12.5k", "leads": 450, "roi": "+145%", "progress": 85, "color": "bg-blue-500" },
+    { "id": 2, "platform": "Meta (Facebook/IG)", "spent": "$8.2k", "leads": 320, "roi": "+98%", "progress": 65, "color": "bg-indigo-500" },
+    { "id": 3, "platform": "Email Marketing", "spent": "$2.1k", "leads": 180, "roi": "+210%", "progress": 45, "color": "bg-[#cddfa0]" },
+    { "id": 4, "platform": "Local Billboards", "spent": "$15.0k", "leads": 95, "roi": "+25%", "progress": 30, "color": "bg-orange-400" }
+  ],
+  "clientFeedback": [
+    { "id": 1, "client": "Anisur Rahman", "property": "Apt 48 - Gulshan", "rating": 5, "comment": "Excellent service and smooth paperwork. Highly recommended!", "time": "2 days ago" },
+    { "id": 2, "client": "Nusrat Jahan", "property": "Villa - Banani", "rating": 5, "comment": "The virtual tour was exactly like the real thing. Very professional.", "time": "1 week ago" },
+    { "id": 3, "client": "Kamrul Hasan", "property": "Office - Motijheel", "rating": 4, "comment": "Good negotiation, though the closing took a bit longer than expected.", "time": "2 weeks ago" }
+  ],
+
+  "quickActions": {
+    "metrics": [
+      { "id": "views", "label": "Viewings", "value": 14, "target": 20, "icon": "eye" },
+      { "id": "leads", "label": "New Leads", "value": 28, "target": 50, "icon": "users" },
+      { "id": "offers", "label": "Offers Sent", "value": 5, "target": 10, "icon": "file" },
+      { "id": "deals", "label": "Closed", "value": 2, "target": 5, "icon": "check" }
+    ]
+  },
+  
+  "stats": {
+    "totalListings": {
+      "value": 1200,
+      "trend": "+ 18%",
+      "description": "Total properties listed"
+    },
+    "newLeads": {
+      "value": 425,
+      "trend": "+ 15%",
+      "description": "Newly acquired leads"
+    },
+    "propertiesSold": {
+      "value": 301,
+      "trend": "+ 8%",
+      "description": "Sold in current year"
+    },
+    "revenue": {
+      "value": 3332800,
+      "trend": "+ 12%",
+      "description": "Total earnings (USD)"
+    }
+  },
+  "salesPerformance": [
+    { "month": "Jan", "value": 15000 },
+    { "month": "Feb", "value": 18000 },
+    { "month": "Mar", "value": 22000 },
+    { "month": "Apr", "value": 24000 },
+    { "month": "May", "value": 26000 },
+    { "month": "Jun", "value": 28000 },
+    { "month": "Jul", "value": 30000 },
+    { "month": "Aug", "value": 32000 },
+    { "month": "Sep", "value": 34000 },
+    { "month": "Oct", "value": 36000 },
+    { "month": "Nov", "value": 38000 },
+    { "month": "Dec", "value": 40000 }
+  ],
+  "userGrowth": [
+    { "month": "Jan", "users": 200 },
+    { "month": "Feb", "users": 400 },
+    { "month": "Mar", "users": 600 },
+    { "month": "Apr", "users": 800 },
+    { "month": "May", "users": 1000 },
+    { "month": "Jun", "users": 1200 },
+    { "month": "Jul", "users": 1400 },
+    { "month": "Aug", "users": 1600 },
+    { "month": "Sep", "users": 1800 },
+    { "month": "Oct", "users": 2000 },
+    { "month": "Nov", "users": 2200 },
+    { "month": "Dec", "users": 2400 }
+  ],
+  "mapCenter": {
+    "lat": 23.8103,
+    "lng": 90.4125
+  },
+  "properties": [
+    { 
+      "id": 1, 
+      "lat": 23.8103, 
+      "lng": 90.4125, 
+      "title": "Modern Apartment in Gulshan", 
+      "price": 450000, 
+      "beds": 3, 
+      "baths": 2, 
+      "area": 1200,
+      "image": "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400",
+      "status": "Available",
+      "agent": "Bubin Islam",
+      "location": "Gulshan, Dhaka",
+      "type": "Apartment"
+    },
+    { 
+      "id": 2, 
+      "lat": 23.8200, 
+      "lng": 90.4000, 
+      "title": "Luxury Villa in Banani", 
+      "price": 850000, 
+      "beds": 4, 
+      "baths": 3, 
+      "area": 2500,
+      "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400",
+      "status": "Under Offer",
+      "agent": "Sreen Name",
+      "location": "Banani, Dhaka",
+      "type": "Villa"
+    },
+    { 
+      "id": 3, 
+      "lat": 23.8000, 
+      "lng": 90.4200, 
+      "title": "Cozy Condo in Dhanmondi", 
+      "price": 320000, 
+      "beds": 2, 
+      "baths": 2, 
+      "area": 950,
+      "image": "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400",
+      "status": "Sold",
+      "agent": "Bubin Islam",
+      "location": "Dhanmondi, Dhaka",
+      "type": "Condo"
+    },
+    { 
+      "id": 4, 
+      "lat": 23.8300, 
+      "lng": 90.4100, 
+      "title": "Penthouse with City View", 
+      "price": 1200000, 
+      "beds": 5, 
+      "baths": 4, 
+      "area": 3200,
+      "image": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400",
+      "status": "Available",
+      "agent": "Sreen Name",
+      "location": "Uttara, Dhaka",
+      "type": "Penthouse"
+    },
+    { 
+      "id": 5, 
+      "lat": 23.7900, 
+      "lng": 90.4300, 
+      "title": "Townhouse in Baridhara", 
+      "price": 650000, 
+      "beds": 3, 
+      "baths": 3, 
+      "area": 1800,
+      "image": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=400",
+      "status": "Available",
+      "agent": "Bubin Islam",
+      "location": "Baridhara, Dhaka",
+      "type": "Townhouse"
+    },
+    { 
+      "id": 6, 
+      "lat": 23.8150, 
+      "lng": 90.3950, 
+      "title": "Studio Apartment", 
+      "price": 180000, 
+      "beds": 1, 
+      "baths": 1, 
+      "area": 600,
+      "image": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400",
+      "status": "Under Offer",
+      "agent": "Sreen Name",
+      "location": "Mohammadpur, Dhaka",
+      "type": "Studio"
+    }
+  ],
+  "agents": [
+    {
+      "id": 1,
+      "name": "Dolan Barren",
+      "email": "dalonslaim@gmail.com",
+      "phone": "+1 (919) 372-7305",
+      "avatar": "https://i.pravatar.cc/150?u=dolan1",
+      "assignedProperties": 12,
+      "propertiesSold": 8,
+      "totalRevenue": 3332800,
+      "rating": 5,
+      "status": "Active",
+      "joinDate": "Jan 10, 2020"
+    },
+    {
+      "id": 2,
+      "name": "Butnin Islam",
+      "email": "connamar@cxgmail.com",
+      "phone": "+1 (910) 372-4308",
+      "avatar": "https://i.pravatar.cc/150?u=butnin",
+      "assignedProperties": 4,
+      "propertiesSold": 10,
+      "totalRevenue": 3332200,
+      "rating": 5,
+      "status": "Active",
+      "joinDate": "Feb 15, 2020"
+    },
+    {
+      "id": 3,
+      "name": "Butnin Islam",
+      "email": "huladin@cxgmail.com",
+      "phone": "+1 (910) 372-7305",
+      "avatar": "https://i.pravatar.cc/150?u=butnin2",
+      "assignedProperties": 6,
+      "propertiesSold": 33,
+      "totalRevenue": 3309000,
+      "rating": 5,
+      "status": "On Leave",
+      "joinDate": "Mar 20, 2020"
+    },
+    {
+      "id": 4,
+      "name": "Srnan Islam",
+      "email": "neithar@gmail.com",
+      "phone": "+1 (919) 372-7305",
+      "avatar": "https://i.pravatar.cc/150?u=srnan",
+      "assignedProperties": 5,
+      "propertiesSold": 23,
+      "totalRevenue": 1232150,
+      "rating": 5,
+      "status": "Active",
+      "joinDate": "Apr 10, 2020"
+    },
+    {
+      "id": 5,
+      "name": "Butnin Islam",
+      "email": "kareest@cxgmail.com",
+      "phone": "+1 (910) 372-7338",
+      "avatar": "https://i.pravatar.cc/150?u=butnin3",
+      "assignedProperties": 3,
+      "propertiesSold": 9,
+      "totalRevenue": 1283680,
+      "rating": 4,
+      "status": "Active",
+      "joinDate": "May 05, 2020"
+    },
+    {
+      "id": 6,
+      "name": "Agent Islam",
+      "email": "alamin@gmail.com",
+      "phone": "+1 (910) 372-7302",
+      "avatar": "https://i.pravatar.cc/150?u=agent",
+      "assignedProperties": 2,
+      "propertiesSold": 3,
+      "totalRevenue": 1233280,
+      "rating": 4,
+      "status": "Active",
+      "joinDate": "Jun 12, 2020"
+    },
+    {
+      "id": 7,
+      "name": "Sarah Johnson",
+      "email": "sarah.johnson@realtors.com",
+      "phone": "+1 (215) 555-0102",
+      "avatar": "https://i.pravatar.cc/150?u=sarah",
+      "assignedProperties": 18,
+      "propertiesSold": 42,
+      "totalRevenue": 4521300,
+      "rating": 5,
+      "status": "Active",
+      "joinDate": "Jan 20, 2019"
+    },
+    {
+      "id": 8,
+      "name": "Michael Chen",
+      "email": "michael.chen@realtors.com",
+      "phone": "+1 (415) 555-0103",
+      "avatar": "https://i.pravatar.cc/150?u=michael",
+      "assignedProperties": 9,
+      "propertiesSold": 27,
+      "totalRevenue": 2987650,
+      "rating": 4,
+      "status": "Active",
+      "joinDate": "Mar 15, 2019"
+    },
+    {
+      "id": 9,
+      "name": "Emma Wilson",
+      "email": "emma.wilson@realtors.com",
+      "phone": "+1 (310) 555-0104",
+      "avatar": "https://i.pravatar.cc/150?u=emma",
+      "assignedProperties": 14,
+      "propertiesSold": 35,
+      "totalRevenue": 3654200,
+      "rating": 5,
+      "status": "Inactive",
+      "joinDate": "May 10, 2019"
+    },
+    {
+      "id": 10,
+      "name": "David Martinez",
+      "email": "david.martinez@realtors.com",
+      "phone": "+1 (786) 555-0105",
+      "avatar": "https://i.pravatar.cc/150?u=david",
+      "assignedProperties": 11,
+      "propertiesSold": 28,
+      "totalRevenue": 3125400,
+      "rating": 4,
+      "status": "Active",
+      "joinDate": "Jul 22, 2019"
+    },
+    {
+      "id": 11,
+      "name": "Jessica Lee",
+      "email": "jessica.lee@realtors.com",
+      "phone": "+1 (206) 555-0106",
+      "avatar": "https://i.pravatar.cc/150?u=jessica",
+      "assignedProperties": 7,
+      "propertiesSold": 19,
+      "totalRevenue": 2245800,
+      "rating": 4,
+      "status": "Active",
+      "joinDate": "Sep 05, 2019"
+    },
+    {
+      "id": 12,
+      "name": "Robert Taylor",
+      "email": "robert.taylor@realtors.com",
+      "phone": "+1 (303) 555-0107",
+      "avatar": "https://i.pravatar.cc/150?u=robert",
+      "assignedProperties": 16,
+      "propertiesSold": 38,
+      "totalRevenue": 3892100,
+      "rating": 5,
+      "status": "Active",
+      "joinDate": "Nov 12, 2018"
+    },
+    {
+      "id": 13,
+      "name": "Amanda Brown",
+      "email": "amanda.brown@realtors.com",
+      "phone": "+1 (512) 555-0108",
+      "avatar": "https://i.pravatar.cc/150?u=amanda",
+      "assignedProperties": 8,
+      "propertiesSold": 21,
+      "totalRevenue": 2534600,
+      "rating": 4,
+      "status": "On Leave",
+      "joinDate": "Dec 18, 2018"
+    },
+    {
+      "id": 14,
+      "name": "Christopher Davis",
+      "email": "christopher.davis@realtors.com",
+      "phone": "+1 (702) 555-0109",
+      "avatar": "https://i.pravatar.cc/150?u=christopher",
+      "assignedProperties": 13,
+      "propertiesSold": 31,
+      "totalRevenue": 3401700,
+      "rating": 5,
+      "status": "Active",
+      "joinDate": "Feb 08, 2018"
+    },
+    {
+      "id": 15,
+      "name": "Jennifer White",
+      "email": "jennifer.white@realtors.com",
+      "phone": "+1 (404) 555-0110",
+      "avatar": "https://i.pravatar.cc/150?u=jennifer",
+      "assignedProperties": 10,
+      "propertiesSold": 26,
+      "totalRevenue": 2876400,
+      "rating": 4,
+      "status": "Active",
+      "joinDate": "Apr 25, 2018"
+    }
+  ],
+  "recentListings": [
+    { "id": 1, "image": "https://images.unsplash.com/photo-1568605114967-8130f3a36994", "title": "Apt 48 - Gulshan", "price": "$450k", "description": "3 Bed, 2 Bath" },
+    { "id": 2, "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750", "title": "Apt 48 - Banani", "price": "$450k", "description": "2 Bed, 2 Bath" },
+    { "id": 3, "image": "https://images.unsplash.com/photo-1570129477492-45c003edd2be", "title": "Apt 30 - Dhanmondi", "price": "$450k", "description": "3 Bed, 2 Bath" }
+  ],
+  "pendingApprovals": [
+    { "id": 1, "agent": "Agent Name", "properties": 13, "revenue": "$300k", "location": "Dhaka, City", "price": "$300k", "status": "Pending", "date": "Sep 25, 2024" },
+    { "id": 2, "agent": "Bubhir Islam", "properties": 1, "revenue": "$50k", "location": "Gulshan, City", "price": "$50k", "status": "Review", "date": "Sep 25, 2024" },
+    { "id": 3, "agent": "Rubbin Khan", "properties": 2, "revenue": "$50k", "location": "Dhanmondi City", "price": "$50k", "status": "Approved", "date": "Sep 25, 2024" }
+  ],
+  "marketShare": [
+    { "name": "Dhaka", "value": 500, "color": "#1a4a40" },
+    { "name": "Gulshan", "value": 300, "color": "#cddfa0" },
+    { "name": "Banani", "value": 200, "color": "#94a894" }
+  ],
+
+  "analytics": {
+    "overview": {
+      "totalRevenue": 3332800,
+      "totalProperties": 1200,
+      "activeAgents": 12,
+      "conversionRate": 68.5,
+      "avgPropertyPrice": 450000,
+      "monthlyGrowth": 12.5
+    },
+    "revenueByMonth": [
+      { "month": "Jan", "revenue": 280000, "target": 300000 },
+      { "month": "Feb", "revenue": 320000, "target": 320000 },
+      { "month": "Mar", "revenue": 350000, "target": 350000 },
+      { "month": "Apr", "revenue": 380000, "target": 380000 },
+      { "month": "May", "revenue": 420000, "target": 400000 },
+      { "month": "Jun", "revenue": 450000, "target": 450000 },
+      { "month": "Jul", "revenue": 480000, "target": 470000 },
+      { "month": "Aug", "revenue": 520000, "target": 500000 },
+      { "month": "Sep", "revenue": 550000, "target": 530000 },
+      { "month": "Oct", "revenue": 580000, "target": 550000 },
+      { "month": "Nov", "revenue": 620000, "target": 580000 },
+      { "month": "Dec", "revenue": 650000, "target": 600000 }
+    ],
+    "propertyTypes": [
+      { "type": "Apartment", "count": 450, "percentage": 37.5, "color": "#cddfa0" },
+      { "type": "Villa", "count": 280, "percentage": 23.3, "color": "#94a894" },
+      { "type": "Condo", "count": 220, "percentage": 18.3, "color": "#1a4a40" },
+      { "type": "Townhouse", "count": 180, "percentage": 15.0, "color": "#0f2e28" },
+      { "type": "Penthouse", "count": 70, "percentage": 5.8, "color": "#133c34" }
+    ],
+    "agentPerformance": [
+      { "name": "Sarah Johnson", "sales": 42, "revenue": 4521300, "rating": 4.9 },
+      { "name": "Robert Taylor", "sales": 38, "revenue": 3892100, "rating": 4.8 },
+      { "name": "Christopher Davis", "sales": 31, "revenue": 3401700, "rating": 4.7 },
+      { "name": "Emma Wilson", "sales": 35, "revenue": 3654200, "rating": 4.6 },
+      { "name": "David Martinez", "sales": 28, "revenue": 3125400, "rating": 4.5 }
+    ],
+    "leadSources": [
+      { "source": "Website", "leads": 450, "conversions": 315, "color": "#cddfa0" },
+      { "source": "Social Media", "leads": 320, "conversions": 192, "color": "#94a894" },
+      { "source": "Referrals", "leads": 280, "conversions": 224, "color": "#1a4a40" },
+      { "source": "Direct", "leads": 180, "conversions": 108, "color": "#0f2e28" },
+      { "source": "Partnerships", "leads": 120, "conversions": 84, "color": "#133c34" }
+    ],
+    "geographicData": [
+      { "region": "Dhaka North", "properties": 380, "sales": 285, "revenue": 128500000 },
+      { "region": "Dhaka South", "properties": 320, "sales": 240, "revenue": 108000000 },
+      { "region": "Dhaka West", "properties": 280, "sales": 210, "revenue": 94500000 },
+      { "region": "Dhaka East", "properties": 220, "sales": 165, "revenue": 74250000 }
+    ],
+    "marketTrends": [
+      { "month": "Jan", "avgPrice": 420000, "transactions": 45 },
+      { "month": "Feb", "avgPrice": 425000, "transactions": 52 },
+      { "month": "Mar", "avgPrice": 430000, "transactions": 48 },
+      { "month": "Apr", "avgPrice": 435000, "transactions": 55 },
+      { "month": "May", "avgPrice": 440000, "transactions": 61 },
+      { "month": "Jun", "avgPrice": 445000, "transactions": 58 },
+      { "month": "Jul", "avgPrice": 450000, "transactions": 63 },
+      { "month": "Aug", "avgPrice": 455000, "transactions": 67 },
+      { "month": "Sep", "avgPrice": 460000, "transactions": 72 },
+      { "month": "Oct", "avgPrice": 465000, "transactions": 69 },
+      { "month": "Nov", "avgPrice": 470000, "transactions": 74 },
+      { "month": "Dec", "avgPrice": 475000, "transactions": 78 }
+    ],
+    "customerSatisfaction": {
+      "overall": 4.6,
+      "responseTime": 4.8,
+      "serviceQuality": 4.5,
+      "valueForMoney": 4.4,
+      "recommendation": 4.7
+    }
+  },
+
+  "notifications": [
+    {
+      "id": 1,
+      "text": "New lead from Dhanmondi property",
+      "time": "2 min ago",
+      "unread": true
+    },
+    {
+      "id": 2,
+      "text": "Agent Sarah closed a deal",
+      "time": "1 hr ago",
+      "unread": true
+    },
+    {
+      "id": 3,
+      "text": "System maintenance scheduled",
+      "time": "Yesterday",
+      "unread": false
+    }
+  ],
+
+  "clients": [
+    {
+      "id": 1,
+      "name": "Aqeel Name",
+      "type": "Buyer",
+      "email": "aqeel@gmail.com",
+      "phone": "+1 (919) 372-7305",
+      "avatar": "https://i.pravatar.cc/150?u=aqeel",
+      "assignedAgent": "S. Islam",
+      "agentAvatar": "https://i.pravatar.cc/150?u=islam1",
+      "lastInteraction": "Viewed Property",
+      "lastActivityDate": "Sep 25, 2024",
+      "status": "Active",
+      "joinDate": "Jan 15, 2024"
+    },
+    {
+      "id": 2,
+      "name": "Joraph Itsson",
+      "type": "Buyer",
+      "email": "@gmail.com",
+      "phone": "+1 (919) 372-7335",
+      "avatar": "https://i.pravatar.cc/150?u=joraph",
+      "assignedAgent": "Dalan Mann",
+      "agentAvatar": "https://i.pravatar.cc/150?u=mann",
+      "lastInteraction": "Viewed Property",
+      "lastActivityDate": "Sep 25, 2024",
+      "status": "Active",
+      "joinDate": "Feb 20, 2024"
+    },
+    {
+      "id": 3,
+      "name": "Butnin Islam",
+      "type": "Seller",
+      "email": "aeham@gmail.com",
+      "phone": "+1 (919) 372-7305",
+      "avatar": "https://i.pravatar.cc/150?u=butnin",
+      "assignedAgent": "Arican Narno",
+      "agentAvatar": "https://i.pravatar.cc/150?u=arican",
+      "lastInteraction": "Viewed Property",
+      "lastActivityDate": "Sep 25, 2024",
+      "status": "Active",
+      "joinDate": "Mar 10, 2024"
+    },
+    {
+      "id": 4,
+      "name": "Srnan Islam",
+      "type": "Seller",
+      "email": "investor@gmail.com",
+      "phone": "+1 (919) 356-7793",
+      "avatar": "https://i.pravatar.cc/150?u=srnan",
+      "assignedAgent": "Azwak Bothar",
+      "agentAvatar": "https://i.pravatar.cc/150?u=bothar",
+      "lastInteraction": "Viewed Property",
+      "lastActivityDate": "Sep 25, 2024",
+      "status": "Active",
+      "joinDate": "Apr 05, 2024"
+    },
+    {
+      "id": 5,
+      "name": "Bubis Itam",
+      "type": "Investor",
+      "email": "@gmail.com",
+      "phone": "+1 (919) 382-7305",
+      "avatar": "https://i.pravatar.cc/150?u=bubis",
+      "assignedAgent": "Basin Islam",
+      "agentAvatar": "https://i.pravatar.cc/150?u=basin",
+      "lastInteraction": "Viewed Property",
+      "lastActivityDate": "Sep 25, 2024",
+      "status": "Active",
+      "joinDate": "May 12, 2024"
+    },
+    {
+      "id": 6,
+      "name": "Srnan Kaama",
+      "type": "Buyer",
+      "email": "collier@gmail.com",
+      "phone": "+1 (919) 382-7383",
+      "avatar": "https://i.pravatar.cc/150?u=srnank",
+      "assignedAgent": "Bubtde Klamn",
+      "agentAvatar": "https://i.pravatar.cc/150?u=klamn",
+      "lastInteraction": "Viewed Property",
+      "lastActivityDate": "Sep 25, 2024",
+      "status": "Active",
+      "joinDate": "Jun 18, 2024"
+    },
+    {
+      "id": 7,
+      "name": "Bubis Itam",
+      "type": "Investor",
+      "email": "email@gmail.com",
+      "phone": "+1 (919) 356-7793",
+      "avatar": "https://i.pravatar.cc/150?u=bubis2",
+      "assignedAgent": "Agent Naros",
+      "agentAvatar": "https://i.pravatar.cc/150?u=naros",
+      "lastInteraction": "Viewed Property",
+      "lastActivityDate": "Sep 25, 2024",
+      "status": "Active",
+      "joinDate": "Jul 22, 2024"
+    },
+    {
+      "id": 8,
+      "name": "Sarah Johnson",
+      "type": "Buyer",
+      "email": "sarah.johnson@email.com",
+      "phone": "+1 (215) 555-0102",
+      "avatar": "https://i.pravatar.cc/150?u=sarah",
+      "assignedAgent": "Jessica Lee",
+      "agentAvatar": "https://i.pravatar.cc/150?u=jessica",
+      "lastInteraction": "Called Agent",
+      "lastActivityDate": "Sep 24, 2024",
+      "status": "Active",
+      "joinDate": "Aug 10, 2024"
+    },
+    {
+      "id": 9,
+      "name": "Michael Chen",
+      "type": "Seller",
+      "email": "michael.chen@email.com",
+      "phone": "+1 (415) 555-0103",
+      "avatar": "https://i.pravatar.cc/150?u=michael",
+      "assignedAgent": "David Martinez",
+      "agentAvatar": "https://i.pravatar.cc/150?u=martinez",
+      "lastInteraction": "Scheduled Tour",
+      "lastActivityDate": "Sep 23, 2024",
+      "status": "Active",
+      "joinDate": "Sep 05, 2024"
+    },
+    {
+      "id": 10,
+      "name": "Emma Wilson",
+      "type": "Investor",
+      "email": "emma.wilson@email.com",
+      "phone": "+1 (310) 555-0104",
+      "avatar": "https://i.pravatar.cc/150?u=emma",
+      "assignedAgent": "Robert Taylor",
+      "agentAvatar": "https://i.pravatar.cc/150?u=taylor",
+      "lastInteraction": "Viewed Property",
+      "lastActivityDate": "Sep 22, 2024",
+      "status": "Inactive",
+      "joinDate": "Oct 01, 2024"
+    }
+  ],
+
+  "clientActivity": [
+    {
+      "id": 1,
+      "description": "The weird names property list on Clinets Criconsiderable to buy",
+      "timestamp": "Sep 25, 2024, 10:16 AM"
+    },
+    {
+      "id": 2,
+      "description": "The wise low continued left Client.",
+      "timestamp": "Sep 25, 2024, 10:15 AM"
+    },
+    {
+      "id": 3,
+      "description": "Thrived property client in Dhaka Estate.",
+      "timestamp": "Sep 21, 2024, 10:15 AM"
+    },
+
+    {
+    "id": 1,
+    "name": "Dalen Bonwan",
+    "email": "dalen@nexus.com",
+    "phone": "+1 (555) 123-4567",
+    "specialty": "Luxury",
+    "status": "Active",
+    "avatar": "https://ui-avatars.com/api/?name=Dalen+Bonwan&background=0D8ABC&color=fff",
+    "rating": 4.9,
+    "propertiesSold": 45,
+    "assignedProperties": 50,
+    "totalRevenue": 24200
+  },
+  {
+    "id": 2,
+    "name": "Boirin Mann",
+    "email": "boirin@nexus.com",
+    "phone": "+1 (555) 987-6543",
+    "specialty": "Commercial",
+    "status": "Active",
+    "avatar": "https://ui-avatars.com/api/?name=Boirin+Mann&background=F59E0B&color=fff",
+    "rating": 4.5,
+    "propertiesSold": 28,
+    "assignedProperties": 35,
+    "totalRevenue": 11600
+  },
+  {
+    "id": 3,
+    "name": "Daon Islam",
+    "email": "daon@nexus.com",
+    "phone": "+1 (555) 456-7890",
+    "specialty": "Residential",
+    "status": "Active",
+    "avatar": "https://ui-avatars.com/api/?name=Daon+Islam&background=8B5CF6&color=fff",
+    "rating": 4.7,
+    "propertiesSold": 32,
+    "assignedProperties": 38,
+    "totalRevenue": 8350
+  },
+  {
+    "id": 4,
+    "name": "Alnean Name",
+    "email": "alnean@nexus.com",
+    "phone": "+1 (555) 222-3333",
+    "specialty": "Residential",
+    "status": "On Leave",
+    "avatar": "https://ui-avatars.com/api/?name=Alnean+Name&background=10B981&color=fff",
+    "rating": 4.2,
+    "propertiesSold": 15,
+    "assignedProperties": 20,
+    "totalRevenue": 4680
+  },
+  {
+    "id": 5,
+    "name": "Aawah Kodiar",
+    "email": "aawah@nexus.com",
+    "phone": "+1 (555) 444-5555",
+    "specialty": "Commercial",
+    "status": "Active",
+    "avatar": "https://ui-avatars.com/api/?name=Aawah+Kodiar&background=6366F1&color=fff",
+    "rating": 3.8,
+    "propertiesSold": 10,
+    "assignedProperties": 18,
+    "totalRevenue": 2970
+  },
+  {
+    "id": 6,
+    "name": "Buoie Hioron",
+    "email": "buoie@nexus.com",
+    "phone": "+1 (555) 666-7777",
+    "specialty": "Luxury",
+    "status": "Active",
+    "avatar": "https://ui-avatars.com/api/?name=Buoie+Hioron&background=EC4899&color=fff",
+    "rating": 4.8,
+    "propertiesSold": 40,
+    "assignedProperties": 42,
+    "totalRevenue": 19500
+  },
+  {
+    "id": 7,
+    "name": "Sarah Connor",
+    "email": "sarah@nexus.com",
+    "phone": "+1 (555) 111-9999",
+    "specialty": "Residential",
+    "status": "Active",
+    "avatar": "",
+    "rating": 4.6,
+    "propertiesSold": 25,
+    "assignedProperties": 30,
+    "totalRevenue": 6500
+  },
+  {
+    "id": 8,
+    "name": "John Matrix",
+    "email": "john@nexus.com",
+    "phone": "+1 (555) 888-2222",
+    "specialty": "Commercial",
+    "status": "Inactive",
+    "avatar": "",
+    "rating": 3.5,
+    "propertiesSold": 5,
+    "assignedProperties": 15,
+    "totalRevenue": 1200
+  },
+  {
+    "id": 9,
+    "name": "Elena Fisher",
+    "email": "elena@nexus.com",
+    "phone": "+1 (555) 333-8888",
+    "specialty": "Luxury",
+    "status": "Active",
+    "avatar": "",
+    "rating": 5.0,
+    "propertiesSold": 18,
+    "assignedProperties": 18,
+    "totalRevenue": 15400
+  },
+  {
+    "id": 10,
+    "name": "Marcus Wright",
+    "email": "marcus@nexus.com",
+    "phone": "+1 (555) 777-4444",
+    "specialty": "Residential",
+    "status": "Active",
+    "avatar": "",
+    "rating": 4.1,
+    "propertiesSold": 12,
+    "assignedProperties": 25,
+    "totalRevenue": 3400
+  },
+  {
+    "id": 11,
+    "name": "Chloe Frazer",
+    "email": "chloe@nexus.com",
+    "phone": "+1 (555) 999-1111",
+    "specialty": "Commercial",
+    "status": "On Leave",
+    "avatar": "",
+    "rating": 4.4,
+    "propertiesSold": 22,
+    "assignedProperties": 28,
+    "totalRevenue": 8900
+  },
+  {
+    "id": 12,
+    "name": "Victor Sullivan",
+    "email": "victor@nexus.com",
+    "phone": "+1 (555) 222-6666",
+    "specialty": "Luxury",
+    "status": "Active",
+    "avatar": "",
+    "rating": 4.3,
+    "propertiesSold": 14,
+    "assignedProperties": 20,
+    "totalRevenue": 10200
+  },
+  {
+    "id": 13,
+    "name": "Nadine Ross",
+    "email": "nadine@nexus.com",
+    "phone": "+1 (555) 555-8888",
+    "specialty": "Commercial",
+    "status": "Active",
+    "avatar": "",
+    "rating": 4.9,
+    "propertiesSold": 38,
+    "assignedProperties": 45,
+    "totalRevenue": 18500
+  },
+  {
+    "id": 14,
+    "name": "Sam Drake",
+    "email": "sam@nexus.com",
+    "phone": "+1 (555) 444-1111",
+    "specialty": "Residential",
+    "status": "Inactive",
+    "avatar": "",
+    "rating": 3.2,
+    "propertiesSold": 2,
+    "assignedProperties": 10,
+    "totalRevenue": 450
+  },
+  {
+    "id": 15,
+    "name": "Rafe Adler",
+    "email": "rafe@nexus.com",
+    "phone": "+1 (555) 777-9999",
+    "specialty": "Luxury",
+    "status": "Active",
+    "avatar": "",
+    "rating": 4.6,
+    "propertiesSold": 30,
+    "assignedProperties": 35,
+    "totalRevenue": 21000
+  }
+  ],
+
+  "clientTypeBreakdown": [
+    { "type": "Buyers", "value": 456, "percentage": 37, "color": "#3b82f6" },
+    { "type": "Sellers", "value": 345, "percentage": 28, "color": "#10b981" },
+    { "type": "Investors", "value": 289, "percentage": 23, "color": "#f59e0b" },
+    { "type": "Referrals", "value": 144, "percentage": 12, "color": "#8b5cf6" }
+  ]
+  
+}
