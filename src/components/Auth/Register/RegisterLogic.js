@@ -17,7 +17,7 @@ export const useRegisterLogic = () => {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  // social registration (Google/GitHub)
+  // ১. সোশ্যাল রেজিস্ট্রেশন (Google/GitHub)
   const handleSocialRegister = async (provider) => {
     if (!role) {
       toast.error("Please select a role first!");
@@ -25,21 +25,13 @@ export const useRegisterLogic = () => {
     }
 
     setLoading(true);
-    const toastId = toast.loading("Verifying with Google...");
+    const toastId = toast.loading("Verifying credentials...");
 
     try {
       const result = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken();
 
-      // direct send data: NextAuth
-      const response = await signIn("credentials", {
-        idToken,
-        role,
-        email: result.user.email,
-        uid: result.user.uid,
-        redirect: false,
-      });
-      // send social data to mongodb
+      // সোশ্যাল ডাটা ডাটাবেজে সেভ করা
       await fetch("/api/auth/social-register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -48,27 +40,34 @@ export const useRegisterLogic = () => {
           email: result.user.email,
           uid: result.user.uid,
           role,
-          provider: provider.providerId, // google.com or github.com
+          provider: provider.providerId,
         }),
       });
 
-      if (response?.error) throw new Error("NextAuth session failed");
+      const response = await signIn("credentials", {
+        idToken,
+        role,
+        email: result.user.email,
+        uid: result.user.uid,
+        redirect: false,
+      });
 
-      toast.success("Login Successful!", { id: toastId });
+      if (response?.error) throw new Error("Session failed");
+
+      toast.success("Welcome! Registration Successful 🚀", { id: toastId });
 
       router.refresh();
       setTimeout(() => {
         router.push(role === "seller" ? "/sellproperty" : "/");
-      }, 500);
+      }, 1000);
     } catch (error) {
-      console.error("Login Error:", error);
       toast.error("Login failed! Please try again.", { id: toastId });
     } finally {
       setLoading(false);
     }
   };
 
-  // email register
+  // ২. ইমেইল রেজিস্ট্রেশন
   const handleEmailRegister = async (name, email, password) => {
     if (!role) return toast.error("Choose a role!");
 
@@ -76,23 +75,46 @@ export const useRegisterLogic = () => {
     const toastId = toast.loading("Creating your account...");
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
-
-      // name update
+      // Firebase-এ ইউজার তৈরি
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      
+      // প্রোফাইল আপডেট (নাম সেট করা)
       await updateProfile(userCredential.user, { displayName: name });
 
-      // send email verification
-      await sendEmailVerification(userCredential.user);
+      // *** ডাটাবেজে (MongoDB) ইউজার ডাটা পাঠানো ***
+      const dbRes = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          email,
+          password, 
+          role,
+          uid: userCredential.user.uid
+        }),
+      });
 
-      toast.success("Verification email sent! ✉️", { id: toastId });
+      // JSON এরর হ্যান্ডলিং (এখানেই আপনার এররটি ফিক্স করা হয়েছে)
+      let dbData = {};
+      try {
+        const contentType = dbRes.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          dbData = await dbRes.json();
+        }
+      } catch (e) {
+        console.error("JSON Parsing Error:", e);
+      }
+
+      if (!dbRes.ok) {
+        throw new Error(dbData.error || "Failed to sync with database");
+      }
+
+      // ভেরিফিকেশন ইমেইল পাঠানো
+      await sendEmailVerification(userCredential.user);
 
       const idToken = await userCredential.user.getIdToken();
 
-      // Create NextAuth session (with roles that the backend developer will save in Mongo)
+      // NextAuth সেশন তৈরি
       const response = await signIn("credentials", {
         idToken,
         role,
@@ -100,16 +122,20 @@ export const useRegisterLogic = () => {
         redirect: false,
       });
 
-      if (!response.error) {
-        setTimeout(() => {
-          router.push(role === "seller" ? "/sellproperty" : "/");
-        }, 2000);
-      }
+      if (response?.error) throw new Error(response.error);
+
+      toast.success("Account Created! Check your email for verification. ✉️", { id: toastId });
+
+      setTimeout(() => {
+        router.push(role === "seller" ? "/sellproperty" : "/");
+        router.refresh();
+      }, 2000);
+
     } catch (err) {
       let errorMessage = err.message;
-      if (err.code === "auth/email-already-in-use")
-        errorMessage = "Email already in use! 🛑";
-
+      if (err.code === "auth/email-already-in-use") errorMessage = "Email already in use! 🛑";
+      if (err.code === "auth/weak-password") errorMessage = "Password is too weak!";
+      
       toast.error(errorMessage, { id: toastId });
       setError(errorMessage);
     } finally {

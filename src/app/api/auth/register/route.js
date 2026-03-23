@@ -1,59 +1,81 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
 import { connect } from "@/src/lib/dbConnect";
 import bcrypt from "bcryptjs";
+import { NextResponse } from "next/server";
 
-export const authOptions = {
-  providers: [
-    CredentialsProvider({
-      name: "credentials",
-      credentials: {},
-      async authorize(credentials) {
-        const { email, password } = credentials;
-        const userCollection = await connect("users");
-        const user = await userCollection.findOne({ email });
+export const runtime = "nodejs";
 
-        if (!user) return null;
+export async function POST(request) {
+  try {
+    const { name, email, password, role, uid } = await request.json();
 
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) return null;
+    if (!name || !email || !password || !role) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
-        // ✅ এখান থেকে ডাটা রিটার্ন করলে তা JWT টোকেনে যাবে
-        return {
-          id: user._id.toString(),
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: "Invalid email format" },
+        { status: 400 }
+      );
+    }
+
+    if (password.length < 6) {
+      return NextResponse.json(
+        { error: "Password must be at least 6 characters" },
+        { status: 400 }
+      );
+    }
+
+    let userCollection;
+    try {
+      userCollection = await connect("users");
+    } catch (dbError) {
+      console.error("Database Connection Error:", dbError.message);
+      return NextResponse.json(
+        { error: "Database connection failed" },
+        { status: 500 }
+      );
+    }
+
+    const existingUser = await userCollection.findOne({ email });
+    if (existingUser) {
+      return NextResponse.json(
+        { error: "User already exists with this email" },
+        { status: 400 }
+      );
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const result = await userCollection.insertOne({
+      name,
+      email,
+      password: hashedPassword,
+      role,
+      uid: uid || null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    return NextResponse.json(
+      {
+        message: "User registered successfully",
+        userId: result.insertedId,
+        email,
+        role,
       },
-    }),
-  ],
-  callbacks: {
-    // ১. JWT টোকেনে ডাটা ঢুকানো
-    async jwt({ token, user }) {
-      if (user) {
-        token.name = user.name;
-        token.role = user.role;
-      }
-      return token;
-    },
-    // ২. সেশনে টোকেন থেকে ডাটা পাস করা (এটিই Navbar এ দেখাবে)
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.name = token.name;
-        session.user.role = token.role;
-      }
-      return session;
-    },
-  },
-  session: {
-    strategy: "jwt",
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/login",
-  },
-};
+      { status: 201 }
+    );
 
-const handler = NextAuth(authOptions);
-export { handler as GET, handler as POST };
+  } catch (error) {
+    console.error("Registration API Error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error: " + error.message },
+      { status: 500 }
+    );
+  }
+}

@@ -1,16 +1,9 @@
-'use client';
-
-import { useState } from 'react';
-
 /**
  * Amenities Component
  * Features: Multi-select grid, animated hover effects, and dark mode support.
  * Uses a list of global property amenities with unique icons.
  */
-const Amenities = () => {
-  // State to store selected amenity IDs
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
-
+const Amenities = ({ amenities, updateAmenities }) => {
   // Industry standard amenities for a global marketplace
   const amenityList = [
     { id: 'wifi', label: 'Free Wi-Fi', icon: '🌐' },
@@ -32,10 +25,10 @@ const Amenities = () => {
    * @param {string} id - The ID of the selected amenity
    */
   const toggleAmenity = (id) => {
-    if (selectedAmenities.includes(id)) {
-      setSelectedAmenities(selectedAmenities.filter((item) => item !== id));
+    if (amenities.includes(id)) {
+      updateAmenities(amenities.filter((item) => item !== id));
     } else {
-      setSelectedAmenities([...selectedAmenities, id]);
+      updateAmenities([...amenities, id]);
     }
   };
 
@@ -58,7 +51,7 @@ const Amenities = () => {
       {/* AMENITIES GRID: Responsive layout with animation */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {amenityList.map((item) => {
-          const isSelected = selectedAmenities.includes(item.id);
+          const isSelected = amenities.includes(item.id);
           
           return (
             <button
@@ -101,11 +94,11 @@ const Amenities = () => {
       {/* FOOTER COUNTER: Real-time feedback */}
       <div className="mt-8 flex items-center justify-between border-t border-slate-100 dark:border-slate-700 pt-6">
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          <span className="font-bold text-blue-600 dark:text-blue-400">{selectedAmenities.length}</span> items selected
+          <span className="font-bold text-blue-600 dark:text-blue-400">{amenities.length}</span> items selected
         </p>
         <button 
           type="button"
-          onClick={() => setSelectedAmenities([])}
+          onClick={() => updateAmenities([])}
           className="text-xs font-bold text-red-500 hover:text-red-600 transition-colors uppercase tracking-wider"
         >
           Clear All

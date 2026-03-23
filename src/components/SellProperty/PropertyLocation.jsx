@@ -13,20 +13,20 @@ const Marker = dynamic(() => import('react-leaflet').then((mod) => mod.Marker), 
 /**
  * Map Click Logic: Map er vitor click korle marker move korbe
  */
-function MapClickHandler({ setPosition }) {
+function MapClickHandler({ updateLocation }) {
   useMapEvents({
     click: (e) => {
-      setPosition([e.latlng.lat, e.latlng.lng]);
+      updateLocation(e.latlng.lat, e.latlng.lng);
     },
   });
   return null;
 }
 
-const PropertyLocation = () => {
-  const [position, setPosition] = useState([23.8103, 90.4125]); // Default: Dhaka
+const PropertyLocation = ({ formData, updateLocation, updateField }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [addressDetails, setAddressDetails] = useState(null);
+  const [addressDetails, setAddressDetails] = useState("");
   const mapRef = useRef(null);
+  const position = [formData.location.latitude, formData.location.longitude];
 
   // Leaflet Marker Icon Fix (Next.js e icon na dekhale eta dorkar)
   useEffect(() => {
@@ -39,21 +39,39 @@ const PropertyLocation = () => {
     });
   }, []);
 
-  // Location details fetch function (Address reverse geocoding)
+  // Location details fetch function (Address reverse geocoding via backend proxy)
   const fetchAddress = async (lat, lng) => {
     try {
-      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
+      const res = await fetch(`/api/geocode/reverse?lat=${lat}&lng=${lng}`);
+      
+      if (!res.ok) {
+        throw new Error(`API error: ${res.status}`);
+      }
+      
       const data = await res.json();
-      setAddressDetails(data.display_name);
+      
+      if (data.error) {
+        console.error("Geocoding error:", data.error);
+        return null;
+      }
+      
+      const address = data.address || data.display_name;
+      setAddressDetails(address);
+      // Update parent form with address
+      if (updateField) {
+        updateField('address', address);
+      }
+      return address;
     } catch (err) {
       console.error("Address fetch failed", err);
+      return null;
     }
   };
 
-  // Position change hole address update hobe
+  // Position change triggers address update
   useEffect(() => {
     fetchAddress(position[0], position[1]);
-  }, [position]);
+  }, [position, updateField]);
 
   // Search function
   const handleSearch = async () => {
@@ -62,9 +80,10 @@ const PropertyLocation = () => {
       const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`);
       const data = await res.json();
       if (data && data.length > 0) {
-        const newPos = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-        setPosition(newPos);
-        mapRef.current?.flyTo(newPos, 16);
+        const lat = parseFloat(data[0].lat);
+        const lng = parseFloat(data[0].lon);
+        updateLocation(lat, lng);
+        mapRef.current?.flyTo([lat, lng], 16);
       }
     } catch (err) {
       alert("Location not found!");
@@ -110,7 +129,7 @@ const PropertyLocation = () => {
             ref={mapRef}
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            <MapClickHandler setPosition={setPosition} />
+            <MapClickHandler updateLocation={updateLocation} />
             <Marker position={position} />
           </MapContainer>
         </div>
@@ -125,9 +144,13 @@ const PropertyLocation = () => {
           <div className="space-y-3">
              <div className="flex flex-col">
                 <span className="text-xs text-slate-400">Exact Address:</span>
-                <p className="text-slate-700 dark:text-slate-200 font-medium line-clamp-2">
-                   {addressDetails ? addressDetails : "Fetching address..."}
-                </p>
+                <input 
+                  type="text" 
+                  placeholder="Address will be auto-filled or type here..." 
+                  className="mt-1 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-white text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                  value={formData.address}
+                  onChange={(e) => updateField && updateField('address', e.target.value)}
+                />
              </div>
              <div className="flex gap-4 text-xs font-mono text-slate-500">
                 <span>LAT: {position[0].toFixed(6)}</span>

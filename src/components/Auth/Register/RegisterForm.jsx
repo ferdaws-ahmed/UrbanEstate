@@ -27,31 +27,14 @@ const RegisterForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          role,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error);
-      }
-
-      
-    } catch (error) {
-      console.error(error.message);
+    
+    // রোল সিলেক্ট করা না থাকলে এরর দিবে
+    if (!role) {
+      return toast.error("Please select a role first!");
     }
-    alert("Registration Successfull");
+
+    // আপনার মেইন লজিক ফাংশনটি কল করা হচ্ছে যা Firebase এবং DB হ্যান্ডেল করবে
+    // এখন আর আলাদাভাবে fetch করার প্রয়োজন নেই এবং alert-ও আগে আসবে না
     onEmailRegister(formData.name, formData.email, formData.password);
   };
 

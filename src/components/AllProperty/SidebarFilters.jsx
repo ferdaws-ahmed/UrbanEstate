@@ -1,97 +1,123 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
-/**
- * SidebarFilters Component
- * Provides advanced filtering options: Price Range, Property Type, Beds/Baths.
- */
-const SidebarFilters = ({ onFilterChange }) => {
-  const [price, setPrice] = useState(500000);
+export default function SidebarFilters({ onFilterChange }) {
+  const [filters, setFilters] = useState({
+    location: [],
+    propertyType: [],
+    bedrooms: [],
+    amenities: [],
+    priceRange: [],
+  });
 
-  const filterHeading = "text-sm font-bold text-slate-900 dark:text-white mb-4 uppercase tracking-wider";
-  const checkboxLabel = "flex items-center gap-3 text-slate-600 dark:text-slate-400 cursor-pointer hover:text-blue-600 transition-colors";
+  const divisions = ["Dhaka", "Chattogram", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur"];
+
+  // চেক বক্স হ্যান্ডলার
+  const handleCheckbox = (category, value) => {
+    const isExist = filters[category].includes(value);
+    const updatedCategory = isExist
+      ? filters[category].filter((v) => v !== value)
+      : [...filters[category], value];
+
+    const newFilters = { ...filters, [category]: updatedCategory };
+    
+    // ১. নিজের স্টেট আপডেট করা
+    setFilters(newFilters);
+    
+    // ২. সরাসরি প্যারেন্টকে আপডেট পাঠানো (useEffect এর দরকার নেই)
+    if (typeof onFilterChange === "function") {
+      onFilterChange(newFilters);
+    }
+  };
+
+  const handleClear = () => {
+    const reset = {
+      location: [],
+      propertyType: [],
+      bedrooms: [],
+      amenities: [],
+      priceRange: [],
+    };
+    setFilters(reset);
+    onFilterChange(reset);
+  };
+
+  // UI Components
+  const Section = ({ title, children }) => (
+    <div className="space-y-3 pb-5 border-b border-[var(--ue-border)] last:border-0 last:pb-0">
+      <h4 className="text-[12px] font-bold text-[var(--ue-foreground)] uppercase tracking-wider opacity-60">
+        {title}
+      </h4>
+      <div className="space-y-2.5">{children}</div>
+    </div>
+  );
+
+  const Checkbox = ({ label, checked, onChange }) => (
+    <label className="flex items-center gap-3 cursor-pointer group">
+      <div className="relative flex items-center">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={onChange}
+          className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-[var(--ue-border)] bg-transparent transition-all checked:bg-[var(--ue-primary)] checked:border-[var(--ue-primary)]"
+        />
+        <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none text-[10px]">
+          ✓
+        </span>
+      </div>
+      <span className="text-sm text-[var(--ue-foreground)] group-hover:text-[var(--ue-primary)] transition-colors capitalize">
+        {label}
+      </span>
+    </label>
+  );
 
   return (
-    <aside className="w-full lg:w-80 space-y-8 p-8 bg-white dark:bg-slate-800 rounded-[2.5rem] border border-slate-100 dark:border-slate-700 shadow-xl h-fit sticky top-24">
-      
-      {/* 1. PRICE RANGE FILTER */}
-      <div>
-        <h3 className={filterHeading}>Budget Range</h3>
-        <div className="space-y-4">
-          <input 
-            type="range" 
-            min="1000" 
-            max="1000000" 
-            step="5000"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
-          />
-          <div className="flex justify-between text-sm font-bold text-blue-600">
-            <span>$1k</span>
-            <span>Up to ${parseInt(price).toLocaleString()}</span>
-          </div>
+    <div className="w-full max-w-xs">
+      <div className="bg-[var(--ue-card)] border border-[var(--ue-border)] p-6 rounded-2xl shadow-sm flex flex-col max-h-[82vh]">
+        <div className="flex items-center justify-between pb-5 border-b border-[var(--ue-border)] mb-5 shrink-0">
+          <h3 className="text-xl font-bold text-[var(--ue-foreground)]">Filters</h3>
+          <button onClick={handleClear} className="text-xs font-semibold text-red-500 hover:underline">
+            Reset
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto pr-2 space-y-6 custom-scrollbar">
+          <Section title="Location">
+            {divisions.map((d) => (
+              <Checkbox key={d} label={d} checked={filters.location.includes(d)} onChange={() => handleCheckbox("location", d)} />
+            ))}
+          </Section>
+
+          <Section title="Property Type">
+            {["residential", "commercial", "land"].map((t) => (
+              <Checkbox key={t} label={t} checked={filters.propertyType.includes(t)} onChange={() => handleCheckbox("propertyType", t)} />
+            ))}
+          </Section>
+
+          <Section title="Bedrooms">
+            {[1, 2, 3, 4, 5].map((n) => (
+              <Checkbox key={n} label={`${n} BR`} checked={filters.bedrooms.includes(n.toString())} onChange={() => handleCheckbox("bedrooms", n.toString())} />
+            ))}
+          </Section>
+
+          <Section title="Price Range">
+            {[
+              { label: "Under 1M", value: "0-1000000" },
+              { label: "1M - 5M", value: "1000000-5000000" },
+              { label: "5M+", value: "5000000-999999999" },
+            ].map((r) => (
+              <Checkbox key={r.value} label={r.label} checked={filters.priceRange.includes(r.value)} onChange={() => handleCheckbox("priceRange", r.value)} />
+            ))}
+          </Section>
+
+          <Section title="Amenities">
+            {["wifi", "pool", "gym", "parking", "ac"].map((a) => (
+              <Checkbox key={a} label={a} checked={filters.amenities.includes(a)} onChange={() => handleCheckbox("amenities", a)} />
+            ))}
+          </Section>
         </div>
       </div>
-
-      <hr className="border-slate-100 dark:border-slate-700" />
-
-      {/* 2. PROPERTY TYPE FILTER */}
-      <div>
-        <h3 className={filterHeading}>Property Type</h3>
-        <div className="space-y-3">
-          {['Apartment', 'Villa', 'Townhouse', 'Studio', 'Penthouse'].map((type) => (
-            <label key={type} className={checkboxLabel}>
-              <input type="checkbox" className="w-5 h-5 rounded-md border-slate-300 text-blue-600 focus:ring-blue-500" />
-              <span className="text-sm font-medium">{type}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <hr className="border-slate-100 dark:border-slate-700" />
-
-      {/* 3. BEDROOMS SELECTOR */}
-      <div>
-        <h3 className={filterHeading}>Bedrooms</h3>
-        <div className="flex gap-2">
-          {['1+', '2+', '3+', '4+'].map((num) => (
-            <button 
-              key={num}
-              className="flex-1 py-2 text-xs font-bold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all dark:text-white"
-            >
-              {num}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* 4. AMENITIES QUICK FILTER */}
-      <div>
-        <h3 className={filterHeading}>Must Have</h3>
-        <div className="grid grid-cols-1 gap-3">
-          {['Swimming Pool', 'Gym', 'Parking'].map((item) => (
-            <label key={item} className={checkboxLabel}>
-              <input type="checkbox" className="w-5 h-5 rounded-md border-slate-300 text-blue-600" />
-              <span className="text-sm font-medium">{item}</span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* ACTION BUTTONS */}
-      <div className="pt-4 space-y-3">
-        <button className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-lg shadow-blue-200 dark:shadow-none transition-transform active:scale-95">
-          Apply Filters
-        </button>
-        <button className="w-full py-3 bg-transparent text-slate-400 hover:text-red-500 text-xs font-bold uppercase tracking-widest transition-colors">
-          Reset All
-        </button>
-      </div>
-
-    </aside>
+    </div>
   );
-};
-
-export default SidebarFilters;
+}

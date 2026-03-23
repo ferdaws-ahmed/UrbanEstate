@@ -48,11 +48,13 @@ const LoginForm = ({ onGoogleClick, onGithubClick, onEmailLogin, onForgotPasswor
         <div className="p-8 sm:p-10">
           {/* --- ১. লকআউট টাইমার নোটিশ --- */}
           {lockoutTime > 0 && (
-            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3 text-red-400 animate-pulse">
-              <Timer size={20} />
-              <span className="text-sm font-bold tracking-wide">System Locked: Try again in {formatTime(lockoutTime)}</span>
-            </div>
-          )}
+              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3 text-red-400 animate-pulse">
+                <Timer size={20} />
+                <span className="text-sm font-bold tracking-wide">
+                  Access Denied: Try again in {formatTime(lockoutTime)}
+                </span>
+              </div>
+            )}
 
           <div className="mb-8 text-center">
             <h3 className="text-2xl font-bold text-white">Welcome Back</h3>

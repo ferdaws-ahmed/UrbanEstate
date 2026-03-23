@@ -1,24 +1,13 @@
-'use client';
-
-import { useState } from 'react';
-
 /**
  * BasicInfo Component
  * Handles primary property data: Title, Price (USD), Category, Status, and Description.
  * Supports Dark/Light mode and prevents negative pricing.
  */
-const BasicInfo = () => {
-  // State to manage the price input to ensure global currency standards
-  const [price, setPrice] = useState("");
-
-  /**
-   * Logic to prevent negative numbers and invalid characters (e, +, -)
-   * This is crucial for a financial/real estate marketplace.
-   */
+const BasicInfo = ({ formData, updateField }) => {
   const handlePriceChange = (e) => {
     const value = e.target.value;
     if (value >= 0 || value === "") {
-      setPrice(value);
+      updateField("price", value);
     }
   };
 
@@ -28,7 +17,6 @@ const BasicInfo = () => {
     }
   };
 
-  // Reusable Tailwind classes for consistent UI across light/dark themes
   const inputStyle = `
     w-full px-4 py-3 rounded-xl 
     border border-slate-200 dark:border-slate-700 
@@ -44,7 +32,6 @@ const BasicInfo = () => {
   return (
     <div className="p-6 md:p-8 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 transition-colors duration-300">
       
-      {/* SECTION HEADER: Essential for user guidance */}
       <div className="mb-8">
         <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">
           Basic Information
@@ -56,22 +43,22 @@ const BasicInfo = () => {
 
       <div className="space-y-6">
         
-        {/* PROPERTY TITLE: High-level naming of the listing */}
         <div>
-          <label className={labelStyle}>Property Title</label>
+          <label className={labelStyle}>Property Title *</label>
           <input 
             type="text" 
             placeholder="e.g. Modern Penthouse with Central Park View" 
             className={inputStyle}
+            value={formData.title}
+            onChange={(e) => updateField("title", e.target.value)}
+            required
           />
         </div>
 
-        {/* FINANCIAL & CATEGORY ROW: Responsive grid for Desktop/Mobile */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           
-          {/* PRICE INPUT: Global Market Standard in USD */}
           <div>
-            <label className={labelStyle}>Price (USD)</label>
+            <label className={labelStyle}>Price (USD) *</label>
             <div className="relative">
               <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 font-semibold">
                 $
@@ -79,21 +66,24 @@ const BasicInfo = () => {
               <input 
                 type="number" 
                 min="0"
-                value={price}
+                value={formData.price}
                 onChange={handlePriceChange}
                 onKeyDown={preventInvalidChars}
                 placeholder="0.00" 
                 className={`${inputStyle} pl-8`}
+                required
               />
             </div>
-            {/* Logic hint for other developers */}
-            <p className="text-[10px] text-slate-400 mt-1 ml-1">Negative values are blocked.</p>
           </div>
 
-          {/* PROPERTY CATEGORY: Used for broad filtering */}
           <div>
-            <label className={labelStyle}>Property Category</label>
-            <select className={inputStyle}>
+            <label className={labelStyle}>Property Category *</label>
+            <select 
+              className={inputStyle}
+              value={formData.category}
+              onChange={(e) => updateField("category", e.target.value)}
+              required
+            >
               <option value="">Select Category</option>
               <option value="residential">Residential</option>
               <option value="commercial">Commercial</option>
@@ -132,11 +122,14 @@ const BasicInfo = () => {
 
         {/* DESCRIPTION: Detailed text area for SEO and Buyer Information */}
         <div>
-          <label className={labelStyle}>Detailed Description</label>
+          <label className={labelStyle}>Detailed Description *</label>
           <textarea 
             rows="5" 
             placeholder="Describe the unique features, surroundings, and why someone should buy/rent this property..." 
             className={`${inputStyle} resize-none`}
+            value={formData.description}
+            onChange={(e) => updateField("description", e.target.value)}
+            required
           ></textarea>
           <div className="flex justify-between mt-2">
             <span className="text-[10px] text-slate-400 italic">Clear descriptions attract more buyers.</span>

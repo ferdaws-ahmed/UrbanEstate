@@ -18,39 +18,39 @@ export const useLoginLogic = () => {
   const [lockoutTime, setLockoutTime] = useState(0); 
   const router = useRouter();
 
-  // ১. লকআউট টাইমার চেক
+  // ১. লকআউট টাইমার ফিক্স (Real-time sync with localStorage)
   useEffect(() => {
-    const storedLockout = localStorage.getItem("lockoutUntil");
-    if (storedLockout) {
-      const timeLeft = Math.ceil((parseInt(storedLockout) - Date.now()) / 1000);
-      if (timeLeft > 0) {
-        setLockoutTime(timeLeft);
-        const interval = setInterval(() => {
-          setLockoutTime((prev) => {
-            if (prev <= 1) {
-              clearInterval(interval);
-              localStorage.removeItem("lockoutUntil");
-              localStorage.removeItem("loginAttempts");
-              return 0;
-            }
-            return prev - 1;
-          });
-        }, 1000);
-        return () => clearInterval(interval);
+    const checkLockout = () => {
+      const storedLockout = localStorage.getItem("lockoutUntil");
+      if (storedLockout) {
+        const timeLeft = Math.ceil((parseInt(storedLockout) - Date.now()) / 1000);
+        if (timeLeft > 0) {
+          setLockoutTime(timeLeft);
+        } else {
+          setLockoutTime(0);
+          localStorage.removeItem("lockoutUntil");
+          localStorage.removeItem("loginAttempts");
+        }
       }
-    }
+    };
+
+    checkLockout();
+    const interval = setInterval(checkLockout, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleLoginAttempt = () => {
     let attempts = parseInt(localStorage.getItem("loginAttempts") || "0");
     attempts += 1;
     localStorage.setItem("loginAttempts", attempts.toString());
+    
     if (attempts >= 5) {
-      const unlockTime = Date.now() + 5 * 60 * 1000; 
+      const unlockTime = Date.now() + 5 * 60 * 1000; // 5 mins
       localStorage.setItem("lockoutUntil", unlockTime.toString());
       setLockoutTime(300);
-      toast.error("Too many failed attempts. Locked for 5 mins!");
+      return true;
     }
+    return false;
   };
 
   const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
@@ -62,24 +62,21 @@ export const useLoginLogic = () => {
       const result = await emailjs.send("service_tgs7syl", "template_vr5ofub", templateParams);
       return result.status === 200;
     } catch (err) {
-      console.error("EmailJS Error:", err);
       return false;
     }
   };
 
   const handleEmailLogin = async (email, password) => {
-    if (lockoutTime > 0) return toast.error("System locked. Please wait.");
+    if (lockoutTime > 0) return toast.error(`System locked. Try again in ${lockoutTime}s`);
 
     setLoading(true);
     const toastId = toast.loading("Checking credentials...");
     
     try {
-      // Step A: Firebase Auth-এ লগইন করে idToken নেওয়া (NextAuth ভেরিফিকেশনের জন্য)
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const fbUser = userCredential.user;
       const idToken = await fbUser.getIdToken();
 
-      // Step B: MongoDB API-তে রিকোয়েস্ট পাঠানো রোল চেক করার জন্য
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -88,19 +85,14 @@ export const useLoginLogic = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        handleLoginAttempt();
         throw new Error(data.error || "Login failed");
       }
 
       localStorage.removeItem("loginAttempts");
+      localStorage.removeItem("lockoutUntil");
       const isDemo = ["user@demo.com", "seller@demo.com", "admin@demo.com"].includes(email);
 
-      // সব ডেটা পেন্ডিং ইউজারে সেভ করা
-      setPendingUser({ 
-        ...data, 
-        idToken, // এটি NextAuth-এ পাঠাতে হবে
-        isDemo 
-      });
+      setPendingUser({ ...data, idToken, isDemo });
 
       if (isDemo) {
         setShowOTPModal(true);
@@ -118,7 +110,21 @@ export const useLoginLogic = () => {
         }
       }
     } catch (err) {
-      toast.error(err.message || "Invalid credentials.", { id: toastId });
+      const isNewlyLocked = handleLoginAttempt();
+      
+      // মিনিংফুল এরর মেসেজ হ্যান্ডলিং
+      let errorMsg = "Invalid email or password.";
+      if (isNewlyLocked || err.code === "auth/too-many-requests") {
+        errorMsg = "Too many failed attempts. Locked for 5 mins!";
+      } else if (err.code === "auth/user-not-found") {
+        errorMsg = "No account found with this email.";
+      } else if (err.code === "auth/wrong-password") {
+        errorMsg = "Incorrect password. Try again.";
+      } else if (err.message.includes("Database")) {
+        errorMsg = "Database connection error. Try again later.";
+      }
+
+      toast.error(errorMsg, { id: toastId });
     } finally {
       setLoading(false);
     }
@@ -128,15 +134,12 @@ export const useLoginLogic = () => {
     if (inputOTP === otpCode) {
       const toastId = toast.loading("Finalizing session...");
       try {
-        // NextAuth-এ idToken এবং role পাঠানো হচ্ছে
         const res = await signIn("credentials", {
           idToken: pendingUser.idToken,
           role: pendingUser.role,
           redirect: false,
         });
-
         if (res?.error) throw new Error(res.error);
-
         toast.success("Verified! 🚀", { id: toastId });
         handleRedirect(pendingUser.role);
       } catch (err) {
@@ -155,9 +158,7 @@ export const useLoginLogic = () => {
         role: pendingUser.role,
         redirect: false,
       });
-
       if (res?.error) throw new Error(res.error);
-
       toast.success("Welcome Demo User!", { id: toastId });
       handleRedirect(pendingUser.role);
     } catch (err) {
@@ -179,15 +180,8 @@ export const useLoginLogic = () => {
       const result = await signInWithPopup(auth, provider);
       const fbUser = result.user;
       const idToken = await fbUser.getIdToken();
-
-      const res = await signIn("credentials", {
-        idToken: idToken,
-        role: "user", // সোশ্যাল লগইনে ডিফল্ট রোল 'user'
-        redirect: false,
-      });
-
+      const res = await signIn("credentials", { idToken, role: "user", redirect: false });
       if (res?.error) throw new Error("Verification failed");
-      
       toast.success("Welcome back!", { id: toastId });
       router.push("/");
       router.refresh();

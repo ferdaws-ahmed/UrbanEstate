@@ -22,7 +22,6 @@ const nextConfig = {
       },
     ];
   },
-  // যদি ইমেজ হ্যান্ডলিং (যেমন Google Profile Picture) লাগে তবে নিচেরটা যোগ করতে পারেন
   images: {
     remotePatterns: [
       {
@@ -32,6 +31,19 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "avatars.githubusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+      },
+      // ImgBB এর জন্য এটি যোগ করা হলো
+      {
+        protocol: "https",
+        hostname: "i.ibb.co",
       },
     ],
   },
