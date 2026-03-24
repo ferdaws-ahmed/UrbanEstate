@@ -38,8 +38,13 @@ const PropertyMap = dynamic(() => import('./PropertyMap'), { ssr: false });
 export default function AdminDashboard() {
   const [dashboardData, setDashboardData] = useState(null);
   const { isDark } = useTheme();
+  
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  
+
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     setDashboardData(data);
@@ -56,20 +61,25 @@ export default function AdminDashboard() {
   return (
     <div className={`min-h-screen flex overflow-hidden ${isDark ? 'bg-[#091a16] text-gray-100' : 'bg-[#f4f7f6] text-gray-900'}`}>
      
+
       <Sidebar 
         isOpen={isSidebarOpen} 
         setIsOpen={setIsSidebarOpen} 
+        isCollapsed={isCollapsed}
+        setIsCollapsed={setIsCollapsed}
       />
 
+
       <div 
-        className={`relative flex flex-col min-h-screen transition-all duration-300
+        className={`relative flex flex-col min-h-screen transition-all duration-500 ease-in-out w-full
           ${isMobile 
-            ? 'w-full ml-0' 
-            : 'ml-[260px] w-[calc(100%-260px)]' 
+            ? 'ml-0' 
+            : isCollapsed 
+              ? 'lg:ml-[90px] lg:w-[calc(100%-90px)]' 
+              : 'lg:ml-[260px] lg:w-[calc(100%-260px)]'
           }
         `}
       >
-        
     
         <header className={`sticky top-0 z-[80] flex items-center px-4 py-2 border-b backdrop-blur-md ${
           isDark ? 'bg-[#091a16]/80 border-[#1a4a40]' : 'bg-white/80 border-gray-200'
@@ -86,7 +96,7 @@ export default function AdminDashboard() {
           </div>
         </header>
         
-        {/*main content*/}
+      
         <main className="p-4 md:p-6 w-full max-w-full overflow-y-auto">
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 w-full">
             
@@ -109,7 +119,6 @@ export default function AdminDashboard() {
               <QuickActions actions={dashboardData.quickActions} />
               <MarketingCampaignROI campaigns={dashboardData.marketingCampaigns} />
               
-   
               <PriorityTasks /> 
               
             </div>
