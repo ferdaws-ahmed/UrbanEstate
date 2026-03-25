@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { Menu } from 'lucide-react'; // মেনু আইকন ইমপোর্ট করা হলো
-import Sidebar from '../../src/components/dashboard/admin/Sidebar';
-import Topbar from '../../src/components/dashboard/admin/Topbar';
-import ClientManagement from '../../src/components/dashboard/admin/ClientsRelated/ClientManagement';
+import Sidebar from '../../../../components/dashboard/admin/Sidebar';
+import Topbar from '../../../../components/dashboard/admin/Topbar';
+import ClientManagement from '../../../../components/dashboard/admin/ClientsRelated/ClientManagement';
 
 export default function ClientsPage() {
   // সাইডবার ওপেন/ক্লোজ করার জন্য স্টেট

@@ -23,11 +23,17 @@ export default function Sidebar({ isOpen, setIsOpen }) {
   const isDark = themeContext ? themeContext.isDark : false;
 
   const menuItems = [
-    { name: 'Dashboard', path: '/admin-dashboard', icon: <LayoutDashboard size={22} /> },
-    { name: 'Properties', path: '/property', icon: <Home size={22} /> },
-    { name: 'Agents', path: '/agents', icon: <Users size={22} /> },
-    { name: 'Clients', path: '/clients', icon: <UserCircle size={22} /> },
-    { name: 'Analytics', path: '/analytics', icon: <BarChart3 size={22} /> },
+    // Dashboard er path thik kora holo (Absolute Path)
+    { name: 'Dashboard', path: '/dashboard/admin', icon: <LayoutDashboard size={22} /> },
+    
+    // Baki path gulo-teo exact '/' diye shuru kora holo
+    { name: 'Properties', path: '/all-properties', icon: <Home size={22} /> },
+    
+    // Apnar main error eikhan-ei chilo (admin/agents -> /dashboard/admin/agents)
+    { name: 'Agents', path: '/dashboard/admin/agents', icon: <Users size={22} /> },
+    { name: 'Clients', path: '/dashboard/admin/clients', icon: <UserCircle size={22} /> },
+    { name: 'Analytics', path: '/dashboard/admin/analytics', icon: <BarChart3 size={22} /> },
+    
     { name: 'Settings', path: '/settings', icon: <Settings size={22} /> },
     { name: 'Support', path: '/support', icon: <LifeBuoy size={22} /> },
     { name: 'Help', path: '/help', icon: <HelpCircle size={22} /> },

@@ -1,5 +1,6 @@
+import AdminDashboard from "../../../components/dashboard/admin/HomePageRelated/AdminDashboard";
 
-import AdminDashboard from '../../src/components/dashboard/admin/HomePageRelated/AdminDashboard'; 
+
 
 export default function DashboardPage() {
   return (
