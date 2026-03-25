@@ -3,11 +3,11 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import Sidebar from '../../src/components/dashboard/admin/Sidebar';
-import Topbar from '../../src/components/dashboard/admin/Topbar';
-import data from '../../public/data/dashboardData.json';
+import Sidebar from '../../components/dashboard/admin/Sidebar';
+import Topbar from '../../components/dashboard/admin/Topbar';
+import data from '../../../public/data/dashboardData.json';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '../../src/components/ThemeProvider';
+import { useTheme } from '../../components/ThemeProvider';
 
 function SearchContent() {
   const searchParams = useSearchParams();
