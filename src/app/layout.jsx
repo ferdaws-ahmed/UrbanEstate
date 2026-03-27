@@ -5,6 +5,7 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Navbar from "../components/shared/Navbar";
 import { ThemeProvider } from "../components/Theme/ThemeContext";
+import Chatbot from "../components/Ai Chatbot/Chatbot";
 
 // font settings (from tamim_new)
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -38,6 +39,9 @@ export default function RootLayout({ children }) {
 
             {/* Toast notifications */}
             <Toaster position="top-center" reverseOrder={false} />
+
+            {/* AI Chatbot */}
+            <Chatbot />
           </AuthProvider>
         </ThemeProvider>
       </body>
