@@ -6,7 +6,7 @@ import {
   ShieldCheck, Calendar, MessageSquare, Radar, Activity, GitCompare
 } from "lucide-react";
 import Link from "next/link";
-import PropertyGallery from "./PropertyGallery";
+import PropertyGallery from "./propertygallery";
 import Navbar from "../../../components/shared/Navbar";
 
 // ডাটা ফেচিং ফাংশন
