@@ -99,7 +99,7 @@ const SellPropertyParent = () => {
 
       // ড্যাশবোর্ডে রিডাইরেক্ট
       setTimeout(() => {
-        window.location.href = "/dashboard";
+        window.location.href = "/all-properties";
       }, 2000);
 
     } catch (error) {
