@@ -93,14 +93,21 @@ const BasicInfo = ({ formData, updateField }) => {
           </div>
         </div>
 
-        {/* LISTING STATUS & TYPE: Using Peer-Checked logic for a modern UI toggle */}
+        {/* LISTING STATUS & TYPE: Updated with value and onChange */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className={labelStyle}>Listing Status</label>
             <div className="flex gap-4">
               {["For Sale", "For Rent"].map((status) => (
                 <label key={status} className="flex-1">
-                  <input type="radio" name="status" className="hidden peer" />
+                  <input 
+                    type="radio" 
+                    name="status" 
+                    value={status} // Added value
+                    checked={formData.status === status} // Added checked state
+                    onChange={(e) => updateField("status", e.target.value)} // Added onChange
+                    className="hidden peer" 
+                  />
                   <div className="text-center py-3 rounded-xl border border-slate-200 dark:border-slate-700 peer-checked:border-blue-500 peer-checked:bg-blue-50 dark:peer-checked:bg-blue-900/20 peer-checked:text-blue-600 dark:peer-checked:text-blue-400 cursor-pointer transition-all font-medium text-slate-600 dark:text-slate-400">
                     {status}
                   </div>
@@ -111,7 +118,12 @@ const BasicInfo = ({ formData, updateField }) => {
 
           <div>
             <label className={labelStyle}>Property Type</label>
-            <select className={inputStyle}>
+            <select 
+              className={inputStyle}
+              value={formData.propertyType} // Added value link to formData
+              onChange={(e) => updateField("propertyType", e.target.value)} // Added onChange
+            >
+              <option value="">Select Type</option>
               <option value="apartment">Apartment</option>
               <option value="villa">Villa</option>
               <option value="studio">Studio</option>
@@ -120,7 +132,7 @@ const BasicInfo = ({ formData, updateField }) => {
           </div>
         </div>
 
-        {/* DESCRIPTION: Detailed text area for SEO and Buyer Information */}
+        {/* DESCRIPTION */}
         <div>
           <label className={labelStyle}>Detailed Description *</label>
           <textarea 
