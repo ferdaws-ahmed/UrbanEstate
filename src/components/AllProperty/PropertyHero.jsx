@@ -6,24 +6,26 @@ export default function PropertyHero({ onSearch }) {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
 
+  // ডাটাবেজে যেভাবে সেভ হচ্ছে, ঠিক সেই নামগুলোই এখানে রাখা ভালো
   const categories = [
-    "All",  "Apartment", "Villa", "Office Space"
+    "All", "Apartment", "Villa", "Office Space", "Studio"
   ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(query);
+    onSearch(query); // সার্চ বার দিয়ে খোঁজার জন্য
   };
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat);
-    // যদি "All" হয় তবে খালি স্ট্রিং পাঠানো যেতে পারে সব দেখানোর জন্য
+    // যদি "All" হয় তবে আমরা সাধারণত পুরো ডাটাবেজ চাই, তাই খালি স্ট্রিং পাঠানো হয়
+    // অন্যথায় ক্যাটাগরির নাম (যেমন: "Apartment") পাঠানো হবে
     onSearch(cat === "All" ? "" : cat);
   };
 
   return (
     <div className="relative py-20 overflow-hidden">
-      {/* BACKGROUNDS (Your existing logic) */}
+      {/* BACKGROUNDS */}
       <div className="absolute inset-0 bg-white dark:hidden" />
       <div className="absolute inset-0 hidden dark:block bg-[var(--ue-secondary)]" />
       <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent dark:from-black/40" />
@@ -57,7 +59,7 @@ export default function PropertyHero({ onSearch }) {
           </button>
         </form>
 
-        {/* UPDATED QUICK TAGS */}
+        {/* QUICK TAGS */}
         <div className="flex flex-wrap justify-center gap-2 mt-10">
           {categories.map((item) => (
             <button

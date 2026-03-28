@@ -117,19 +117,21 @@ const BasicInfo = ({ formData, updateField }) => {
           </div>
 
           <div>
-            <label className={labelStyle}>Property Type</label>
-            <select 
-              className={inputStyle}
-              value={formData.propertyType} // Added value link to formData
-              onChange={(e) => updateField("propertyType", e.target.value)} // Added onChange
-            >
-              <option value="">Select Type</option>
-              <option value="apartment">Apartment</option>
-              <option value="villa">Villa</option>
-              <option value="studio">Studio</option>
-              <option value="office">Office Space</option>
-            </select>
-          </div>
+  <label className={labelStyle}>Property Type</label>
+  <select 
+    className={inputStyle}
+    value={formData.propertyType} 
+    onChange={(e) => updateField("propertyType", e.target.value)}
+    required
+  >
+    <option value="">Select Type</option>
+   
+    <option value="Apartment">Apartment</option>
+    <option value="Villa">Villa</option>
+    <option value="Studio">Studio</option>
+    <option value="Office Space">Office Space</option>
+  </select>
+</div>
         </div>
 
         {/* DESCRIPTION */}
