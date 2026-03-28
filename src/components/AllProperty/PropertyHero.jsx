@@ -7,8 +7,7 @@ export default function PropertyHero({ onSearch }) {
   const [activeCategory, setActiveCategory] = useState("All");
 
   const categories = [
-    "All", "Residential", "Commercial", "Industrial", 
-    "Land/Plot", "Apartment", "Villa", "Office Space"
+    "All",  "Apartment", "Villa", "Office Space"
   ];
 
   const handleSubmit = (e) => {
