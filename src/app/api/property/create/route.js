@@ -7,7 +7,7 @@ export const runtime = "nodejs";
 
 export async function POST(request) {
   try {
-    // ১. সেশন চেক করা (ইউজার লগইন করা আছে কিনা)
+    // ১. সেশন চেক করা
     const session = await getServerSession(authOptions);
     if (!session || !session.user) {
       return NextResponse.json(
@@ -16,11 +16,15 @@ export async function POST(request) {
       );
     }
 
-    // २. রিকোয়েস্ট ডাটা পড়া
+    // ২. রিকোয়েস্ট ডাটা পড়া
     const propertyData = await request.json();
 
-    // ३. ভ্যালিডেশন
-    const { title, price, category, description, bedrooms, bathrooms, area, location, address, amenities, images } = propertyData;
+    // ৩. ভ্যালিডেশন (status এবং propertyType এখানে যোগ করা হয়েছে)
+    const { 
+      title, price, category, status, propertyType, 
+      description, bedrooms, bathrooms, area, 
+      location, address, amenities, images 
+    } = propertyData;
 
     if (!title || !price || !category || !description || !location || !address) {
       return NextResponse.json(
@@ -29,7 +33,7 @@ export async function POST(request) {
       );
     }
 
-    // ४. ডাটাবেস কানেকশন
+    // ৪. ডাটাবেস কানেকশন
     let propertiesCollection;
     try {
       propertiesCollection = await connect("properties");
@@ -41,11 +45,13 @@ export async function POST(request) {
       );
     }
 
-    // ५. নতুন প্রপার্টি তৈরি করা
+    // ৫. নতুন প্রপার্টি তৈরি করা
     const result = await propertiesCollection.insertOne({
       title,
       price: Number(price),
-      category,
+      category, // আবাসিক/বাণিজ্যিক ইত্যাদি
+      status: status || "For Sale", // ইউজারের সিলেক্ট করা Status (যেমন: For Rent/For Sale)
+      propertyType: propertyType || "apartment", // ইউজারের সিলেক্ট করা Type (যেমন: Villa/Studio)
       description,
       bedrooms: bedrooms ? Number(bedrooms) : null,
       bathrooms: bathrooms ? Number(bathrooms) : null,
@@ -59,7 +65,7 @@ export async function POST(request) {
       images: images || [],
       sellerId: session.user.id,
       sellerEmail: session.user.email,
-      status: "published",
+      listingStatus: "published", // এটি হলো প্রপার্টি লাইভ কিনা তার স্ট্যাটাস
       views: 0,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -69,7 +75,6 @@ export async function POST(request) {
       {
         message: "Property published successfully",
         propertyId: result.insertedId,
-        status: "published",
       },
       { status: 201 }
     );
