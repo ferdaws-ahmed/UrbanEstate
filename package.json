@@ -6,7 +6,8 @@
     "dev": "set NODE_OPTIONS=--dns-result-order=ipv4first && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "git push marketplace development:main --force"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
