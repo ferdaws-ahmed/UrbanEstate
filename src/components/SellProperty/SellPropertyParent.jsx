@@ -14,6 +14,8 @@ const SellPropertyParent = () => {
     title: "",
     price: "",
     category: "",
+    status: "For Sale", // নতুন যোগ করা হয়েছে (Default value)
+    propertyType: "",   // নতুন যোগ করা হয়েছে
     description: "",
     bedrooms: "",
     bathrooms: "",
@@ -82,11 +84,13 @@ const SellPropertyParent = () => {
       toast.success("Property published successfully! 🎉", { id: toastId });
       console.log("Property created:", data);
 
-      // ফর্ম রিসেট করা
+      // ফর্ম রিসেট করা (সবগুলো ফিল্ড সহ)
       setFormData({
         title: "",
         price: "",
         category: "",
+        status: "For Sale",
+        propertyType: "",
         description: "",
         bedrooms: "",
         bathrooms: "",
