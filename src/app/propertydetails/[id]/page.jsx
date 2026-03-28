@@ -10,15 +10,22 @@ import Navbar from "../../../components/shared/Navbar";
 
 // ডাটা ফেচিং ফাংশন
 async function getProperty(id) {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  // ১. সরাসরি VERCEL_URL চেক করা (সবচেয়ে নিরাপদ)
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 
+                  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
   try {
     const res = await fetch(`${baseUrl}/api/propertydetails/${id}`, {
-      next: { revalidate: 0 } 
+      cache: 'no-store' // রিয়েল টাইম ডাটা নিশ্চিত করতে
     });
-    if (!res.ok) return null;
+    
+    if (!res.ok) {
+      console.error(`API Error: ${res.status}`);
+      return null;
+    }
     return res.json();
   } catch (error) {
-    console.error("Fetch error:", error);
+    console.error("Fetch error details:", error);
     return null;
   }
 }
