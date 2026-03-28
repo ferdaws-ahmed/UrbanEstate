@@ -168,7 +168,7 @@ export const useLoginLogic = () => {
 
   const handleRedirect = (role) => {
     if (role === "admin") router.push("/admin/dashboard");
-    else if (role === "seller") router.push("/seller/dashboard");
+    else if (role === "seller") router.push("/");
     else router.push("/");
     router.refresh();
   };
