@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import React from "react";
 import { 
   Bed, Bath, Maximize, MapPin, 
@@ -12,7 +13,7 @@ import Navbar from "../../../components/shared/Navbar";
 async function getProperty(id) {
   // ১. সরাসরি VERCEL_URL চেক করা (সবচেয়ে নিরাপদ)
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || 
-                  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+                (process.env.VERCEL_URL ? `https://urbanestate-marketplace.vercel.app` : "http://localhost:3000");
 
   try {
     const res = await fetch(`${baseUrl}/api/propertydetails/${id}`, {
