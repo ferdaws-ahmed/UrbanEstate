@@ -1,29 +1,31 @@
-export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  
-  // পেজ নম্বর এবং লিমিট সেট করা
-  const page = parseInt(searchParams.get("page")) || 1;
-  const limit = 15;
-  const skip = (page - 1) * limit;
+import { NextResponse } from "next/server";
+import { connect } from "@/src/lib/dbConnect";
+import { ObjectId } from "mongodb";
 
+export const runtime = "nodejs";
+
+export async function GET(request, { params }) {
   try {
-    const propertiesCollection = await connect("properties");
-    
-    // মোট কয়টি ডাটা আছে তা বের করা (বাটন দেখানোর জন্য)
-    const totalProperties = await propertiesCollection.countDocuments();
-    
-    // নির্দিষ্ট ১৫টি ডাটা ফেচ করা
-    const properties = await propertiesCollection
-      .find({})
-      .skip(skip)
-      .limit(limit)
-      .toArray();
+    const { id } = await params;
+    if (!id) {
+      return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    }
 
-    return NextResponse.json({
-      properties,
-      totalPages: Math.ceil(totalProperties / limit),
-      currentPage: page
-    });
+    let oid;
+    try {
+      oid = new ObjectId(id);
+    } catch {
+      return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+    }
+
+    const propertiesCollection = await connect("properties");
+    const property = await propertiesCollection.findOne({ _id: oid });
+
+    if (!property) {
+      return NextResponse.json({ error: "Property not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(property);
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
