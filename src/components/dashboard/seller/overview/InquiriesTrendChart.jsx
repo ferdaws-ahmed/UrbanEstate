@@ -17,15 +17,15 @@ export default function InquiriesTrendChart({ data = [] }) {
 
   return (
     <div
-      className={`h-full min-h-[260px] rounded-2xl border p-4 shadow-sm ${
+      className={`min-w-0 h-full min-h-[260px] rounded-2xl border p-4 shadow-sm ${
         isDark ? "border-[#1a4a40]/50 bg-[#0f2e28]/80" : "border-slate-100 bg-white"
       }`}
     >
       <h3 className="mb-4 text-sm font-bold text-slate-800 dark:text-white">
         Inquiries Trend
       </h3>
-      <div className="h-[200px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="h-[200px] w-full min-w-0 min-h-[200px]">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
           <AreaChart data={data} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
             <defs>
               <linearGradient id="inqGrad" x1="0" y1="0" x2="0" y2="1">

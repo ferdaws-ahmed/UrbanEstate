@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { connect } from "@/src/lib/dbConnect";
+import { addressToString } from "@/src/lib/addressToString";
 
 export const runtime = "nodejs";
 
@@ -115,7 +116,7 @@ export async function GET() {
         bedrooms: top.bedrooms ?? 0,
         bathrooms: top.bathrooms ?? 0,
         images: top.images || [],
-        address: top.address || top.location?.address || "",
+        address: addressToString(top.address, top.location),
       };
     }
 
@@ -123,7 +124,7 @@ export async function GET() {
       _id: p._id.toString(),
       title: p.title || "",
       description: p.description || "",
-      address: p.address || "",
+      address: addressToString(p.address, p.location),
       status: p.status || "draft",
       category: p.category || "",
       price: p.price || 0,

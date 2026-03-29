@@ -25,15 +25,15 @@ export default function ListingViewsChart({ data = [] }) {
 
   return (
     <div
-      className={`h-full min-h-[260px] rounded-2xl border p-4 shadow-sm ${
+      className={`min-w-0 h-full min-h-[260px] rounded-2xl border p-4 shadow-sm ${
         isDark ? "border-[#1a4a40]/50 bg-[#0f2e28]/80" : "border-slate-100 bg-white"
       }`}
     >
       <h3 className="mb-4 text-sm font-bold text-slate-800 dark:text-white">
         Listing Views
       </h3>
-      <div className="h-[200px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="h-[200px] w-full min-w-0 min-h-[200px]">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
           <BarChart data={chartData} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#1a4a40" : "#e2e8f0"} />
             <XAxis dataKey="day" tick={{ fill: isDark ? "#94a3b8" : "#64748b", fontSize: 11 }} />

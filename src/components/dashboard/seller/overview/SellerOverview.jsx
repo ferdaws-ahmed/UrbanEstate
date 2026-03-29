@@ -83,16 +83,16 @@ export default function SellerOverview() {
   return (
     <div className="space-y-6 pb-24">
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-12 xl:gap-6">
-        <div className="xl:col-span-2">
+        <div className="min-w-0 xl:col-span-2">
           <MetricCards stats={data.stats} />
         </div>
-        <div className="xl:col-span-3">
+        <div className="min-w-0 xl:col-span-3">
           <ListingViewsChart data={data.viewsByDay} />
         </div>
-        <div className="xl:col-span-4">
+        <div className="min-w-0 xl:col-span-4">
           <InquiriesTrendChart data={data.inquiriesTrend} />
         </div>
-        <div className="xl:col-span-3">
+        <div className="min-w-0 xl:col-span-3">
           <RecentInquiries items={data.recentInquiries} />
         </div>
       </div>

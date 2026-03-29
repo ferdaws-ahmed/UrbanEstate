@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Search, ChevronDown } from "lucide-react";
 import { useTheme } from "@/src/components/Theme/ThemeContext";
+import { addressToString } from "@/src/lib/addressToString";
 
 export default function MyListingsTable({ listings = [] }) {
   const { isDark } = useTheme();
@@ -15,12 +16,14 @@ export default function MyListingsTable({ listings = [] }) {
   const filtered = useMemo(() => {
     if (!q.trim()) return listings;
     const s = q.toLowerCase();
-    return listings.filter(
-      (p) =>
+    return listings.filter((p) => {
+      const addr = addressToString(p.address, p.location);
+      return (
         (p.title || "").toLowerCase().includes(s) ||
-        (p.address || "").toLowerCase().includes(s) ||
+        addr.toLowerCase().includes(s) ||
         (p.description || "").toLowerCase().includes(s)
-    );
+      );
+    });
   }, [listings, q]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
@@ -89,7 +92,9 @@ export default function MyListingsTable({ listings = [] }) {
                 </td>
               </tr>
             ) : (
-              slice.map((p) => (
+              slice.map((p) => {
+                const addrLine = addressToString(p.address, p.location);
+                return (
                 <tr
                   key={p._id}
                   className={`border-t ${
@@ -117,7 +122,7 @@ export default function MyListingsTable({ listings = [] }) {
                         >
                           {p.title || "Untitled"}
                         </Link>
-                        <p className="text-xs text-slate-500 line-clamp-1">{p.address}</p>
+                        <p className="text-xs text-slate-500 line-clamp-1">{addrLine}</p>
                       </div>
                     </div>
                   </td>
@@ -152,7 +157,8 @@ export default function MyListingsTable({ listings = [] }) {
                     </button>
                   </td>
                 </tr>
-              ))
+                );
+              })
             )}
           </tbody>
         </table>
