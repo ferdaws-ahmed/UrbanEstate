@@ -168,7 +168,7 @@ export const useLoginLogic = () => {
 
   const handleRedirect = (role) => {
     if (role === "admin") router.push("/dashboard/admin");
-    else if (role === "seller") router.push("/");
+    else if (role === "seller") router.push("/dashboard/seller");
     else router.push("/");
     router.refresh();
   };
@@ -180,11 +180,25 @@ export const useLoginLogic = () => {
       const result = await signInWithPopup(auth, provider);
       const fbUser = result.user;
       const idToken = await fbUser.getIdToken();
-      const res = await signIn("credentials", { idToken, role: "user", redirect: false });
+
+      // সোশ্যাল লগইনের জন্য ডেটাবেজ থেকে রোল এবং ইউজার ডাটা চেক করা
+      const dbRes = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: fbUser.email, isSocial: true }), // isSocial ফ্ল্যাগ দিয়ে পাসওয়ার্ড চেক স্কিপ করা যেতে পারে
+      });
+
+      let role = "user";
+      if (dbRes.ok) {
+        const dbData = await dbRes.json();
+        role = dbData.role || "user";
+      }
+
+      const res = await signIn("credentials", { idToken, role, redirect: false });
       if (res?.error) throw new Error("Verification failed");
+
       toast.success("Welcome back!", { id: toastId });
-      router.push("/");
-      router.refresh();
+      handleRedirect(role);
     } catch (err) {
       toast.error("Social Login failed.", { id: toastId });
     } finally {

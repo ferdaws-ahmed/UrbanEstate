@@ -63,7 +63,8 @@ export const useRegisterLogic = () => {
       setShowVerificationModal(false);
 
       setTimeout(() => {
-        router.push(role === "seller" ? "/sellproperty" : "/");
+        const dashboardPath = role === "seller" ? "/dashboard/seller" : (role === "admin" ? "/dashboard/admin" : "/");
+        router.push(dashboardPath);
         router.refresh();
       }, 1500);
     } catch (err) {
@@ -112,7 +113,8 @@ export const useRegisterLogic = () => {
 
       router.refresh();
       setTimeout(() => {
-        router.push(role === "seller" ? "/sellproperty" : "/");
+        const dashboardPath = role === "seller" ? "/dashboard/seller" : (role === "admin" ? "/dashboard/admin" : "/");
+        router.push(dashboardPath);
       }, 1000);
     } catch (error) {
       toast.error("Login failed! Please try again.", { id: toastId });

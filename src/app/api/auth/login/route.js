@@ -5,10 +5,10 @@ export const runtime = "nodejs";
 
 export async function POST(request) {
   try {
-    const { email, password } = await request.json();
+    const { email, password, isSocial } = await request.json();
 
-    // ১. ভ্যালিডেশন চেক
-    if (!email || !password) {
+    // ১. ভ্যালিডেশন চেক (isSocial হলে শুধু ইমেইল লাগবে)
+    if (!email || (!password && !isSocial)) {
       return Response.json(
         { error: "Email and password are required" },
         { status: 400 }
@@ -36,13 +36,18 @@ export async function POST(request) {
     const isDemoAccount = ["user@demo.com", "seller@demo.com", "admin@demo.com"].includes(email);
     let isMatch = false;
 
-    // Bcrypt চেক (যদি পাসওয়ার্ড হ্যাশ করা থাকে)
-    try {
-      if (user.password && (user.password.startsWith("$2a$") || user.password.startsWith("$2b$"))) {
-        isMatch = await bcrypt.compare(password, user.password);
+    // সোশ্যাল লগইন হলে পাসওয়ার্ড চেক লাগবে না
+    if (isSocial) {
+      isMatch = true;
+    } else {
+      // Bcrypt চেক (যদি পাসওয়ার্ড হ্যাশ করা থাকে)
+      try {
+        if (user.password && (user.password.startsWith("$2a$") || user.password.startsWith("$2b$"))) {
+          isMatch = await bcrypt.compare(password, user.password);
+        }
+      } catch (bcryptError) {
+        console.warn("Bcrypt comparison failed, checking plain text if applicable.");
       }
-    } catch (bcryptError) {
-      console.warn("Bcrypt comparison failed, checking plain text if applicable.");
     }
 
     // ডেমো অ্যাকাউন্টের জন্য প্লেইন টেক্সট চেক (যদি হ্যাশ না মিলে)
