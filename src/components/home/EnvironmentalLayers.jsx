@@ -121,23 +121,27 @@ function MapOverlays({ showNoise, showCrime, showAQI }) {
     defaultCenter.lng,
   ]);
 
-  // Live Location Tracking
+  // One-shot location (watchPosition + permission denied = noisy errors; Strict Mode doubles subscriptions)
   useEffect(() => {
     if (typeof window === "undefined" || !navigator.geolocation) return;
 
-    map.flyTo(userLocation, 14, { duration: 1.5 });
-
-    const watchId = navigator.geolocation.watchPosition(
+    let cancelled = false;
+    navigator.geolocation.getCurrentPosition(
       (position) => {
+        if (cancelled) return;
         const { latitude, longitude } = position.coords;
         setUserLocation([latitude, longitude]);
-        map.flyTo([latitude, longitude], map.getZoom(), { duration: 1.0 });
+        map.flyTo([latitude, longitude], 14, { duration: 1.2 });
       },
-      (error) => console.warn("Location error: ", error),
-      { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
+      () => {
+        map.flyTo([defaultCenter.lat, defaultCenter.lng], 13, { duration: 0 });
+      },
+      { enableHighAccuracy: false, maximumAge: 120000, timeout: 12000 }
     );
 
-    return () => navigator.geolocation.clearWatch(watchId);
+    return () => {
+      cancelled = true;
+    };
   }, [map]);
 
   // Pulse (Red Dot) Icon
@@ -249,7 +253,13 @@ export default function EnvironmentalLayers() {
   const [showNoise, setShowNoise] = useState(false);
   const [showCrime, setShowCrime] = useState(false);
   const [showAQI, setShowAQI] = useState(false);
+  const [mapMounted, setMapMounted] = useState(false);
   const { isDark } = useTheme();
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMapMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   const ToggleSwitch = ({ checked, onChange }) => (
     <button
@@ -373,23 +383,31 @@ export default function EnvironmentalLayers() {
               isDark ? "border-white/10" : "border-black/10"
             }`}
           >
-            <MapContainer
-              center={[defaultCenter.lat, defaultCenter.lng]}
-              zoom={13}
-              style={{ height: "100%", width: "100%", zIndex: 10 }}
-              zoomControl={false}
-            >
-              <TileLayer
-                url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            {!mapMounted ? (
+              <div
+                className="h-full w-full bg-slate-200/80 dark:bg-slate-900/40 animate-pulse"
+                aria-hidden
               />
-              <MapOverlays
-                showNoise={showNoise}
-                showCrime={showCrime}
-                showAQI={showAQI}
-              />
-              <ZoomControl position="topright" />
-            </MapContainer>
+            ) : (
+              <MapContainer
+                key="environmental-layers-map"
+                center={[defaultCenter.lat, defaultCenter.lng]}
+                zoom={13}
+                style={{ height: "100%", width: "100%", zIndex: 10 }}
+                zoomControl={false}
+              >
+                <TileLayer
+                  url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <MapOverlays
+                  showNoise={showNoise}
+                  showCrime={showCrime}
+                  showAQI={showAQI}
+                />
+                <ZoomControl position="topright" />
+              </MapContainer>
+            )}
 
             <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_40px_rgba(8,29,25,0.8)] z-20"></div>
           </div>

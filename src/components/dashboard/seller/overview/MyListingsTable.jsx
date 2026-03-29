@@ -13,8 +13,10 @@ export default function MyListingsTable({ listings = [] }) {
   const [page, setPage] = useState(1);
   const perPage = 5;
 
+  const list = Array.isArray(listings) ? listings : [];
+
   const filtered = useMemo(() => {
-    if (!q.trim()) return listings;
+    if (!q.trim()) return list;
     const s = q.toLowerCase();
     return listings.filter((p) => {
       const addr = addressToString(p.address, p.location);
@@ -24,7 +26,7 @@ export default function MyListingsTable({ listings = [] }) {
         (p.description || "").toLowerCase().includes(s)
       );
     });
-  }, [listings, q]);
+  }, [list, q]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
   const slice = filtered.slice((page - 1) * perPage, page * perPage);

@@ -14,6 +14,7 @@ import { useTheme } from "@/src/components/Theme/ThemeContext";
 export default function InquiriesTrendChart({ data = [] }) {
   const { isDark } = useTheme();
   const stroke = isDark ? "#9ee9d4" : "#2D9CDB";
+  const rows = Array.isArray(data) ? data : [];
 
   return (
     <div
@@ -26,7 +27,7 @@ export default function InquiriesTrendChart({ data = [] }) {
       </h3>
       <div className="h-[200px] w-full min-w-0 min-h-[200px]">
         <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
-          <AreaChart data={data} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
+          <AreaChart data={rows} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
             <defs>
               <linearGradient id="inqGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor={stroke} stopOpacity={0.35} />

@@ -5,6 +5,7 @@ import { useTheme } from "@/src/components/Theme/ThemeContext";
 
 export default function RecentInquiries({ items = [] }) {
   const { isDark } = useTheme();
+  const rows = Array.isArray(items) ? items : [];
 
   return (
     <div
@@ -24,12 +25,12 @@ export default function RecentInquiries({ items = [] }) {
         </Link>
       </div>
       <ul className="space-y-3 max-h-[220px] overflow-y-auto">
-        {items.length === 0 ? (
+        {rows.length === 0 ? (
           <li className="text-sm text-slate-500 dark:text-slate-400 py-4 text-center">
             এখনো কোনো ইনকোয়ারি নেই।
           </li>
         ) : (
-          items.map((item) => (
+          rows.map((item) => (
             <li
               key={item.id}
               className={`flex gap-3 rounded-xl p-2 ${

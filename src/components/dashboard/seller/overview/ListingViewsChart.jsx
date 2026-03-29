@@ -17,7 +17,8 @@ export default function ListingViewsChart({ data = [] }) {
   const fill = isDark ? "#9ee9d4" : "#2D9CDB";
   const fill2 = isDark ? "#f2994a" : "#F2994A";
 
-  const chartData = data.map((d, i) => ({
+  const rows = Array.isArray(data) ? data : [];
+  const chartData = rows.map((d, i) => ({
     ...d,
     views: d.views ?? 0,
     fill: i % 2 === 0 ? fill : fill2,

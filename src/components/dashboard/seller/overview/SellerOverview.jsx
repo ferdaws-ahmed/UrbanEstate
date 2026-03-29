@@ -41,7 +41,19 @@ export default function SellerOverview() {
         return res.json();
       })
       .then((json) => {
-        if (json) setData(json);
+        if (!json) return;
+        setData({
+          ...json,
+          stats: json.stats ?? {
+            totalListings: 0,
+            activeListings: 0,
+            avgDaysOnMarket: 0,
+          },
+          viewsByDay: Array.isArray(json.viewsByDay) ? json.viewsByDay : [],
+          inquiriesTrend: Array.isArray(json.inquiriesTrend) ? json.inquiriesTrend : [],
+          recentInquiries: Array.isArray(json.recentInquiries) ? json.recentInquiries : [],
+          listings: Array.isArray(json.listings) ? json.listings : [],
+        });
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
