@@ -3,6 +3,7 @@
 import React, { Suspense } from "react";
 import { Manrope } from "next/font/google";
 import { Canvas } from "@react-three/fiber";
+import * as THREE from "three";
 import {
   OrbitControls,
   Environment,
@@ -184,7 +185,12 @@ export default function Property3D() {
                 Click & Drag
               </div>
 
-              <Canvas camera={{ position: [8, 5, 10], fov: 45 }} shadows>
+              <Canvas
+                shadows={{ type: THREE.PCFShadowMap }}
+                camera={{ position: [25, 20, 25], fov: 40 }}
+                dpr={[1, 2]}
+                gl={{ antialias: true }}
+              >
                 <Suspense fallback={null}>
                   <ambientLight intensity={0.5} />
                   <directionalLight
