@@ -36,6 +36,7 @@ export default function PropertyMap() {
   const [userLocation, setUserLocation] = useState(null);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [properties, setProperties] = useState([]);
+  const { isDark } = { isDark: false }; // Default for home page, but we'll make it dynamic if needed
   const router = useRouter(); 
 
   useEffect(() => {
@@ -60,7 +61,10 @@ export default function PropertyMap() {
   useEffect(() => {
     if (!userLocation || !containerRef.current) return;
 
+    let mapInstance = null;
+
     const initMap = async () => {
+      // 1. Ensure Leaflet is loaded
       if (!document.getElementById('leaflet-css')) {
         const link = document.createElement("link");
         link.id = 'leaflet-css'; link.rel = "stylesheet"; 
@@ -77,50 +81,77 @@ export default function PropertyMap() {
       }
 
       const L = window.L;
-      if (mapRef.current) { mapRef.current.remove(); }
+      
+      // 2. Critical Cleanup: Ensure container is clean before new map
+      if (containerRef.current) {
+        // Remove any existing map instance attached to this container
+        if (containerRef.current._leaflet_id) {
+          containerRef.current._leaflet_id = null;
+        }
+        // Clear the container HTML to be absolutely sure
+        containerRef.current.innerHTML = "";
+      }
 
+      // 3. Initialize Map
       const map = L.map(containerRef.current, {
         zoomControl: false,
-        scrollWheelZoom: false,
+        scrollWheelZoom: true,
         dragging: true,
-        touchZoom: false
+        touchZoom: true
       }).setView(userLocation, 14);
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      // 4. Add Tile Layer (Support Light/Dark styles better)
+      const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+      L.tileLayer(tileUrl, {
         maxZoom: 18,
+        className: 'map-tiles'
       }).addTo(map);
 
+      // 5. Add Overlays & Markers
       L.circle(userLocation, {
-        color: '#ef4444', fillColor: '#ef4444', fillOpacity: 0.1, radius: 500
+        color: '#10b981', fillColor: '#10b981', fillOpacity: 0.1, radius: 800, weight: 1
       }).addTo(map);
 
       const userIcon = L.divIcon({
-        className: 'custom-user',
-        html: `<div style="background:#ef4444; width:14px; height:14px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 15px #ef4444; animation:pulse 2s infinite;"></div>`,
-        iconSize: [14, 14]
+        className: 'custom-user-marker',
+        html: `<div class="pulse-marker"></div>`,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
       });
       L.marker(userLocation, { icon: userIcon }).addTo(map);
 
       const propertyIcon = L.divIcon({
-        className: 'custom-prop',
-        html: `<div style="background:#0f2e28; width:22px; height:22px; border-radius:50%; border:3px solid #cddfa0; box-shadow:0 4px 10px rgba(0,0,0,0.2); display:flex; align-items:center; justify-content:center;"><div style="background:#cddfa0; width:8px; height:8px; border-radius:50%;"></div></div>`,
-        iconSize: [22, 22]
+        className: 'custom-prop-marker',
+        html: `<div class="prop-pin"></div>`,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
       });
 
       properties.forEach((p) => {
         const marker = L.marker([p.lat, p.lng], { icon: propertyIcon }).addTo(map);
         marker.on('click', () => {
           setSelectedProperty(p);
-          map.flyTo([p.lat, p.lng], 15, { animate: true });
+          map.flyTo([p.lat, p.lng], 15, { animate: true, duration: 1.5 });
         });
       });
 
       mapRef.current = map;
-      setTimeout(() => map.invalidateSize(), 500);
+      mapInstance = map;
+      setTimeout(() => map.invalidateSize(), 300);
     };
 
     initMap();
-    return () => { if (mapRef.current) mapRef.current.remove(); };
+
+    return () => {
+      if (mapInstance) {
+        mapInstance.off();
+        mapInstance.remove();
+        mapInstance = null;
+      }
+      if (mapRef.current) {
+        mapRef.current = null;
+      }
+    };
   }, [userLocation, properties]);
 
   const handleZoom = (type) => {
@@ -202,10 +233,63 @@ export default function PropertyMap() {
       </AnimatePresence>
 
       <style>{`
-        @keyframes pulse {
-          0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
-          70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        .pulse-marker {
+          background: #10b981;
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          border: 2px solid #fff;
+          box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+          animation: marker-pulse 2s infinite;
+        }
+
+        .prop-pin {
+          background: #0f2e28;
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          border: 3px solid #cddfa0;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
+        }
+
+        .prop-pin::after {
+          content: '';
+          background: #cddfa0;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+        }
+
+        .custom-prop-marker:hover .prop-pin {
+          transform: scale(1.2);
+          background: #10b981;
+          border-color: #fff;
+        }
+
+        @keyframes marker-pulse {
+          0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+          70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        .map-tiles {
+          filter: grayscale(0.2) contrast(1.1);
+        }
+
+        .dark .map-tiles {
+          filter: invert(100%) hue-rotate(180deg) brightness(0.9) contrast(0.9) grayscale(0.3);
+        }
+
+        .leaflet-container {
+          background: #f8fafc !important;
+        }
+
+        .dark .leaflet-container {
+          background: #0b1f1a !important;
         }
       `}</style>
     </section>

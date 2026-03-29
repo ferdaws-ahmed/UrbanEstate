@@ -4,87 +4,139 @@ import PropertyGrid from "@/src/components/AllProperty/PropertyGrid";
 import PropertyHero from "@/src/components/AllProperty/PropertyHero";
 import SidebarFilters from "@/src/components/AllProperty/SidebarFilters";
 import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 export default function AllPropertiesPage() {
+  const { status } = useSession();
   const [properties, setProperties] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("Newest First");
+  const [activeFilters, setActiveFilters] = useState({
+    location: [],
+    category: [],
+    propertyType: [],
+    bedrooms: [],
+    amenities: [],
+    priceRange: [],
+  });
 
+  // সেশন স্ট্যাটাস চেঞ্জ হলে ডাটা আবার ফেচ করা হবে
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         setLoading(true);
         const res = await fetch("/api/seller-property");
         const data = await res.json();
-        setProperties(data);
-        setFilteredProperties(data);
+        const propertyList = Array.isArray(data) ? data : [];
+        setProperties(propertyList);
+        setFilteredProperties(propertyList);
       } catch (err) {
         console.error(err);
+        setProperties([]);
+        setFilteredProperties([]);
       } finally {
         setLoading(false);
       }
     };
     fetchProperties();
-  }, []);
+  }, [status]); // status এড করা হলো যাতে লগইন/আউট হলে ফেভারিট স্টেট আপডেট হয়
 
-  // ফিল্টার ফাংশন (SidebarFilters থেকে ডাটা রিসিভ করবে)
-  const handleFilterChange = (selectedFilters) => {
+  // কনসোলিডেটেড ফিল্টার এবং সর্টিং লজিক
+  useEffect(() => {
     let tempProperties = [...properties];
 
-    // ১. লোকেশন ফিল্টার (Division)
-    if (selectedFilters.location.length > 0) {
+    // ১. সার্চ কুয়েরি (Title, Address, District)
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      tempProperties = tempProperties.filter(
+        (p) =>
+          p.title?.toLowerCase().includes(q) ||
+          p.address?.toLowerCase().includes(q) ||
+          p.district?.toLowerCase().includes(q) ||
+          p.category?.toLowerCase().includes(q) ||
+          p.propertyType?.toLowerCase().includes(q)
+      );
+    }
+
+    // ২. লোকেশন ফিল্টার (Division/District)
+    if (activeFilters.location.length > 0) {
       tempProperties = tempProperties.filter((p) =>
-        selectedFilters.location.some((loc) =>
-          p.location?.address?.toLowerCase().includes(loc.toLowerCase())
+        activeFilters.location.some((loc) =>
+          p.address?.toLowerCase().includes(loc.toLowerCase()) ||
+          p.district?.toLowerCase().includes(loc.toLowerCase())
         )
       );
     }
 
-    // ২. প্রপার্টি টাইপ (Category)
-    if (selectedFilters.propertyType.length > 0) {
+    // ৩. ক্যাটাগরি ফিল্টার (Residential, Commercial, etc.)
+    if (activeFilters.category.length > 0) {
       tempProperties = tempProperties.filter((p) =>
-        selectedFilters.propertyType.includes(p.category)
+        activeFilters.category.some(cat => 
+          p.category?.toLowerCase() === cat.toLowerCase()
+        )
       );
     }
 
-    // ৩. বেডরুম ফিল্টার
-    if (selectedFilters.bedrooms.length > 0) {
+    // ৪. প্রপার্টি টাইপ ফিল্টার (Apartment, Villa, etc.)
+    if (activeFilters.propertyType.length > 0) {
       tempProperties = tempProperties.filter((p) =>
-        selectedFilters.bedrooms.includes(p.bedrooms.toString())
+        activeFilters.propertyType.some(type => 
+          p.propertyType?.toLowerCase() === type.toLowerCase()
+        )
       );
     }
 
-    // ৪. প্রাইস রেঞ্জ ফিল্টার
-    if (selectedFilters.priceRange.length > 0) {
+    // ৫. বেডরুম ফিল্টার
+    if (activeFilters.bedrooms.length > 0) {
+      tempProperties = tempProperties.filter((p) =>
+        activeFilters.bedrooms.includes(p.bedrooms?.toString())
+      );
+    }
+
+    // ৬. প্রাইস রেঞ্জ ফিল্টার
+    if (activeFilters.priceRange.length > 0) {
       tempProperties = tempProperties.filter((p) => {
-        return selectedFilters.priceRange.some((range) => {
+        return activeFilters.priceRange.some((range) => {
           const [min, max] = range.split("-").map(Number);
           return p.price >= min && p.price <= max;
         });
       });
     }
 
-    // ৫. অ্যামেনিটিস ফিল্টার (সবগুলো সিলেক্ট করা সুবিধা থাকতে হবে)
-    if (selectedFilters.amenities.length > 0) {
+    // ৭. অ্যামেনিটিস ফিল্টার
+    if (activeFilters.amenities.length > 0) {
       tempProperties = tempProperties.filter((p) =>
-        selectedFilters.amenities.every((amenity) =>
+        activeFilters.amenities.every((amenity) =>
           p.amenities?.includes(amenity)
         )
       );
     }
 
+    // ৮. সর্টিং লজিক
+    switch (sortBy) {
+      case "Price Low → High":
+        tempProperties.sort((a, b) => a.price - b.price);
+        break;
+      case "Price High → Low":
+        tempProperties.sort((a, b) => b.price - a.price);
+        break;
+      case "Newest First":
+      default:
+        tempProperties.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        break;
+    }
+
     setFilteredProperties(tempProperties);
+  }, [properties, searchQuery, activeFilters, sortBy]);
+
+  const handleFilterChange = (selectedFilters) => {
+    setActiveFilters(selectedFilters);
   };
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    const filtered = properties.filter(
-      (p) =>
-        p.title.toLowerCase().includes(query.toLowerCase()) ||
-        p.location?.address?.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredProperties(filtered);
   };
 
   return (
@@ -94,12 +146,10 @@ export default function AllPropertiesPage() {
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-12">
         <div className="flex flex-col lg:flex-row gap-8">
           
-          {/* SIDEBAR - এখানে প্রপসটি পাস করা হয়েছে */}
           <aside className="w-full lg:w-80 shrink-0">
             <SidebarFilters onFilterChange={handleFilterChange} />
           </aside>
 
-          {/* CONTENT */}
           <div className="flex-1">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
               <div>
@@ -112,7 +162,11 @@ export default function AllPropertiesPage() {
                 </p>
               </div>
 
-              <select className="bg-[var(--card)] border border-[var(--border)] px-4 py-2 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-[var(--ring)]">
+              <select 
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-[var(--card)] border border-[var(--border)] px-4 py-2 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-[var(--ring)] cursor-pointer"
+              >
                 <option>Newest First</option>
                 <option>Price Low → High</option>
                 <option>Price High → Low</option>

@@ -23,6 +23,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="scroll-smooth">
       <body
+        suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}
       >
         <ThemeProvider>
@@ -30,14 +31,12 @@ export default function RootLayout({ children }) {
             {/* Jodi Dashboard na hoy, tobei Navbar dekhabe */}
             {!isDashboard && <Navbar />}
             
-            <div className="flex-grow">
-              <main>{children}</main>
-            </div>
+            <div suppressHydrationWarning className="flex-grow">{children}</div>
 
             {/* Jodi Dashboard na hoy, tobei Footer dekhabe */}
             {!isDashboard && <Footer />}
 
-            <Toaster position="top-center" reverseOrder={false} />
+            <Toaster position="top-center" />
           </AuthProvider>
         </ThemeProvider>
       </body>

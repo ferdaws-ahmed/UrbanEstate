@@ -8,18 +8,22 @@ export default function PropertyHero({ onSearch }) {
 
   // ডাটাবেজে যেভাবে সেভ হচ্ছে, ঠিক সেই নামগুলোই এখানে রাখা ভালো
   const categories = [
-    "All", "Apartment", "Villa", "Office Space", "Studio"
+    "All", "Apartment", "Villa", "House", "Office", "Studio", "Land"
   ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSearch(query); // সার্চ বার দিয়ে খোঁজার জন্য
+    onSearch(query); // ফর্ম সাবমিট করলেও কাজ করবে
+  };
+
+  const handleChange = (e) => {
+    const val = e.target.value;
+    setQuery(val);
+    onSearch(val); // রিয়েল-টাইম সার্চের জন্য
   };
 
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat);
-    // যদি "All" হয় তবে আমরা সাধারণত পুরো ডাটাবেজ চাই, তাই খালি স্ট্রিং পাঠানো হয়
-    // অন্যথায় ক্যাটাগরির নাম (যেমন: "Apartment") পাঠানো হবে
     onSearch(cat === "All" ? "" : cat);
   };
 
@@ -28,7 +32,9 @@ export default function PropertyHero({ onSearch }) {
       {/* BACKGROUNDS */}
       <div className="absolute inset-0 bg-white dark:hidden" />
       <div className="absolute inset-0 hidden dark:block bg-[var(--ue-secondary)]" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-transparent dark:from-black/40" />
+      
+      {/* GRADIENT OVERLAY: Only for Dark Mode, White for Light Mode */}
+      <div className="absolute inset-0 hidden dark:block bg-gradient-to-b from-black/60 to-transparent" />
 
       <div className="relative max-w-6xl mx-auto px-4 text-center">
         {/* TITLE & SUBTEXT */}
@@ -46,9 +52,9 @@ export default function PropertyHero({ onSearch }) {
         >
           <input
             type="text"
-            placeholder="Search by title, location..."
+            placeholder="Search by title, location, district..."
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={handleChange}
             className="flex-1 w-full px-6 py-3 bg-transparent outline-none text-[#cddfa0] placeholder:text-gray-400 font-medium"
           />
           <button

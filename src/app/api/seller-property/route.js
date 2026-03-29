@@ -6,9 +6,13 @@
 
 import { connect } from "@/src/lib/dbConnect";
 import { ObjectId } from "mongodb";
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 
 export async function GET(request) {
   try {
+    const session = await getServerSession(authOptions);
     const { searchParams } = new URL(request.url);
     
     // Get query parameters
@@ -21,13 +25,11 @@ export async function GET(request) {
     const search = searchParams.get('search');
 
     // Connect to MongoDB
-    const { db } = await connect();
-    const propertiesCollection = db.collection("properties");
+    const propertiesCollection = await connect("properties");
 
     // Build filter query
-    const filter = { 
-      status: { $in: ['active', 'published'] } // Only show active/published properties
-    };
+    // properties কালেকশনে সাধারণত শুধু পাবলিশড প্রপার্টিই থাকে, তাও ফিল্টার যোগ করা হলো সেফটির জন্য
+    const filter = {};
 
     // Price filtering
     if (minPrice || maxPrice) {
@@ -38,7 +40,7 @@ export async function GET(request) {
 
     // Property type filtering
     if (propertyType) {
-      filter.category = propertyType;
+      filter.propertyType = { $regex: new RegExp(`^${propertyType}$`, 'i') };
     }
 
     // Bedrooms filtering
@@ -49,7 +51,7 @@ export async function GET(request) {
     // Amenities filtering
     if (amenities) {
       const amenityArray = amenities.split(',');
-      filter.amenities = { $in: amenityArray };
+      filter.amenities = { $all: amenityArray };
     }
 
     // Search filtering (title, description, address)
@@ -57,7 +59,8 @@ export async function GET(request) {
       filter.$or = [
         { title: { $regex: search, $options: 'i' } },
         { description: { $regex: search, $options: 'i' } },
-        { address: { $regex: search, $options: 'i' } }
+        { address: { $regex: search, $options: 'i' } },
+        { district: { $regex: search, $options: 'i' } }
       ];
     }
 
@@ -76,6 +79,33 @@ export async function GET(request) {
         break;
     }
 
+    // Fetch properties from database
+    const properties = await propertiesCollection
+      .find(filter)
+      .sort(sortQuery)
+      .limit(100)
+      .toArray();
+
+    // Get favorite counts for all fetched properties
+    const favoritesCollection = await connect("favorites");
+    const favCounts = await favoritesCollection.aggregate([
+      { $match: { propertyId: { $in: properties.map(p => p._id.toString()) } } },
+      { $group: { _id: "$propertyId", count: { $sum: 1 } } }
+    ]).toArray();
+
+    const favCountMap = favCounts.reduce((acc, curr) => {
+      acc[curr._id] = curr.count;
+      return acc;
+    }, {});
+
+    // Check which ones are favorited by the current logged-in user
+    const userFavorites = session?.user?.email
+      ? (await favoritesCollection.find({
+          userEmail: session.user.email,
+          propertyId: { $in: properties.map(p => p._id.toString()) }
+        }).toArray()).map(f => f.propertyId.toString())
+      : [];
+
     // Default image URLs (free, working images)
     const defaultImages = [
       "https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg?auto=compress&cs=tinysrgb&w=600",
@@ -86,31 +116,22 @@ export async function GET(request) {
       "https://images.pexels.com/photos/1721933/pexels-photo-1721933.jpeg?auto=compress&cs=tinysrgb&w=600",
     ];
 
-    // Fetch properties from database
-    const properties = await propertiesCollection
-      .find(filter)
-      .sort(sortQuery)
-      .limit(50) // Limit to 50 properties per request
-      .toArray();
-
     // Format response - convert ObjectId to string
     const formattedProperties = properties.map((prop, index) => {
       let images = prop.images || [];
       
-      // Convert to array if not already
       if (!Array.isArray(images)) {
         images = [images];
       }
       
       // Replace dead unsplash URLs with working pexels URLs
       images = images.map(url => {
-        if (typeof url === 'string' && url.includes('unsplash')) {
+        if (typeof url === 'string' && (url.includes('unsplash') || url === "")) {
           return defaultImages[index % defaultImages.length];
         }
         return url;
       });
       
-      // If still empty, use default
       if (images.length === 0 || images.every(img => !img)) {
         images = [defaultImages[index % defaultImages.length]];
       }
@@ -119,23 +140,19 @@ export async function GET(request) {
         ...prop,
         _id: prop._id.toString(),
         sellerId: prop.sellerId?.toString(),
-        images: images
+        images: images,
+        favoriteCount: favCountMap[prop._id.toString()] || 0,
+        isFavorited: userFavorites.includes(prop._id.toString())
       };
     });
 
-    return new Response(JSON.stringify(formattedProperties), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return NextResponse.json(formattedProperties);
 
   } catch (error) {
     console.error('Error fetching properties:', error);
-    return new Response(
-      JSON.stringify({ 
-        error: 'Failed to fetch properties', 
-        details: error.message 
-      }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    return NextResponse.json(
+      { error: 'Failed to fetch properties', details: error.message },
+      { status: 500 }
     );
   }
 }

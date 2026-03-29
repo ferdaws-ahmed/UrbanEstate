@@ -18,19 +18,62 @@ export async function POST(request) {
 
     // ২. রিকোয়েস্ট ডাটা পড়া
     const propertyData = await request.json();
+    console.log("Received Property Data:", propertyData);
 
-    // ৩. ভ্যালিডেশন (status এবং propertyType এখানে যোগ করা হয়েছে)
+    // ৩. ভ্যালিডেশন
     const { 
       title, price, category, status, propertyType, 
       description, bedrooms, bathrooms, area, 
-      location, address, amenities, images 
+      location, address, district: providedDistrict, fullAddress: providedFullAddress, 
+      amenities, images 
     } = propertyData;
 
-    if (!title || !price || !category || !description || !location || !address) {
+    if (!title || !price || !category || !propertyType || !description || !location || !address) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Missing required fields (Title, Price, Category, Property Type, Description, Location, or Address)" },
         { status: 400 }
       );
+    }
+
+    const parsedPrice = parseFloat(price);
+    if (isNaN(parsedPrice)) {
+      return NextResponse.json(
+        { error: "Invalid price format" },
+        { status: 400 }
+      );
+    }
+
+    // Use provided location details or fetch as fallback
+    let district = providedDistrict || "Unknown District";
+    let fullAddress = providedFullAddress || address;
+
+    if (!providedDistrict || !providedFullAddress) {
+      try {
+        const geoRes = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${location.latitude}&lon=${location.longitude}&accept-language=en-US`,
+          {
+            headers: {
+              "Accept-Language": "en-US,en;q=0.9",
+              "User-Agent": "UrbanEstate_RealEstate_App/2.0"
+            }
+          }
+        );
+        
+        if (geoRes.ok) {
+          const geoData = await geoRes.json();
+          if (geoData && geoData.address) {
+            const a = geoData.address;
+            district = a.state_district || a.city || a.town || a.county || a.state || "Unknown Area";
+            fullAddress = geoData.display_name;
+            
+            // Filter Bengali characters and cleanup
+            district = district.replace(/[ঀ-৿]/g, "").trim().replace(/ District$/, "");
+            fullAddress = fullAddress.replace(/[ঀ-৿]/g, "").trim();
+          }
+        }
+      } catch (geoError) {
+        console.error("Geocoding fallback failed:", geoError);
+      }
     }
 
     // ৪. ডাটাবেস কানেকশন
@@ -48,10 +91,10 @@ export async function POST(request) {
     // ৫. নতুন প্রপার্টি তৈরি করা
     const result = await propertiesCollection.insertOne({
       title,
-      price: Number(price),
-      category, // আবাসিক/বাণিজ্যিক ইত্যাদি
-      status: status || "For Sale", // ইউজারের সিলেক্ট করা Status (যেমন: For Rent/For Sale)
-      propertyType: propertyType || "apartment", // ইউজারের সিলেক্ট করা Type (যেমন: Villa/Studio)
+      price: parsedPrice,
+      category, 
+      propertyType, 
+      status: status || "For Sale", 
       description,
       bedrooms: bedrooms ? Number(bedrooms) : null,
       bathrooms: bathrooms ? Number(bathrooms) : null,
@@ -60,16 +103,32 @@ export async function POST(request) {
         latitude: location.latitude,
         longitude: location.longitude,
       },
+      district,
+      fullAddress,
       address,
       amenities: amenities || [],
       images: images || [],
       sellerId: session.user.id,
       sellerEmail: session.user.email,
-      listingStatus: "published", // এটি হলো প্রপার্টি লাইভ কিনা তার স্ট্যাটাস
+      listingStatus: "published", 
       views: 0,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+
+    // ৬. নোটিফিকেশন তৈরি করা
+    try {
+      const notificationsCollection = await connect("notifications");
+      await notificationsCollection.insertOne({
+        userId: session.user.id,
+        text: `You have successfully listed a new property: ${title}`,
+        type: "success",
+        read: false,
+        createdAt: new Date(),
+      });
+    } catch (notifError) {
+      console.error("Failed to create notification:", notifError);
+    }
 
     return NextResponse.json(
       {

@@ -2,7 +2,7 @@ import DashboardParent from "@/src/components/dashboard/seller/DashboardParent";
 import SellerAnalyticsPage from "@/src/components/dashboard/seller/analytics/SellerAnalyticsPage";
 
 export const metadata = {
-  title: "Analytics | Seller",
+  title: "Performance Analytics | Seller",
 };
 
 export default function Page() {

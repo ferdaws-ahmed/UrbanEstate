@@ -9,6 +9,9 @@ import {
   Building,
   UserCircle,
   Loader2,
+  X,
+  CheckCircle2,
+  ExternalLink,
 } from "lucide-react";
 
 const RegisterForm = ({
@@ -18,6 +21,10 @@ const RegisterForm = ({
   onEmailRegister,
   loading,
   error,
+  showVerificationModal,
+  setShowVerificationModal,
+  pendingUserData,
+  onResendEmail,
 }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -229,6 +236,70 @@ const RegisterForm = ({
           </p>
         </div>
       </div>
+
+      {/* Verification Waiting Modal */}
+      {showVerificationModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden relative">
+            <button 
+              onClick={() => setShowVerificationModal(false)}
+              className="absolute top-6 right-6 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="p-10 text-center">
+              <div className="w-20 h-20 bg-blue-50 dark:bg-blue-900/20 rounded-3xl flex items-center justify-center mx-auto mb-8 relative">
+                <Mail className="text-blue-600 animate-bounce" size={32} />
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></div>
+              </div>
+
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
+                Verify Your Email
+              </h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-8">
+                We've sent a verification link to <br />
+                <span className="font-bold text-blue-600">{pendingUserData?.email}</span>. <br />
+                Please check your inbox and click the link to continue.
+              </p>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-center gap-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                  <Loader2 className="animate-spin text-blue-600" size={18} />
+                  <span className="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">
+                    Waiting for verification...
+                  </span>
+                </div>
+
+                <a 
+                  href="https://mail.google.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-full py-4 px-6 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-xl"
+                >
+                  Open Mail App <ExternalLink size={16} />
+                </a>
+
+                <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest pt-4">
+                  This window will close automatically once verified
+                </p>
+
+                <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Didn't get the email? 
+                    <button 
+                      onClick={onResendEmail}
+                      className="text-blue-600 font-bold ml-1 hover:underline"
+                    >
+                      Resend Link
+                    </button>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

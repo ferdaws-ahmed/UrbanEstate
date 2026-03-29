@@ -25,7 +25,38 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: "Property not found" }, { status: 404 });
     }
 
-    return NextResponse.json(property);
+    // Increment visit count
+    try {
+      await propertiesCollection.updateOne(
+        { _id: oid },
+        { $inc: { visitCount: 1 } }
+      );
+    } catch (vErr) {
+      console.error("Failed to update visit count:", vErr);
+    }
+
+    // Get favorite count
+    const favoritesCollection = await connect("favorites");
+    const favoriteCount = await favoritesCollection.countDocuments({ propertyId: id });
+    
+    // Check if favorited by current user
+    const { getServerSession } = await import("next-auth");
+    const { authOptions } = await import("@/src/app/api/auth/[...nextauth]/route");
+    const session = await getServerSession(authOptions);
+    let isFavorited = false;
+    if (session?.user?.email) {
+      const existing = await favoritesCollection.findOne({
+        userEmail: session.user.email,
+        propertyId: id
+      });
+      isFavorited = !!existing;
+    }
+
+    return NextResponse.json({
+      ...property,
+      favoriteCount,
+      isFavorited
+    });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

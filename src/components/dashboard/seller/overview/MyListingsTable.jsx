@@ -1,16 +1,81 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, ChevronDown } from "lucide-react";
+import { Search, Heart, Info, X, User, Mail, Clock, MapPin, Eye, MessageSquare } from "lucide-react";
 import { useTheme } from "@/src/components/Theme/ThemeContext";
-import { addressToString } from "@/src/lib/addressToString";
+import LocationName from "@/src/components/shared/LocationName";
+
+const FavoritesModal = ({ isOpen, onClose, favorites, propertyTitle }) => {
+  const { isDark } = useTheme();
+  if (!isOpen) return null;
+
+  return (
+    <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-300`}>
+      <div className={`relative w-full max-w-lg rounded-[2.5rem] border shadow-2xl overflow-hidden ${isDark ? 'bg-[#0b1f1a] border-[#1a4a40]' : 'bg-white border-slate-200'}`}>
+        <div className={`p-8 border-b flex items-center justify-between ${isDark ? 'border-[#1a4a40]/40 bg-white/5' : 'border-slate-100 bg-slate-50'}`}>
+          <div>
+            <h3 className={`text-xl font-black tracking-tighter ${isDark ? 'text-white' : 'text-slate-900'}`}>Property Favorites</h3>
+            <p className="text-[10px] font-black text-teal-600 dark:text-[#cddfa0] uppercase tracking-[0.2em] mt-1">{propertyTitle}</p>
+          </div>
+          <button onClick={onClose} className={`p-2 rounded-xl transition-all ${isDark ? 'hover:bg-white/10 text-slate-400' : 'hover:bg-slate-200 text-slate-500'}`}>
+            <X size={24} />
+          </button>
+        </div>
+        
+        <div className="p-8 max-h-[60vh] overflow-y-auto custom-scrollbar">
+          {favorites.length === 0 ? (
+            <div className="text-center py-16 opacity-30">
+              <Heart className={`h-16 w-16 mx-auto mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`} />
+              <p className="font-black uppercase tracking-[0.25em] text-xs">No activity detected</p>
+            </div>
+          ) : (
+            <div className="space-y-5">
+              {favorites.map((fav, i) => (
+                <div key={i} className={`flex items-center gap-5 p-5 rounded-3xl border transition-all hover:scale-[1.02] ${isDark ? 'bg-white/5 border-white/5' : 'bg-white border-slate-100 shadow-sm'}`}>
+                  <div className="h-14 w-14 rounded-2xl overflow-hidden bg-teal-600 border-2 border-white dark:border-white/10 shadow-lg">
+                    {fav.userImage ? (
+                      <img src={fav.userImage} alt="" className="h-full w-full object-cover" />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center text-white font-black text-lg">
+                        {fav.userName?.charAt(0) || "U"}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`font-black text-sm truncate ${isDark ? 'text-white' : 'text-slate-900'}`}>{fav.userName}</p>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-1.5">
+                      <span className="flex items-center gap-1.5 text-[9px] font-black text-slate-500 uppercase tracking-tight">
+                        <Mail size={12} className="text-teal-600" /> {fav.userEmail}
+                      </span>
+                      <span className="hidden sm:block text-slate-300">•</span>
+                      <span className="flex items-center gap-1.5 text-[9px] font-black text-teal-600 dark:text-[#cddfa0] uppercase tracking-tight">
+                        <Clock size={12} /> {new Date(fav.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        <div className={`p-6 border-t ${isDark ? 'border-[#1a4a40]/40' : 'border-slate-100 bg-slate-50/50'}`}>
+          <button onClick={onClose} className="w-full py-4 rounded-2xl bg-teal-600 text-white text-[10px] font-black uppercase tracking-[0.3em] hover:bg-teal-700 transition-all shadow-xl shadow-teal-600/20 active:scale-[0.98]">
+            Dismiss Panel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function MyListingsTable({ listings = [] }) {
   const { isDark } = useTheme();
   const [q, setQ] = useState("");
   const [page, setPage] = useState(1);
+  const [selectedProperty, setSelectedProperty] = useState(null);
   const perPage = 5;
 
   const list = Array.isArray(listings) ? listings : [];
@@ -18,178 +83,167 @@ export default function MyListingsTable({ listings = [] }) {
   const filtered = useMemo(() => {
     if (!q.trim()) return list;
     const s = q.toLowerCase();
-    return listings.filter((p) => {
-      const addr = addressToString(p.address, p.location);
-      return (
-        (p.title || "").toLowerCase().includes(s) ||
-        addr.toLowerCase().includes(s) ||
-        (p.description || "").toLowerCase().includes(s)
-      );
-    });
+    return list.filter((p) =>
+      (p.title || "").toLowerCase().includes(s)
+    );
   }, [list, q]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
   const slice = filtered.slice((page - 1) * perPage, page * perPage);
 
-  const thumb = (images) => {
-    const img = Array.isArray(images) && images[0] ? images[0] : null;
-    return img || "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&w=200";
-  };
-
   return (
-    <div
-      className={`rounded-2xl border shadow-sm overflow-hidden ${
-        isDark ? "border-[#1a4a40]/50 bg-[#0f2e28]/80" : "border-slate-100 bg-white"
-      }`}
+    <div 
+      className="rounded-[2.5rem] border overflow-hidden transition-all duration-500 shadow-sm dark:shadow-[0_20px_25px_-5px_rgb(0,0,0,0.3)]"
+      style={{ 
+        backgroundColor: 'var(--ue-card)', 
+        borderColor: 'var(--ue-border)' 
+      }}
     >
-      <div
-        className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border-b ${
-          isDark ? "border-[#1a4a40]/40" : "border-slate-100"
-        }`}
+      <div 
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-8 border-b transition-colors"
+        style={{ borderColor: 'var(--ue-border)', backgroundColor: 'rgba(255,255,255,0.02)' }}
       >
-        <h3 className="text-sm font-black tracking-widest text-slate-800 dark:text-[#cddfa0]">
-          MY LISTINGS
-        </h3>
-        <div className="relative max-w-xs w-full">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <div>
+          <h3 className={`text-xs font-black tracking-[0.3em] uppercase ${isDark ? "text-[#cddfa0]" : "text-teal-700"}`}>Protocol Asset Management</h3>
+          <p className="text-[10px] font-black uppercase mt-1.5 tracking-wider" style={{ color: 'var(--ue-text-muted)' }}>Syncing live marketplace data</p>
+        </div>
+        <div className="relative max-w-xs w-full group">
+          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 group-focus-within:text-teal-500 transition-colors" />
           <input
             type="search"
-            placeholder="Search..."
+            placeholder="Search assets..."
             value={q}
-            onChange={(e) => {
-              setQ(e.target.value);
-              setPage(1);
-            }}
-            className={`w-full rounded-xl py-2 pl-9 pr-3 text-sm outline-none ring-1 ${
-              isDark
-                ? "bg-[#061510] ring-[#1a4a40] text-white placeholder:text-slate-500"
-                : "bg-slate-50 ring-slate-200 text-slate-900"
+            onChange={(e) => { setQ(e.target.value); setPage(1); }}
+            className={`w-full rounded-2xl border py-4 pl-12 pr-4 text-[11px] font-black uppercase tracking-widest outline-none transition-all ${
+              isDark 
+                ? "border-[#1a4a40] bg-[#0b1f1a] text-white focus:border-[#cddfa0] focus:ring-4 focus:ring-[#cddfa0]/5" 
+                : "border-slate-200 bg-white text-slate-900 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/5 shadow-inner"
             }`}
           />
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm">
+      <div className="overflow-x-auto custom-scrollbar">
+        <table className="w-full border-collapse">
           <thead>
-            <tr
-              className={`text-[10px] uppercase tracking-wider ${
-                isDark ? "text-slate-500 bg-[#061510]/80" : "text-slate-500 bg-slate-50"
-              }`}
-            >
-              <th className="p-3 w-10">
-                <input type="checkbox" className="rounded" aria-label="select all" />
-              </th>
-              <th className="p-3">Property</th>
-              <th className="p-3 hidden md:table-cell">Description</th>
-              <th className="p-3">Status</th>
-              <th className="p-3 hidden sm:table-cell">Quick Actions</th>
+            <tr className="text-left text-[10px] font-black uppercase tracking-[0.25em]" style={{ color: 'var(--ue-text-muted)' }}>
+              <th className="px-8 py-6">Asset Profile</th>
+              <th className="px-8 py-6">Geo-Node</th>
+              <th className="px-8 py-6">Engagement</th>
+              <th className="px-8 py-6 text-right">Operations</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y" style={{ borderColor: 'var(--ue-border)' }}>
             {slice.length === 0 ? (
               <tr>
-                <td colSpan={5} className="p-8 text-center text-slate-500">
-                  কোনো লিস্টিং নেই।
+                <td colSpan="4" className="py-24 text-center opacity-30">
+                  <div className="flex flex-col items-center gap-4">
+                    <Info className="h-10 w-10" style={{ color: 'var(--ue-text-main)' }} />
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em]" style={{ color: 'var(--ue-text-main)' }}>No records found</p>
+                  </div>
                 </td>
               </tr>
             ) : (
-              slice.map((p) => {
-                const addrLine = addressToString(p.address, p.location);
-                return (
-                <tr
-                  key={p._id}
-                  className={`border-t ${
-                    isDark ? "border-[#1a4a40]/30 hover:bg-[#061510]/40" : "border-slate-100 hover:bg-slate-50/80"
-                  }`}
-                >
-                  <td className="p-3 align-middle">
-                    <input type="checkbox" className="rounded" aria-label="select row" />
-                  </td>
-                  <td className="p-3 align-middle">
-                    <div className="flex items-center gap-3 min-w-[200px]">
-                      <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-lg bg-slate-200">
+              slice.map((p) => (
+                <tr key={p._id} className={`group transition-all duration-300 ${isDark ? "hover:bg-white/[0.03]" : "hover:bg-slate-50"}`}>
+                  <td className="px-8 py-5">
+                    <div className="flex items-center gap-5">
+                      <div className={`relative h-16 w-24 shrink-0 overflow-hidden rounded-2xl border-4 transition-all duration-500 ${isDark ? 'border-white/5 shadow-black/20' : 'border-white shadow-lg'}`}>
                         <Image
-                          src={thumb(p.images)}
+                          src={Array.isArray(p.images) && p.images[0] ? p.images[0] : "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg"}
                           alt=""
                           fill
-                          className="object-cover"
-                          sizes="80px"
+                          className="object-cover transition-transform duration-700 group-hover:scale-110"
                         />
                       </div>
-                      <div>
-                        <Link
-                          href={`/propertydetails/${p._id}`}
-                          className="font-semibold text-slate-900 dark:text-white hover:text-teal-600 dark:hover:text-[#cddfa0] line-clamp-1"
-                        >
-                          {p.title || "Untitled"}
-                        </Link>
-                        <p className="text-xs text-slate-500 line-clamp-1">{addrLine}</p>
+                      <div className="min-w-0">
+                        <p className={`text-sm font-black truncate max-w-[220px] tracking-tight transition-colors duration-300 ${isDark ? "text-white" : "text-slate-900"}`}>
+                          {p.title}
+                        </p>
+                        <p className="text-[11px] font-black text-teal-600 dark:text-[#cddfa0] uppercase tracking-widest mt-1">
+                          ৳ {p.price?.toLocaleString()}
+                        </p>
                       </div>
                     </div>
                   </td>
-                  <td className="p-3 align-middle hidden md:table-cell max-w-[240px]">
-                    <span className="text-slate-600 dark:text-slate-300 line-clamp-2 text-xs">
-                      {p.bedrooms} BR · {p.category} · {p.area} sq ft
-                      {p.description ? ` — ${p.description}` : ""}
-                    </span>
+                  <td className="px-8 py-5">
+                    <div className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--ue-text-muted)' }}>
+                      <MapPin size={12} className="text-teal-600" />
+                      <LocationName lat={p.location?.latitude} lon={p.location?.longitude} />
+                    </div>
                   </td>
-                  <td className="p-3 align-middle">
-                    <span
-                      className={`inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase ${
-                        ["active", "published"].includes((p.status || "").toLowerCase())
-                          ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
-                          : "bg-slate-200/80 text-slate-600 dark:bg-white/10 dark:text-slate-300"
-                      }`}
-                    >
-                      {p.status || "draft"}
-                    </span>
+                  <td className="px-8 py-5">
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center gap-3">
+                        <div className={`flex items-center justify-center h-8 w-8 rounded-lg ${isDark ? 'bg-rose-500/10 text-rose-400' : 'bg-rose-50 text-rose-600'}`}>
+                          <Heart size={14} fill="currentColor" />
+                        </div>
+                        <span className="text-xs font-black transition-colors duration-300" style={{ color: 'var(--ue-text-main)' }}>{p.favoriteCount || 0}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className={`flex items-center justify-center h-8 w-8 rounded-lg ${isDark ? 'bg-blue-500/10 text-blue-400' : 'bg-blue-50 text-blue-600'}`}>
+                          <Eye size={14} fill="currentColor" />
+                        </div>
+                        <span className="text-xs font-black transition-colors duration-300" style={{ color: 'var(--ue-text-main)' }}>{p.visitCount || 0}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className={`flex items-center justify-center h-8 w-8 rounded-lg ${isDark ? 'bg-purple-500/10 text-purple-400' : 'bg-purple-50 text-purple-600'}`}>
+                          <MessageSquare size={14} fill="currentColor" />
+                        </div>
+                        <span className="text-xs font-black transition-colors duration-300" style={{ color: 'var(--ue-text-main)' }}>{p.commentCount || 0}</span>
+                      </div>
+                    </div>
                   </td>
-                  <td className="p-3 align-middle hidden sm:table-cell">
-                    <button
-                      type="button"
-                      className={`inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold ${
-                        isDark
-                          ? "bg-[#1a4a40]/60 text-[#cddfa0]"
-                          : "bg-slate-100 text-slate-700"
-                      }`}
+                  <td className="px-8 py-5 text-right">
+                    <button 
+                      onClick={() => setSelectedProperty(p)}
+                      className={`inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${
+                        isDark 
+                          ? "bg-[#1a4a40] text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[#0b1f1a]" 
+                          : "bg-slate-900 text-white hover:bg-teal-600 shadow-lg shadow-teal-100"
+                      } active:scale-95`}
                     >
-                      Quick Actions
-                      <ChevronDown className="h-3 w-3" />
+                      Inquiry Scan
                     </button>
                   </td>
                 </tr>
-                );
-              })
+              ))
             )}
           </tbody>
         </table>
       </div>
 
+      {/* Pagination */}
       {totalPages > 1 && (
-        <div
-          className={`flex justify-center gap-2 p-3 border-t text-xs ${
-            isDark ? "border-[#1a4a40]/40" : "border-slate-100"
-          }`}
+        <div 
+          className="p-6 flex items-center justify-center gap-3 border-t transition-colors"
+          style={{ borderColor: 'var(--ue-border)', backgroundColor: 'rgba(255,255,255,0.01)' }}
         >
-          <span className="text-slate-500 py-1">Pages</span>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+          {[...Array(totalPages)].map((_, i) => (
             <button
-              key={n}
-              type="button"
-              onClick={() => setPage(n)}
-              className={`min-w-[28px] rounded-md py-1 ${
-                page === n
-                  ? isDark
-                    ? "bg-[#1a4a40] text-[#cddfa0]"
-                    : "bg-teal-600 text-white"
-                  : "text-slate-600 hover:bg-slate-100 dark:hover:bg-white/10"
+              key={i}
+              onClick={() => setPage(i + 1)}
+              className={`h-10 w-10 rounded-xl text-[10px] font-black transition-all duration-300 ${
+                page === i + 1
+                  ? "bg-teal-600 text-white shadow-xl shadow-teal-600/30 scale-110"
+                  : isDark 
+                    ? "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white" 
+                    : "bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-teal-600 shadow-sm"
               }`}
             >
-              {n}
+              {i + 1}
             </button>
           ))}
         </div>
+      )}
+
+      {selectedProperty && (
+        <FavoritesModal 
+          isOpen={!!selectedProperty}
+          onClose={() => setSelectedProperty(null)}
+          favorites={selectedProperty.favorites || []}
+          propertyTitle={selectedProperty.title}
+        />
       )}
     </div>
   );

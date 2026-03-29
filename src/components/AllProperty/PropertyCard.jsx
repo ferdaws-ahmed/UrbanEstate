@@ -2,12 +2,22 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Bed, Bath, Maximize, ArrowUpRight, Check } from "lucide-react";
+import { Bed, Bath, Maximize, ArrowUpRight, Check, Heart } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "../Theme/ThemeContext";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
 export default function PropertyCard({ property, onToggleCompare, isSelected }) {
   const { isDark } = useTheme();
+  const { data: session } = useSession();
+  const [favoriteCount, setFavoriteCount] = useState(property?.favoriteCount || 0);
+
+  // সেশন বা প্রপস চেঞ্জ হলে স্টেট আপডেট করা
+  useEffect(() => {
+    setFavoriteCount(property?.favoriteCount || 0);
+  }, [property?.favoriteCount]);
 
   // ১. ইমেজ হ্যান্ডলিং: ডাটাবেজ থেকে images array চেক করা
   const getImageUrl = () => {
@@ -23,9 +33,7 @@ export default function PropertyCard({ property, onToggleCompare, isSelected }) 
   const imageUrl = getImageUrl();
 
   // ২. প্রাইস ফরম্যাটিং
-  const formattedPrice = property?.price 
-    ? new Intl.NumberFormat('en-IN').format(property.price) 
-    : "0";
+  const formattedPrice = property?.price?.toLocaleString();
 
   return (
     <motion.div
@@ -52,9 +60,17 @@ export default function PropertyCard({ property, onToggleCompare, isSelected }) 
 
         <div className="absolute inset-0 bg-gradient-to-t from-[#13332c]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
 
-        <div className="absolute top-4 left-4">
+        <div className="absolute top-4 left-4 flex gap-2">
           <div className={`bg-[#0f2e28]/90 backdrop-blur-md text-[#cddfa0] text-[8px] font-bold px-3 py-1 rounded-full border border-white/10 tracking-widest uppercase`}>
             {property?.category || "Featured"}
+          </div>
+        </div>
+
+        {/* Favorite Count Only */}
+        <div className="absolute top-4 right-4 flex flex-col items-end gap-2 z-20">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-white shadow-lg z-[30]">
+            <Heart size={12} className="text-red-500 fill-red-500" />
+            <span className="text-[11px] font-black">{favoriteCount}</span>
           </div>
         </div>
       </div>

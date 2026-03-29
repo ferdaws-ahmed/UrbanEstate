@@ -20,34 +20,42 @@ export async function GET(request) {
 
     // Call Nominatim API from server-side (no CORS issues)
     const response = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=en-US`,
       {
         headers: {
-          'User-Agent': 'UrbanEState-RealEstateApp/1.0',
-          'Accept': 'application/json'
-        },
-        timeout: 10000
+          "Accept-Language": "en-US,en;q=0.9",
+          "User-Agent": "UrbanEstate_RealEstate_App_v2_Contact_admin_at_urbanestate_com",
+          "Referer": "https://urbanestate.com"
+        }
       }
     );
 
     if (!response.ok) {
-      console.error(`Nominatim API returned status: ${response.status}`);
-      // Return a default address format if Nominatim fails
-      return Response.json({
-        address: `${lat}, ${lng}`,
-        display_name: `${lat}, ${lng}`,
-        lat,
-        lon: lng
-      });
+      const errorText = await response.text();
+      return Response.json({ error: `Failed to fetch from Nominatim: ${errorText}` }, { status: response.status });
     }
 
     const data = await response.json();
+    
+    if (data && data.address) {
+      const a = data.address;
+      const district = a.state_district || a.city || a.town || a.village || a.county || a.state || "Unknown Area";
+      const fullAddr = data.display_name;
+      
+      // Filter Bengali characters (Bengali Unicode range: 0980-09FF)
+      const cleanDistrict = district.replace(/[\u0980-\u09FF]/g, "").trim().replace(/ District$/, "");
+      const cleanFullAddr = fullAddr.replace(/[\u0980-\u09FF]/g, "").trim();
 
-    return Response.json({
-      address: data.display_name || `${lat}, ${lng}`,
-      display_name: data.display_name,
-      ...data
-    });
+      return Response.json({
+        district: cleanDistrict || "Unknown District",
+        fullAddress: cleanFullAddr || fullAddr,
+        display_name: cleanFullAddr || fullAddr,
+        address: cleanFullAddr || fullAddr,
+        raw: data
+      });
+    }
+
+    return Response.json({ error: "No address found" }, { status: 404 });
 
   } catch (error) {
     console.error('Reverse geocoding error:', error);

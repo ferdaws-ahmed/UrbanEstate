@@ -2,7 +2,7 @@ import DashboardParent from "@/src/components/dashboard/seller/DashboardParent";
 import SellerProfilePage from "@/src/components/dashboard/seller/profile/SellerProfilePage";
 
 export const metadata = {
-  title: "Profile | Seller",
+  title: "Account Profile | Seller",
 };
 
 export default function Page() {

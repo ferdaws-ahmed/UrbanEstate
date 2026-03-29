@@ -21,6 +21,41 @@ export default function SellerOverview() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchDashboardData = async (silent = false) => {
+    try {
+      if (!silent) setLoading(true);
+      const res = await fetch("/api/seller/dashboard", { credentials: "include" });
+      
+      if (res.status === 403) {
+        setError("seller_only");
+        return;
+      }
+      if (!res.ok) {
+        const j = await res.json().catch(() => ({}));
+        throw new Error(j.error || "Failed to load");
+      }
+      const json = await res.json();
+      if (!json) return;
+
+      setData({
+        ...json,
+        stats: json.stats ?? {
+          totalListings: 0,
+          activeListings: 0,
+          avgDaysOnMarket: 0,
+        },
+        viewsByDay: Array.isArray(json.viewsByDay) ? json.viewsByDay : [],
+        inquiriesTrend: Array.isArray(json.inquiriesTrend) ? json.inquiriesTrend : [],
+        recentInquiries: Array.isArray(json.recentInquiries) ? json.recentInquiries : [],
+        listings: Array.isArray(json.listings) ? json.listings : [],
+      });
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      if (!silent) setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/login");
@@ -28,44 +63,21 @@ export default function SellerOverview() {
     }
     if (status !== "authenticated") return;
 
-    fetch("/api/seller/dashboard", { credentials: "include" })
-      .then(async (res) => {
-        if (res.status === 403) {
-          setError("seller_only");
-          return;
-        }
-        if (!res.ok) {
-          const j = await res.json().catch(() => ({}));
-          throw new Error(j.error || "Failed to load");
-        }
-        return res.json();
-      })
-      .then((json) => {
-        if (!json) return;
-        setData({
-          ...json,
-          stats: json.stats ?? {
-            totalListings: 0,
-            activeListings: 0,
-            avgDaysOnMarket: 0,
-          },
-          viewsByDay: Array.isArray(json.viewsByDay) ? json.viewsByDay : [],
-          inquiriesTrend: Array.isArray(json.inquiriesTrend) ? json.inquiriesTrend : [],
-          recentInquiries: Array.isArray(json.recentInquiries) ? json.recentInquiries : [],
-          listings: Array.isArray(json.listings) ? json.listings : [],
-        });
-      })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
+    fetchDashboardData();
+
+    // Polling for real-time updates every 10 seconds for overview
+    const interval = setInterval(() => {
+      fetchDashboardData(true);
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, [status, router]);
 
   if (loading || status === "loading") {
     return (
-      <div className="flex min-h-[40vh] items-center justify-center">
+      <div className="flex h-96 items-center justify-center">
         <div
-          className={`h-10 w-10 animate-spin rounded-full border-2 border-teal-500 border-t-transparent ${
-            isDark ? "border-[#cddfa0]" : ""
-          }`}
+          className={`h-12 w-12 animate-spin rounded-full border-t-2 border-b-2 border-teal-600`}
         />
       </div>
     );
@@ -75,10 +87,10 @@ export default function SellerOverview() {
     return (
       <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center dark:border-amber-800 dark:bg-amber-950/40">
         <p className="font-medium text-amber-900 dark:text-amber-200">
-          Seller dashboard শুধু seller অ্যাকাউন্টের জন্য।
+          Seller dashboard is for seller accounts only.
         </p>
         <Link href="/" className="mt-4 inline-block text-teal-600 underline dark:text-[#cddfa0]">
-          হোমে ফিরে যান
+          Return to Home
         </Link>
       </div>
     );
@@ -87,35 +99,35 @@ export default function SellerOverview() {
   if (error || !data) {
     return (
       <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center dark:border-red-900 dark:bg-red-950/30">
-        <p className="text-red-800 dark:text-red-200">{error || "ডাটা লোড করা যায়নি।"}</p>
+        <p className="text-red-800 dark:text-red-200">{error || "Failed to load dashboard data."}</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 pb-24">
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-12 xl:gap-6">
-        <div className="min-w-0 xl:col-span-2">
-          <MetricCards stats={data.stats} />
+    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-24 px-1">
+      {/* Top Section: Metrics */}
+      <MetricCards stats={data.stats} />
+
+      {/* Featured Banner: Top Performer & Recent Leads */}
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <TopPerformingCard listing={data.topListing} />
         </div>
-        <div className="min-w-0 xl:col-span-3">
-          <ListingViewsChart data={data.viewsByDay} />
-        </div>
-        <div className="min-w-0 xl:col-span-4">
-          <InquiriesTrendChart data={data.inquiriesTrend} />
-        </div>
-        <div className="min-w-0 xl:col-span-3">
+        <div className="lg:col-span-1">
           <RecentInquiries items={data.recentInquiries} />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        <div className="lg:col-span-8">
-          <MyListingsTable listings={data.listings} />
-        </div>
-        <div className="lg:col-span-4">
-          <TopPerformingCard listing={data.topListing} />
-        </div>
+      {/* Analytics Section: Charts */}
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
+        <ListingViewsChart data={data.viewsByDay} />
+        <InquiriesTrendChart data={data.inquiriesTrend} />
+      </div>
+
+      {/* Data Section: Favorite Listings Table */}
+      <div className="pt-2">
+        <MyListingsTable listings={data.listings} />
       </div>
 
       <Link

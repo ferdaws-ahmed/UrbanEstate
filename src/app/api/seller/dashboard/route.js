@@ -24,11 +24,29 @@ export async function GET() {
 
     const sellerId = session.user.id;
     const propertiesCollection = await connect("properties");
+    const favoritesCollection = await connect("favorites");
 
     const properties = await propertiesCollection
       .find({ sellerId })
       .sort({ createdAt: -1 })
       .toArray();
+
+    // Get favorites for this seller's properties
+    const favorites = await favoritesCollection.find({ sellerId }).toArray();
+    
+    // Group favorites by propertyId
+    const favoritesByProperty = favorites.reduce((acc, fav) => {
+      const pid = fav.propertyId.toString();
+      if (!acc[pid]) acc[pid] = [];
+      acc[pid].push({
+        userId: fav.userId,
+        userName: fav.userName,
+        userEmail: fav.userEmail,
+        userImage: fav.userImage,
+        createdAt: fav.createdAt
+      });
+      return acc;
+    }, {});
 
     const totalListings = properties.length;
     const daysOnMarketList = properties.map((p) => daysSince(p.createdAt));
@@ -39,7 +57,10 @@ export async function GET() {
           )
         : 0;
 
-    const totalViews = properties.reduce((s, p) => s + (Number(p.views) || 0), 0);
+    const totalViews = properties.reduce((s, p) => s + (Number(p.visitCount) || Number(p.views) || 0), 0);
+    const totalFavorites = favorites.length;
+    const totalComments = properties.reduce((s, p) => s + (Number(p.commentCount) || 0), 0);
+
     const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const viewsByDay = dayLabels.map((day, i) => ({
       day,
@@ -88,13 +109,19 @@ export async function GET() {
       const recent = await leadsCollection
         .find({ sellerId })
         .sort({ createdAt: -1 })
-        .limit(5)
+        .limit(20) // Increased limit to see more bookmarks/leads
         .toArray();
+        
       recentInquiries = recent.map((r) => ({
         id: r._id.toString(),
-        name: r.name || "Lead",
+        name: r.userName || r.name || "Anonymous",
+        email: r.userEmail || "",
         message: r.message || "",
-        avatar: r.avatar || null,
+        avatar: r.userImage || r.avatar || null,
+        propertyTitle: r.propertyTitle || "",
+        propertyId: r.propertyId || "",
+        type: r.type || "lead",
+        status: r.status || "new",
         createdAt: r.createdAt,
       }));
     } catch {
@@ -103,28 +130,36 @@ export async function GET() {
 
     let topListing = null;
     if (properties.length > 0) {
-      const sorted = [...properties].sort(
-        (a, b) => (Number(b.views) || 0) - (Number(a.views) || 0)
-      );
+      // Dynamic Top Listing: (Views * 1) + (FavoriteCount * 5)
+      const sorted = [...properties].sort((a, b) => {
+        const scoreA = (Number(a.views) || 0) + (favoritesByProperty[a._id.toString()]?.length || 0) * 5;
+        const scoreB = (Number(b.views) || 0) + (favoritesByProperty[b._id.toString()]?.length || 0) * 5;
+        return scoreB - scoreA;
+      });
+      
       const top = sorted[0];
       topListing = {
         _id: top._id.toString(),
         title: top.title || "Listing",
         price: top.price || 0,
-        views: top.views || 0,
+        views: top.visitCount || top.views || 0,
+        favorites: (favoritesByProperty[top._id.toString()] || []).length,
+        commentCount: top.commentCount || 0,
         area: top.area || 0,
         bedrooms: top.bedrooms ?? 0,
         bathrooms: top.bathrooms ?? 0,
         images: top.images || [],
         address: addressToString(top.address, top.location),
+        location: top.location,
       };
     }
 
-    const listingsTable = properties.slice(0, 10).map((p) => ({
+    const listingsTable = properties.map((p) => ({
       _id: p._id.toString(),
       title: p.title || "",
       description: p.description || "",
       address: addressToString(p.address, p.location),
+      location: p.location,
       status: p.status || "draft",
       category: p.category || "",
       price: p.price || 0,
@@ -132,6 +167,11 @@ export async function GET() {
       bathrooms: p.bathrooms ?? 0,
       area: p.area ?? 0,
       images: p.images || [],
+      favorites: favoritesByProperty[p._id.toString()] || [],
+      favoriteCount: (favoritesByProperty[p._id.toString()] || []).length,
+      visitCount: Number(p.visitCount) || Number(p.views) || 0,
+      commentCount: Number(p.commentCount) || 0,
+      createdAt: p.createdAt,
     }));
 
     return NextResponse.json({
@@ -141,6 +181,9 @@ export async function GET() {
           ["active", "published"].includes(p.status)
         ).length,
         avgDaysOnMarket,
+        totalFavorites,
+        totalViews,
+        totalComments,
       },
       viewsByDay,
       inquiriesTrend,

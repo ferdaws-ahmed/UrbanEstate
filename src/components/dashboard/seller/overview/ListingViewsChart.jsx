@@ -14,8 +14,8 @@ import { useTheme } from "@/src/components/Theme/ThemeContext";
 
 export default function ListingViewsChart({ data = [] }) {
   const { isDark } = useTheme();
-  const fill = isDark ? "#9ee9d4" : "#2D9CDB";
-  const fill2 = isDark ? "#f2994a" : "#F2994A";
+  const fill = isDark ? "#cddfa0" : "#0d9488";
+  const fill2 = isDark ? "#1a4a40" : "#ccfbf1";
 
   const rows = Array.isArray(data) ? data : [];
   const chartData = rows.map((d, i) => ({
@@ -26,27 +26,48 @@ export default function ListingViewsChart({ data = [] }) {
 
   return (
     <div
-      className={`min-w-0 h-full min-h-[260px] rounded-2xl border p-4 shadow-sm ${
-        isDark ? "border-[#1a4a40]/50 bg-[#0f2e28]/80" : "border-slate-100 bg-white"
+      className={`min-w-0 h-full min-h-[320px] rounded-[2rem] border p-6 shadow-sm transition-all duration-300 ${
+        isDark ? "border-[#1a4a40]/50 bg-[#0b1f1a]" : "border-slate-200 bg-white"
       }`}
     >
-      <h3 className="mb-4 text-sm font-bold text-slate-800 dark:text-white">
-        Listing Views
-      </h3>
-      <div className="h-[200px] w-full min-w-0 min-h-[200px]">
-        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
-          <BarChart data={chartData} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#1a4a40" : "#e2e8f0"} />
-            <XAxis dataKey="day" tick={{ fill: isDark ? "#94a3b8" : "#64748b", fontSize: 11 }} />
-            <YAxis tick={{ fill: isDark ? "#94a3b8" : "#64748b", fontSize: 11 }} />
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
+            Listing Views
+          </h3>
+          <p className="mt-1 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+            Last 7 Days Activity
+          </p>
+        </div>
+      </div>
+      
+      <div className="h-[220px] w-full min-w-0">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={chartData} margin={{ top: 0, right: 0, left: -25, bottom: 0 }}>
+            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={isDark ? "#1a4a40" : "#f1f5f9"} />
+            <XAxis 
+              dataKey="day" 
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: isDark ? "#94a3b8" : "#64748b", fontSize: 10, fontWeight: 700 }} 
+            />
+            <YAxis 
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: isDark ? "#94a3b8" : "#64748b", fontSize: 10, fontWeight: 700 }} 
+            />
             <Tooltip
+              cursor={{ fill: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)' }}
               contentStyle={{
                 background: isDark ? "#0b1f1a" : "#fff",
                 border: isDark ? "1px solid #1a4a40" : "1px solid #e2e8f0",
-                borderRadius: 12,
+                borderRadius: 16,
+                fontSize: 12,
+                fontWeight: 700,
+                boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'
               }}
             />
-            <Bar dataKey="views" radius={[6, 6, 0, 0]}>
+            <Bar dataKey="views" radius={[6, 6, 0, 0]} barSize={20}>
               {chartData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
@@ -57,3 +78,4 @@ export default function ListingViewsChart({ data = [] }) {
     </div>
   );
 }
+

@@ -51,29 +51,29 @@
 
   /* UrbanEstate Custom Theme Variables */
   .light {
-    --ue-primary: #0f2e28;
-    --ue-secondary: #cddfa0;
-    --ue-background: #ffffff;
-    --ue-foreground: #0f172a;
+    --ue-primary: #0d9488; /* teal-600 */
+    --ue-secondary: #f0fdfa; /* teal-50 */
+    --ue-background: #f8fafc; /* slate-50 */
     --ue-card: #ffffff;
+    --ue-card-hover: #f1f5f9;
     --ue-border: #e2e8f0;
-    --ue-navbar: #0f2e28;
-    --ue-navbar-text: #ffffff;
+    --ue-text-main: #0f172a; /* slate-900 */
+    --ue-text-muted: #64748b; /* slate-500 */
     --ue-accent: #cddfa0;
-    --ue-accent-text: #0f2e28;
+    --ue-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
 
   .dark {
     --ue-primary: #cddfa0;
     --ue-secondary: #0f2e28;
-    --ue-background: #0f172a;
-    --ue-foreground: #f8fafc;
-    --ue-card: #1e293b;
-    --ue-border: #334155;
-    --ue-navbar: #0f2e28;
-    --ue-navbar-text: #cddfa0;
+    --ue-background: #061510;
+    --ue-card: #0b1f1a;
+    --ue-card-hover: #133c34;
+    --ue-border: rgba(26, 74, 64, 0.5);
+    --ue-text-main: #f8fafc;
+    --ue-text-muted: #94a3b8;
     --ue-accent: #cddfa0;
-    --ue-accent-text: #0f2e28;
+    --ue-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
   }
 }
 
@@ -89,5 +89,38 @@
   *::after {
     transition: background-color 0.3s ease, border-color 0.3s ease,
       color 0.3s ease;
+  }
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+  }
+
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #1a4a40;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

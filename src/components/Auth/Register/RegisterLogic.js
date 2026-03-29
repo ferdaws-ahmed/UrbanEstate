@@ -7,7 +7,7 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
@@ -15,7 +15,61 @@ export const useRegisterLogic = () => {
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [pendingUserData, setPendingUserData] = useState(null);
   const router = useRouter();
+
+  // ইমেইল ভেরিফিকেশন চেক করার জন্য পোলিং
+  useEffect(() => {
+    let interval;
+    if (showVerificationModal && !isVerified) {
+      interval = setInterval(async () => {
+        try {
+          if (auth.currentUser) {
+            await auth.currentUser.reload();
+            if (auth.currentUser.emailVerified) {
+              setIsVerified(true);
+              clearInterval(interval);
+              handleFinalSignIn();
+            }
+          }
+        } catch (err) {
+          console.error("Verification check error:", err);
+        }
+      }, 3000);
+    }
+    return () => clearInterval(interval);
+  }, [showVerificationModal, isVerified, pendingUserData]);
+
+  const handleFinalSignIn = async () => {
+    if (!pendingUserData || !auth.currentUser) return;
+
+    const { role, email } = pendingUserData;
+    const toastId = toast.loading("Finalizing your session...");
+
+    try {
+      const idToken = await auth.currentUser.getIdToken(true); // Force refresh to get updated claims
+      const response = await signIn("credentials", {
+        idToken,
+        role,
+        email,
+        redirect: false,
+      });
+
+      if (response?.error) throw new Error(response.error);
+
+      toast.success("Identity Verified! Welcome aboard. 🚀", { id: toastId });
+      setShowVerificationModal(false);
+
+      setTimeout(() => {
+        router.push(role === "seller" ? "/sellproperty" : "/");
+        router.refresh();
+      }, 1500);
+    } catch (err) {
+      toast.error(err.message, { id: toastId });
+    }
+  };
 
   // ১. সোশ্যাল রেজিস্ট্রেশন (Google/GitHub)
   const handleSocialRegister = async (provider) => {
@@ -114,22 +168,11 @@ export const useRegisterLogic = () => {
 
       const idToken = await userCredential.user.getIdToken();
 
-      // NextAuth সেশন তৈরি
-      const response = await signIn("credentials", {
-        idToken,
-        role,
-        email: email,
-        redirect: false,
-      });
-
-      if (response?.error) throw new Error(response.error);
+      // NextAuth সেশন এখন আর সাথে সাথে হবে না, ভেরিফিকেশনের জন্য ওয়েট করবে
+      setPendingUserData({ idToken, role, email });
+      setShowVerificationModal(true);
 
       toast.success("Account Created! Check your email for verification. ✉️", { id: toastId });
-
-      setTimeout(() => {
-        router.push(role === "seller" ? "/sellproperty" : "/");
-        router.refresh();
-      }, 2000);
 
     } catch (err) {
       let errorMessage = err.message;
@@ -143,6 +186,16 @@ export const useRegisterLogic = () => {
     }
   };
 
+  const handleResendEmail = async () => {
+    if (!auth.currentUser) return toast.error("No user found!");
+    try {
+      await sendEmailVerification(auth.currentUser);
+      toast.success("Verification link resent! ✉️");
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
   return {
     role,
     setRole,
@@ -150,5 +203,10 @@ export const useRegisterLogic = () => {
     handleEmailRegister,
     loading,
     error,
+    showVerificationModal,
+    setShowVerificationModal,
+    isVerified,
+    pendingUserData,
+    handleResendEmail,
   };
 };

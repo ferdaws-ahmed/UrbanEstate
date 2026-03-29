@@ -3,6 +3,7 @@
 import React, { useMemo } from "react";
 import { X, ArrowRight, ShieldCheck, DollarSign, Bed, Bath, Maximize, Trophy, Star } from "lucide-react"; 
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 export default function CompareModal({ open, items, onClose }) {
   // ১. সেরা প্রপার্টি খুঁজে বের করার লজিক (Price per Sqft হিসেবে)
@@ -119,7 +120,13 @@ export default function CompareModal({ open, items, onClose }) {
             <p className="text-[10px] text-white/30 font-bold uppercase tracking-widest">Select up to 3 for precision</p>
             <div className="flex gap-3">
               <button onClick={onClose} className="px-6 py-3 rounded-2xl text-white/40 font-bold text-[10px] uppercase tracking-widest hover:text-white transition-colors">Close</button>
-              <button className="bg-[#cddfa0] text-[#0f2e28] px-8 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:shadow-[0_0_20px_rgba(205,223,160,0.3)] transition-all flex items-center gap-2">View Best Deal <ArrowRight size={14} /></button>
+              {recommendation && (
+                <Link href={`/propertydetails/${recommendation.bestValue._id}`}>
+                  <button className="bg-[#cddfa0] text-[#0f2e28] px-8 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:shadow-[0_0_20px_rgba(205,223,160,0.3)] transition-all flex items-center gap-2">
+                    View Best Deal <ArrowRight size={14} />
+                  </button>
+                </Link>
+              )}
             </div>
           </div>
         </motion.div>

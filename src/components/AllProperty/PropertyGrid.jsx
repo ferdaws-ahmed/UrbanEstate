@@ -4,8 +4,10 @@ import { useState } from "react";
 import PropertyCard from "./PropertyCard";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import CompareModal from "../home/CompareModal";
+import { useTheme } from "../Theme/ThemeContext";
 
 export default function PropertyGrid({ properties, loading }) {
+  const { isDark } = useTheme();
   const [selectedProperties, setSelectedProperties] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
@@ -14,10 +16,11 @@ export default function PropertyGrid({ properties, loading }) {
   const itemsPerPage = 15;
 
   // ২. ক্যালকুলেশন: কতটুকু ডাটা দেখাবে
+  const safeProperties = Array.isArray(properties) ? properties : [];
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProperties = properties.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(properties.length / itemsPerPage);
+  const currentProperties = safeProperties.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(safeProperties.length / itemsPerPage);
 
   const handleToggleCompare = (property) => {
     setSelectedProperties((prev) => {
@@ -64,13 +67,17 @@ export default function PropertyGrid({ properties, loading }) {
       </div>
 
       {/* ৪. পেজিনেশন বাটন ডিজাইন (আপনার থিম অনুযায়ী) */}
-      {properties.length > itemsPerPage && (
+      {safeProperties.length > itemsPerPage && (
         <div className="flex items-center justify-center gap-3 py-10 pb-32">
           {/* Previous Button */}
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="p-3 rounded-2xl border border-white/5 bg-[#0f2e28] text-[#cddfa0] disabled:opacity-20 hover:bg-[#cddfa0] hover:text-[#0f2e28] transition-all"
+            className={`p-3 rounded-2xl border transition-all disabled:opacity-20 ${
+              isDark 
+                ? "border-white/5 bg-[#0f2e28] text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[#0f2e28]" 
+                : "border-slate-200 bg-white text-slate-600 hover:bg-teal-500 hover:text-white"
+            }`}
           >
             <ChevronLeft size={20} />
           </button>
@@ -83,8 +90,12 @@ export default function PropertyGrid({ properties, loading }) {
                 onClick={() => handlePageChange(i + 1)}
                 className={`w-12 h-12 rounded-2xl font-black text-[11px] transition-all border ${
                   currentPage === i + 1 
-                  ? "bg-[#cddfa0] text-[#0f2e28] border-[#cddfa0] shadow-[0_0_20px_rgba(205,223,160,0.3)]" 
-                  : "bg-white/5 text-white/40 border-white/5 hover:border-white/20"
+                    ? (isDark 
+                        ? "bg-[#cddfa0] text-[#0f2e28] border-[#cddfa0] shadow-[0_0_20px_rgba(205,223,160,0.3)]" 
+                        : "bg-teal-500 text-white border-teal-500 shadow-lg shadow-teal-500/20")
+                    : (isDark 
+                        ? "bg-white/5 text-white/40 border-white/5 hover:border-white/20" 
+                        : "bg-white text-slate-400 border-slate-200 hover:border-teal-300 hover:text-teal-500")
                 }`}
               >
                 {i + 1}
@@ -96,7 +107,11 @@ export default function PropertyGrid({ properties, loading }) {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="p-3 rounded-2xl border border-white/5 bg-[#0f2e28] text-[#cddfa0] disabled:opacity-20 hover:bg-[#cddfa0] hover:text-[#0f2e28] transition-all"
+            className={`p-3 rounded-2xl border transition-all disabled:opacity-20 ${
+              isDark 
+                ? "border-white/5 bg-[#0f2e28] text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[#0f2e28]" 
+                : "border-slate-200 bg-white text-slate-600 hover:bg-teal-500 hover:text-white"
+            }`}
           >
             <ChevronRight size={20} />
           </button>

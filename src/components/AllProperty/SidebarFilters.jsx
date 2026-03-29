@@ -5,13 +5,20 @@ import { useState } from "react";
 export default function SidebarFilters({ onFilterChange }) {
   const [filters, setFilters] = useState({
     location: [],
+    category: [],
     propertyType: [],
     bedrooms: [],
     amenities: [],
     priceRange: [],
   });
 
-  const divisions = ["Dhaka", "Chattogram", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur"];
+  const locations = [
+    "Dhaka", "Chattogram", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur",
+    "Gulshan", "Banani", "Dhanmondi", "Uttara", "Mirpur", "Bashundhara"
+  ];
+
+  const categories = ["Residential", "Commercial", "Industrial", "Land"];
+  const propertyTypes = ["Apartment", "Villa", "House", "Office", "Studio", "Land"];
 
   // চেক বক্স হ্যান্ডলার
   const handleCheckbox = (category, value) => {
@@ -34,6 +41,7 @@ export default function SidebarFilters({ onFilterChange }) {
   const handleClear = () => {
     const reset = {
       location: [],
+      category: [],
       propertyType: [],
       bedrooms: [],
       amenities: [],
@@ -84,13 +92,19 @@ export default function SidebarFilters({ onFilterChange }) {
 
         <div className="flex-1 overflow-y-auto pr-2 space-y-6 custom-scrollbar">
           <Section title="Location">
-            {divisions.map((d) => (
+            {locations.map((d) => (
               <Checkbox key={d} label={d} checked={filters.location.includes(d)} onChange={() => handleCheckbox("location", d)} />
             ))}
           </Section>
 
+          <Section title="Category">
+            {categories.map((c) => (
+              <Checkbox key={c} label={c} checked={filters.category.includes(c)} onChange={() => handleCheckbox("category", c)} />
+            ))}
+          </Section>
+
           <Section title="Property Type">
-            {["residential", "commercial", "land"].map((t) => (
+            {propertyTypes.map((t) => (
               <Checkbox key={t} label={t} checked={filters.propertyType.includes(t)} onChange={() => handleCheckbox("propertyType", t)} />
             ))}
           </Section>

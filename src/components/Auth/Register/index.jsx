@@ -11,7 +11,12 @@ const Register = () => {
     handleSocialRegister, 
     handleEmailRegister, 
     loading,
-    error 
+    error,
+    showVerificationModal,
+    setShowVerificationModal,
+    isVerified,
+    pendingUserData,
+    handleResendEmail
   } = useRegisterLogic();
 
  
@@ -27,11 +32,14 @@ const Register = () => {
     <RegisterForm 
       role={role}
       setRole={setRole}
-      
       onSocialRegister={handleSocialClick} 
       onEmailRegister={handleEmailRegister}
       loading={loading}
       error={error}
+      showVerificationModal={showVerificationModal}
+      setShowVerificationModal={setShowVerificationModal}
+      pendingUserData={pendingUserData}
+      onResendEmail={handleResendEmail}
     />
   );
 };

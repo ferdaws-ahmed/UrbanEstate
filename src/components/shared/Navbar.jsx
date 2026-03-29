@@ -14,6 +14,7 @@ import {
 import { useSession, signOut } from "next-auth/react";
 import ThemeToggle from "../Theme/ThemeToggle";
 import Translation, { TranslationInit } from "../shared/Translation";
+import { useTheme } from "../Theme/ThemeContext";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -21,6 +22,7 @@ const manrope = Manrope({
 });
 
 const Navbar = () => {
+  const { isDark } = useTheme();
   const [visible, setVisible] = useState(true);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [scrolled, setScrolled] = useState(false);
@@ -71,7 +73,7 @@ const Navbar = () => {
         allProperty,
         pricePredictor,
         
-        { name: "Add Property", path: "/sellproperty" },
+        { name: "Add Property", path: "/dashboard/seller/create-listing" },
         
       ];
     }
@@ -97,12 +99,7 @@ const Navbar = () => {
       className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${
         manrope.className
       }
-      ${visible ? "translate-y-0" : "-translate-y-full"} 
-      ${
-        scrolled
-          ? "bg-[#0f2e28]/95 backdrop-blur-md py-3 shadow-md"
-          : "bg-transparent py-6"
-      }`}
+      bg-[#0f2e28]/95 backdrop-blur-md shadow-md py-4 text-white`}
     >
       <div className="container mx-auto flex justify-between items-center px-6 lg:px-12">
         {/* Logo Section */}
@@ -136,13 +133,13 @@ const Navbar = () => {
               />
             </g>
           </svg>
-          <span className="text-[26px] font-extrabold text-white tracking-tight drop-shadow-md">
+          <span className="text-[26px] font-extrabold text-white tracking-tight drop-shadow-md transition-colors duration-300">
             Urban<span className="text-[#cddfa0]">E</span>state
           </span>
         </Link>
 
         {/* Desktop Menu */}
-        <ul className="hidden lg:flex gap-10 text-white font-bold text-[17px] tracking-wide items-center">
+        <ul className="hidden lg:flex gap-10 font-bold text-[17px] tracking-wide items-center transition-colors duration-300 text-white">
           {navItems.map((item, index) => (
             <li key={index}>
               <Link
@@ -163,13 +160,13 @@ const Navbar = () => {
             <>
               <Link
                 href="/register"
-                className="text-white font-bold text-[16px] hover:text-[#cddfa0] transition duration-300"
+                className="font-bold text-[16px] transition duration-300 text-white hover:text-[#cddfa0]"
               >
                 Get Started
               </Link>
               <Link
                 href="/login"
-                className="bg-[#cddfa0] text-[#0f2e28] px-7 py-2.5 rounded-md font-bold text-[16px] hover:bg-[#b8cc89] transition shadow-lg"
+                className="px-7 py-2.5 rounded-md font-bold text-[16px] transition shadow-lg bg-[#cddfa0] text-[#0f2e28] hover:bg-[#b8cc89]"
               >
                 Login
               </Link>
@@ -178,7 +175,7 @@ const Navbar = () => {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-3 bg-white/10 hover:bg-white/20 border border-white/20 p-1.5 pr-4 rounded-full transition-all duration-300"
+                className="flex items-center gap-3 p-1.5 pr-4 rounded-full transition-all duration-300 border bg-white/10 hover:bg-white/20 border-white/20"
               >
                 {user.image ? (
                   <img
@@ -188,20 +185,20 @@ const Navbar = () => {
                     className="w-9 h-9 rounded-full border-2 border-[#cddfa0]"
                   />
                 ) : (
-                  <div className="w-9 h-9 rounded-full bg-[#cddfa0] flex items-center justify-center text-[#0f2e28] font-bold">
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold bg-[#cddfa0] text-[#0f2e28]">
                     {user.name ? user.name[0] : "U"}
                   </div>
                 )}
                 <div className="text-left hidden xl:block">
-                  <p className="text-white text-xs font-bold leading-tight">
+                  <p className="text-xs font-bold leading-tight text-white">
                     {user.name || "User"}
                   </p>
-                  <p className="text-[#cddfa0] text-[10px] uppercase tracking-tighter">
+                  <p className="text-[10px] uppercase tracking-tighter text-[#cddfa0]">
                     {user.role}
                   </p>
                 </div>
                 <HiChevronDown
-                  className={`text-white transition-transform duration-300 ${
+                  className={`transition-transform duration-300 text-white ${
                     isDropdownOpen ? "rotate-180" : ""
                   }`}
                 />
