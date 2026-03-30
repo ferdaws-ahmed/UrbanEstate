@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useTheme } from '../../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
 import { Home, Users, CheckCircle, DollarSign, TrendingUp, TrendingDown } from 'lucide-react';
 
 export default function StatCards({ stats }) {

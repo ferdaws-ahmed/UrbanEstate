@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { MapPin, ArrowUpRight, Home } from 'lucide-react';
-import { useTheme } from '../../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
 
 // সরাসরি ডাটা এখানে দিয়ে দিচ্ছি যাতে লোডিং হওয়ার কোনো সুযোগ না থাকে
 const staticListings = [

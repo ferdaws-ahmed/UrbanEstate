@@ -63,7 +63,7 @@ export const useRegisterLogic = () => {
       setShowVerificationModal(false);
 
       setTimeout(() => {
-        const dashboardPath = role === "seller" ? "/dashboard/seller" : (role === "admin" ? "/dashboard/admin" : "/");
+        const dashboardPath = role === "seller" ? "/dashboard/seller" : (role === "admin" ? "/dashboard/admin" : "/dashboard/user");
         router.push(dashboardPath);
         router.refresh();
       }, 1500);
@@ -113,7 +113,7 @@ export const useRegisterLogic = () => {
 
       router.refresh();
       setTimeout(() => {
-        const dashboardPath = role === "seller" ? "/dashboard/seller" : (role === "admin" ? "/dashboard/admin" : "/");
+        const dashboardPath = role === "seller" ? "/dashboard/seller" : (role === "admin" ? "/dashboard/admin" : "/dashboard/user");
         router.push(dashboardPath);
       }, 1000);
     } catch (error) {

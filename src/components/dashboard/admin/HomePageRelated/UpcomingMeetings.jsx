@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useTheme } from '../../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
 import { CalendarDays, Clock, MapPin, User } from 'lucide-react';
 
 export default function UpcomingMeetings() {
@@ -9,11 +9,11 @@ export default function UpcomingMeetings() {
 
 
   const meetings = [
-    { id: 1, title: 'Luxury Villa Tour', time: '10:00 AM', location: 'Banani', agent: 'Sarah Johnson' },
-    { id: 2, title: 'Contract Signing', time: '02:30 PM', location: 'Head Office', agent: 'David Martinez' },
-    { id: 3, title: 'Property Valuation', time: '04:00 PM', location: 'Gulshan 2', agent: 'Agent Naron' },
-    { id: 4, title: 'Client Meeting', time: '05:30 PM', location: 'Zoom Call', agent: 'Rahim Uddin' },
-    { id: 5, title: 'Key Handover', time: '06:45 PM', location: 'Dhanmondi', agent: 'Sarah Johnson' },
+    { id: 1, title: 'Luxury Villa Tour', time: '10:00 AM', location: 'Banani', Seller: 'Sarah Johnson' },
+    { id: 2, title: 'Contract Signing', time: '02:30 PM', location: 'Head Office', Seller: 'David Martinez' },
+    { id: 3, title: 'Property Valuation', time: '04:00 PM', location: 'Gulshan 2', Seller: 'Seller Naron' },
+    { id: 4, title: 'User Meeting', time: '05:30 PM', location: 'Zoom Call', Seller: 'Rahim Uddin' },
+    { id: 5, title: 'Key Handover', time: '06:45 PM', location: 'Dhanmondi', Seller: 'Sarah Johnson' },
   ];
 
   return (
@@ -63,7 +63,7 @@ export default function UpcomingMeetings() {
                 </div>
               </div>
               
-              {/* Location & Agent */}
+              {/* Location & Seller */}
               <div className="flex justify-between items-center mt-1 gap-2 flex-wrap">
                 <div className={`flex items-center gap-1 text-[9px] sm:text-[10px] font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                   <MapPin size={10} className="shrink-0" />
@@ -72,7 +72,7 @@ export default function UpcomingMeetings() {
                 
                 <div className={`flex items-center gap-1 text-[9px] sm:text-[10px] font-bold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                   <User size={10} className={`shrink-0 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
-                  <span className="truncate">{meeting.agent}</span>
+                  <span className="truncate">{meeting.Seller}</span>
                 </div>
               </div>
               

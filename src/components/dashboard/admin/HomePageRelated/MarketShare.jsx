@@ -3,7 +3,7 @@
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { PieChart as PieChartIcon, MoreHorizontal } from 'lucide-react';
-import { useTheme } from '../../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
 
 export default function MarketShare({ data }) {
   const { isDark } = useTheme();

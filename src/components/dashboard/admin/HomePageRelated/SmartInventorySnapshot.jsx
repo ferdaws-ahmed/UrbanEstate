@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { AlertCircle, TrendingUp, Clock, Flame, MoreHorizontal, CheckCircle2 } from 'lucide-react';
-import { useTheme } from '../../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
 
 export default function SmartInventorySnapshot({ inventory }) {
   const { isDark } = useTheme();

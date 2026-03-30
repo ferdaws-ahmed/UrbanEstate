@@ -93,25 +93,42 @@ export default function PropertyDetailsClient({ property: initialProperty }) {
     }
     
     setIsContacting(true);
+    const toastId = toast.loading("Connecting to seller...");
     try {
+      // 1. Create Lead (Old system)
       const res = await fetch("/api/seller/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           propertyId: property._id,
+          propertyTitle: property.title,
           sellerId: property.sellerId,
-          message: `Hello, I am interested in your property "${property.title}". Please let me know more details.`,
+          name: session.user.name,
+          email: session.user.email,
+          avatar: session.user.image,
+          message: `Interested in "${property.title}". Please provide more details.`,
         }),
       });
-      const data = await res.json();
+
+      // 2. Create Chat Message (New system)
+      await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          receiverId: property.sellerId,
+          text: `I'm interested in your property: "${property.title}". Please tell me more about it.`,
+          propertyId: property._id,
+          propertyTitle: property.title,
+        }),
+      });
+
       if (res.ok) {
-        toast.success("Message sent to seller successfully!");
-      } else {
-        toast.error(data.error || "Failed to send message");
+        toast.success("Message sent! You can now chat in your dashboard.", { id: toastId });
+        router.push("/dashboard/user/chat");
       }
     } catch (err) {
       console.error(err);
-      toast.error("Something went wrong");
+      toast.error("Failed to connect", { id: toastId });
     } finally {
       setIsContacting(false);
     }

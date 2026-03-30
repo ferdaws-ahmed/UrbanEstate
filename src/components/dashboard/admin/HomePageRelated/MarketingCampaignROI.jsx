@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Megaphone, TrendingUp, CalendarDays } from 'lucide-react';
-import { useTheme } from '../../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
 
 export default function MarketingCampaignROI({ campaigns }) {
   const { isDark } = useTheme();

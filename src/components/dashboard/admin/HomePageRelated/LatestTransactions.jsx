@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useTheme } from '../../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
 import { ArrowUpRight, CheckCircle2, DollarSign } from 'lucide-react';
 
 export default function LatestTransactions() {
@@ -9,12 +9,12 @@ export default function LatestTransactions() {
 
   
   const transactions = [
-    { id: 'TRX-928', property: 'Apt 48 - Gulshan', amount: '$450k', date: 'Today, 10:30 AM', agent: 'Sarah Johnson' },
-    { id: 'TRX-927', property: 'Villa - Banani', amount: '$1.2M', date: 'Yesterday', agent: 'David Martinez' },
-    { id: 'TRX-926', property: 'Office - Motijheel', amount: '$850k', date: 'Mar 14, 2026', agent: 'Michael Chen' },
-    { id: 'TRX-925', property: 'Duplex - Dhanmondi', amount: '$920k', date: 'Mar 12, 2026', agent: 'Agent Naron' },
-    { id: 'TRX-924', property: 'Plot - Bashundhara', amount: '$2.5M', date: 'Mar 10, 2026', agent: 'Rahim Uddin' },
-    { id: 'TRX-923', property: 'Studio - Uttara', amount: '$180k', date: 'Mar 08, 2026', agent: 'Sarah Johnson' },
+    { id: 'TRX-928', property: 'Apt 48 - Gulshan', amount: '$450k', date: 'Today, 10:30 AM', Seller: 'Sarah Johnson' },
+    { id: 'TRX-927', property: 'Villa - Banani', amount: '$1.2M', date: 'Yesterday', Seller: 'David Martinez' },
+    { id: 'TRX-926', property: 'Office - Motijheel', amount: '$850k', date: 'Mar 14, 2026', Seller: 'Michael Chen' },
+    { id: 'TRX-925', property: 'Duplex - Dhanmondi', amount: '$920k', date: 'Mar 12, 2026', Seller: 'Seller Naron' },
+    { id: 'TRX-924', property: 'Plot - Bashundhara', amount: '$2.5M', date: 'Mar 10, 2026', Seller: 'Rahim Uddin' },
+    { id: 'TRX-923', property: 'Studio - Uttara', amount: '$180k', date: 'Mar 08, 2026', Seller: 'Sarah Johnson' },
   ];
 
   return (
@@ -64,7 +64,7 @@ export default function LatestTransactions() {
                     {trx.property}
                   </p>
                   <p className={`text-[8px] sm:text-[9px] font-medium leading-none truncate mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                    Closed by {trx.agent}
+                    Closed by {trx.Seller}
                   </p>
                 </div>
               </div>

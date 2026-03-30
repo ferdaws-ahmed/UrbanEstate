@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { BrainCircuit, TrendingUp, Target, Sparkles } from 'lucide-react';
-import { useTheme } from '../../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
 
 export default function AIPredictiveAnalytics({ data }) {
   const { isDark } = useTheme();

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Activity, Clock } from 'lucide-react';
-import { useTheme } from '../../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
 
 export default function LiveActivityStream({ activities }) {
   const { isDark } = useTheme();

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useTheme } from '../../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
 import { CheckSquare, Clock, MoreHorizontal, AlertCircle, Check } from 'lucide-react';
 
 export default function PriorityTasks() {

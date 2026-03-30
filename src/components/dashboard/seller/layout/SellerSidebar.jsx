@@ -14,11 +14,15 @@ import {
   Map,
   FileText,
   ArrowLeft,
+  MessageCircle,
 } from "lucide-react";
 import { useTheme } from "@/src/components/Theme/ThemeContext";
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 const menuItems = [
   { name: "Dashboard", path: "/dashboard/seller", icon: LayoutDashboard },
+  { name: "Chat", path: "/dashboard/seller/chat", icon: MessageCircle, badge: "unreadMessages" },
   { name: "My Listings", path: "/dashboard/seller/listings", icon: List },
   {
     name: "Create New Listing",
@@ -35,6 +39,25 @@ const menuItems = [
 export default function SellerSidebar({ isOpen, onClose }) {
   const pathname = usePathname();
   const { isDark } = useTheme();
+  const { data: session } = useSession();
+  const [stats, setStats] = useState({ unreadMessages: 0 });
+
+  // Polling for unread messages (Same logic as user sidebar)
+  useEffect(() => {
+    if (!session) return;
+    
+    const fetchStats = async () => {
+      try {
+        const res = await fetch("/api/user/dashboard"); // Reuse the dashboard API for stats
+        const data = await res.json();
+        if (res.ok) setStats({ unreadMessages: data.stats.unreadMessages });
+      } catch (e) { console.error(e); }
+    };
+
+    fetchStats();
+    const interval = setInterval(fetchStats, 10000); // Poll every 10s
+    return () => clearInterval(interval);
+  }, [session]);
 
   return (
     <>
@@ -59,40 +82,48 @@ export default function SellerSidebar({ isOpen, onClose }) {
         <div suppressHydrationWarning className={`flex items-center justify-between px-6 py-6 border-b transition-colors duration-300 ${
           isDark ? "border-[#1a4a40]/50" : "border-slate-100 bg-slate-50/50"
         }`}>
-          <div suppressHydrationWarning className="flex items-center gap-2">
+          <Link 
+            href="/" 
+            suppressHydrationWarning 
+            className={`flex items-center gap-3 group cursor-pointer p-2 rounded-2xl transition-all duration-300 ${
+              isDark ? "hover:bg-white/5" : "hover:bg-teal-50"
+            }`}
+          >
             <div
               suppressHydrationWarning
-              className={`flex h-10 w-10 items-center justify-center rounded-xl shadow-inner transition-all duration-300 ${
+              className={`flex h-10 w-10 items-center justify-center rounded-xl shadow-inner transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 ${
                 isDark ? "bg-[#1a4a40]/80 text-[#cddfa0]" : "bg-teal-600 text-white shadow-teal-200"
               }`}
             >
               <Home className="h-5 w-5" />
             </div>
             <div suppressHydrationWarning>
-              <p className={`font-black text-sm tracking-tight transition-colors duration-300 ${isDark ? "text-white" : "text-slate-900"}`}>
+              <p className={`font-black text-sm tracking-tight transition-colors duration-300 ${isDark ? "text-white" : "text-slate-900"} group-hover:text-teal-600`}>
                 UrbanEstate
               </p>
               <p className="text-[10px] uppercase font-black tracking-widest text-teal-600/80 dark:text-[#cddfa0]/70">
                 Seller Hub
               </p>
             </div>
-          </div>
+          </Link>
           <button onClick={onClose} className="md:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-lg transition-colors">
             <HiX size={20} />
           </button>
         </div>
 
       <nav className="flex-1 space-y-1.5 px-4 py-6 overflow-y-auto custom-scrollbar">
-        {menuItems.map(({ name, path, icon: Icon }) => {
+        {menuItems.map(({ name, path, icon: Icon, badge }) => {
           const active =
             path === "/dashboard/seller"
               ? pathname === path
               : pathname?.startsWith(path);
+          const badgeValue = badge ? stats[badge] : 0;
+
           return (
             <Link
               key={path}
               href={path}
-              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-xs font-black uppercase tracking-widest transition-all duration-300
+              className={`flex items-center justify-between rounded-xl px-4 py-3 text-xs font-black uppercase tracking-widest transition-all duration-300
                 ${
                   active
                     ? isDark
@@ -103,8 +134,17 @@ export default function SellerSidebar({ isOpen, onClose }) {
                       : "text-slate-600 hover:bg-slate-50 hover:text-teal-600 border border-transparent"
                 } group`}
             >
-              <Icon className={`h-4.5 w-4.5 shrink-0 transition-all duration-300 ${active ? "opacity-100 scale-110" : "opacity-60 group-hover:opacity-100 group-hover:scale-110"}`} />
-              <span>{name}</span>
+              <div className="flex items-center gap-3">
+                <Icon className={`h-4.5 w-4.5 shrink-0 transition-all duration-300 ${active ? "opacity-100 scale-110" : "opacity-60 group-hover:opacity-100 group-hover:scale-110"}`} />
+                <span>{name}</span>
+              </div>
+              {badgeValue > 0 && (
+                <span className={`px-2 py-0.5 rounded-full text-[8px] font-black ${
+                  active ? "bg-white text-teal-600" : "bg-teal-600 text-white animate-pulse"
+                }`}>
+                  {badgeValue}
+                </span>
+              )}
             </Link>
           );
         })}

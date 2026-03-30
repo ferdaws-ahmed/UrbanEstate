@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Target, TrendingUp, Zap, Calendar, BarChart3, Activity } from 'lucide-react';
-import { useTheme } from '../../../ThemeProvider'; 
+import { useTheme } from '@/src/components/Theme/ThemeContext'; 
 
 export default function RevenueTarget() {
   const theme = useTheme();

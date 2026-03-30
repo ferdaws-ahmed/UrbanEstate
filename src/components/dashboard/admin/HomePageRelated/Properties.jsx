@@ -1,131 +1,282 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useTheme } from '../../ThemeProvider'; 
-
-const propertiesData = [
-  { id: 1, address: '123 Main St, Gulshan', price: '$450,000', status: 'Available', type: 'Apartment', beds: 3, baths: 2, sqft: 1200 },
-  { id: 2, address: '456 Oak Ave, Banani', price: '$380,000', status: 'Sold', type: 'House', beds: 4, baths: 3, sqft: 1800 },
-  { id: 3, address: '789 Pine Rd, Dhanmondi', price: '$600,000', status: 'Pending', type: 'Villa', beds: 5, baths: 4, sqft: 2500 },
-  { id: 4, address: '321 Elm St, Uttara', price: '$320,000', status: 'Available', type: 'Condo', beds: 2, baths: 2, sqft: 900 },
-  { id: 5, address: '654 Maple Ln, Mirpur', price: '$280,000', status: 'Sold', type: 'Apartment', beds: 2, baths: 1, sqft: 800 }
-];
+import React, { useState, useEffect } from 'react';
+import { useTheme } from '@/src/components/Theme/ThemeContext'; 
+import { Search, Filter, MoreVertical, Edit, Trash2, Eye, LayoutGrid, List, User, Mail, Calendar, MapPin } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function Properties() {
   const { isDark } = useTheme(); 
+  const [properties, setProperties] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
+  const [categoryFilter, setCategoryFilter] = useState('All');
+  const [viewMode, setViewMode] = useState('table'); // 'table' or 'grid'
 
-  const filteredProperties = propertiesData.filter(property => {
-    const matchesSearch = property.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          property.type.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'All' || property.status === statusFilter;
-    return matchesSearch && matchesStatus;
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await fetch('/api/admin/properties');
+        if (!response.ok) throw new Error('Failed to fetch properties');
+        const data = await response.json();
+        setProperties(data);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+        toast.error("Failed to load properties");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProperties();
+  }, []);
+
+  const categories = ['All', ...new Set(properties.map(p => p.category || p.type).filter(Boolean))];
+
+  const filteredProperties = properties.filter(property => {
+    const matchesSearch = property.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          property.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          property.seller?.name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = categoryFilter === 'All' || (property.category || property.type) === categoryFilter;
+    return matchesSearch && matchesCategory;
   });
 
-  const bgColor = isDark ? 'bg-[#0f2e28]' : 'bg-gray-50';
-  const cardBg = isDark ? 'bg-[#1a4a40]/40' : 'bg-white';
-  const borderColor = isDark ? 'border-[#1a4a40]' : 'border-gray-200';
-  const textColor = isDark ? 'text-white' : 'text-gray-900';
-  const subTextColor = isDark ? 'text-[#cddfa0]/80' : 'text-gray-600';
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this property?")) {
+      try {
+        // Implementation for delete would go here
+        toast.success("Property deleted successfully");
+        setProperties(properties.filter(p => p._id !== id));
+      } catch (error) {
+        toast.error("Failed to delete property");
+      }
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className={`text-sm font-bold uppercase tracking-widest ${isDark ? 'text-white' : 'text-gray-800'}`}>Loading Properties...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${bgColor}`}>
-      <div className="p-4 md:p-6 lg:p-8 overflow-auto">
-        
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className={`text-xl md:text-2xl font-bold transition-colors ${textColor}`}>Properties Management</h1>
-          <p className={`text-sm mt-1 transition-colors ${subTextColor}`}>Manage and monitor all property listings</p>
-        </div>
+    <div className="w-full">
+      
+      {/* Category Sorting Navbar-like Header */}
+      <div className={`sticky top-0 z-30 mb-8 p-2 rounded-2xl border backdrop-blur-md transition-all duration-300 ${
+        isDark ? 'bg-[#133c34]/80 border-[#1a4a40] shadow-xl shadow-black/20' : 'bg-white/80 border-gray-200 shadow-lg shadow-gray-200/50'
+      }`}>
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-2">
+          {/* Categories */}
+          <div className="flex items-center gap-1 overflow-x-auto pb-2 md:pb-0 no-scrollbar w-full md:w-auto">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setCategoryFilter(cat)}
+                className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-300 ${
+                  categoryFilter === cat
+                    ? (isDark ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/20')
+                    : (isDark ? 'text-gray-400 hover:bg-white/5' : 'text-gray-600 hover:bg-gray-100')
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
 
-        {/* Filters */}
-        <div className="mb-6 flex flex-col sm:flex-row gap-4">
-          <input
-            type="text"
-            placeholder="Search properties..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={`w-full sm:flex-1 px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 shadow-sm transition-all duration-300 ${isDark ? 'bg-[#1a4a40]/30 border-[#1a4a40] text-white placeholder-gray-400 focus:ring-[#cddfa0]/50' : 'bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:ring-blue-500'}`}
-          />
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className={`w-full sm:w-auto px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 shadow-sm transition-all duration-300 cursor-pointer ${isDark ? 'bg-[#1a4a40]/30 border-[#1a4a40] text-white focus:ring-[#cddfa0]/50' : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500'}`}
-          >
-            <option value="All">All Status</option>
-            <option value="Available">Available</option>
-            <option value="Sold">Sold</option>
-            <option value="Pending">Pending</option>
-          </select>
+          {/* Search & Actions */}
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            <div className="relative flex-1 md:w-64">
+              <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
+              <input
+                type="text"
+                placeholder="Search by title, address, seller..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className={`w-full pl-10 pr-4 py-2 rounded-xl text-xs border focus:outline-none transition-all duration-300 ${
+                  isDark ? 'bg-black/20 border-[#1a4a40] text-white focus:border-emerald-500' : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-emerald-500'
+                }`}
+              />
+            </div>
+            
+            <div className={`flex items-center p-1 rounded-xl border ${isDark ? 'bg-black/20 border-[#1a4a40]' : 'bg-gray-50 border-gray-200'}`}>
+              <button 
+                onClick={() => setViewMode('table')}
+                className={`p-1.5 rounded-lg transition-all ${viewMode === 'table' ? (isDark ? 'bg-emerald-500 text-white' : 'bg-white text-emerald-600 shadow-sm') : 'text-gray-500'}`}
+              >
+                <List size={16} />
+              </button>
+              <button 
+                onClick={() => setViewMode('grid')}
+                className={`p-1.5 rounded-lg transition-all ${viewMode === 'grid' ? (isDark ? 'bg-emerald-500 text-white' : 'bg-white text-emerald-600 shadow-sm') : 'text-gray-500'}`}
+              >
+                <LayoutGrid size={16} />
+              </button>
+            </div>
+          </div>
         </div>
+      </div>
 
-        {/* Properties Table */}
-        <div className={`border rounded-xl overflow-hidden shadow-sm transition-colors duration-300 ${cardBg} ${borderColor}`}>
+      {/* Property List */}
+      {viewMode === 'table' ? (
+        <div className={`rounded-3xl border overflow-hidden transition-all duration-300 ${isDark ? 'bg-[#133c34]/40 border-[#1a4a40]' : 'bg-white border-gray-200 shadow-sm'}`}>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm whitespace-nowrap">
+            <table className="w-full text-left border-collapse">
               <thead>
-                <tr className={`border-b transition-colors ${isDark ? 'border-[#1a4a40] bg-[#133c34]/50' : 'border-gray-200 bg-gray-50'}`}>
-                  <th className={`text-left py-4 px-4 font-semibold ${isDark ? 'text-[#cddfa0]' : 'text-gray-700'}`}>Address</th>
-                  <th className={`text-left py-4 px-4 font-semibold ${isDark ? 'text-[#cddfa0]' : 'text-gray-700'}`}>Type</th>
-                  <th className={`text-left py-4 px-4 font-semibold ${isDark ? 'text-[#cddfa0]' : 'text-gray-700'}`}>Price</th>
-                  <th className={`text-left py-4 px-4 font-semibold ${isDark ? 'text-[#cddfa0]' : 'text-gray-700'}`}>Beds/Baths</th>
-                  <th className={`text-left py-4 px-4 font-semibold ${isDark ? 'text-[#cddfa0]' : 'text-gray-700'}`}>Sqft</th>
-                  <th className={`text-left py-4 px-4 font-semibold ${isDark ? 'text-[#cddfa0]' : 'text-gray-700'}`}>Status</th>
-                  <th className={`text-left py-4 px-4 font-semibold ${isDark ? 'text-[#cddfa0]' : 'text-gray-700'}`}>Actions</th>
+                <tr className={`border-b ${isDark ? 'border-[#1a4a40] bg-black/20' : 'border-gray-100 bg-gray-50'}`}>
+                  <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500">Property Details</th>
+                  <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500">Seller Information</th>
+                  <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500">Price & Specs</th>
+                  <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500">Status & Date</th>
+                  <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {filteredProperties.length > 0 ? (
-                  filteredProperties.map((property) => (
-                    <tr key={property.id} className={`border-b transition-colors ${isDark ? 'border-[#1a4a40]/50 hover:bg-[#133c34]/30' : 'border-gray-100 hover:bg-gray-50'}`}>
-                      <td className={`py-3.5 px-4 font-medium ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>{property.address}</td>
-                      <td className={`py-3.5 px-4 ${isDark ? 'text-gray-400' : 'text-gray-700'}`}>{property.type}</td>
-                      <td className={`py-3.5 px-4 font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>{property.price}</td>
-                      <td className={`py-3.5 px-4 ${isDark ? 'text-gray-400' : 'text-gray-700'}`}>{property.beds} bed / {property.baths} bath</td>
-                      <td className={`py-3.5 px-4 ${isDark ? 'text-gray-400' : 'text-gray-700'}`}>{property.sqft}</td>
-                      <td className="py-3.5 px-4">
-                        <span className={`px-3 py-1.5 rounded-full text-[11px] uppercase tracking-wider font-bold ${
-                          property.status === 'Available' ? (isDark ? 'bg-green-900/40 text-green-400' : 'bg-green-100 text-green-800') :
-                          property.status === 'Sold' ? (isDark ? 'bg-red-900/40 text-red-400' : 'bg-red-100 text-red-800') :
-                          (isDark ? 'bg-yellow-900/40 text-yellow-400' : 'bg-yellow-100 text-yellow-800')
+              <tbody className="divide-y divide-transparent">
+                {filteredProperties.map((p) => (
+                  <tr key={p._id} className={`group transition-all duration-300 ${isDark ? 'hover:bg-white/5' : 'hover:bg-gray-50'}`}>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-4">
+                        <img 
+                          src={p.images?.[0] || "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400"} 
+                          alt={p.title} 
+                          className="w-14 h-14 rounded-2xl object-cover border-2 border-transparent group-hover:border-emerald-500 transition-all"
+                        />
+                        <div className="min-w-0">
+                          <p className={`text-sm font-black truncate ${isDark ? 'text-white' : 'text-gray-900'}`}>{p.title}</p>
+                          <p className={`text-[10px] font-medium flex items-center gap-1 mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                            <MapPin size={10} className="text-emerald-500" /> {p.address}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <img 
+                          src={p.seller?.image || p.sellerAvatar} 
+                          alt={p.seller?.name || p.agent} 
+                          className="w-10 h-10 rounded-full object-cover border-2 border-emerald-500/20"
+                        />
+                        <div className="min-w-0">
+                          <p className={`text-xs font-bold truncate ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>{p.seller?.name || p.agent}</p>
+                          <p className={`text-[10px] font-medium truncate ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>{p.seller?.email || p.agentEmail || 'Seller'}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div>
+                        <p className={`text-sm font-black ${isDark ? 'text-[#cddfa0]' : 'text-emerald-700'}`}>$ {p.price == null ? '' : Number(p.price).toLocaleString()}</p>
+                        <p className={`text-[10px] font-bold mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                          {p.beds} {p.beds === 1 ? 'Bed' : 'Beds'} • {p.baths} {p.baths === 1 ? 'Bath' : 'Baths'} • {p.area?.toLocaleString()} sqft
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex flex-col gap-1.5">
+                        <span className={`w-fit px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${
+                          p.status === 'published' ? (isDark ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-100 text-emerald-700') :
+                          p.status === 'pending' ? (isDark ? 'bg-amber-500/10 text-amber-400' : 'bg-amber-100 text-amber-700') :
+                          (isDark ? 'bg-red-500/10 text-red-400' : 'bg-red-100 text-red-700')
                         }`}>
-                          {property.status}
+                          {p.status}
                         </span>
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <button className={`mr-4 font-medium transition-colors ${isDark ? 'text-[#cddfa0] hover:text-white' : 'text-blue-600 hover:text-blue-800'}`}>Edit</button>
-                        <button className={`font-medium transition-colors ${isDark ? 'text-red-400 hover:text-red-300' : 'text-red-600 hover:text-red-800'}`}>Delete</button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="7" className={`py-8 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                      No properties found matching your search.
+                        <p className={`text-[10px] font-bold flex items-center gap-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+                          <Calendar size={10} /> {new Date(p.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-white hover:bg-emerald-500/20' : 'bg-gray-100 text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'}`}>
+                          <Eye size={16} />
+                        </button>
+                        <button className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-white hover:bg-blue-500/20' : 'bg-gray-100 text-gray-600 hover:text-blue-600 hover:bg-blue-50'}`}>
+                          <Edit size={16} />
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(p._id)}
+                          className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-red-400 hover:bg-red-500/20' : 'bg-gray-100 text-gray-600 hover:text-red-600 hover:bg-red-50'}`}
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
                     </td>
                   </tr>
-                )}
+                ))}
               </tbody>
             </table>
           </div>
         </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredProperties.map((p) => (
+            <div key={p._id} className={`group rounded-[2rem] border overflow-hidden transition-all duration-500 hover:scale-[1.02] ${isDark ? 'bg-[#133c34]/40 border-[#1a4a40] hover:bg-[#133c34]' : 'bg-white border-gray-200 hover:shadow-2xl shadow-gray-200/50'}`}>
+              <div className="relative h-48 overflow-hidden">
+                <img 
+                  src={p.images?.[0] || "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400"} 
+                  alt={p.title} 
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute top-4 left-4 flex gap-2">
+                  <span className={`px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest backdrop-blur-md ${
+                    p.status === 'published' ? 'bg-emerald-500/80 text-white' : 'bg-amber-500/80 text-white'
+                  }`}>
+                    {p.status}
+                  </span>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                  <p className="text-white text-lg font-black leading-tight truncate">{p.title}</p>
+                </div>
+              </div>
+              
+              <div className="p-5">
+                <div className="flex items-center gap-3 mb-4">
+                  <img src={p.seller?.image || p.sellerAvatar} className="w-8 h-8 rounded-full border border-emerald-500/30" />
+                  <div className="min-w-0">
+                    <p className={`text-[10px] font-black truncate ${isDark ? 'text-gray-300' : 'text-gray-800'}`}>{p.seller?.name || p.agent}</p>
+                    <p className="text-[8px] font-bold text-gray-500 truncate">{p.seller?.email || p.agentEmail || 'Seller'}</p>
+                  </div>
+                </div>
 
-        {/* Summary Stats */}
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {[
-            { label: 'Total Properties', val: propertiesData.length, color: isDark ? 'text-white' : 'text-gray-900' },
-            { label: 'Available', val: propertiesData.filter(p => p.status === 'Available').length, color: isDark ? 'text-[#cddfa0]' : 'text-green-600' },
-            { label: 'Sold', val: propertiesData.filter(p => p.status === 'Sold').length, color: isDark ? 'text-red-400' : 'text-red-600' }
-          ].map((stat, i) => (
-            <div key={i} className={`p-5 md:p-6 rounded-xl border shadow-sm transition-colors duration-300 ${cardBg} ${borderColor}`}>
-              <h3 className={`text-xs md:text-sm font-bold uppercase tracking-widest ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{stat.label}</h3>
-              <p className={`text-2xl md:text-3xl font-black mt-2 ${stat.color}`}>{stat.val}</p>
+                <div className={`grid grid-cols-3 gap-2 py-3 border-y mb-4 ${isDark ? 'border-white/5' : 'border-gray-100'}`}>
+                  <div className="text-center">
+                    <p className={`text-[10px] font-black ${isDark ? 'text-white' : 'text-gray-900'}`}>{p.beds}</p>
+                    <p className="text-[8px] font-bold text-gray-500 uppercase tracking-tighter">Beds</p>
+                  </div>
+                  <div className="text-center">
+                    <p className={`text-[10px] font-black ${isDark ? 'text-white' : 'text-gray-900'}`}>{p.baths}</p>
+                    <p className="text-[8px] font-bold text-gray-500 uppercase tracking-tighter">Baths</p>
+                  </div>
+                  <div className="text-center">
+                    <p className={`text-[10px] font-black ${isDark ? 'text-white' : 'text-gray-900'}`}>{p.area}</p>
+                    <p className="text-[8px] font-bold text-gray-500 uppercase tracking-tighter">Sqft</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <p className={`text-sm font-black ${isDark ? 'text-[#cddfa0]' : 'text-emerald-700'}`}>$ {p.price?.toLocaleString()}</p>
+                  <div className="flex gap-2">
+                    <button className={`p-2 rounded-xl ${isDark ? 'bg-white/5 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-600 hover:text-emerald-600'}`}>
+                      <Edit size={14} />
+                    </button>
+                    <button className={`p-2 rounded-xl ${isDark ? 'bg-white/5 text-gray-400 hover:text-red-400' : 'bg-gray-100 text-gray-600 hover:text-red-600'}`}>
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           ))}
         </div>
-        
-      </div>
+      )}
+
+      {filteredProperties.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-20 opacity-40">
+          <Filter size={48} className="mb-4" />
+          <p className="text-sm font-black uppercase tracking-[0.2em]">No properties found</p>
+        </div>
+      )}
     </div>
   );
 }

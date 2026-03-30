@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, MapPin, Bed, Bath, Square, Eye, TrendingUp, Plus, Edit, Trash2, AlertCircle, X, CheckCircle, Image as ImageIcon } from 'lucide-react';
-import { useTheme } from '../../../ThemeProvider'; 
+import { useTheme } from '@/src/components/Theme/ThemeContext'; 
 
 export default function PropertiesGrid() {
 
@@ -157,7 +157,7 @@ export default function PropertiesGrid() {
       beds: Number(formData.get('beds')) || formModal.property?.beds || 3,
       baths: Number(formData.get('baths')) || formModal.property?.baths || 2,
       area: Number(formData.get('area')) || formModal.property?.area || 1200,
-      agent: formModal.property?.agent || 'Admin',
+      Seller: formModal.property?.Seller || 'Admin',
     };
 
     if (formModal.type === 'ADD') {
@@ -372,8 +372,8 @@ export default function PropertiesGrid() {
 
                 <div className="mt-auto flex justify-between items-center pt-1">
                   <div className="flex flex-col">
-                    <span className="text-[9px] uppercase tracking-widest font-bold text-gray-400">Agent</span>
-                    <span className="text-xs font-bold text-gray-900 dark:text-[#cddfa0]">{property.agent || 'Unknown'}</span>
+                    <span className="text-[9px] uppercase tracking-widest font-bold text-gray-400">Seller</span>
+                    <span className="text-xs font-bold text-gray-900 dark:text-[#cddfa0]">{property.Seller || 'Unknown'}</span>
                   </div>
                   
                   <div className="flex gap-1.5">

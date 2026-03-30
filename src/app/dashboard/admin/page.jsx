@@ -1,11 +1,7 @@
-import AdminDashboard from "../../../components/dashboard/admin/HomePageRelated/AdminDashboard";
+"use client";
 
+import AdminDashboard from "@/src/components/dashboard/admin/HomePageRelated/AdminDashboard";
 
-
-export default function DashboardPage() {
-  return (
-    <main>
-      <AdminDashboard />
-    </main>
-  );
+export default function AdminOverviewPage() {
+  return <AdminDashboard />;
 }

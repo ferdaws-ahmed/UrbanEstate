@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { Calendar, Eye, Users, FileSignature, CheckCircle, Clock } from 'lucide-react';
-import { useTheme } from '../../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
 
 export default function QuickActions({ actions }) {
   const { isDark } = useTheme();

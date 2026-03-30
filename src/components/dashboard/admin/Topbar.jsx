@@ -3,13 +3,16 @@
 import React, { useState, useEffect, useRef, Suspense } from 'react'; 
 import { useRouter, useSearchParams } from 'next/navigation'; 
 import Link from 'next/link';
-import { useTheme } from '../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
+import { useSession } from 'next-auth/react';
+import { Bell, Sun, Moon, Calendar, User as UserIcon, Settings, ChevronDown } from 'lucide-react';
 
 
-function TopbarContent({ loggedInUser }) {
+function TopbarContent() {
   const router = useRouter();
   const searchParams = useSearchParams(); 
-  const themeContext = useTheme(); 
+  const { isDark, toggleTheme } = useTheme();
+  const { data: session } = useSession();
   const dropdownRef = useRef(null);
   const [mounted, setMounted] = useState(false);
 
@@ -17,13 +20,10 @@ function TopbarContent({ loggedInUser }) {
     setMounted(true);
   }, []);
 
-  const isDark = themeContext ? themeContext.isDark : false;
-  const setIsDark = themeContext ? themeContext.setIsDark : () => {};
-
-  const user = loggedInUser || {
+  const user = session?.user || {
     name: "S. Islam",
     role: "Admin",
-    avatar: "https://i.pravatar.cc/150?img=11",
+    image: "https://i.pravatar.cc/150?img=11",
     email: "admin@urbanestate.com"
   };
 
@@ -32,37 +32,26 @@ function TopbarContent({ loggedInUser }) {
   const [isDateMenuOpen, setIsDateMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   
-  const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || "");
   const [notifications, setNotifications] = useState([]);
   const [isLoadingNotifications, setIsLoadingNotifications] = useState(true);
 
   useEffect(() => {
-    if (mounted) {
-      if (isDark) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    }
-  }, [isDark, mounted]);
-
-  useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch('/data/dashboardData.json', { cache: 'no-store' });
+        const response = await fetch('/api/notifications', { cache: 'no-store' });
         if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
-        setNotifications(data.notifications || []);
+        setNotifications(data || []);
       } catch (error) {
         console.error("Failed to fetch notifications:", error);
       } finally {
         setIsLoadingNotifications(false);
       }
     };
-    fetchNotifications();
-  }, []);
+    if (mounted) fetchNotifications();
+  }, [mounted]);
 
-  const unreadCount = notifications.filter(n => n.unread).length;
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   useEffect(() => {
     setCurrentTime(new Date());
@@ -82,82 +71,43 @@ function TopbarContent({ loggedInUser }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    setSearchQuery(searchParams?.get('q') || "");
-  }, [searchParams]);
-
-  const handleLiveSearch = (e) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-    if (value.trim().length > 0) {
-      router.push(`/search?q=${encodeURIComponent(value)}`, { scroll: false });
-    } else {
-      router.push('/search', { scroll: false }); 
-    }
-  };
-
   const formattedDateTime = currentTime
     ? currentTime.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true })
     : "Loading...";
 
 
   if (!mounted) {
-    return <div className="h-15 w-full bg-transparent" />;
+    return <div className="h-16 w-full bg-transparent" />;
   }
 
   return (
-    <header className={`w-full h-15 backdrop-blur-xl flex items-center justify-between px-3 md:px-10 border-b sticky top-0 z-40 transition-all duration-300 ${isDark ? 'bg-[#0f2e28]/95 border-[#1a4a40]/80 shadow-[0_4px_30px_rgba(0,0,0,0.5)]' : 'bg-white/95 border-gray-200 shadow-[0_4px_30px_rgba(0,0,0,0.1)]'}`}>
+    <header className={`w-full h-16 backdrop-blur-xl flex items-center justify-between px-4 md:px-10 border-b sticky top-0 z-40 transition-all duration-300 ${isDark ? 'bg-[#0f2e28]/90 border-[#1a4a40]/60 shadow-lg' : 'bg-white/90 border-gray-200 shadow-sm'}`}>
 
-      {/* Left Section: Search Bar */}
-      <div className="flex-1 md:w-2/5 mr-2 md:mr-6 flex items-center">
-        <form onSubmit={(e) => e.preventDefault()} className="relative w-full max-w-lg group">
-          <div className="absolute inset-y-0 left-0 pl-3 md:pl-4 flex items-center pointer-events-none">
-            <svg className={`w-4 h-4 md:w-5 md:h-5 transition-colors duration-300 ${isDark ? 'text-gray-400 group-focus-within:text-[#cddfa0]' : 'text-gray-400 group-focus-within:text-emerald-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={handleLiveSearch} 
-            placeholder="Search..."
-            className={`w-full rounded-xl md:rounded-2xl py-2 md:py-2.5 pl-9 md:pl-12 pr-3 md:pr-4 focus:outline-none shadow-inner transition-all duration-300 italic tracking-wide text-xs md:text-sm border ${isDark ? 'bg-[#0a1a17]/60 border-[#1a4a40] text-gray-200 placeholder-gray-500 focus:bg-[#0f2e28]/80 focus:border-[#cddfa0]/60' : 'bg-gray-100 border-transparent text-gray-800 placeholder-gray-500 focus:bg-white focus:border-emerald-200'}`}
-          />
-        </form>
+      {/* Left Section: Welcome Message (Replaced Search) */}
+      <div className="flex-1 flex items-center">
+        <div>
+          <h1 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-gray-800'}`}>
+            Admin Dashboard
+          </h1>
+          <p className={`text-[10px] font-medium uppercase tracking-[0.2em] ${isDark ? 'text-[#cddfa0]/60' : 'text-emerald-600/70'}`}>
+            Urban Estate Management
+          </p>
+        </div>
       </div>
 
       {/* Right Section */}
-      <div className="flex items-center space-x-1.5 md:space-x-7 ml-auto flex-shrink-0" ref={dropdownRef}>
-
-        {/* Theme Toggle */}
-        <button
-          onClick={() => setIsDark(!isDark)}
-          className={`p-1.5 md:p-2.5 rounded-xl border transition-all duration-300 group shadow-sm ${isDark ? 'bg-[#133c34]/50 border-[#1a4a40] hover:border-[#cddfa0]/50' : 'bg-gray-100 border-transparent hover:border-emerald-200'}`}
-          title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-        >
-          {isDark ? (
-            <svg className="w-4 h-4 md:w-5 md:h-5 text-gray-300 group-hover:text-[#cddfa0] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-          ) : (
-            <svg className="w-4 h-4 md:w-5 md:h-5 text-gray-600 group-hover:text-emerald-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-            </svg>
-          )}
-        </button>
+      <div className="flex items-center space-x-2 md:space-x-6 ml-auto flex-shrink-0" ref={dropdownRef}>
 
         {/* Date & Time */}
         <div className="relative hidden lg:block">
           <button
             onClick={() => { setIsDateMenuOpen(!isDateMenuOpen); setIsProfileOpen(false); setIsNotificationOpen(false); }}
-            className={`flex items-center gap-2 border rounded-xl px-4 py-2 transition-all duration-300 shadow-sm group ${isDark ? 'bg-[#133c34]/50 border-[#1a4a40] hover:bg-[#1a4a40]/80 hover:border-[#cddfa0]/50' : 'bg-gray-100 border-transparent hover:bg-gray-200'}`}
+            className={`flex items-center gap-3 border rounded-xl px-4 py-2 transition-all duration-300 group ${isDark ? 'bg-[#133c34]/40 border-[#1a4a40] hover:bg-[#1a4a40]' : 'bg-gray-50 border-gray-200 hover:bg-white shadow-sm'}`}
           >
-            <span className={`text-xs font-semibold tracking-widest uppercase transition-colors duration-300 ${isDark ? 'text-gray-300 group-hover:text-[#cddfa0]' : 'text-gray-700'}`}>
+            <Calendar className={`w-4 h-4 ${isDark ? 'text-[#cddfa0]' : 'text-emerald-600'}`} />
+            <span className={`text-xs font-bold tracking-wider transition-colors duration-300 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
               {formattedDateTime}
             </span>
-            <svg className={`w-4 h-4 transition-transform duration-300 ${isDateMenuOpen ? 'rotate-180' : ''} ${isDark ? 'text-[#cddfa0]' : 'text-gray-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-            </svg>
           </button>
         </div>
 
@@ -165,15 +115,13 @@ function TopbarContent({ loggedInUser }) {
         <div className="relative">
           <button
             onClick={() => { setIsNotificationOpen(!isNotificationOpen); setIsProfileOpen(false); setIsDateMenuOpen(false); }}
-            className={`relative p-1.5 md:p-2.5 rounded-xl border transition-all duration-300 group shadow-sm ${isDark ? 'bg-[#133c34]/50 border-[#1a4a40] hover:border-[#cddfa0]/50' : 'bg-gray-100 border-transparent hover:border-emerald-200'}`}
+            className={`relative p-2 rounded-xl border transition-all duration-300 group ${isDark ? 'bg-[#133c34]/40 border-[#1a4a40] hover:bg-[#1a4a40]' : 'bg-gray-50 border-gray-200 hover:bg-white shadow-sm'}`}
           >
-            <svg className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${isDark ? 'text-gray-300 group-hover:text-[#cddfa0]' : 'text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
+            <Bell className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${isDark ? 'text-gray-300 group-hover:text-[#cddfa0]' : 'text-gray-600'}`} />
             {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-3 w-3 md:h-5 md:w-5 items-center justify-center">
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 md:h-5 md:w-5 items-center justify-center">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className={`relative inline-flex items-center justify-center rounded-full h-3 w-3 md:h-5 md:w-5 bg-red-500 border md:border-2 text-[6px] md:text-[10px] font-bold text-white shadow-[0_0_10px_rgba(239,68,68,0.5)] ${isDark ? 'border-[#0a1a17]' : 'border-white'}`}>
+                <span className={`relative inline-flex items-center justify-center rounded-full h-4 w-4 md:h-5 md:w-5 bg-red-600 border-2 text-[8px] md:text-[10px] font-black text-white shadow-lg ${isDark ? 'border-[#0a1a17]' : 'border-white'}`}>
                   {unreadCount}
                 </span>
               </span>
@@ -181,59 +129,103 @@ function TopbarContent({ loggedInUser }) {
           </button>
 
           {isNotificationOpen && (
-            <div className={`absolute right-0 mt-4 w-64 md:w-80 backdrop-blur-md border rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] py-2 z-50 animate-in fade-in zoom-in duration-200 ${isDark ? 'bg-[#0a1a17]/95 border-[#1a4a40]' : 'bg-white border-gray-200'}`}>
-              <div className={`px-4 py-3 border-b flex justify-between items-center ${isDark ? 'border-[#1a4a40]/50' : 'border-gray-100'}`}>
-                <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>Notifications</h3>
-                <span className="text-xs bg-[#cddfa0]/20 text-[#cddfa0] px-2 py-0.5 rounded-full">{unreadCount} New</span>
+            <div className={`absolute right-0 mt-4 w-72 md:w-96 backdrop-blur-xl border rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200 ${isDark ? 'bg-[#0a1a17]/95 border-[#1a4a40]' : 'bg-white/95 border-gray-200'}`}>
+              <div className={`px-5 py-4 border-b flex justify-between items-center ${isDark ? 'border-[#1a4a40]/50' : 'border-gray-100'}`}>
+                <h3 className={`text-sm font-black uppercase tracking-widest ${isDark ? 'text-white' : 'text-gray-800'}`}>Notifications</h3>
+                <span className="text-[10px] font-bold bg-red-500/10 text-red-500 px-2.5 py-1 rounded-full">{unreadCount} New Alerts</span>
               </div>
-              <div className="max-h-64 overflow-y-auto">
+              <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
                 {isLoadingNotifications ? (
-                  <p className="px-4 py-3 text-sm text-gray-500 text-center">Loading notifications...</p>
+                  <div className="flex flex-col items-center justify-center py-10 gap-3">
+                    <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">Scanning System...</p>
+                  </div>
                 ) : notifications.length > 0 ? (
                   notifications.map((notif) => (
-                    <Link href={`/notifications/${notif.id}`} key={notif.id} className={`block px-4 py-3 border-b transition-colors ${isDark ? 'border-[#1a4a40]/30 hover:bg-[#133c34]/50' : 'border-gray-50 hover:bg-gray-50'} ${notif.unread ? (isDark ? 'bg-[#133c34]/20' : 'bg-blue-50/50') : ''}`}>
-                      <p className={`text-sm ${notif.unread ? (isDark ? 'text-white font-semibold' : 'text-gray-800 font-semibold') : (isDark ? 'text-gray-400' : 'text-gray-600')}`}>{notif.text}</p>
-                      <p className="text-xs text-gray-500 mt-1">{notif.time}</p>
-                    </Link>
+                    <div key={notif._id || notif.id} className={`block px-5 py-4 border-b transition-colors cursor-pointer ${isDark ? 'border-[#1a4a40]/30 hover:bg-white/5' : 'border-gray-50 hover:bg-gray-50'} ${!notif.read ? (isDark ? 'bg-emerald-500/5' : 'bg-emerald-50/30') : ''}`}>
+                      <div className="flex gap-3">
+                        <div className="w-2 h-2 mt-1.5 rounded-full flex-shrink-0 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+                        <div>
+                          <p className={`text-xs leading-relaxed ${!notif.read ? (isDark ? 'text-white font-bold' : 'text-gray-900 font-bold') : (isDark ? 'text-gray-400 font-medium' : 'text-gray-600 font-medium')}`}>
+                            {notif.text}
+                          </p>
+                          <p className="text-[10px] font-bold uppercase tracking-tighter text-gray-500 mt-1.5 flex items-center gap-1">
+                            {new Date(notif.createdAt || notif.time).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   ))
                 ) : (
-                  <p className="px-4 py-3 text-sm text-gray-500 text-center">No new notifications</p>
+                  <div className="py-12 flex flex-col items-center justify-center opacity-40">
+                    <Bell className="w-10 h-10 mb-2" />
+                    <p className="text-[10px] font-black uppercase tracking-widest">No alerts detected</p>
+                  </div>
                 )}
+              </div>
+              <div className="px-5 py-3 border-t border-transparent text-center">
+                <button className={`text-[10px] font-black uppercase tracking-widest hover:underline ${isDark ? 'text-[#cddfa0]' : 'text-emerald-600'}`}>
+                  View All Activity Logs
+                </button>
               </div>
             </div>
           )}
         </div>
 
-        <div className={`hidden xs:block h-6 md:h-8 w-[2px] bg-gradient-to-b from-transparent to-transparent ${isDark ? 'via-[#1a4a40]' : 'via-gray-300'}`}></div>
+        <div className={`h-8 w-[1px] ${isDark ? 'bg-[#1a4a40]' : 'bg-gray-200'}`}></div>
 
-        {/* Profile Section */}
-        <div className="relative">
+        {/* Theme Toggle & Profile Group */}
+        <div className="flex items-center gap-3">
+          {/* Theme Toggle */}
           <button
-            onClick={() => { setIsProfileOpen(!isProfileOpen); setIsDateMenuOpen(false); setIsNotificationOpen(false); }}
-            className={`flex items-center gap-1.5 md:gap-3 p-1 rounded-2xl border transition-all duration-300 group ${isDark ? 'hover:bg-[#133c34]/60 border-transparent hover:border-[#1a4a40]' : 'hover:bg-gray-100 border-transparent'}`}
+            onClick={toggleTheme}
+            className={`p-2 rounded-xl border transition-all duration-300 group ${isDark ? 'bg-[#133c34]/40 border-[#1a4a40] text-[#cddfa0] hover:bg-[#1a4a40]' : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-emerald-200 hover:bg-white shadow-sm'}`}
+            title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
           >
-            <div className="hidden sm:flex flex-col items-end">
-              <span className={`text-sm font-bold transition-colors ${isDark ? 'text-gray-200 group-hover:text-[#cddfa0]' : 'text-gray-800 group-hover:text-emerald-700'}`}>{user.name}</span>
-              <span className={`text-[10px] font-black uppercase tracking-widest ${isDark ? 'text-[#cddfa0]/70' : 'text-emerald-600'}`}>{user.role}</span>
-            </div>
-            <div className="relative flex-shrink-0">
-              <img src={user.avatar} alt="Profile" className={`w-8 h-8 md:w-10 md:h-10 rounded-xl border md:border-2 transition-all duration-300 object-cover shadow-sm ${isDark ? 'border-[#1a4a40] group-hover:border-[#cddfa0]' : 'border-gray-200 group-hover:border-emerald-500'}`} />
-              <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 md:w-3 md:h-3 bg-green-500 border md:border-2 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.6)] ${isDark ? 'border-[#0a1a17]' : 'border-white'}`}></span>
-            </div>
+            {isDark ? <Sun className="w-4 h-4 md:w-5 md:h-5" /> : <Moon className="w-4 h-4 md:w-5 md:h-5" />}
           </button>
 
-          {isProfileOpen && (
-            <div className={`absolute right-0 mt-4 w-48 md:w-60 backdrop-blur-md border rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] py-2 z-50 animate-in fade-in zoom-in duration-200 ${isDark ? 'bg-[#0a1a17]/95 border-[#1a4a40]' : 'bg-white border-gray-200'}`}>
-              <div className={`px-4 md:px-5 py-3 md:py-4 border-b rounded-t-2xl mx-1 -mt-2 ${isDark ? 'border-[#1a4a40]/50 bg-[#133c34]/20' : 'border-gray-100 bg-gray-50'}`}>
-                <p className={`text-sm md:text-base font-bold truncate ${isDark ? 'text-white' : 'text-gray-800'}`}>{user.name}</p>
-                <p className={`text-[10px] md:text-xs mt-1 truncate ${isDark ? 'text-[#cddfa0]/80' : 'text-gray-500'}`}>{user.email}</p>
+          {/* Profile Section */}
+          <div className="relative">
+            <button
+              onClick={() => { setIsProfileOpen(!isProfileOpen); setIsDateMenuOpen(false); setIsNotificationOpen(false); }}
+              className={`flex items-center gap-3 p-1 rounded-2xl border transition-all duration-300 group ${isDark ? 'hover:bg-white/5 border-transparent hover:border-[#1a4a40]' : 'hover:bg-gray-50 border-transparent hover:border-gray-200'}`}
+            >
+              <div className="hidden sm:flex flex-col items-end">
+                <span className={`text-sm font-black tracking-tight transition-colors ${isDark ? 'text-white group-hover:text-[#cddfa0]' : 'text-gray-800 group-hover:text-emerald-700'}`}>{user.name}</span>
+                <span className={`text-[9px] font-black uppercase tracking-[0.2em] px-2 py-0.5 rounded-md ${isDark ? 'bg-[#cddfa0]/10 text-[#cddfa0]' : 'bg-emerald-100 text-emerald-700'}`}>{user.role || 'Administrator'}</span>
               </div>
-              <div className="py-2 px-1">
-                <Link href="/profile" className={`flex items-center gap-3 px-4 py-2 text-xs md:text-sm font-medium rounded-lg mx-2 transition-colors ${isDark ? 'text-gray-300 hover:bg-[#133c34]' : 'text-gray-700 hover:bg-gray-100'}`}>My Profile</Link>
-                <button className={`w-full text-left flex items-center gap-3 px-4 py-2 text-xs md:text-sm font-medium rounded-lg mx-2 transition-colors ${isDark ? 'text-red-400 hover:bg-red-900/20' : 'text-red-600 hover:bg-red-50'}`}>Sign Out</button>
+              <div className="relative flex-shrink-0 p-0.5 rounded-xl bg-gradient-to-tr from-emerald-500 to-[#cddfa0]">
+                <div className={`rounded-[10px] overflow-hidden border-2 ${isDark ? 'border-[#0a1a17]' : 'border-white'}`}>
+                  <img 
+                    src={user.image || user.avatar || "https://ui-avatars.com/api/?name=Admin&background=10b981&color=fff"} 
+                    alt="Profile" 
+                    className="w-9 h-9 md:w-10 md:h-10 object-cover" 
+                  />
+                </div>
+                <span className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 rounded-full shadow-lg ${isDark ? 'border-[#0a1a17]' : 'border-white'}`}></span>
               </div>
-            </div>
-          )}
+            </button>
+
+            {isProfileOpen && (
+              <div className={`absolute right-0 mt-4 w-56 md:w-64 backdrop-blur-xl border rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200 ${isDark ? 'bg-[#0a1a17]/95 border-[#1a4a40]' : 'bg-white/95 border-gray-200'}`}>
+                <div className={`px-5 py-4 border-b mx-1 -mt-2 rounded-t-xl ${isDark ? 'border-[#1a4a40]/50 bg-white/5' : 'border-gray-100 bg-gray-50/50'}`}>
+                  <p className={`text-sm font-black truncate ${isDark ? 'text-white' : 'text-gray-800'}`}>{user.name}</p>
+                  <p className={`text-[10px] font-bold mt-0.5 truncate text-gray-500 uppercase tracking-tighter`}>{user.email}</p>
+                </div>
+                <div className="py-2 px-1 space-y-1">
+                  <Link href="/dashboard/admin/profile" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl mx-2 transition-all ${isDark ? 'text-gray-300 hover:bg-white/10 hover:text-white' : 'text-gray-700 hover:bg-emerald-50 hover:text-emerald-700'}`}>
+                    <UserIcon className="w-4 h-4" />
+                    Profile Settings
+                  </Link>
+                  <Link href="/dashboard/admin/settings" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl mx-2 transition-all ${isDark ? 'text-gray-300 hover:bg-white/10 hover:text-white' : 'text-gray-700 hover:bg-emerald-50 hover:text-emerald-700'}`}>
+                    <Settings className="w-4 h-4" />
+                    Dashboard Config
+                  </Link>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>
@@ -242,7 +234,7 @@ function TopbarContent({ loggedInUser }) {
 
 export default function Topbar(props) {
   return (
-    <Suspense fallback={<div className="h-15 w-full border-b bg-transparent" />}>
+    <Suspense fallback={<div className="h-16 w-full border-b bg-transparent animate-pulse" />}>
       <TopbarContent {...props} />
     </Suspense>
   );

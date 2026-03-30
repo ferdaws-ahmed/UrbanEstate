@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useTheme } from '../../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
 import { Calendar, MoreHorizontal, CheckCircle2 } from 'lucide-react';
 
 export default function PendingApprovals({ approvals }) {
@@ -9,9 +9,9 @@ export default function PendingApprovals({ approvals }) {
 
 
   const [data, setData] = useState(approvals || [
-    { id: 1, agentName: 'Sarah Johnson', properties: 13, revenue: '$300K', location: 'Dhaka', status: 'Pending', color: 'amber' },
-    { id: 2, agentName: 'Robert Taylor', properties: 8, revenue: '$150K', location: 'Chittagong', status: 'Pending', color: 'amber' },
-    { id: 3, agentName: 'Michael Chen', properties: 5, revenue: '$90K', location: 'Sylhet', status: 'Approved', color: 'emerald' },
+    { id: 1, SellerName: 'Sarah Johnson', properties: 13, revenue: '$300K', location: 'Dhaka', status: 'Pending', color: 'amber' },
+    { id: 2, SellerName: 'Robert Taylor', properties: 8, revenue: '$150K', location: 'Chittagong', status: 'Pending', color: 'amber' },
+    { id: 3, SellerName: 'Michael Chen', properties: 5, revenue: '$90K', location: 'Sylhet', status: 'Approved', color: 'emerald' },
   ]);
 
   // Dropdown & Toast States
@@ -74,7 +74,7 @@ export default function PendingApprovals({ approvals }) {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className={`border-b text-[10px] font-black uppercase tracking-widest ${isDark ? 'border-[#1a4a40] text-gray-400' : 'border-gray-100 text-gray-400'}`}>
-                <th className="pb-3 px-2 whitespace-nowrap">Agent</th>
+                <th className="pb-3 px-2 whitespace-nowrap">Seller</th>
                 <th className="pb-3 text-center whitespace-nowrap">Sales</th>
                 <th className="pb-3 pr-2 text-right whitespace-nowrap">Status</th>
               </tr>
@@ -84,9 +84,9 @@ export default function PendingApprovals({ approvals }) {
                 <tr key={item.id} className="group hover:bg-white/5 transition-colors">
                   <td className="py-3 px-2 min-w-[140px]">
                     <div className="flex items-center gap-3">
-                      <img src={`https://ui-avatars.com/api/?name=${item.agentName}&background=random&color=fff&bold=true`} className="w-8 h-8 rounded-lg shrink-0 shadow-sm" alt="" />
+                      <img src={`https://ui-avatars.com/api/?name=${item.SellerName}&background=random&color=fff&bold=true`} className="w-8 h-8 rounded-lg shrink-0 shadow-sm" alt="" />
                       <div className="min-w-0">
-                        <p className={`text-[12px] font-black truncate ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>{item.agentName}</p>
+                        <p className={`text-[12px] font-black truncate ${isDark ? 'text-gray-200' : 'text-gray-900'}`}>{item.SellerName}</p>
                         <p className="text-[9px] font-bold text-gray-500 truncate">{item.location}</p>
                       </div>
                     </div>

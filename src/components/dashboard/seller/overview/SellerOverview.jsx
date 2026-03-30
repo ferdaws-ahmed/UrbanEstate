@@ -21,6 +21,8 @@ export default function SellerOverview() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [unreadCount, setUnreadCount] = useState(0);
+
   const fetchDashboardData = async (silent = false) => {
     try {
       if (!silent) setLoading(true);
@@ -49,6 +51,12 @@ export default function SellerOverview() {
         recentInquiries: Array.isArray(json.recentInquiries) ? json.recentInquiries : [],
         listings: Array.isArray(json.listings) ? json.listings : [],
       });
+
+      // Fetch unread messages count
+      const unreadRes = await fetch("/api/user/dashboard");
+      const unreadData = await unreadRes.json();
+      if (unreadRes.ok) setUnreadCount(unreadData.stats.unreadMessages || 0);
+
     } catch (e) {
       setError(e.message);
     } finally {
@@ -65,10 +73,10 @@ export default function SellerOverview() {
 
     fetchDashboardData();
 
-    // Polling for real-time updates every 10 seconds for overview
+    // Polling for real-time updates every 5 seconds for overview
     const interval = setInterval(() => {
       fetchDashboardData(true);
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [status, router]);
@@ -130,13 +138,26 @@ export default function SellerOverview() {
         <MyListingsTable listings={data.listings} />
       </div>
 
+      {/* Floating Chat Icon */}
       <Link
-        href="/dashboard/seller/leads"
-        className={`fixed bottom-6 right-6 z-[70] flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform hover:scale-105
-          ${isDark ? "bg-[#1a4a40] text-[#cddfa0]" : "bg-teal-600 text-white"}`}
+        href="/dashboard/seller/chat"
+        className={`fixed bottom-10 right-10 z-[100] flex h-16 w-16 items-center justify-center rounded-[2rem] shadow-2xl transition-all duration-500 hover:scale-110 active:scale-95 group
+          ${isDark ? "bg-[#1a4a40] border border-white/10" : "bg-teal-600 border border-teal-500"}
+          ${unreadCount > 0 ? "animate-bounce ring-8 ring-teal-500/30 shadow-teal-500/60" : ""}`}
         aria-label="Messages"
       >
-        <MessageCircle className="h-7 w-7" />
+        <MessageCircle className={`h-8 w-8 text-white ${unreadCount > 0 ? "animate-pulse" : ""}`} />
+        
+        {unreadCount > 0 && (
+          <span className="absolute -top-2 -right-2 h-7 w-7 flex items-center justify-center bg-red-600 text-white text-[10px] font-black rounded-full border-2 border-white dark:border-[#0b1f1a] shadow-lg animate-in zoom-in duration-300">
+            {unreadCount}
+          </span>
+        )}
+
+        {/* Tooltip */}
+        <div className="absolute right-20 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap shadow-xl border border-white/10">
+          {unreadCount > 0 ? `${unreadCount} New Messages` : "Open Messenger"}
+        </div>
       </Link>
     </div>
   );

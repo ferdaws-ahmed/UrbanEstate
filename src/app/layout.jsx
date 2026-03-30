@@ -7,6 +7,10 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import Navbar from "../components/shared/Navbar";
 import { ThemeProvider } from "../components/Theme/ThemeContext";
+import { ReportProvider } from "../context/ReportContext";
+import { ChatProvider } from "../context/ChatContext";
+import FloatingChatButton from "../components/dashboard/admin/ChatRelated/FloatingChatButton";
+import FloatingReportButton from "../components/dashboard/admin/ReportRelated/FloatingReportButton";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
@@ -28,15 +32,21 @@ export default function RootLayout({ children }) {
       >
         <ThemeProvider>
           <AuthProvider>
-            {/* Jodi Dashboard na hoy, tobei Navbar dekhabe */}
-            {!isDashboard && <Navbar />}
-            
-            <div suppressHydrationWarning className="flex-grow">{children}</div>
+            <ReportProvider>
+              <ChatProvider>
+                {/* Jodi Dashboard na hoy, tobei Navbar dekhabe */}
+                {!isDashboard && <Navbar />}
+                
+                <div suppressHydrationWarning className="flex-grow">{children}</div>
 
-            {/* Jodi Dashboard na hoy, tobei Footer dekhabe */}
-            {!isDashboard && <Footer />}
+                {/* Jodi Dashboard na hoy, tobei Footer dekhabe */}
+                {!isDashboard && <Footer />}
 
-            <Toaster position="top-center" />
+                <Toaster position="top-center" />
+                <FloatingChatButton />
+                <FloatingReportButton />
+              </ChatProvider>
+            </ReportProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useTheme } from '../../../ThemeProvider';
+import { useTheme } from '@/src/components/Theme/ThemeContext';
 import { Home, Building2, Map, Building, Store, MoreHorizontal } from 'lucide-react';
 
 export default function PropertyType() {
