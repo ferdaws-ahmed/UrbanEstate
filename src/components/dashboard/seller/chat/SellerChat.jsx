@@ -14,12 +14,11 @@ import {
   ArrowLeft,
   Loader2,
   Inbox,
-  MessageCircle
+  MessageCircle,
+  Plus,
+  X,
+  Trash2
 } from "lucide-react";
-import { useTheme } from "@/src/components/Theme/ThemeContext";
-import { useChat } from "@/src/context/ChatContext";
-import toast from "react-hot-toast";
-import { Plus, X } from "lucide-react";
 
 export default function SellerChat() {
   const { data: session } = useSession();
@@ -99,9 +98,37 @@ export default function SellerChat() {
         }),
       });
       if (res.ok) {
-        const data = await res.json();
-        setMessages([...messages, data]);
-        fetchConversations(); // Update last message in sidebar
+        fetchMessages(activeChat.id);
+        fetchConversations();
+        fetchChatCount();
+      }
+    } catch (e) { console.error(e); }
+  };
+
+  const handleDeleteMessage = async (messageId) => {
+    if (!confirm("Are you sure you want to delete this message?")) return;
+    try {
+      const res = await fetch(`/api/messages?messageId=${messageId}`, {
+        method: "DELETE"
+      });
+      if (res.ok) {
+        toast.success("Message deleted");
+        fetchMessages(activeChat.id);
+      }
+    } catch (e) { console.error(e); }
+  };
+
+  const handleDeleteConversation = async (partnerId) => {
+    if (!confirm("Are you sure you want to delete the entire conversation?")) return;
+    try {
+      const res = await fetch(`/api/messages?partnerId=${partnerId}`, {
+        method: "DELETE"
+      });
+      if (res.ok) {
+        toast.success("Conversation deleted");
+        setActiveChat(null);
+        fetchConversations();
+        fetchChatCount();
       }
     } catch (e) { console.error(e); }
   };
@@ -302,8 +329,12 @@ export default function SellerChat() {
                 <button className={`p-2 md:p-3 rounded-xl transition-all ${isDark ? "hover:bg-white/5 text-slate-400" : "hover:bg-slate-100 text-slate-500"}`}>
                   <Video size={18} />
                 </button>
-                <button className={`p-2 md:p-3 rounded-xl transition-all ${isDark ? "hover:bg-white/5 text-slate-400" : "hover:bg-slate-100 text-slate-500"}`}>
-                  <MoreVertical size={18} />
+                <button 
+                  onClick={() => handleDeleteConversation(activeChat.id)}
+                  title="Delete Conversation"
+                  className={`p-2 md:p-3 rounded-xl transition-all ${isDark ? "hover:bg-red-500/10 text-red-400" : "hover:bg-red-50 text-red-500"}`}
+                >
+                  <Trash2 size={18} />
                 </button>
               </div>
             </div>
@@ -319,7 +350,7 @@ export default function SellerChat() {
                   const isMe = msg.senderId === session.user.id;
                   return (
                     <div key={i} className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
-                      <div className={`max-w-[80%] md:max-w-[70%] group`}>
+                      <div className={`max-w-[80%] md:max-w-[70%] group relative`}>
                         <div className={`p-4 rounded-[1.5rem] text-sm font-medium transition-all ${
                           isMe 
                             ? "bg-teal-600 text-white rounded-br-none shadow-lg shadow-teal-600/20" 
@@ -327,6 +358,17 @@ export default function SellerChat() {
                         }`}>
                           {msg.text}
                         </div>
+                        
+                        {/* Delete message button */}
+                        <button 
+                          onClick={() => handleDeleteMessage(msg._id)}
+                          className={`absolute top-0 ${isMe ? "-left-8" : "-right-8"} p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all ${
+                            isDark ? "bg-white/5 text-red-400 hover:bg-red-500/20" : "bg-slate-100 text-red-500 hover:bg-red-50"
+                          }`}
+                        >
+                          <Trash2 size={12} />
+                        </button>
+
                         <div className={`flex items-center gap-2 mt-1.5 px-1 ${isMe ? "justify-end" : "justify-start"}`}>
                           <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">
                             {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

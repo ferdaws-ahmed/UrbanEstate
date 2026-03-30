@@ -20,13 +20,15 @@ export default function AdminReportPage({ userRole }) {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [subject, setSubject] = useState('');
+  const [reportedUserEmail, setReportedUserEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [expandedId, setExpandedId] = useState(null);
 
-  const fetchReports = async () => {
+  const fetchReports = async (showLoading = true) => {
     try {
+      if (showLoading) setLoading(true);
       const res = await fetch('/api/reports');
       const data = await res.json();
       if (res.ok) {
@@ -45,17 +47,20 @@ export default function AdminReportPage({ userRole }) {
     } catch (err) {
       console.error("Error fetching reports:", err);
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchReports();
+    // Real-time polling every 5 seconds
+    const interval = setInterval(() => fetchReports(false), 5000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!subject || !message) return;
+    if (!subject || !message || !reportedUserEmail) return;
 
     setSubmitting(true);
     setError('');
@@ -65,16 +70,18 @@ export default function AdminReportPage({ userRole }) {
       const res = await fetch('/api/reports', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subject, message })
+        body: JSON.stringify({ subject, message, reportedUserEmail })
       });
 
       if (res.ok) {
         setSuccess('Report submitted successfully to admin.');
         setSubject('');
+        setReportedUserEmail('');
         setMessage('');
         fetchReports();
       } else {
-        setError('Failed to submit report. Please try again.');
+        const data = await res.json();
+        setError(data.error || 'Failed to submit report. Please try again.');
       }
     } catch (err) {
       setError('An error occurred. Please try again.');
@@ -112,6 +119,24 @@ export default function AdminReportPage({ userRole }) {
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="What is this report about?"
+              className={`w-full px-5 py-4 rounded-2xl border-2 outline-none transition-all font-bold ${
+                isDark 
+                ? 'bg-black/20 border-white/5 text-white focus:border-red-500/50' 
+                : 'bg-slate-50 border-slate-100 text-slate-900 focus:border-red-500/30'
+              }`}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className={`text-xs font-black uppercase tracking-widest ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+              User Email to Report
+            </label>
+            <input
+              type="email"
+              value={reportedUserEmail}
+              onChange={(e) => setReportedUserEmail(e.target.value)}
+              placeholder="Enter the email of the user you are reporting"
               className={`w-full px-5 py-4 rounded-2xl border-2 outline-none transition-all font-bold ${
                 isDark 
                 ? 'bg-black/20 border-white/5 text-white focus:border-red-500/50' 

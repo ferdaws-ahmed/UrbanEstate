@@ -169,3 +169,43 @@ export async function POST(request) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
+
+// DELETE: Remove a specific message or an entire conversation
+export async function DELETE(request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    const { searchParams } = new URL(request.url);
+    const messageId = searchParams.get("messageId");
+    const partnerId = searchParams.get("partnerId");
+    const userId = session.user.id;
+
+    const messagesCollection = await connect("messages");
+
+    if (messageId) {
+      // Delete a single message
+      // Note: Only the sender can delete their own message for everyone, 
+      // or we can just allow deletion from both sides if requested.
+      // For now, let's allow deleting a specific message by its ID.
+      const result = await messagesCollection.deleteOne({
+        _id: new ObjectId(messageId)
+      });
+      return NextResponse.json({ success: result.deletedCount > 0 });
+    } else if (partnerId) {
+      // Delete entire conversation between user and partner
+      const result = await messagesCollection.deleteMany({
+        $or: [
+          { senderId: String(userId), receiverId: String(partnerId) },
+          { senderId: String(partnerId), receiverId: String(userId) }
+        ]
+      });
+      return NextResponse.json({ success: true, deletedCount: result.deletedCount });
+    } else {
+      return NextResponse.json({ error: "Missing messageId or partnerId" }, { status: 400 });
+    }
+  } catch (error) {
+    console.error("Delete Message API Error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}

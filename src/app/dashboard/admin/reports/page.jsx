@@ -28,16 +28,16 @@ export default function ReportsPage() {
   const [replyMessage, setReplyMessage] = useState('');
   const [submittingReply, setSubmittingReply] = useState(false);
 
-  const fetchReports = async () => {
+  const fetchReports = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const res = await fetch('/api/admin/reports');
       const data = await res.json();
       setReports(data);
     } catch (error) {
       console.error("Error fetching reports:", error);
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 
@@ -72,6 +72,10 @@ export default function ReportsPage() {
     fetchReports();
     // After visiting the page, we should refresh the count in context
     fetchCount();
+    
+    // Real-time polling every 5 seconds
+    const interval = setInterval(() => fetchReports(false), 5000);
+    return () => clearInterval(interval);
   }, []);
 
   const filteredReports = reports.filter(r => {
@@ -176,6 +180,12 @@ export default function ReportsPage() {
                         <User size={14} className="text-red-500" />
                         <span>By: {report.userName || report.reportedBy || 'Anonymous'} ({report.userRole || report.reportedByRole || 'User'})</span>
                       </div>
+                      {report.reportedUserEmail && (
+                        <div className="flex items-center gap-1.5">
+                          <AlertTriangle size={14} className="text-orange-500" />
+                          <span>Reported User: {report.reportedUserEmail}</span>
+                        </div>
+                      )}
                       {report.type === 'property' && (
                         <div className="flex items-center gap-1.5">
                           <Home size={14} className="text-amber-500" />

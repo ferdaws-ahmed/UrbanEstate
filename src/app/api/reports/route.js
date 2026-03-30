@@ -35,9 +35,9 @@ export async function POST(request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { subject, message } = await request.json();
-    if (!subject || !message) {
-      return NextResponse.json({ error: "Missing subject or message" }, { status: 400 });
+    const { subject, message, reportedUserEmail } = await request.json();
+    if (!subject || !message || !reportedUserEmail) {
+      return NextResponse.json({ error: "Missing subject, message, or reported user email" }, { status: 400 });
     }
 
     const adminReportsColl = await connect("admin-reports");
@@ -47,6 +47,7 @@ export async function POST(request) {
       userEmail: session.user.email,
       userRole: session.user.role,
       subject,
+      reportedUserEmail,
       message,
       status: "unread", // Admin hasn't read it
       adminReply: null,
