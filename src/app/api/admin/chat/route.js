@@ -58,7 +58,9 @@ async function getAllConversations(adminIdStr) {
     { $unwind: { path: "$userDetails", preserveNullAndEmptyArrays: true } },
     {
         $project: {
-            id: { $ifNull: ["$userDetails._id", "$_id"] },
+            // Same id as stored in messages (partner uid / thread key). Do not use userDetails._id
+            // or open-chat / polling breaks when uid ≠ Mongo _id.
+            id: { $toString: "$_id" },
             name: { $ifNull: ["$userDetails.name", "Unknown"] },
             image: { $ifNull: ["$userDetails.image", null] },
             role: { $ifNull: ["$userDetails.role", "user"] },
@@ -72,7 +74,8 @@ async function getAllConversations(adminIdStr) {
                 }
             }
         }
-    }
+    },
+    { $sort: { lastMessageTime: -1 } },
   ]).toArray();
 
   return conversations;
