@@ -140,7 +140,7 @@ export default function PropertyCard({ property, onToggleCompare, isSelected }) 
           </div>
         </div>
 
-        <Link href={`/propertydetails/${property?._id}`} prefetch={true} className="block">
+        <Link href={`/propertydetails/${property?._id}?view=1`} prefetch={true} className="block">
           <div className={`w-full flex items-center justify-center gap-2 ${isDark ? "bg-[#0f2e28]" : "bg-white"} ${isDark ? "text-white" : "text-black"} py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest border border-white/10 transition-all duration-200 group/btn shadow-lg active:scale-95 cursor-pointer`}>
             <span className="group-hover/btn:text-[#cddfa0] transition-colors">View Details</span>
             <ArrowUpRight size={16} className="group-hover/btn:text-[#cddfa0] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-all" />

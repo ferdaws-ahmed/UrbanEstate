@@ -262,7 +262,7 @@ export default function SellerLeadsPage() {
                           </div>
                         </div>
                         <Link 
-                          href={`/propertydetails/${lead.propertyId}`}
+                          href={`/propertydetails/${lead.propertyId}?view=1`}
                           className={`shrink-0 p-2 rounded-lg transition-all ${
                             isDark ? 'text-[#cddfa0] hover:bg-[#cddfa0]/10' : 'text-teal-600 hover:bg-teal-600/10'
                           }`}

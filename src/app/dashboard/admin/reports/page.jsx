@@ -157,7 +157,7 @@ export default function ReportsPage() {
                   <div className="flex items-center gap-3">
                     {report.type === 'property' ? (
                       <Link 
-                        href={`/propertydetails/${report.propertyId}`}
+                        href={`/propertydetails/${report.propertyId}?view=1`}
                         className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
                           isDark ? 'bg-white/5 text-white hover:bg-white/10' : 'bg-slate-100 text-slate-900 hover:bg-slate-200'
                         }`}

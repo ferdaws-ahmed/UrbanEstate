@@ -121,7 +121,7 @@ export default function CompareModal({ open, items, onClose }) {
             <div className="flex gap-3">
               <button onClick={onClose} className="px-6 py-3 rounded-2xl text-white/40 font-bold text-[10px] uppercase tracking-widest hover:text-white transition-colors">Close</button>
               {recommendation && (
-                <Link href={`/propertydetails/${recommendation.bestValue._id}`}>
+                <Link href={`/propertydetails/${recommendation.bestValue._id}?view=1`}>
                   <button className="bg-[#cddfa0] text-[#0f2e28] px-8 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:shadow-[0_0_20px_rgba(205,223,160,0.3)] transition-all flex items-center gap-2">
                     View Best Deal <ArrowRight size={14} />
                   </button>

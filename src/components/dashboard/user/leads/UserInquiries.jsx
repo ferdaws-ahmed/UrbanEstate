@@ -134,7 +134,7 @@ export default function UserInquiries() {
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Asset Reference</p>
                         <h4 className={`text-lg font-black truncate leading-tight ${isDark ? "text-white" : "text-slate-900"}`}>{item.propertyTitle}</h4>
                      </div>
-                     <Link href={`/propertydetails/${item.propertyId}`} className={`ml-auto p-3 rounded-xl hover:bg-blue-600 hover:text-white transition-all ${
+                     <Link href={`/propertydetails/${item.propertyId}?view=1`} className={`ml-auto p-3 rounded-xl hover:bg-blue-600 hover:text-white transition-all ${
                        isDark ? "bg-white/5 text-slate-400" : "bg-slate-50 text-slate-500"
                      }`}>
                         <ExternalLink size={18} />
@@ -190,7 +190,7 @@ export default function UserInquiries() {
                       <h4 className={`text-xs font-bold truncate ${isDark ? "text-white" : "text-slate-900"}`}>{like.title}</h4>
                       <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{like.location}</p>
                     </div>
-                    <Link href={`/propertydetails/${like.id}`} className="p-2 rounded-lg bg-blue-600 text-white shadow-lg shadow-blue-600/20">
+                    <Link href={`/propertydetails/${like.id}?view=1`} className="p-2 rounded-lg bg-blue-600 text-white shadow-lg shadow-blue-600/20">
                       <ExternalLink size={14} />
                     </Link>
                   </div>
@@ -211,7 +211,7 @@ export default function UserInquiries() {
                     <p className={`text-xs italic leading-relaxed ${isDark ? "text-slate-300" : "text-slate-600"}`}>"{c.comment || c.text}"</p>
                     <div className="flex justify-between items-center mt-3 pt-3 border-t border-slate-100 dark:border-white/5">
                       <span className="text-[9px] text-slate-400 font-bold uppercase">{new Date(c.createdAt).toLocaleDateString()}</span>
-                      <Link href={`/propertydetails/${c.propertyId}`} className="text-[9px] font-black text-blue-600 uppercase tracking-widest hover:underline">View Property</Link>
+                    <Link href={`/propertydetails/${c.propertyId}?view=1`} className="text-[9px] font-black text-blue-600 uppercase tracking-widest hover:underline">View Property</Link>
                     </div>
                   </div>
                 ))}
@@ -242,7 +242,7 @@ export default function UserInquiries() {
                       <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Paid</p>
                       <p className="text-blue-600 font-black text-sm">${p.amount?.toLocaleString()}</p>
                     </div>
-                    <Link href={`/propertydetails/${p.propertyId}`} className="p-3 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/20 hover:scale-105 transition-transform">
+                    <Link href={`/propertydetails/${p.propertyId}?view=1`} className="p-3 rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/20 hover:scale-105 transition-transform">
                       <ExternalLink size={16} />
                     </Link>
                   </div>

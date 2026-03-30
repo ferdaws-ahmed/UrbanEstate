@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { 
   Bed, Bath, Maximize, MapPin, 
   Heart, Share2, ChevronLeft, 
-  ShieldCheck, Calendar, MessageSquare, Radar, Activity,
+  ShieldCheck, Calendar, MessageSquare, Radar, Activity, Flag, X,
   ShoppingBag, PhoneCall, Eye, Send, User as UserIcon
 } from "lucide-react";
 import Link from "next/link";
@@ -29,6 +29,16 @@ export default function PropertyDetailsClient({ property: initialProperty }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+
+  // Property report modal state
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+  const [isSubmittingReport, setIsSubmittingReport] = useState(false);
+
+  // Comment reply state
+  const [replyToCommentId, setReplyToCommentId] = useState(null);
+  const [replyText, setReplyText] = useState("");
+  const [isSubmittingReply, setIsSubmittingReply] = useState(false);
 
   const fetchComments = async (silent = false) => {
     try {
@@ -84,11 +94,56 @@ export default function PropertyDetailsClient({ property: initialProperty }) {
     }
   };
 
+  const handleAddReply = async (e) => {
+    e.preventDefault();
+    if (!session?.user) {
+      toast.error("Please login to reply");
+      return;
+    }
+    if (!replyToCommentId) return;
+    if (!replyText.trim()) return;
+
+    setIsSubmittingReply(true);
+    try {
+      const res = await fetch("/api/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          propertyId: property._id,
+          sellerId: property.sellerId,
+          comment: replyText.trim(),
+          parentCommentId: replyToCommentId,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setReplyText("");
+        setReplyToCommentId(null);
+        setComments((prev) => [data.comment, ...prev]);
+        toast.success("Reply added!");
+      } else {
+        toast.error(data.error || "Failed to add reply");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong");
+    } finally {
+      setIsSubmittingReply(false);
+    }
+  };
+
   const isOwner = session?.user?.id === property.sellerId;
+  const isOwnerSeller = session?.user?.role === "seller" && session?.user?.id === property.sellerId;
 
   const handleContactSeller = async () => {
     if (!session?.user) {
       toast.error("Please login to contact seller");
+      return;
+    }
+
+    if (isOwnerSeller) {
+      toast.error("You cannot contact the seller for your own property.");
       return;
     }
     
@@ -134,6 +189,52 @@ export default function PropertyDetailsClient({ property: initialProperty }) {
     }
   };
 
+  const handleSubmitReport = async (e) => {
+    e.preventDefault();
+    if (!session?.user) {
+      toast.error("Please login to report");
+      return;
+    }
+
+    if (isOwnerSeller) {
+      toast.error("You cannot report your own property.");
+      return;
+    }
+
+    if (!reportReason.trim()) {
+      toast.error("Please write a report reason.");
+      return;
+    }
+
+    setIsSubmittingReport(true);
+    try {
+      const res = await fetch("/api/property/report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          propertyId: property._id,
+          sellerId: property.sellerId,
+          reason: reportReason.trim(),
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        toast.error(data.error || "Failed to submit report");
+        return;
+      }
+
+      setIsReportModalOpen(false);
+      setReportReason("");
+      toast.success("Report submitted successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong while submitting report.");
+    } finally {
+      setIsSubmittingReport(false);
+    }
+  };
+
   const handleFavorite = async () => {
     if (!session?.user) {
       toast.error("Please login to favorite properties");
@@ -168,6 +269,15 @@ export default function PropertyDetailsClient({ property: initialProperty }) {
   };
 
   const formattedPrice = new Intl.NumberFormat('en-IN').format(property.price || 0);
+
+  const topLevelComments = comments.filter((c) => !c.parentCommentId);
+  const repliesByParent = comments.reduce((acc, c) => {
+    if (!c.parentCommentId) return acc;
+    const key = String(c.parentCommentId);
+    acc[key] = acc[key] || [];
+    acc[key].push(c);
+    return acc;
+  }, {});
 
   return (
     <div className={`min-h-screen transition-colors duration-500 overflow-x-hidden ${isDark ? 'bg-[#061510] text-white' : 'bg-white text-slate-900'}`}>
@@ -310,32 +420,126 @@ export default function PropertyDetailsClient({ property: initialProperty }) {
                         <p className="font-black uppercase tracking-widest text-[10px]">No transmission data found</p>
                       </div>
                     ) : (
-                      comments.map((cmt, idx) => (
-                        <div key={idx} className="flex gap-6 group animate-in slide-in-from-left-4 duration-500">
-                          <div className={`h-12 w-12 rounded-2xl overflow-hidden shrink-0 border-2 transition-transform group-hover:scale-110 ${isDark ? 'border-white/10' : 'border-white shadow-md'}`}>
-                            {cmt.userImage ? (
-                              <img src={cmt.userImage} className="h-full w-full object-cover" alt="" />
-                            ) : (
-                              <div className={`h-full w-full flex items-center justify-center font-black ${isDark ? 'bg-[#0a2e26] text-[#cddfa0]' : 'bg-teal-50 text-teal-600'}`}>
-                                {cmt.userName?.charAt(0)}
+                      topLevelComments.map((cmt) => {
+                        const replies = repliesByParent[String(cmt._id)] || [];
+                        return (
+                          <div key={String(cmt._id)} className="flex flex-col gap-4">
+                            <div className="flex gap-6 group animate-in slide-in-from-left-4 duration-500">
+                              <div className={`h-12 w-12 rounded-2xl overflow-hidden shrink-0 border-2 transition-transform group-hover:scale-110 ${isDark ? 'border-white/10' : 'border-white shadow-md'}`}>
+                                {cmt.userImage ? (
+                                  <img src={cmt.userImage} className="h-full w-full object-cover" alt="" />
+                                ) : (
+                                  <div className={`h-full w-full flex items-center justify-center font-black ${isDark ? 'bg-[#0a2e26] text-[#cddfa0]' : 'bg-teal-50 text-teal-600'}`}>
+                                    {cmt.userName?.charAt(0)}
+                                  </div>
+                                )}
                               </div>
-                            )}
-                          </div>
-                          <div className="flex-1 space-y-2">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                <span className={`text-sm font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>{cmt.userName}</span>
-                                <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${isDark ? 'bg-white/5 text-white/30' : 'bg-slate-50 text-slate-400'}`}>
-                                  {new Date(cmt.createdAt).toLocaleDateString()}
-                                </span>
+                              <div className="flex-1 space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-3">
+                                    <span className={`text-sm font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>{cmt.userName}</span>
+                                    <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${isDark ? 'bg-white/5 text-white/30' : 'bg-slate-50 text-slate-400'}`}>
+                                      {new Date(cmt.createdAt).toLocaleDateString()}
+                                    </span>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setReplyToCommentId(String(cmt._id));
+                                      setReplyText("");
+                                    }}
+                                    className={`text-[10px] font-black uppercase tracking-widest transition-all ${
+                                      isDark
+                                        ? 'text-[#cddfa0] hover:bg-white/10'
+                                        : 'text-teal-600 hover:bg-teal-50'
+                                  } px-3 py-2 rounded-xl ${replyToCommentId === String(cmt._id) ? 'bg-white/5' : ''}`}
+                                  >
+                                    Reply
+                                  </button>
+                                </div>
+                                <div className={`text-[15px] leading-relaxed font-medium ${isDark ? 'text-white/60' : 'text-slate-600'}`}>
+                                  {cmt.text}
+                                </div>
+
+                                {replyToCommentId === String(cmt._id) && (
+                                  <form onSubmit={handleAddReply} className="mt-4 space-y-3">
+                                    <textarea
+                                      required
+                                      rows={3}
+                                      value={replyText}
+                                      onChange={(e) => setReplyText(e.target.value)}
+                                      placeholder="Write your reply..."
+                                      className={`w-full px-4 py-3 rounded-xl border outline-none transition-all resize-none ${
+                                        isDark
+                                          ? 'bg-white/5 border-white/10 focus:border-emerald-500 text-white'
+                                          : 'bg-slate-50 border-slate-200 focus:border-emerald-500 text-slate-900'
+                                      }`}
+                                    />
+                                    <div className="flex gap-3">
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setReplyToCommentId(null);
+                                          setReplyText("");
+                                        }}
+                                        className={`flex-1 py-3 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${
+                                          isDark
+                                            ? 'border-white/10 text-slate-300 hover:bg-white/5'
+                                            : 'border-slate-200 text-slate-700 hover:bg-slate-50'
+                                        }`}
+                                      >
+                                        Cancel
+                                      </button>
+                                      <button
+                                        type="submit"
+                                        disabled={isSubmittingReply || !replyText.trim()}
+                                        className="flex-1 py-3 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 transition-all disabled:opacity-50"
+                                      >
+                                        {isSubmittingReply ? (
+                                          <Activity size={16} className="animate-spin" />
+                                        ) : (
+                                          "Submit Reply"
+                                        )}
+                                      </button>
+                                    </div>
+                                  </form>
+                                )}
+
+                                {replies.length > 0 && (
+                                  <div className="mt-6 space-y-4">
+                                    {replies.map((r) => (
+                                      <div key={String(r._id)} className={`flex gap-6 pl-4 border-l ${isDark ? 'border-white/10' : 'border-slate-200'}`}>
+                                        <div className={`h-10 w-10 rounded-2xl overflow-hidden shrink-0 border-2 ${isDark ? 'border-white/10' : 'border-white shadow-sm'}`}>
+                                          {r.userImage ? (
+                                            <img src={r.userImage} className="h-full w-full object-cover" alt="" />
+                                          ) : (
+                                            <div className={`h-full w-full flex items-center justify-center font-black text-[10px] ${isDark ? 'bg-[#0a2e26] text-[#cddfa0]' : 'bg-teal-50 text-teal-600'}`}>
+                                              {r.userName?.charAt(0)}
+                                            </div>
+                                          )}
+                                        </div>
+                                        <div className="flex-1 space-y-2">
+                                          <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                              <span className={`text-sm font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>{r.userName}</span>
+                                              <span className={`text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full ${isDark ? 'bg-white/5 text-white/30' : 'bg-slate-50 text-slate-400'}`}>
+                                                {new Date(r.createdAt).toLocaleDateString()}
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <div className={`text-[14px] leading-relaxed font-medium ${isDark ? 'text-white/60' : 'text-slate-600'}`}>
+                                            {r.text}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
                               </div>
                             </div>
-                            <div className={`text-[15px] leading-relaxed font-medium ${isDark ? 'text-white/60' : 'text-slate-600'}`}>
-                              {cmt.text}
-                            </div>
                           </div>
-                        </div>
-                      ))
+                        );
+                      })
                     )}
                   </div>
                 </div>
@@ -350,16 +554,26 @@ export default function PropertyDetailsClient({ property: initialProperty }) {
               </div>
 
               <div className="space-y-4">
-                <Link
-                  href={`/payment?propertyId=${property._id}&price=${property.price}`}
-                  className={`w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all shadow-lg flex items-center justify-center gap-3 active:scale-95 ${isDark ? 'bg-[#cddfa0] text-[#061510] hover:bg-white' : 'bg-teal-600 text-white hover:bg-teal-700'}`}
-                >
-                  <ShoppingBag size={16} /> Buy Property
-                </Link>
+                {isOwnerSeller ? (
+                  <button
+                    type="button"
+                    disabled
+                    className={`w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all shadow-lg flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isDark ? 'bg-white/5 text-white' : 'bg-slate-100 text-slate-500'}`}
+                  >
+                    <ShoppingBag size={16} /> Buy Property
+                  </button>
+                ) : (
+                  <Link
+                    href={`/payment?propertyId=${property._id}&price=${property.price}`}
+                    className={`w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all shadow-lg flex items-center justify-center gap-3 active:scale-95 ${isDark ? 'bg-[#cddfa0] text-[#061510] hover:bg-white' : 'bg-teal-600 text-white hover:bg-teal-700'}`}
+                  >
+                    <ShoppingBag size={16} /> Buy Property
+                  </Link>
+                )}
                 <button 
                   onClick={handleContactSeller}
-                  disabled={isContacting}
-                  className={`w-full bg-transparent border py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 disabled:opacity-50 ${isDark ? 'border-white/10 text-white hover:bg-white/5' : 'border-slate-200 text-slate-700 hover:bg-slate-50'}`}
+                  disabled={isContacting || isOwnerSeller}
+                  className={`w-full bg-transparent border py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed ${isDark ? 'border-white/10 text-white hover:bg-white/5' : 'border-slate-200 text-slate-700 hover:bg-slate-50'}`}
                 >
                   {isContacting ? (
                     <Activity size={16} className="animate-spin" />
@@ -367,6 +581,17 @@ export default function PropertyDetailsClient({ property: initialProperty }) {
                     <PhoneCall size={16} />
                   )}
                   {isContacting ? "Sending..." : "Contact Seller"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsReportModalOpen(true)}
+                  disabled={isOwnerSeller}
+                  className={`w-full bg-transparent border py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed ${
+                    isDark ? 'border-amber-400/30 text-white hover:bg-amber-400/10' : 'border-amber-500/30 text-slate-700 hover:bg-amber-500/10'
+                  }`}
+                >
+                  <Flag size={16} /> Report Property
                 </button>
               </div>
 
@@ -390,6 +615,52 @@ export default function PropertyDetailsClient({ property: initialProperty }) {
         url={typeof window !== "undefined" ? window.location.href : ""} 
         title={property.title} 
       />
+
+      {/* Report Modal */}
+      {isReportModalOpen && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className={`w-full max-w-md rounded-[2rem] p-6 shadow-2xl ${isDark ? 'bg-[#0b1f1a] border border-[#1a4a40]' : 'bg-white border border-slate-200'}`}>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>Report Property</h3>
+              <button
+                type="button"
+                onClick={() => setIsReportModalOpen(false)}
+                className={`p-2 rounded-xl transition-colors ${isDark ? 'hover:bg-white/10 text-slate-400' : 'hover:bg-slate-100 text-slate-500'}`}
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmitReport} className="space-y-4">
+              <div>
+                <label className={`block text-sm font-bold mb-2 ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                  Report Reason
+                </label>
+                <textarea
+                  required
+                  rows={4}
+                  value={reportReason}
+                  onChange={(e) => setReportReason(e.target.value)}
+                  placeholder="Explain the issue (e.g., wrong details, duplicate listing, fraud concern...)"
+                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all resize-none ${
+                    isDark
+                      ? 'bg-white/5 border-white/10 focus:border-amber-500 text-white'
+                      : 'bg-slate-50 border-slate-200 focus:border-amber-500 text-slate-900'
+                  }`}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmittingReport || !reportReason.trim()}
+                className="w-full py-3 bg-amber-600 text-white font-bold rounded-xl hover:bg-amber-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isSubmittingReport ? <Activity size={18} className="animate-spin" /> : "Submit Report"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

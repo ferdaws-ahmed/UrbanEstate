@@ -153,7 +153,7 @@ export default function UserOverview() {
                       </span>
                     </div>
                   </div>
-                  <Link href={`/propertydetails/${fav.id}`} className={`p-2 rounded-lg ${isDark ? "bg-white/5 text-slate-400" : "bg-white text-slate-400 shadow-sm"}`}>
+                  <Link href={`/propertydetails/${fav.id}?view=1`} className={`p-2 rounded-lg ${isDark ? "bg-white/5 text-slate-400" : "bg-white text-slate-400 shadow-sm"}`}>
                     <ArrowRight size={16} />
                   </Link>
                 </div>

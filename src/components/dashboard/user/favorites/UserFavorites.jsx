@@ -110,7 +110,7 @@ export default function UserFavorites() {
                 </div>
                 
                 <Link 
-                  href={`/propertydetails/${item.id}`}
+                  href={`/propertydetails/${item.id}?view=1`}
                   className={`w-full py-4 rounded-2xl border flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all ${
                     isDark 
                       ? "border-white/10 text-white hover:bg-white/5" 

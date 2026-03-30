@@ -98,7 +98,7 @@ export default function TopPerformingCard({ listing }) {
 
           <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
             <Link
-              href={`/propertydetails/${listing._id}`}
+              href={`/propertydetails/${listing._id}?view=1`}
               className={`w-full sm:w-auto px-8 py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 shadow-xl ${
                 isDark 
                   ? "bg-[#1a4a40] text-white hover:bg-[#cddfa0] hover:text-[#0b1f1a]" 

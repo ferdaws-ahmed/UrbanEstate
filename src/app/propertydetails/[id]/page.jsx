@@ -5,9 +5,10 @@ import { connect } from "@/src/lib/dbConnect";
 import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
+import { cookies } from "next/headers";
 
 // ডাটা ফেচিং ফাংশন - এখন সরাসরি ডাটাবেজ থেকে ফেচ করবে যাতে সেশন পাওয়া যায়
-async function getPropertyData(id) {
+async function getPropertyData(id, { shouldCount = false } = {}) {
   try {
     const session = await getServerSession(authOptions);
     const propertiesCollection = await connect("properties");
@@ -22,14 +23,31 @@ async function getPropertyData(id) {
     const property = await propertiesCollection.findOne({ _id: oid });
     if (!property) return null;
 
-    // Increment visit count (server-side fetch as well)
-    try {
-      await propertiesCollection.updateOne(
-        { _id: oid },
-        { $inc: { visitCount: 1 } }
-      );
-    } catch (vErr) {
-      console.error("Failed to update visit count:", vErr);
+    let visitCount = property.visitCount || 0;
+    if (shouldCount) {
+      const cookieStore = cookies();
+      const cookieKey = `viewed_property_${id}`;
+      const existing = cookieStore.get(cookieKey)?.value === "1";
+
+      // Only increment once per browser (cookie) to avoid reload counting.
+      if (!existing) {
+        try {
+          await propertiesCollection.updateOne(
+            { _id: oid },
+            { $inc: { visitCount: 1 } }
+          );
+          visitCount += 1;
+
+          cookieStore.set(cookieKey, "1", {
+            path: "/",
+            maxAge: 60 * 60 * 24 * 30, // 30 days
+            httpOnly: true,
+            sameSite: "lax",
+          });
+        } catch (vErr) {
+          console.error("Failed to update visit count:", vErr);
+        }
+      }
     }
 
     // ফেভারিট কাউন্ট এবং ইউজার ফেভারিট স্টেট বের করা
@@ -47,7 +65,7 @@ async function getPropertyData(id) {
 
     return {
       ...JSON.parse(JSON.stringify(property)),
-      visitCount: (property.visitCount || 0) + 1, // Include the current visit
+      visitCount,
       favoriteCount,
       isFavorited
     };
@@ -57,9 +75,10 @@ async function getPropertyData(id) {
   }
 }
 
-export default async function PropertyPage({ params }) {
+export default async function PropertyPage({ params, searchParams }) {
   const { id } = await params; 
-  const property = await getPropertyData(id);
+  const shouldCount = searchParams?.view === "1";
+  const property = await getPropertyData(id, { shouldCount });
 
   if (!property) {
     return (

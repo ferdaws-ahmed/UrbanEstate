@@ -62,6 +62,7 @@ export default function PropertyMap() {
     if (!userLocation || !containerRef.current) return;
 
     let mapInstance = null;
+    let invalidateSizeTimeout = null;
 
     const initMap = async () => {
       // 1. Ensure Leaflet is loaded
@@ -137,12 +138,19 @@ export default function PropertyMap() {
 
       mapRef.current = map;
       mapInstance = map;
-      setTimeout(() => map.invalidateSize(), 300);
+      // Leaflet needs an invalidate after mount, but if the component unmounts
+      // (or container is cleared) within 300ms, Leaflet may throw.
+      invalidateSizeTimeout = setTimeout(() => {
+        if (mapRef.current && mapRef.current === map) {
+          mapRef.current.invalidateSize();
+        }
+      }, 300);
     };
 
     initMap();
 
     return () => {
+      if (invalidateSizeTimeout) clearTimeout(invalidateSizeTimeout);
       if (mapInstance) {
         mapInstance.off();
         mapInstance.remove();

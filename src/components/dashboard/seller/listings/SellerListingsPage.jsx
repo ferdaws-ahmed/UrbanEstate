@@ -205,7 +205,7 @@ export default function SellerListingsPage() {
                     <td className="px-10 py-6 text-right">
                       <div className="flex items-center justify-end gap-3">
                         <Link 
-                          href={`/propertydetails/${p._id}`}
+                          href={`/propertydetails/${p._id}?view=1`}
                           className={`p-3 rounded-xl transition-all ${isDark ? "bg-white/5 text-slate-300 hover:bg-teal-500 hover:text-white" : "bg-slate-50 text-slate-500 hover:bg-teal-600 hover:text-white"}`}
                           title="View Asset"
                         >
