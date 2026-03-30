@@ -153,7 +153,7 @@ export default function SellerDraftsPage() {
                   <div className="flex items-center gap-3">
                     <DollarSign size={16} className="text-teal-600" />
                     <span className="text-[11px] font-black tracking-[0.1em] uppercase" style={{ color: 'var(--ue-text-main)' }}>
-                      ৳ {draft.price ? Number(draft.price).toLocaleString() : "0"}
+                     $ {draft.price ? Number(draft.price).toLocaleString() : "0"}
                     </span>
                   </div>
                   <div className="flex items-center gap-3">

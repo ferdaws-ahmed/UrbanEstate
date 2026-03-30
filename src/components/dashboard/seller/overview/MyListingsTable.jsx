@@ -161,7 +161,7 @@ export default function MyListingsTable({ listings = [] }) {
                           {p.title}
                         </p>
                         <p className="text-[11px] font-black text-teal-600 dark:text-[#cddfa0] uppercase tracking-widest mt-1">
-                          ৳ {p.price?.toLocaleString()}
+                         $ {p.price?.toLocaleString()}
                         </p>
                       </div>
                     </div>

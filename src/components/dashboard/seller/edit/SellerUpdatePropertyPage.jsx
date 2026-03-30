@@ -183,7 +183,7 @@ export default function SellerUpdatePropertyPage({ propertyId }) {
                 <div className={`p-6 rounded-3xl border transition-colors ${isDark ? "bg-white/5 border-white/5" : "bg-slate-50 border-slate-100"}`}>
                   <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-500 mb-2">Price Point</p>
                   <p className="text-3xl font-black text-teal-600 tracking-tighter">
-                    ৳ {formData.price ? Number(formData.price).toLocaleString() : "0.00"}
+                   $ {formData.price ? Number(formData.price).toLocaleString() : "0.00"}
                   </p>
                 </div>
               </div>

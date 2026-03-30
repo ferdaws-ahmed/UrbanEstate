@@ -13,6 +13,7 @@ import {
   ArrowLeft,
   Bell,
   MessageCircle,
+  ShieldAlert,
 } from "lucide-react";
 import { useTheme } from "@/src/components/Theme/ThemeContext";
 import { useState, useEffect } from "react";
@@ -24,6 +25,7 @@ const menuItems = [
   { name: "Saved Assets", path: "/dashboard/user/favorites", icon: Heart },
   { name: "My Inquiries", path: "/dashboard/user/leads", icon: MessageSquare },
   { name: "My Profile", path: "/dashboard/user/profile", icon: User },
+  { name: "Admin Report", path: "/dashboard/user/admin-report", icon: ShieldAlert, badge: "unreadReports" },
   { name: "Settings", path: "/dashboard/user/settings", icon: Settings },
 ];
 
@@ -31,7 +33,7 @@ export default function UserSidebar({ isOpen, onClose }) {
   const pathname = usePathname();
   const { isDark } = useTheme();
   const { data: session } = useSession();
-  const [stats, setStats] = useState({ unreadMessages: 0 });
+  const [stats, setStats] = useState({ unreadMessages: 0, unreadReports: 0 });
 
   // Polling for unread messages
   useEffect(() => {
@@ -41,7 +43,15 @@ export default function UserSidebar({ isOpen, onClose }) {
       try {
         const res = await fetch("/api/user/dashboard");
         const data = await res.json();
-        if (res.ok) setStats({ unreadMessages: data.stats.unreadMessages });
+        if (res.ok) {
+          // Fetch unread reports count
+          const reportsRes = await fetch("/api/reports/unread-count");
+          const reportsData = await reportsRes.json();
+          setStats({ 
+            unreadMessages: data.stats.unreadMessages,
+            unreadReports: reportsData.count || 0
+          });
+        }
       } catch (e) { console.error(e); }
     };
 
