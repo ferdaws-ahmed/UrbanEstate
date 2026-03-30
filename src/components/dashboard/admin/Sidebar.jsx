@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence, useTime, useTransform } from 'framer-motion';
-import React from 'react';
+import React, { useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTheme } from '../../ThemeProvider'; 
@@ -11,9 +11,14 @@ import {
 } from 'lucide-react'; 
 
 const bgImages = {
-  default: "https://i.ibb.co/gZz1V6Ck/1.png",
-  property: "https://i.ibb.co/RnDgvKJ/2.png",
-  clients: "https://i.ibb.co/Y7S2Pyfp/3.png"
+  default: "https://i.ibb.co/7dvk3zt8/11.png", 
+  property: "https://i.ibb.co/LDpNVNHX/12.png",
+  clients: "https://i.ibb.co/QFsNKB04/14.png",
+  agents: "https://i.ibb.co/VY4zHwq7/13.png",
+  analytics: "https://i.ibb.co/Y7S2Pyfp/3.png", 
+  settings: "https://i.ibb.co/RnDgvKJ/2.png", 
+  support: "https://i.ibb.co/gZz1V6Ck/1.png", 
+  help: "https://i.ibb.co/wFZQf8Gv/15.png"
 };
 
 export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed }) { 
@@ -42,19 +47,63 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
   const yTop = useTransform(wave, (val) => `${val * 80}vh`);
   const yBottom = useTransform(wave, (val) => `${-val * 80}vh`);
 
-  const handleLockToggle = (e) => {
-    const colors = isDark ? ['#cddfa0', '#94a894', '#ffffff'] : ['#059669', '#10b981', '#34d399', '#fcd34d'];
+  const handleLockToggle = useCallback((e) => {
+
+    setIsCollapsed((prev) => !prev);
+
+    setTimeout(() => {
+      const flowerColors = ['#ff69b4', '#ffb6c1', '#ffd700', '#87ceeb', '#98fb98', '#dda0dd', '#ff4500', '#00ff7f', '#ba55d3', '#ffffff'];
+      
+      const baseConfig = {
+        spread: 120,
+        startVelocity: 85,
+        colors: flowerColors,
+        zIndex: 9999,
+        disableForReducedMotion: true,
+        useWorker: true 
+      };
+
     
-    confetti({
-      particleCount: 150,
-      spread: 100,
-      origin: { y: e.clientY / window.innerHeight, x: e.clientX / window.innerWidth }, 
-      colors: colors,
-      zIndex: 9999
-    });
-    
-    setIsCollapsed(!isCollapsed);
-  };
+      requestAnimationFrame(() => {
+        confetti({
+          ...baseConfig,
+          particleCount: 250, 
+          angle: 60, 
+          origin: { x: -0.1, y: 1 }, 
+        });
+      });
+
+     
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          confetti({
+            ...baseConfig,
+            particleCount: 250, 
+            angle: 120, 
+            origin: { x: 1.1, y: 1 }, 
+          });
+        });
+      }, 50);
+      
+
+      setTimeout(() => {
+        requestAnimationFrame(() => {
+          confetti({
+            particleCount: 150, 
+            angle: 90,
+            spread: 100,
+            startVelocity: 60,
+            origin: { x: 0.5, y: 1.1 },
+            colors: flowerColors,
+            zIndex: 9999,
+            disableForReducedMotion: true,
+            useWorker: true
+          });
+        });
+      }, 100);
+
+    }, 350); 
+  }, [setIsCollapsed]); 
 
   return (
     <>
@@ -71,8 +120,7 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
       </AnimatePresence>
 
       <aside 
-        // 🔴 ল্যাগ কমানোর জন্য transition-[width,transform], duration-300 এবং will-change-[width] যোগ করা হয়েছে
-        className={`fixed top-0 left-0 min-h-screen z-[90] transition-[width,transform] duration-300 ease-in-out border-r will-change-[width]
+        className={`fixed top-0 left-0 min-h-screen z-[90] transition-[width] duration-300 ease-in-out border-r will-change-[width]
         ${isDark 
           ? 'bg-[#0b1f1a] border-[#1a4a40]/60 shadow-[10px_0_30px_rgba(0,0,0,0.5)]' 
           : 'bg-white border-gray-200 shadow-[10px_0_30px_rgba(0,0,0,0.05)]'
@@ -110,22 +158,24 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
 
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
           {Object.entries(bgImages).map(([key, url]) => {
-            const isVisible = (key === 'property' && pathname === '/property') || 
-                              (key === 'clients' && pathname === '/clients') ||
-                              (key === 'default' && pathname !== '/property' && pathname !== '/clients');
+            const currentPathKey = pathname.replace('/', '');
+            const activeKey = bgImages[currentPathKey] ? currentPathKey : 'default';
+            const isVisible = key === activeKey;
+
             return (
               <div 
                 key={key}
-                className={`absolute inset-0 transition-opacity duration-1000 ${isVisible ? (isDark ? 'opacity-60' : 'opacity-50') : 'opacity-0'}`}
+                className={`absolute inset-0 transition-opacity duration-700 ease-in-out will-change-[opacity] ${isVisible ? (isDark ? 'opacity-60' : 'opacity-100') : 'opacity-0'}`}
                 style={{ 
                   backgroundImage: `url('${url}')`, 
-                  backgroundSize: 'cover', 
-                  backgroundPosition: 'center' 
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'bottom center',
+                  backgroundRepeat: 'no-repeat' 
                 }}
               />
             );
           })}
-          <div className={`absolute inset-0 transition-colors duration-500 ${isDark ? 'bg-[#0b1f1a]/80' : 'bg-white/80'}`} />
+          <div className={`absolute inset-0 transition-colors duration-500 ${isDark ? 'bg-[#0b1f1a]/80' : 'bg-gradient-to-b from-white/95 via-white/80 to-white/30'}`} />
         </div>
 
         <div className="relative z-10 h-full flex flex-col">
@@ -137,11 +187,12 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
                   <path d="M40 130 L100 80 L145 130 H190" stroke={isDark ? "#cddfa0" : "#059669"} strokeWidth="14" strokeLinecap="round" />
                 </g>
               </svg>
-              {!isCollapsed && (
-                <span className={`text-xl font-black italic whitespace-nowrap ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  Urban<span className={isDark ? "text-[#cddfa0]" : "text-emerald-600"}>E</span>state
-                </span>
-              )}
+              
+              <span className={`text-xl font-black italic whitespace-nowrap overflow-hidden transition-all duration-300 ${isCollapsed ? 'max-w-0 opacity-0' : 'max-w-[150px] opacity-100'}`}>
+                <span className={isDark ? 'text-white' : 'text-gray-900'}>Urban</span>
+                <span className={isDark ? "text-[#cddfa0]" : "text-emerald-600"}>E</span>
+                <span className={isDark ? 'text-white' : 'text-gray-900'}>state</span>
+              </span>
             </Link>
           </div>
 
@@ -165,11 +216,9 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
                         {item.icon}
                       </span>
                       
-                      {!isCollapsed && (
-                        <span className="text-[15px] font-medium whitespace-nowrap">
-                          {item.name}
-                        </span>
-                      )}
+                      <span className={`text-[15px] font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ${isCollapsed ? 'max-w-0 opacity-0' : 'max-w-[200px] opacity-100'}`}>
+                        {item.name}
+                      </span>
 
                       {isCollapsed && (
                         <div className={`absolute left-full ml-4 px-3 py-1.5 rounded-lg text-sm font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 whitespace-nowrap shadow-xl z-50
@@ -187,5 +236,5 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
         </div>
       </aside>
     </>
-  );
+  );  
 }

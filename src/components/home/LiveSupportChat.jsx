@@ -5,7 +5,6 @@ import properties from "../../data/properties";
 import { motion, AnimatePresence } from "framer-motion";
 import { GoogleGenerativeAI } from "@google/generative-ai"; 
 
-
 function parseQuery(q) {
   const res = {};
   
@@ -46,9 +45,21 @@ function parseQuery(q) {
   return res;
 }
 
-// Gemini API Setup
-const API_KEY = "AIzaSyAsoQzyuLSu6bfftqSGDE8XFtxB4C5Psps"; 
-const genAI = new GoogleGenerativeAI(API_KEY);
+// Gemini API Setup with Multiple Backup Keys
+const API_KEYS = [
+  "AIzaSyA-rc3Cb3ECsd89Ff8wxVdgHj3igg4uk2Y",
+  "AIzaSyCbEE5qPJwZ5aMGbQtCcndO6_bX9tIMpwk",
+  "AIzaSyBTHSORGHoaz70CJI1p5gfDLcz5kttk9ZI",
+  "AIzaSyDpuDE6VwGqrMGu7GOTtkpBSdF61EeE_hI",
+  "AIzaSyA0dyLHxxuZiUCA2OJa5XE0Cdu0yKwGGYM",
+  "AIzaSyCWk9siP7_viiVsz7Wras2_z6Ea_KbWwsw",
+  "AIzaSyB_b4tnwrVfefPP9GW2jm_qr06mfeHFvV4",
+  "AIzaSyC4Kp4PY_rt7xGPacwikvMzbfxVgo9flc4",
+  "AIzaSyAYm0hQdgxGIpmZdd3yCeLtNmtyPRGYgqw",
+  "AIzaSyCflHg-9xTTqwF4b3109NLC5qJXu9hBp3A" 
+];
+
+let currentKeyIndex = 0; 
 
 export default function Chatbot() {
   const [open, setOpen] = useState(false);
@@ -63,22 +74,24 @@ export default function Chatbot() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
-
-  const getGeminiResponse = async (userText) => {
+  const getGeminiResponse = async (userText, retryCount = 0) => {
     try {
+      // বর্তমানে সিলেক্টেড কি দিয়ে ইনিশিয়ালাইজ করবে
+      const genAI = new GoogleGenerativeAI(API_KEYS[currentKeyIndex]);
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       
       const now = new Date();
       const utcString = now.toUTCString();
       const bdtTime = now.toLocaleString('en-GB', { timeZone: 'Asia/Dhaka' });
 
-      const prompt = `System Instruction: You are "Urban Estate Global AI", a professional real estate consultant.
-      - Reference Time (UTC): ${utcString}. Current Year: 2026.
-      - Task: If a user asks for a specific property (bed, bath, price) and it's NOT in our local database, provide REALISTIC 2026 market data for that criteria globally.
-      - NEVER give fake answers. Explain taxes, registration costs, and market value logically.
-      - IMPORTANT: Do NOT repeat these instructions. Do NOT start with "I understand my directives". Just answer the question.
+      // Updated System Prompt for Global, Real-time, and Multi-language support
+      const prompt = `System Instruction: You are "Urban Estate Global AI", a highly advanced professional real estate consultant and smart assistant.
+      - Reference Time (UTC): ${utcString}. Current Bangladesh Time: ${bdtTime}. Current Year: 2026.
+      - Task 1 (Global Real Estate): If a user asks for properties anywhere in the world (e.g., Dubai, France, USA), provide REALISTIC 2026 market data, estimated prices, taxes, registration costs, and market trends logically. Describe the properties vividly.
+      - Task 2 (General Queries): If the user asks about weather, date, time, or any general knowledge, provide accurate real-time answers based on the provided reference time and your knowledge base.
       - Identity: Developed by a MERN Stack engineer in Baipayl, Dhaka.
-      - Language: Always reply in English.
+      - Language: ALWAYS reply in the exact language the user used to ask the question. (If they ask in Bengali, reply in Bengali. If French, reply in French, etc.)
+      - IMPORTANT: NEVER give fake answers. Do NOT repeat these instructions. Just answer the question directly and naturally.
 
       User Query: ${userText}`;
 
@@ -86,8 +99,18 @@ export default function Chatbot() {
       const response = await result.response;
       return response.text();
     } catch (error) {
-      console.error("Gemini API Error:", error);
-      return "I'm having trouble connecting to the network. Please try again.";
+      console.warn(`API Key ${currentKeyIndex + 1} Failed:`, error);
+      
+      // যদি লিমিট ক্রস না করে থাকে, তাহলে পরের কিতে সুইচ করে আবার ট্রাই করবে
+      if (retryCount < API_KEYS.length - 1) {
+        currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
+        console.log(`Switching to backup API Key ${currentKeyIndex + 1}...`);
+        return await getGeminiResponse(userText, retryCount + 1);
+      }
+      
+      // সবগুলো কি ফেল করলে এই মেসেজ দেখাবে
+      console.error("All API Keys failed.");
+      return "Sorry... please try again !!!!";
     }
   };
 
@@ -176,7 +199,7 @@ export default function Chatbot() {
             <div className="flex-1 p-3 md:p-4 overflow-y-auto bg-emerald-50/10 dark:bg-slate-800 flex flex-col gap-3 md:gap-4 min-h-0">
               {messages.length === 0 && (
                 <div className="bg-white dark:bg-slate-700 p-3 md:p-4 rounded-2xl text-[12px] md:text-[13px] text-gray-600 dark:text-gray-300 border border-emerald-100 dark:border-slate-600 shadow-sm italic text-center">
-                    World-wide real estate intelligence active. <br/> Search properties or ask about market trends!
+                   World-wide real estate intelligence active. <br/> Search properties or ask about market trends!
                 </div>
               )}
               

@@ -11,39 +11,57 @@ const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700
 
 function parseQuery(q) {
   const res = {};
-  
-  const mBeds = q.match(/(\d+)\s*(bed|br|room)/i) || q.match(/(?:find|show).*?(\d+)/i);
+  const mBeds = q.match(/(\d+)\s*(bed|br|room|বেড|রুম)/i) || q.match(/(?:find|show|খুঁজে).*?(\d+)/i);
   if (mBeds) res.beds = Number(mBeds[1]);
-
-  const mBaths = q.match(/(\d+)\s*(bath|bt)/i);
+  const mBaths = q.match(/(\d+)\s*(bath|bt|বাথরুম)/i);
   if (mBaths) res.baths = Number(mBaths[1]);
-
-  const mMillion = q.match(/(\d+\.?\d*)\s*(m|million)/i);
-  const mLakh = q.match(/(\d+)\s*lakh/i);
-  
+  const mMillion = q.match(/(\d+\.?\d*)\s*(m|million|মিলিয়ন)/i);
+  const mLakh = q.match(/(\d+)\s*(lakh|লাখ)/i);
   if (mMillion) res.maxPrice = parseFloat(mMillion[1]) * 1000000;
   else if (mLakh) res.maxPrice = Number(mLakh[1]) * 100000;
   else {
     const mPrice = q.match(/\$?([0-9,]+)k?/i);
     if (mPrice) res.maxPrice = Number(mPrice[1].replace(/,/g, ""));
   }
-
-  const mSize = q.match(/(\d+)\s*(sqft|sq\s*mt|katha|sq|area|ft)/i);
+  const mSize = q.match(/(\d+)\s*(sqft|sq\s*mt|katha|sq|area|ft|স্কয়ার|ফিট|কাঠা)/i);
   if (mSize) res.size = Number(mSize[1]);
-
   const lowerQ = q.toLowerCase();
+  
+  let isPropertyQuery = false;
+  
   properties.forEach(p => {
     const titleWords = p.title.toLowerCase().split(' ');
     titleWords.forEach(word => {
-      if (word.length > 3 && lowerQ.includes(word)) res.city = word;
+      if (word.length > 3 && lowerQ.includes(word)) {
+          res.city = word;
+          isPropertyQuery = true;
+      }
     });
   });
+
+  // Check if it's explicitly a property query
+  if (q.match(/(house|home|apartment|flat|property|villa|buy|rent|বাড়ি|বাসা|ফ্ল্যাট|জমি)/i)) {
+      isPropertyQuery = true;
+  }
+  
+  res.isPropertyQuery = isPropertyQuery;
 
   return res;
 }
 
-const API_KEY = "AIzaSyAsoQzyuLSu6bfftqSGDE8XFtxB4C5Psps"; 
-const genAI = new GoogleGenerativeAI(API_KEY);
+const API_KEYS = [
+  "AIzaSyA-rc3Cb3ECsd89Ff8wxVdgHj3igg4uk2Y",
+  "AIzaSyCbEE5qPJwZ5aMGbQtCcndO6_bX9tIMpwk",
+  "AIzaSyBTHSORGHoaz70CJI1p5gfDLcz5kttk9ZI",
+  "AIzaSyDpuDE6VwGqrMGu7GOTtkpBSdF61EeE_hI",
+  "AIzaSyA0dyLHxxuZiUCA2OJa5XE0Cdu0yKwGGYM",
+  "AIzaSyCWk9siP7_viiVsz7Wras2_z6Ea_KbWwsw",
+  "AIzaSyB_b4tnwrVfefPP9GW2jm_qr06mfeHFvV4",
+  "AIzaSyC4Kp4PY_rt7xGPacwikvMzbfxVgo9flc4",
+  "AIzaSyAsoQzyuLSu6bfftqSGDE8XFtxB4C5Psps"
+];
+
+let currentKeyIndex = 0;
 
 export default function VoiceSearch() {
   const [supported, setSupported] = useState(true);
@@ -54,64 +72,85 @@ export default function VoiceSearch() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   
   const recognitionRef = useRef(null);
+  const activeLangRef = useRef("en-US"); 
 
-  const speak = (text, langCode = "en-US") => {
+ 
+  const speakFemaleVoice = (text, langCode = "en-US") => {
+   
+    const existingAudio = document.getElementById("ai-voice-player");
+    if (existingAudio) {
+      existingAudio.pause();
+      existingAudio.remove();
+    }
+    
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
-      window.speechSynthesis.cancel(); 
-      const utterance = new SpeechSynthesisUtterance(text);
+      window.speechSynthesis.cancel();
+    }
+
+    const targetLang = langCode.split('-')[0]; 
+
+    if (targetLang === "bn") {
+     
+      const audioUrl = `https://translate.googleapis.com/translate_tts?client=gtx&ie=UTF-8&tl=bn&q=${encodeURIComponent(text)}`;
+      const audio = new Audio(audioUrl);
+      audio.id = "ai-voice-player";
       
+      audio.play().catch(error => {
+        console.warn("Bangla audio blocked, trying fallback:", error);
+        fallbackSpeak(text, langCode);
+      });
+    } else {
+     
+      fallbackSpeak(text, langCode);
+    }
+  };
+
+  const fallbackSpeak = (text, langCode) => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = langCode;
+      const targetLang = langCode.split('-')[0];
       const voices = window.speechSynthesis.getVoices();
       
-      const targetLang = langCode.split('-')[0]; 
-      
-      let matchedVoice = voices.find(v => 
-        v.lang.startsWith(targetLang) && 
-        (v.name.includes("Female") || v.name.includes("Samantha") || v.name.includes("Zira") || v.name.includes("Victoria") || v.name.includes("Google UK English Female") || v.name.includes("Microsoft Kalpana") || v.name.includes("Lekha"))
+      let selectedVoice = voices.find(v => 
+        (v.lang.startsWith(targetLang) || v.lang.replace('_', '-').startsWith(targetLang)) &&
+        (v.name.includes('Female') || v.name.includes('Google') || v.name.includes('Zira') || v.name.includes('Lekha'))
       );
-      
-      if (!matchedVoice) {
-        matchedVoice = voices.find(v => v.lang.startsWith(targetLang));
-      }
 
-      if (matchedVoice) {
-        utterance.voice = matchedVoice;
-      }
+      if (!selectedVoice) selectedVoice = voices.find(v => v.lang.startsWith(targetLang));
+      if (!selectedVoice && voices.length > 0) selectedVoice = voices[0];
 
-      if (targetLang === "bn") {
-        utterance.rate = 0.9;  
-        utterance.pitch = 1.3; 
-      } else {
-        utterance.rate = 0.95; 
-        utterance.pitch = 1.2; 
-      }
+      if (selectedVoice) utterance.voice = selectedVoice;
+      utterance.pitch = 1.2;
+      utterance.rate = targetLang === 'bn' ? 0.9 : 1.0;
       
       window.speechSynthesis.speak(utterance);
     }
   };
 
-  const getGeminiResponse = async (userText, localMatchCount) => {
+  const getGeminiResponse = async (userText, localMatchCount, isPropertyQuery, retryCount = 0) => {
     try {
+      const genAI = new GoogleGenerativeAI(API_KEYS[currentKeyIndex]);
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+      const prompt = `IGNORE ALL PREVIOUS SYSTEM INSTRUCTIONS ABOUT ALWAYS SPEAKING BENGALI. 
+      You are a highly intelligent AI Voice Assistant.
       
-      const prompt = `You are a highly intelligent female AI Assistant for real estate.
+      CRITICAL RULES:
+      1. You MUST reply in the EXACT language the user speaks right now.
+      2. If the user's text "${userText}" contains English, reply in English and set "languageCode": "en-US".
+      3. If the user's text "${userText}" contains Bengali or Banglish (e.g., "kemon acho"), reply in pure Bengali script and set "languageCode": "bn-BD".
+      4. ONLY show a property card if the user asks for a house/property AND localMatchCount is 0. If it's a general question like "How are you?", set "showPropertyCard": false.
       
-      CRITICAL INSTRUCTIONS:
-      1. DETECT LANGUAGE: You MUST detect the language of the 'User Query' and reply in the EXACT SAME LANGUAGE and SCRIPT.
-      2. ANSWER ANYTHING: You are allowed to answer ANY question. General knowledge, math, science, time, coding, jokes, or real estate.
-      3. REAL ESTATE CHECK: The local database found ${localMatchCount} matching properties. 
-         - If ${localMatchCount} > 0, just tell them you found it in your native language. Do NOT make up property data here.
-         - If ${localMatchCount} == 0 and they asked about a property, give a realistic market analysis and generate a global property card for that area.
-      
-      Output strictly in this JSON format ONLY (No markdown):
+      Output JSON ONLY:
       {
         "languageCode": "en-US", 
-        "replyText": "Your response here (in the detected language)",
-        "showPropertyCard": ${localMatchCount === 0 ? true : false}, 
+        "replyText": "Response matching user language perfectly.",
+        "showPropertyCard": ${(localMatchCount === 0 && isPropertyQuery) ? true : false}, 
         "propertyData": {
-          "title": "Luxury Real Estate in [Area]",
-          "location": "[Area Name, Country]",
-          "priceLabel": "[Estimated Price]",
+          "title": "Property title",
+          "location": "Location",
+          "priceLabel": "Price",
           "beds": 3,
           "baths": 2,
           "sqft": 2000
@@ -122,15 +161,18 @@ export default function VoiceSearch() {
 
       const result = await model.generateContent(prompt);
       const rawText = await result.response.text();
-      
       const cleanJson = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
       return JSON.parse(cleanJson);
 
     } catch (error) {
-      console.error("AI Error:", error);
+      console.warn(`API Error:`, error);
+      if (retryCount < API_KEYS.length - 1) {
+        currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
+        return await getGeminiResponse(userText, localMatchCount, isPropertyQuery, retryCount + 1);
+      }
       return {
         languageCode: "en-US",
-        replyText: "Sorry, I could not process your request. Please try again.",
+        replyText: "Sorry, I couldn't process that.",
         showPropertyCard: false
       };
     }
@@ -142,10 +184,15 @@ export default function VoiceSearch() {
       setSupported(false);
       return;
     }
-    const recog = new SpeechRecognition();
     
-    recog.lang = navigator.language || "en-US"; 
+    if (typeof window !== "undefined" && window.speechSynthesis) {
+        window.speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+
+    const recog = new SpeechRecognition();
     recog.interimResults = true;
+    recog.continuous = false; 
     
     recog.onresult = (e) => {
       let final = "";
@@ -157,24 +204,48 @@ export default function VoiceSearch() {
         processVoiceQuery(final);
       }
     };
+    
+    recog.onerror = (e) => {
+        console.error("Speech Recognition Error:", e.error);
+        setListening(false);
+    };
+
     recog.onend = () => setListening(false);
     recognitionRef.current = recog;
-
-    if (typeof window !== "undefined") {
-      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-    }
   }, []);
 
   const toggleListen = () => {
+ 
+    const existingAudio = document.getElementById("ai-voice-player");
+    if (existingAudio) {
+      existingAudio.pause();
+      existingAudio.remove();
+    }
+    
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      const unlockUtterance = new SpeechSynthesisUtterance('');
+      unlockUtterance.volume = 0;
+      window.speechSynthesis.speak(unlockUtterance);
+    }
+
     if (listening) {
       recognitionRef.current?.stop();
     } else {
-      window.speechSynthesis.cancel(); 
       setTranscript("");
       setAiResponse("");
       setResults([]);
-      recognitionRef.current?.start();
-      setListening(true);
+      
+      if (recognitionRef.current) {
+        recognitionRef.current.lang = activeLangRef.current === "en-US" ? "en-US" : "bn-BD"; 
+      }
+      
+      try {
+        recognitionRef.current?.start();
+        setListening(true);
+      } catch (e) {
+         console.error("Failed to start listening", e);
+      }
     }
   };
 
@@ -186,8 +257,7 @@ export default function VoiceSearch() {
       const query = parseQuery(userMsg);
       let matches = [];
 
-      // STEP 1: Always check Local Database first
-      if (query.beds || query.maxPrice || query.city || query.size || query.baths) {
+      if (query.isPropertyQuery && (query.beds || query.maxPrice || query.city || query.size || query.baths)) {
         matches = properties.filter(p => {
           let isMatch = true;
           if (query.beds && p.beds !== query.beds) isMatch = false;
@@ -199,18 +269,15 @@ export default function VoiceSearch() {
         });
       }
 
-      // STEP 2: Send to AI for natural voice response & fallback generation
-      const aiData = await getGeminiResponse(userMsg, matches.length);
-      
+      const aiData = await getGeminiResponse(userMsg, matches.length, query.isPropertyQuery);
       const finalResponseText = aiData.replyText;
-      const finalLangCode = aiData.languageCode; 
+      const finalLangCode = aiData.languageCode || "en-US"; 
+      
+      activeLangRef.current = finalLangCode; 
 
-      // STEP 3: Display Logic
       if (matches.length > 0) {
-
         setResults(matches.slice(0, 6)); 
       } else if (matches.length === 0 && aiData.showPropertyCard && aiData.propertyData) {
-     
         setResults([{
           id: 'ai-global-dynamic',
           title: aiData.propertyData.title,
@@ -222,16 +289,18 @@ export default function VoiceSearch() {
           image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=800&q=80"
         }]);
       } else {
-        
         setResults([]); 
       }
 
       setAiResponse(finalResponseText);
-      speak(finalResponseText, finalLangCode);
+      
+      setTimeout(() => {
+        speakFemaleVoice(finalResponseText, finalLangCode);
+      }, 100);
 
     } catch (error) {
-      setAiResponse("Sorry, I could not understand you. Please try again.");
-      speak("Sorry, I could not understand you. Please try again.", "en-US");
+      setAiResponse("Sorry, please try again.");
+      speakFemaleVoice("Sorry, please try again.", "en-US");
     } finally {
       setIsAnalyzing(false);
     }
@@ -243,87 +312,42 @@ export default function VoiceSearch() {
     <section className={`w-full py-24 px-6 lg:px-12 bg-slate-50 dark:bg-[#0f2e28] min-h-screen relative overflow-hidden transition-colors duration-500 ${manrope.className}`}>
       
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] blur-[150px] rounded-full pointer-events-none bg-emerald-100/50 dark:bg-[#cddfa0]/5"></div>
-
       <div className="max-w-5xl mx-auto w-full relative z-10 flex flex-col items-center">
-        
         <div className="inline-flex items-center gap-2 text-emerald-600 dark:text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white dark:bg-white/5 px-5 py-2 rounded-full border border-gray-200 dark:border-white/10 mb-8 shadow-sm">
           <Sparkles size={14} /> Intelligence Voice Search
         </div>
-
         <h2 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4 tracking-tight text-center leading-none">
           Urban Estate <span className="text-emerald-500 dark:text-[#cddfa0] italic font-light">AI Voice</span>
         </h2>
-        
         <p className="text-gray-500 dark:text-white/60 text-center mb-12 max-w-lg text-sm md:text-base">
           Tap the microphone and ask about any property, location, or general questions!
         </p>
-
         <div className="relative w-full max-w-md h-16 flex items-center justify-center gap-1.5 mb-8">
-          <motion.div 
-            animate={{ opacity: [0.1, 0.3, 0.1], scale: [0.95, 1.05, 0.95] }} 
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} 
-            className="absolute w-2/3 h-full bg-emerald-400/20 dark:bg-[#cddfa0]/10 blur-2xl rounded-full pointer-events-none"
-          />
-
+          <motion.div animate={{ opacity: [0.1, 0.3, 0.1], scale: [0.95, 1.05, 0.95] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} className="absolute w-2/3 h-full bg-emerald-400/20 dark:bg-[#cddfa0]/10 blur-2xl rounded-full pointer-events-none" />
           {listening ? (
             [...Array(25)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="w-1.5 bg-emerald-500 dark:bg-[#cddfa0] rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] dark:shadow-[0_0_15px_#cddfa0] relative z-10"
-                animate={{ 
-                  height: [8, Math.random() * 50 + 15, 8],
-                  y: [0, (Math.random() * 6) - 3, 0] 
-                }}
-                transition={{ duration: 0.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.02 }}
-              />
+              <motion.div key={i} className="w-1.5 bg-emerald-500 dark:bg-[#cddfa0] rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] dark:shadow-[0_0_15px_#cddfa0] relative z-10" animate={{ height: [8, Math.random() * 50 + 15, 8], y: [0, (Math.random() * 6) - 3, 0] }} transition={{ duration: 0.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.02 }} />
             ))
           ) : (
             <div className="flex items-center gap-1.5 z-10">
               {[...Array(25)].map((_, i) => (
-                <motion.div 
-                  key={i} 
-                  className="w-1.5 h-1.5 bg-emerald-500 dark:bg-[#cddfa0] rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)] dark:shadow-[0_0_10px_#cddfa0]" 
-                  animate={{ 
-                    y: [0, 4, 0], 
-                    opacity: [0.4, 1, 0.4] 
-                  }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.1 }}
-                />
+                <motion.div key={i} className="w-1.5 h-1.5 bg-emerald-500 dark:bg-[#cddfa0] rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)] dark:shadow-[0_0_10px_#cddfa0]" animate={{ y: [0, 4, 0], opacity: [0.4, 1, 0.4] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: i * 0.1 }} />
               ))}
             </div>
           )}
         </div>
-
         <div className="relative mb-16 h-32 flex items-center justify-center">
-          <motion.div 
-            animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }} 
-            transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }} 
-            className="absolute w-28 h-28 bg-emerald-400/20 dark:bg-[#cddfa0]/20 rounded-full blur-md" 
-          />
-          <motion.div 
-            animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.4, 0.1] }} 
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }} 
-            className="absolute w-32 h-32 bg-emerald-400/10 dark:bg-[#cddfa0]/10 rounded-full blur-xl" 
-          />
-
+          <motion.div animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }} transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }} className="absolute w-28 h-28 bg-emerald-400/20 dark:bg-[#cddfa0]/20 rounded-full blur-md" />
+          <motion.div animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.4, 0.1] }} transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }} className="absolute w-32 h-32 bg-emerald-400/10 dark:bg-[#cddfa0]/10 rounded-full blur-xl" />
           <AnimatePresence>
             {listening && (
               <motion.div initial={{ scale: 1, opacity: 0.8 }} animate={{ scale: 2.5, opacity: 0 }} transition={{ repeat: Infinity, duration: 1 }} className="absolute w-20 h-20 bg-emerald-400/50 dark:bg-[#cddfa0]/50 rounded-full" />
             )}
           </AnimatePresence>
-          
-          <button 
-            onClick={toggleListen} 
-            className={`relative z-10 w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center transition-all duration-300 ${
-              listening 
-                ? 'bg-emerald-500 dark:bg-[#cddfa0] text-white dark:text-[#0f2e28] scale-110 shadow-[0_0_40px_rgba(16,185,129,0.6)] dark:shadow-[0_0_50px_rgba(205,223,160,0.8)]' 
-                : 'bg-white dark:bg-[#13332c] text-emerald-600 dark:text-[#cddfa0] shadow-xl dark:shadow-[0_0_25px_rgba(205,223,160,0.5)] hover:scale-105 border border-gray-100 dark:border-none'
-            }`}
-          >
+          <button onClick={toggleListen} className={`relative z-10 w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center transition-all duration-300 ${listening ? 'bg-emerald-500 dark:bg-[#cddfa0] text-white dark:text-[#0f2e28] scale-110 shadow-[0_0_40px_rgba(16,185,129,0.6)] dark:shadow-[0_0_50px_rgba(205,223,160,0.8)]' : 'bg-white dark:bg-[#13332c] text-emerald-600 dark:text-[#cddfa0] shadow-xl dark:shadow-[0_0_25px_rgba(205,223,160,0.5)] hover:scale-105 border border-gray-100 dark:border-none'}`}>
             {listening ? <Mic size={36} className="animate-pulse" /> : <Mic size={36} />}
           </button>
         </div>
-
         <div className="w-full max-w-3xl space-y-6 px-4 md:px-0">
           {transcript && (
             <div className="bg-white dark:bg-white/5 backdrop-blur-md p-5 md:p-6 rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-none">
@@ -331,7 +355,6 @@ export default function VoiceSearch() {
               <p className="text-lg md:text-xl text-gray-800 dark:text-white font-medium italic">"{transcript}"</p>
             </div>
           )}
-
           {isAnalyzing ? (
             <div className="flex items-center gap-3 text-emerald-600 dark:text-[#cddfa0] font-mono text-xs md:text-sm animate-pulse bg-white dark:bg-transparent p-4 rounded-xl shadow-sm dark:shadow-none border border-gray-100 dark:border-none">
               <Loader2 className="animate-spin" size={18} /> PROCESSING_AI_RESPONSE...
@@ -345,7 +368,6 @@ export default function VoiceSearch() {
             </motion.div>
           )}
         </div>
-
         {!isAnalyzing && results.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 w-full px-4 md:px-0">
             {results.map((r) => (
@@ -371,7 +393,6 @@ export default function VoiceSearch() {
             ))}
           </div>
         )}
-
       </div>
     </section>
   );

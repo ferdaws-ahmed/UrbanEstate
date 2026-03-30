@@ -143,7 +143,7 @@ export default function AgentManagement() {
     if (!isDragging || !scrollRef.current) return;
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX) * 2; // Scroll speed multiplier
+    const walk = (x - startX) * 2; 
     scrollRef.current.scrollLeft = scrollLeft - walk;
   };
 
@@ -174,7 +174,8 @@ export default function AgentManagement() {
           const parsed = JSON.parse(savedAgents);
           const enriched = parsed.map(a => ({ ...a, specialty: a.specialty || ['Residential', 'Commercial', 'Luxury'][Math.floor(Math.random()*3)] }));
           setAgents(enriched);
-          setIsLoading(false);
+          // 1 Second loading for local storage data
+          setTimeout(() => setIsLoading(false), 1000);
           return; 
         }
 
@@ -188,8 +189,13 @@ export default function AgentManagement() {
 
         setAgents(agentsList);
         localStorage.setItem('agentsData', JSON.stringify(agentsList)); 
-      } catch (error) { console.error('❌ Data Fetch Error:', error); } 
-      finally { setTimeout(() => setIsLoading(false), 800); }
+      } catch (error) { 
+        console.error('❌ Data Fetch Error:', error); 
+      } 
+      finally { 
+        // 1 Second loading for API fetched data
+        setTimeout(() => setIsLoading(false), 1000); 
+      }
     };
     fetchData();
   }, []);

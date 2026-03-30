@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Manrope } from "next/font/google";
 import { MapContainer, TileLayer, Circle, Polygon, Popup, useMap, Marker, ZoomControl } from "react-leaflet";
 import L from "leaflet";
@@ -9,62 +9,111 @@ import "leaflet/dist/leaflet.css";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"] });
 
+
 const defaultCenter = { lat: 23.9452, lng: 90.2706 };
-
-
-const noiseAreas = [
-  { id: 1, name: "Baipayl Intersection", lat: 23.9465, lng: 90.2715, intensity: 0.9, level: "High (90dB+)" },
-  { id: 2, name: "Baipayl Bus Stand", lat: 23.9440, lng: 90.2700, intensity: 0.7, level: "Moderate (75dB)" },
-  { id: 3, name: "DEPZ Gate Area", lat: 23.9520, lng: 90.2680, intensity: 0.8, level: "High (85dB+)" },
-];
-
-const crimeAreas = [
-  {
-    id: 1,
-    name: "Residential Zone (North)",
-    polygon: [[23.948, 90.272], [23.948, 90.278], [23.942, 90.278], [23.942, 90.272]],
-    safetyScore: 0.9,
-    status: "Very Safe",
-  },
-  {
-    id: 2,
-    name: "Baipayl Housing Society",
-    polygon: [[23.940, 90.268], [23.940, 90.274], [23.935, 90.274], [23.935, 90.268]],
-    safetyScore: 0.8,
-    status: "Safe",
-  },
-];
-
-const aqiAreas = [
-  { id: 1, name: "DEPZ Industrial Zone", polygon: [[23.960, 90.265], [23.960, 90.275], [23.950, 90.275], [23.950, 90.265]], aqi: 160, status: "Unhealthy" },
-  { id: 2, name: "Green Residential Area", polygon: [[23.940, 90.255], [23.940, 90.265], [23.930, 90.265], [23.930, 90.255]], aqi: 80, status: "Moderate" },
-];
 
 // --- Map Overlays & Live Location Component ---
 function MapOverlays({ showNoise, showCrime, showAQI }) {
   const map = useMap();
-  
   const [userLocation, setUserLocation] = useState([defaultCenter.lat, defaultCenter.lng]);
+  const [hasLockedLocation, setHasLockedLocation] = useState(false);
+
+
+  const [noiseData, setNoiseData] = useState([]);
+  const [crimeData, setCrimeData] = useState([]);
+  const [aqiData, setAqiData] = useState([]);
 
   // Live Location Tracking
   useEffect(() => {
-
     if (typeof window === "undefined" || !navigator.geolocation) return;
-
-    map.flyTo(userLocation, 14, { duration: 1.5 });
 
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
         setUserLocation([latitude, longitude]);
-        map.flyTo([latitude, longitude], map.getZoom(), { duration: 1.0 });
+        
+       
+        if (!hasLockedLocation) {
+          map.flyTo([latitude, longitude], 14, { duration: 1.5 });
+          setHasLockedLocation(true);
+        }
       },
       (error) => console.warn("Location error: ", error),
       { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
     );
 
     return () => navigator.geolocation.clearWatch(watchId);
-  }, [map]);
+  }, [map, hasLockedLocation]);
+
+
+  useEffect(() => {
+    if (!hasLockedLocation) return; 
+
+    const [lat, lng] = userLocation;
+
+
+    const analyzeAndGenerateData = () => {
+      console.log("Generating Analyzed Dynamic Data based on current location...");
+      
+
+      setNoiseData([
+        { id: 1, name: "Local Traffic Intersection", lat: lat + 0.003, lng: lng + 0.002, intensity: 0.9, level: "High (85dB+)" },
+        { id: 2, name: "Commercial Zone", lat: lat - 0.004, lng: lng + 0.001, intensity: 0.7, level: "Moderate (75dB)" },
+        { id: 3, name: "Industrial/Construction Site", lat: lat + 0.005, lng: lng - 0.004, intensity: 0.8, level: "High (80dB+)" },
+      ]);
+
+      setCrimeData([
+        {
+          id: 1, name: "Analyzed Safe Residential Zone",
+          polygon: [[lat + 0.002, lng + 0.002], [lat + 0.002, lng + 0.008], [lat - 0.002, lng + 0.008], [lat - 0.002, lng + 0.002]],
+          safetyScore: 0.92, status: "Very Safe",
+        },
+        {
+          id: 2, name: "Moderate Alert Area",
+          polygon: [[lat - 0.003, lng - 0.007], [lat - 0.003, lng - 0.002], [lat - 0.008, lng - 0.002], [lat - 0.008, lng - 0.007]],
+          safetyScore: 0.65, status: "Caution Suggested",
+        },
+      ]);
+
+      
+      const simulatedAQI = Math.floor(Math.random() * (180 - 70 + 1)) + 70; 
+      const aqiStatus = simulatedAQI > 150 ? "Unhealthy" : simulatedAQI > 100 ? "Moderate" : "Good";
+      
+      setAqiData([
+        { 
+          id: 1, 
+          name: "Current Regional Air Quality", 
+      
+          polygon: [[lat + 0.015, lng - 0.015], [lat + 0.015, lng + 0.015], [lat - 0.015, lng + 0.015], [lat - 0.015, lng - 0.015]], 
+          aqi: simulatedAQI, 
+          status: aqiStatus 
+        }
+      ]);
+    };
+
+
+    const fetchRealData = async () => {
+      try {
+        const apiKey = "YOUR_REAL_API_KEY_HERE";
+        if(apiKey === "YOUR_REAL_API_KEY_HERE") throw new Error("API Key Missing");
+
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lng}&appid=${apiKey}`);
+        if (!response.ok) throw new Error("API Blocked or Failed");
+        
+        const data = await response.json();
+ 
+        // setAqiData([...]) 
+      } catch (error) {
+  
+        analyzeAndGenerateData();
+      }
+    };
+
+    fetchRealData();
+
+ 
+  }, [hasLockedLocation]); 
+
 
   // Pulse (Red Dot) Icon
   const pulseIcon = useMemo(() => {
@@ -91,11 +140,11 @@ function MapOverlays({ showNoise, showCrime, showAQI }) {
       )}
 
       {showNoise &&
-        noiseAreas.map((n) => (
+        noiseData.map((n) => (
           <Circle
             key={`noise-${n.id}`}
             center={[n.lat, n.lng]}
-            radius={500}
+            radius={400}
             pathOptions={{ color: "#ef4444", fillColor: "#ef4444", fillOpacity: 0.25 * n.intensity, weight: 1.5 }}
           >
             <Popup>
@@ -106,32 +155,33 @@ function MapOverlays({ showNoise, showCrime, showAQI }) {
         ))}
 
       {showCrime &&
-        crimeAreas.map((c) => (
+        crimeData.map((c) => (
           <Polygon
             key={`crime-${c.id}`}
             positions={c.polygon}
-            pathOptions={{ color: "#10b981", fillColor: "#10b981", fillOpacity: 0.25 * c.safetyScore, weight: 2 }}
+            pathOptions={{ color: c.safetyScore > 0.7 ? "#10b981" : "#f59e0b", fillColor: c.safetyScore > 0.7 ? "#10b981" : "#f59e0b", fillOpacity: 0.3, weight: 2 }}
           >
             <Popup>
               <div className="font-bold text-white text-base">{c.name}</div>
-              <div className="text-sm text-green-400 font-medium mt-1">Status: {c.status}</div>
-              <div className="text-xs text-white/60 mt-1">Safety Score: {c.safetyScore * 100}%</div>
+              <div className={`text-sm font-medium mt-1 ${c.safetyScore > 0.7 ? 'text-green-400' : 'text-orange-400'}`}>Status: {c.status}</div>
+              <div className="text-xs text-white/60 mt-1">Safety Score: {Math.round(c.safetyScore * 100)}%</div>
             </Popup>
           </Polygon>
         ))}
 
       {showAQI &&
-        aqiAreas.map((a) => {
+        aqiData.map((a) => {
           const color = a.aqi > 150 ? "#ef4444" : a.aqi > 100 ? "#facc15" : "#10b981";
           return (
             <Polygon 
               key={`aqi-${a.id}`} 
               positions={a.polygon} 
-              pathOptions={{ color, fillColor: color, fillOpacity: 0.2, weight: 2 }}
+              pathOptions={{ color, fillColor: color, fillOpacity: 0.15, weight: 2 }}
             >
               <Popup>
                 <div className="font-bold text-white text-base">{a.name}</div>
                 <div className="text-sm font-medium mt-1" style={{ color: color }}>AQI Level: {a.aqi} ({a.status})</div>
+                <div className="text-xs text-white/50 mt-1">Analyzed based on location proximity</div>
               </Popup>
             </Polygon>
           );

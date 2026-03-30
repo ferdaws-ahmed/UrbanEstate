@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import dynamic from 'next/dynamic'; // <-- নতুন অ্যাড করা হয়েছে
 import Navbar from '../components/shared/Navbar';
 import Footer from '../components/shared/Footer';
 
@@ -17,7 +18,7 @@ import SpaceReimaginer from './home/SpaceReimaginer';
 import AeroTopoScanner from './home/AeroTopoScanner';
 import PricePredictor from './home/PricePredictor';
 import EMICalculator from './home/EMICalculator';
-import EnvironmentalLayers from './home/EnvironmentalLayers';
+
 import AIDecorator from './home/AIDecorator';
 import Included from './home/Included';
 import ArchitecturalStory from './home/ArchitecturalStory';
@@ -26,6 +27,13 @@ import FAQSection from './home/FAQSection';
 import LiveSupportChat from './home/LiveSupportChat';
 
 
+const EnvironmentalLayers = dynamic(
+  () => import('./home/EnvironmentalLayers'),
+  { 
+    ssr: false, 
+    loading: () => <div className="py-20 text-center text-white/50 animate-pulse">Loading Environmental Map...</div> 
+  }
+);
 
 export default function Home() {
   return (

@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useRef, Suspense } from 'react'; 
 import { useRouter, useSearchParams } from 'next/navigation'; 
 import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../../ThemeProvider';
-
 
 function TopbarContent({ loggedInUser }) {
   const router = useRouter();
@@ -20,47 +20,223 @@ function TopbarContent({ loggedInUser }) {
   const isDark = themeContext ? themeContext.isDark : false;
   const setIsDark = themeContext ? themeContext.setIsDark : () => {};
 
-  const user = loggedInUser || {
+  // Profile data sync logic added here
+  const initialUser = useRef(loggedInUser || {
     name: "S. Islam",
     role: "Admin",
     avatar: "https://i.pravatar.cc/150?img=11",
     email: "admin@urbanestate.com"
-  };
+  });
+
+  const [user, setUser] = useState(initialUser.current);
+
+  useEffect(() => {
+    const loadUser = () => {
+      try {
+        const storedProfile = window.localStorage.getItem("ue_profile");
+        if (storedProfile) {
+          const parsedProfile = JSON.parse(storedProfile);
+          setUser({
+            name: `${parsedProfile.firstName || ''} ${parsedProfile.lastName || ''}`.trim() || initialUser.current.name,
+            role: parsedProfile.jobTitle || initialUser.current.role,
+            avatar: parsedProfile.avatar || initialUser.current.avatar,
+            email: parsedProfile.email || initialUser.current.email
+          });
+        }
+      } catch (e) {
+        console.warn("Failed to load profile", e);
+      }
+    };
+
+    if (mounted) {
+      loadUser();
+    }
+
+    window.addEventListener('profileUpdated', loadUser);
+    window.addEventListener('storage', loadUser);
+
+    return () => {
+      window.removeEventListener('profileUpdated', loadUser);
+      window.removeEventListener('storage', loadUser);
+    };
+  }, [mounted]);
 
   const [currentTime, setCurrentTime] = useState(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isDateMenuOpen, setIsDateMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   
+  // Calendar specific state
+  const [viewDate, setViewDate] = useState(new Date());
+  const [inputYear, setInputYear] = useState(new Date().getFullYear());
+
+  // Reset calendar view to today when opened
+  useEffect(() => {
+    if (isDateMenuOpen) {
+      setViewDate(new Date());
+      setInputYear(new Date().getFullYear());
+    }
+  }, [isDateMenuOpen]);
+
+  // Sync input year when viewDate changes via arrows
+  useEffect(() => {
+    setInputYear(viewDate.getFullYear());
+  }, [viewDate]);
+  
   const [searchQuery, setSearchQuery] = useState(searchParams?.get('q') || "");
+  
+  // ─── Dynamic Notifications State & Logic ───────────────────────────────────
   const [notifications, setNotifications] = useState([]);
   const [isLoadingNotifications, setIsLoadingNotifications] = useState(true);
+  const [expandedNotifId, setExpandedNotifId] = useState(null); // State for FAQ style expansion
 
-  useEffect(() => {
-    if (mounted) {
-      if (isDark) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
+  // Helper function to generate meaningful details based on notification text
+  const getMeaningfulDetails = (text) => {
+    const lowerText = (text || "").toLowerCase();
+    if (lowerText.includes('property') || lowerText.includes('listing')) {
+      return "The property details have been successfully synchronized. Click here to view full property analytics and manage client interactions related to this listing.";
     }
-  }, [isDark, mounted]);
+    if (lowerText.includes('review') || lowerText.includes('message') || lowerText.includes('inquiry')) {
+      return "You have received new feedback or messages from a client. Please navigate to the communication center to read and reply promptly.";
+    }
+    if (lowerText.includes('user') || lowerText.includes('agent') || lowerText.includes('client')) {
+      return "New activity has been detected for this user account. Review their profile to see recent actions, permissions, and status updates.";
+    }
+    if (lowerText.includes('payment') || lowerText.includes('bill') || lowerText.includes('invoice')) {
+      return "A recent billing transaction has been processed in your account. You can verify and download the official invoice from the billing section.";
+    }
+    return "Please review this alert and take any necessary actions from your admin dashboard. Keeping track of these updates ensures smooth operation.";
+  };
 
   useEffect(() => {
-    const fetchNotifications = async () => {
+    let isSubscribed = true;
+
+    const loadNotifications = async () => {
       try {
-        const response = await fetch('/data/dashboardData.json', { cache: 'no-store' });
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        setNotifications(data.notifications || []);
+        // Read tracked read notifications
+        const readIdsStr = window.localStorage.getItem('ue_read_notifs');
+        let readIds = [];
+        if (readIdsStr) {
+          try { readIds = JSON.parse(readIdsStr); } catch (e) {}
+        }
+
+        // 1. Check if we already have dynamic notifications in localStorage
+        const dynamicNotifsStr = window.localStorage.getItem('ue_dynamic_notifs');
+        let dynamicNotifs = [];
+        if (dynamicNotifsStr) {
+          try { dynamicNotifs = JSON.parse(dynamicNotifsStr); } catch (e) {}
+        }
+
+        if (dynamicNotifs.length > 0) {
+          // If dynamic notifications exist, use them ONLY (ignore JSON)
+          if (isSubscribed) {
+            const mappedDynamic = dynamicNotifs.map(n => ({
+              ...n,
+              unread: readIds.includes(n.id) ? false : n.unread
+            }));
+            setNotifications(mappedDynamic);
+            setIsLoadingNotifications(false);
+          }
+        } else {
+          // 2. If NO dynamic notifications, load the default JSON ones
+          const response = await fetch('/data/dashboardData.json', { cache: 'no-store' });
+          if (!response.ok) throw new Error('Network response was not ok');
+          const data = await response.json();
+          if (isSubscribed) {
+            // Adding a detailed message & applying saved read states
+            const enhancedData = (data.notifications || []).map(n => ({
+              ...n,
+              unread: readIds.includes(n.id) ? false : n.unread, // Ensure read state persists on refresh
+              details: n.details || getMeaningfulDetails(n.text)
+            }));
+            setNotifications(enhancedData);
+            setIsLoadingNotifications(false);
+          }
+        }
       } catch (error) {
         console.error("Failed to fetch notifications:", error);
-      } finally {
-        setIsLoadingNotifications(false);
+        if (isSubscribed) setIsLoadingNotifications(false);
       }
     };
-    fetchNotifications();
-  }, []);
+
+    if (mounted) {
+      loadNotifications();
+    }
+
+    // 3. Listen for new dynamic notifications from anywhere in the project
+    const handleNewDynamicNotification = (e) => {
+      const newNotif = e.detail;
+      // Ensure dynamic notifications also have a details field with meaningful fallback
+      if(!newNotif.details) {
+        newNotif.details = getMeaningfulDetails(newNotif.text);
+      }
+      
+      // Get existing dynamic notifs from storage
+      const existingDynamicStr = window.localStorage.getItem('ue_dynamic_notifs');
+      let existingDynamic = [];
+      if (existingDynamicStr) {
+        try { existingDynamic = JSON.parse(existingDynamicStr); } catch (err) {}
+      }
+      
+      // Add new notification to the top
+      const updatedNotifs = [newNotif, ...existingDynamic];
+      window.localStorage.setItem('ue_dynamic_notifs', JSON.stringify(updatedNotifs));
+      
+      // Update state immediately (This completely replaces the JSON ones)
+      setNotifications(updatedNotifs);
+    };
+
+    // Sync across tabs
+    const handleStorageChange = (e) => {
+      if (e.key === 'ue_dynamic_notifs' || e.key === 'ue_read_notifs') {
+        loadNotifications();
+      }
+    };
+
+    window.addEventListener('addDynamicNotification', handleNewDynamicNotification);
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      isSubscribed = false;
+      window.removeEventListener('addDynamicNotification', handleNewDynamicNotification);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [mounted]);
+
+  // Handle clicking a notification to mark as read AND expand
+  const handleNotificationClick = (id) => {
+    // Toggle expand/collapse
+    setExpandedNotifId(prevId => prevId === id ? null : id);
+
+    // Mark as read in local state
+    const updatedNotifs = notifications.map(n => 
+      n.id === id ? { ...n, unread: false } : n
+    );
+    setNotifications(updatedNotifs);
+
+    try {
+      // Save read state globally so it persists upon refresh
+      const readIdsStr = window.localStorage.getItem('ue_read_notifs');
+      let readIds = readIdsStr ? JSON.parse(readIdsStr) : [];
+      if (!readIds.includes(id)) {
+        readIds.push(id);
+        window.localStorage.setItem('ue_read_notifs', JSON.stringify(readIds));
+      }
+
+      // Update local storage if it's dynamic
+      const existingDynamicStr = window.localStorage.getItem('ue_dynamic_notifs');
+      if (existingDynamicStr) {
+        let existingDynamic = JSON.parse(existingDynamicStr);
+        const isDynamic = existingDynamic.some(n => n.id === id);
+        if (isDynamic) {
+          existingDynamic = existingDynamic.map(n => 
+            n.id === id ? { ...n, unread: false } : n
+          );
+          window.localStorage.setItem('ue_dynamic_notifs', JSON.stringify(existingDynamic));
+        }
+      }
+    } catch (err) {}
+  };
 
   const unreadCount = notifications.filter(n => n.unread).length;
 
@@ -76,6 +252,7 @@ function TopbarContent({ loggedInUser }) {
         setIsProfileOpen(false);
         setIsDateMenuOpen(false);
         setIsNotificationOpen(false);
+        setExpandedNotifId(null); // Collapse all when closing dropdown
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -100,6 +277,28 @@ function TopbarContent({ loggedInUser }) {
     ? currentTime.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true })
     : "Loading...";
 
+  // Calendar Calculation Helpers
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDayOfMonth = new Date(year, month, 1).getDay();
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+  // Festival/Events mapping (MonthIndex-Day format)
+  const festivalsObj = {
+    "0-1": "New Year's Day",
+    "1-21": "International Mother Language Day",
+    "2-17": "Sheikh Mujibur Rahman's Birthday",
+    "2-26": "Independence Day",
+    "3-14": "Pohela Boishakh",
+    "4-1": "May Day",
+    "7-15": "National Mourning Day",
+    "11-16": "Victory Day",
+    "11-25": "Christmas Day"
+  };
+
+  const getFestival = (m, d) => festivalsObj[`${m}-${d}`];
+  const currentMonthFestivals = Object.entries(festivalsObj).filter(([key]) => key.startsWith(`${month}-`));
 
   if (!mounted) {
     return <div className="h-15 w-full bg-transparent" />;
@@ -146,8 +345,8 @@ function TopbarContent({ loggedInUser }) {
           )}
         </button>
 
-        {/* Date & Time */}
-        <div className="relative hidden lg:block">
+        {/* Date & Time with Advanced Calendar */}
+        <div className="relative hidden md:block">
           <button
             onClick={() => { setIsDateMenuOpen(!isDateMenuOpen); setIsProfileOpen(false); setIsNotificationOpen(false); }}
             className={`flex items-center gap-2 border rounded-xl px-4 py-2 transition-all duration-300 shadow-sm group ${isDark ? 'bg-[#133c34]/50 border-[#1a4a40] hover:bg-[#1a4a40]/80 hover:border-[#cddfa0]/50' : 'bg-gray-100 border-transparent hover:bg-gray-200'}`}
@@ -159,6 +358,126 @@ function TopbarContent({ loggedInUser }) {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
+
+          {/* Advanced Calendar Dropdown */}
+          {isDateMenuOpen && (
+            <div className={`absolute right-0 mt-4 w-[calc(100vw-2rem)] sm:w-72 lg:w-80 max-w-sm backdrop-blur-xl border rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] p-4 sm:p-5 z-50 animate-in fade-in zoom-in duration-200 ${isDark ? 'bg-[#0a1a17]/95 border-[#1a4a40]' : 'bg-white border-gray-200'}`}>
+              
+              {/* Type to Jump / Calendar Controls */}
+              <div className="flex flex-col gap-2 mb-4">
+                <div className="flex justify-between items-center w-full">
+                  <button onClick={(e) => { e.stopPropagation(); setViewDate(new Date(year, month - 1, 1)); }} className={`p-1.5 rounded-lg transition-colors ${isDark ? 'hover:bg-[#1a4a40] text-gray-400 hover:text-white' : 'hover:bg-gray-100 text-gray-600 hover:text-black'}`} title="Previous Month">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  
+                  {/* Month and Year Selectors */}
+                  <div className="flex gap-1.5 items-center justify-center flex-1">
+                    <select 
+                      value={month} 
+                      onChange={(e) => { e.stopPropagation(); setViewDate(new Date(year, parseInt(e.target.value), 1)); }}
+                      className={`text-sm font-bold bg-transparent outline-none cursor-pointer p-1 rounded transition-colors border-none ${isDark ? 'text-white hover:bg-[#1a4a40]' : 'text-gray-800 hover:bg-gray-100'}`}
+                    >
+                      {monthNames.map((m, i) => <option key={m} value={i} className={isDark ? "bg-[#0a1a17] text-white" : "bg-white text-gray-900"}>{m}</option>)}
+                    </select>
+                    
+                    <input 
+                      type="number" 
+                      value={inputYear}
+                      onChange={(e) => {
+                        setInputYear(e.target.value);
+                        const y = parseInt(e.target.value);
+                        if (y > 1000 && y < 9999) {
+                          setViewDate(new Date(y, month, 1));
+                        }
+                      }}
+                      className={`w-16 text-sm font-bold text-center outline-none p-1 border rounded transition-colors ${isDark ? 'bg-[#0a1a17] text-white border-[#1a4a40] focus:border-[#cddfa0]' : 'bg-white text-gray-800 border-gray-200 focus:border-emerald-500'}`}
+                    />
+                  </div>
+
+                  <button onClick={(e) => { e.stopPropagation(); setViewDate(new Date(year, month + 1, 1)); }} className={`p-1.5 rounded-lg transition-colors ${isDark ? 'hover:bg-[#1a4a40] text-gray-400 hover:text-white' : 'hover:bg-gray-100 text-gray-600 hover:text-black'}`} title="Next Month">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* Days of Week */}
+              <div className="grid grid-cols-7 gap-1 mb-2 text-center">
+                {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(wd => (
+                  <div key={wd} className={`text-[10px] font-black uppercase ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>{wd}</div>
+                ))}
+              </div>
+
+              {/* Calendar Days */}
+              <div className="grid grid-cols-7 gap-1 place-items-center">
+                {/* Empty slots for previous month padding */}
+                {Array.from({ length: firstDayOfMonth }).map((_, i) => (
+                  <div key={`empty-${i}`} className="w-7 h-7 sm:w-8 sm:h-8"></div>
+                ))}
+                
+                {/* Actual Days */}
+                {Array.from({ length: daysInMonth }).map((_, i) => {
+                  const dayNum = i + 1;
+                  const isToday = dayNum === currentTime?.getDate() && month === currentTime?.getMonth() && year === currentTime?.getFullYear();
+                  const festivalName = getFestival(month, dayNum);
+
+                  return (
+                    <div 
+                      key={dayNum} 
+                      title={festivalName || ''}
+                      className={`relative w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-full text-xs font-medium cursor-pointer transition-all
+                        ${isToday 
+                          ? (isDark ? 'bg-[#cddfa0] text-[#0a1a17] shadow-[0_0_10px_rgba(205,223,160,0.5)] font-black scale-110' : 'bg-emerald-500 text-white shadow-md font-black scale-110') 
+                          : (isDark ? 'text-gray-300 hover:bg-[#1a4a40] hover:text-white' : 'text-gray-700 hover:bg-gray-100 hover:text-black')}
+                      `}
+                    >
+                      {dayNum}
+                      {/* Festival Dot on Date */}
+                      {festivalName && (
+                        <span className={`absolute bottom-0.5 w-1 h-1 rounded-full ${isToday ? 'bg-black/50' : 'bg-amber-500'}`}></span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Explicit Festival List for Current View Month */}
+              {currentMonthFestivals.length > 0 ? (
+                <div className={`mt-3 pt-3 border-t ${isDark ? 'border-[#1a4a40]/50' : 'border-gray-200'}`}>
+                  <p className={`text-[10px] uppercase font-black tracking-wider mb-2 ${isDark ? 'text-[#cddfa0]' : 'text-emerald-600'}`}>Festivals This Month</p>
+                  <ul className="space-y-1.5">
+                    {currentMonthFestivals.map(([key, name]) => {
+                      const day = key.split('-')[1];
+                      return (
+                        <li key={key} className={`text-[11px] flex items-start gap-2 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                          <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 bg-amber-500"></span>
+                          <span><span className="font-bold">{day} {monthNames[month]}</span> - {name}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ) : (
+                <div className={`mt-3 pt-3 border-t text-[10px] flex items-center justify-center gap-1.5 font-medium ${isDark ? 'border-[#1a4a40]/50 text-gray-500' : 'border-gray-200 text-gray-400'}`}>
+                  No events or festivals this month
+                </div>
+              )}
+
+              {/* Go to Today Button - Bottom Placed */}
+              <div className={`mt-4 pt-3 border-t flex justify-center ${isDark ? 'border-[#1a4a40]/50' : 'border-gray-200'}`}>
+                <button 
+                  onClick={(e) => { 
+                    e.stopPropagation(); 
+                    setViewDate(new Date()); 
+                    setInputYear(new Date().getFullYear()); 
+                  }} 
+                  className={`w-full py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all shadow-sm
+                    ${isDark ? 'bg-[#cddfa0] text-[#0a1a17] hover:bg-[#b8cc80]' : 'bg-emerald-500 text-white hover:bg-emerald-600 shadow-emerald-500/20'}`}
+                >
+                  Go to Today
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Notification Bell */}
@@ -186,15 +505,41 @@ function TopbarContent({ loggedInUser }) {
                 <h3 className={`text-sm font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>Notifications</h3>
                 <span className="text-xs bg-[#cddfa0]/20 text-[#cddfa0] px-2 py-0.5 rounded-full">{unreadCount} New</span>
               </div>
-              <div className="max-h-64 overflow-y-auto">
+              <div className="max-h-64 overflow-y-auto custom-nav-scroll">
                 {isLoadingNotifications ? (
                   <p className="px-4 py-3 text-sm text-gray-500 text-center">Loading notifications...</p>
                 ) : notifications.length > 0 ? (
                   notifications.map((notif) => (
-                    <Link href={`/notifications/${notif.id}`} key={notif.id} className={`block px-4 py-3 border-b transition-colors ${isDark ? 'border-[#1a4a40]/30 hover:bg-[#133c34]/50' : 'border-gray-50 hover:bg-gray-50'} ${notif.unread ? (isDark ? 'bg-[#133c34]/20' : 'bg-blue-50/50') : ''}`}>
-                      <p className={`text-sm ${notif.unread ? (isDark ? 'text-white font-semibold' : 'text-gray-800 font-semibold') : (isDark ? 'text-gray-400' : 'text-gray-600')}`}>{notif.text}</p>
-                      <p className="text-xs text-gray-500 mt-1">{notif.time}</p>
-                    </Link>
+                    <div 
+                      key={notif.id} 
+                      onClick={() => handleNotificationClick(notif.id)}
+                      className={`block px-4 py-3 border-b cursor-pointer transition-colors ${isDark ? 'border-[#1a4a40]/30 hover:bg-[#133c34]/50' : 'border-gray-50 hover:bg-gray-50'} ${notif.unread ? (isDark ? 'bg-[#133c34]/20' : 'bg-blue-50/50') : ''}`}
+                    >
+                      <div className="flex justify-between items-start">
+                        <p className={`text-sm ${notif.unread ? (isDark ? 'text-white font-semibold' : 'text-gray-800 font-semibold') : (isDark ? 'text-gray-400' : 'text-gray-600')}`}>{notif.text}</p>
+                        <svg className={`w-4 h-4 ml-2 flex-shrink-0 transition-transform duration-300 ${expandedNotifId === notif.id ? 'rotate-180' : ''} ${isDark ? 'text-gray-500' : 'text-gray-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                      
+                      {/* Expanded Content Section (FAQ Style) */}
+                      <AnimatePresence>
+                        {expandedNotifId === notif.id && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0, marginTop: 0 }}
+                            animate={{ height: 'auto', opacity: 1, marginTop: 8 }}
+                            exit={{ height: 0, opacity: 0, marginTop: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <p className={`text-xs p-2.5 rounded-lg leading-relaxed ${isDark ? 'bg-[#091a16] text-gray-300 border border-[#1a4a40]/50' : 'bg-gray-100 text-gray-600 border border-gray-200'}`}>
+                              {notif.details || "No additional details available for this notification."}
+                            </p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      <p className="text-xs text-gray-500 mt-1.5">{notif.time}</p>
+                    </div>
                   ))
                 ) : (
                   <p className="px-4 py-3 text-sm text-gray-500 text-center">No new notifications</p>
