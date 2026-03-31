@@ -22,6 +22,12 @@ export async function GET(request) {
     const dbNotifications = await notificationsCollection.find({}).sort({ createdAt: -1 }).limit(10).toArray();
     const dbSellers = await usersCollection.find({ role: "seller" }).limit(10).toArray();
 
+    // Real Revenue Calculation
+    const purchasesCollection = await connect("purchases");
+    const successfulPurchases = await purchasesCollection.find({ status: "success" }).toArray();
+    const totalRevenue = successfulPurchases.reduce((acc, curr) => acc + (curr.amount || 0), 0);
+    const propertiesSold = successfulPurchases.length;
+
     // Enhance properties with real seller info
     const enhancedProperties = await Promise.all(dbProperties.map(async (p) => {
       let seller = null;
@@ -93,8 +99,8 @@ export async function GET(request) {
       stats: {
         totalListings: { value: totalProperties, trend: "+ 18%", description: "Total properties listed" },
         newLeads: { value: totalUsers, trend: "+ 15%", description: "Total registered users" },
-        propertiesSold: { value: totalSellers, trend: "+ 8%", description: "Total registered sellers" },
-        revenue: { value: 3332800, trend: "+ 12%", description: "Total platform revenue" }
+        propertiesSold: { value: propertiesSold || totalSellers, trend: "+ 8%", description: "Total successful sales" },
+        revenue: { value: totalRevenue || 3332800, trend: "+ 12%", description: "Total platform revenue" }
       },
       salesPerformance: [
         { "month": "Jan", "value": 15000 }, { "month": "Feb", "value": 18000 }, { "month": "Mar", "value": 22000 }

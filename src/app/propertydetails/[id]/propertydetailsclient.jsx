@@ -554,13 +554,13 @@ export default function PropertyDetailsClient({ property: initialProperty }) {
               </div>
 
               <div className="space-y-4">
-                {isOwnerSeller ? (
+                {isOwnerSeller || property.status === "sold" ? (
                   <button
                     type="button"
                     disabled
                     className={`w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all shadow-lg flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${isDark ? 'bg-white/5 text-white' : 'bg-slate-100 text-slate-500'}`}
                   >
-                    <ShoppingBag size={16} /> Buy Property
+                    <ShoppingBag size={16} /> {property.status === "sold" ? "Property Sold" : "Buy Property"}
                   </button>
                 ) : (
                   <Link
