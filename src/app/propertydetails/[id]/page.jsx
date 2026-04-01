@@ -7,7 +7,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { cookies } from "next/headers";
 
-// ডাটা ফেচিং ফাংশন (নাম সংশোধন করা হয়েছে)
+// ডাটা ফেচিং ফাংশন
 async function getPropertyData(id, shouldCount) {
   try {
     const session = await getServerSession(authOptions);
@@ -25,9 +25,9 @@ async function getPropertyData(id, shouldCount) {
 
     let visitCount = property.visitCount || 0;
 
-    // shouldCount এখন প্যারামিটার থেকে আসছে
     if (shouldCount) {
-      const cookieStore = cookies();
+      // ⚠️ Next.js 15/16 এ cookies() এর আগে await দিতে হবে
+      const cookieStore = await cookies(); 
       const cookieKey = `viewed_property_${id}`;
       const existing = cookieStore.get(cookieKey)?.value === "1";
 
@@ -39,9 +39,8 @@ async function getPropertyData(id, shouldCount) {
           );
           visitCount += 1;
 
-          // প্রোডাকশনে সার্ভার কম্পোনেন্টে কুকি সেট করা অনেক সময় এরর দেয়, 
-          // তাই এটিকে try-catch এ রাখা নিরাপদ।
           try {
+            // ⚠️ এখানেও set করার সময় cookieStore এর আগে await কার্যকর থাকবে
             cookieStore.set(cookieKey, "1", {
               path: "/",
               maxAge: 60 * 60 * 24 * 30, // 30 days
@@ -82,12 +81,11 @@ async function getPropertyData(id, shouldCount) {
 }
 
 export default async function PropertyPage({ params, searchParams }) {
-  // Next.js 15+ এ params এবং searchParams অবশ্যই await করতে হয়
+  // Next.js 15/16 এ params এবং searchParams ও await করতে হয়
   const { id } = await params; 
   const sParams = await searchParams;
   const shouldCount = sParams?.view === "1";
 
-  // সঠিক ফাংশন (getPropertyData) কল করা হয়েছে এবং প্যারামিটার পাস করা হয়েছে
   const property = await getPropertyData(id, shouldCount);
 
   if (!property) {
