@@ -7,8 +7,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { cookies } from "next/headers";
 
-// ডাটা ফেচিং ফাংশন - এখন সরাসরি ডাটাবেজ থেকে ফেচ করবে যাতে সেশন পাওয়া যায়
-async function getPropertyData(id, { shouldCount = false } = {}) {
+// ডাটা ফেচিং ফাংশন (নাম সংশোধন করা হয়েছে)
+async function getPropertyData(id, shouldCount) {
   try {
     const session = await getServerSession(authOptions);
     const propertiesCollection = await connect("properties");
@@ -24,12 +24,13 @@ async function getPropertyData(id, { shouldCount = false } = {}) {
     if (!property) return null;
 
     let visitCount = property.visitCount || 0;
+
+    // shouldCount এখন প্যারামিটার থেকে আসছে
     if (shouldCount) {
       const cookieStore = cookies();
       const cookieKey = `viewed_property_${id}`;
       const existing = cookieStore.get(cookieKey)?.value === "1";
 
-      // Only increment once per browser (cookie) to avoid reload counting.
       if (!existing) {
         try {
           await propertiesCollection.updateOne(
@@ -38,19 +39,24 @@ async function getPropertyData(id, { shouldCount = false } = {}) {
           );
           visitCount += 1;
 
-          cookieStore.set(cookieKey, "1", {
-            path: "/",
-            maxAge: 60 * 60 * 24 * 30, // 30 days
-            httpOnly: true,
-            sameSite: "lax",
-          });
+          // প্রোডাকশনে সার্ভার কম্পোনেন্টে কুকি সেট করা অনেক সময় এরর দেয়, 
+          // তাই এটিকে try-catch এ রাখা নিরাপদ।
+          try {
+            cookieStore.set(cookieKey, "1", {
+              path: "/",
+              maxAge: 60 * 60 * 24 * 30, // 30 days
+              httpOnly: true,
+              sameSite: "lax",
+            });
+          } catch (cookieErr) {
+            console.warn("Could not set cookie in RSC:", cookieErr.message);
+          }
         } catch (vErr) {
           console.error("Failed to update visit count:", vErr);
         }
       }
     }
 
-    // ফেভারিট কাউন্ট এবং ইউজার ফেভারিট স্টেট বের করা
     const favoritesCollection = await connect("favorites");
     const favoriteCount = await favoritesCollection.countDocuments({ propertyId: id });
     
@@ -76,9 +82,13 @@ async function getPropertyData(id, { shouldCount = false } = {}) {
 }
 
 export default async function PropertyPage({ params, searchParams }) {
+  // Next.js 15+ এ params এবং searchParams অবশ্যই await করতে হয়
   const { id } = await params; 
-  const shouldCount = searchParams?.view === "1";
-  const property = await getPropertyData(id, { shouldCount });
+  const sParams = await searchParams;
+  const shouldCount = sParams?.view === "1";
+
+  // সঠিক ফাংশন (getPropertyData) কল করা হয়েছে এবং প্যারামিটার পাস করা হয়েছে
+  const property = await getPropertyData(id, shouldCount);
 
   if (!property) {
     return (
