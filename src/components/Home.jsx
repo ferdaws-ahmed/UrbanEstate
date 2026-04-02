@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import dynamic from 'next/dynamic'; // <-- নতুন অ্যাড করা হয়েছে
+import dynamic from 'next/dynamic'; // <-- নতুন অ্যাড করা হয়েছে
 import Navbar from '../components/shared/Navbar';
 import Footer from '../components/shared/Footer';
 
@@ -26,6 +26,14 @@ import TestimonialSlider from './home/TestimonialSlider';
 import FAQSection from './home/FAQSection';
 import LiveSupportChat from './home/LiveSupportChat';
 
+// 3D ফার্নিচার সেকশনটি ডাইনামিকালি ইমপোর্ট করা হলো (SSR অফ করে)
+const ARFurnitureFit = dynamic(
+  () => import('./home/ARFurnitureFit'),
+  { 
+    ssr: false, 
+    loading: () => <div className="py-20 text-center font-bold animate-pulse">Loading 3D Furniture Fit...</div> 
+  }
+);
 
 const EnvironmentalLayers = dynamic(
   () => import('./home/EnvironmentalLayers'),
@@ -62,6 +70,13 @@ export default function Home() {
 
       
         <AIDecorator />
+
+        {/* নতুন 3D ফার্নিচার সেকশনটি AIDecorator এর ঠিক নিচে বসানো হলো */}
+        <div className="container mx-auto py-12 px-4">
+          <h2 className="text-3xl font-bold text-center mb-8">ভার্চুয়াল ফার্নিচার ফিটিং</h2>
+          <ARFurnitureFit />
+        </div>
+
         <Included />
         <ArchitecturalStory />
 
