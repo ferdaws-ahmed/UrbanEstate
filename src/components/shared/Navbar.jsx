@@ -59,16 +59,18 @@ const Navbar = () => {
   const getNavItems = () => {
     const commonHome = { name: "Home", path: "/" };
     const allProperty = { name: "All Property", path: "/all-properties" };
+    const about = { name: "About", path: "/about" };
 
     if (user?.role === "seller") {
       return [
         commonHome,
         { name: "Add Property", path: "/sellproperty" },
         allProperty,
+        about,
       ];
     }
 
-    return [commonHome, allProperty];
+    return [commonHome, allProperty, about];
   };
 
   const navItems = getNavItems();
@@ -79,11 +81,7 @@ const Navbar = () => {
         manrope.className
       }
       ${visible ? "translate-y-0" : "-translate-y-full"} 
-      ${
-        scrolled
-          ? "bg-[#0f2e28]/95 backdrop-blur-md py-3 shadow-md"
-          : "bg-transparent py-6"
-      }`}
+      bg-[#0f2e28]/95 backdrop-blur-md py-3 shadow-md`}
     >
       <div className="container mx-auto flex justify-between items-center px-6 lg:px-12">
         {/* Logo Section */}
