@@ -1,66 +1,65 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import properties from "../../data/properties";
+import properties from "../../data/properties"; 
 import { motion, AnimatePresence } from "framer-motion";
-
-// Massive Smart Knowledge Base 
-const knowledgeBase = {
-  greetings: {
-    keywords: ["hello", "hi", "hey", "greetings", "good morning", "how are you", "hru", "yo", "anyone there", "hey assistant", "support", "help me", "hi there", "good evening", "good afternoon", "morning", "night", "whats up", "buddy"],
-    reply: "Hello! Welcome to the Urban Estate Support Hub. I'm doing great, thank you for asking! How can I assist you with your property inquiry today?"
-  },
-  personal: {
-    keywords: ["what are you doing", "what is your name", "who are you", "your name", "who made you", "where are you from", "are you human", "are you a robot", "what is your job", "what can you do", "doing now", "developer", "creator", "owner", "built you", "programmed", "founder"],
-    reply: "I am Urban Estate AI, your dedicated real estate concierge. Right now, I'm analyzing market trends to help you find your dream home! I was developed by a specialized MERN Stack engineer based in Baipayl, Dhaka."
-  },
-  location_personal: {
-    keywords: ["where do you live", "where are you", "your office", "where are you living", "where is your home", "address", "location", "place", "area", "baipayl", "dhaka", "bangladesh", "visit", "office address", "map", "direction"],
-    reply: "I live in the digital cloud, but my heart (and our main office) is in Baipayl, Dhaka Division, Bangladesh! You can also find us at our corporate unit in Banani, Road 11."
-  },
-  complex_buying: {
-    keywords: ["buy", "steps", "process", "procedure", "purchase", "guide", "method", "how to buy", "requirements", "booking", "handover", "possession", "closure", "agreement", "rules", "policy"],
-    reply: "Our purchase flow is seamless: 1. Asset selection. 2. Title verification. 3. MOU drafting. 4. Escrow setup. 5. Registration and physical possession handover. We handle the paperwork for you!"
-  },
-  legal: {
-    keywords: ["legal", "document", "paper", "verified", "khatian", "mutation", "registration", "deed", "authentic", "title", "ownership", "dispute", "scam", "safe", "papers", "cs", "sa", "rs", "bs", "porcha", "dakhila"],
-    reply: "Safety is our priority. We verify all CS, SA, RS, and BS Khatians, Mutation records, and PoA validity to ensure every property is 100% dispute-free and authentic."
-  },
-  finance: {
-    keywords: ["loan", "emi", "bank", "installment", "interest", "finance", "mortgage", "price", "cost", "budget", "down payment", "tax", "vat", "stamp duty", "hidden cost", "ait", "registration fee", "total amount"],
-    reply: "We facilitate 70-80% bank financing via major partners. Beyond the property price, budget an extra 10-12% for government taxes, stamp duty, and registration fees."
-  },
-  investment: {
-    keywords: ["investment", "roi", "return", "market", "trend", "future", "profit", "appreciation", "risk", "bubble", "valuation", "yield", "capital gain", "income", "growth"],
-    reply: "Real estate is a shield against inflation. Our AI predicts 12-18% annual appreciation in emerging infrastructure corridors like Dhaka and Miami. It's a high-yield choice."
-  },
-  technical: {
-    keywords: ["structural", "piling", "quality", "material", "architect", "engineer", "soil test", "building code", "safety", "earthquake", "cement", "steel", "fittings", "substation", "generator", "lift"],
-    reply: "All listed properties adhere to strict building codes. We review soil tests, structural designs, and ensure high-end specs like earthquake resistance and heavy-load substations."
-  },
-  support: {
-    keywords: ["contact", "phone", "email", "number", "human", "talk", "expert", "agent", "complain", "issue", "sa9079600@gmail.com", "manager", "whatsapp", "call", "helpdesk"],
-    reply: "For high-priority human intervention or direct help, reach our senior team at sa9079600@gmail.com or visit our Road 11, Banani office directly."
-  },
-  real_estate_general: {
-    keywords: ["house", "villa", "apartment", "flat", "land", "plot", "commercial", "shop", "office space", "residential", "luxury", "affordable", "ready", "under construction"],
-    reply: "We have a vast collection of verified residential and commercial assets. Tell me your preferred area, budget, or bedroom count, and I will find the best match for you instantly."
-  }
-};
+import { GoogleGenerativeAI } from "@google/generative-ai"; 
 
 function parseQuery(q) {
   const res = {};
-  const mBeds = q.match(/(\d+)\s*-?\s?bed/);
+  
+  // Beds detection
+  const mBeds = q.match(/(\d+)\s*(bed|br|room)/i);
   if (mBeds) res.beds = Number(mBeds[1]);
-  const mPrice = q.match(/\$?([0-9,]+)k?/i);
-  if (mPrice) {
-    const raw = mPrice[1].replace(/,/g, "");
-    res.maxPrice = Number(raw);
+
+  // Baths detection
+  const mBaths = q.match(/(\d+)\s*(bath|bt)/i);
+  if (mBaths) res.baths = Number(mBaths[1]);
+
+  // Price detection (Million, Lakh, or k)
+  const mMillion = q.match(/(\d+\.?\d*)\s*m/i);
+  const mLakh = q.match(/(\d+)\s*lakh/i);
+  if (mMillion) res.maxPrice = parseFloat(mMillion[1]) * 1000000;
+  else if (mLakh) res.maxPrice = Number(mLakh[1]) * 100000;
+  else {
+    const mPrice = q.match(/\$?([0-9,]+)k?/i);
+    if (mPrice) {
+      const raw = mPrice[1].replace(/,/g, "");
+      res.maxPrice = Number(raw);
+    }
   }
-  const city = q.match(/in\s([A-Za-z\s]+)/i);
-  if (city) res.city = city[1].trim();
+
+  // Size detection
+  const mSize = q.match(/(\d+)\s*(sqft|sq\s*mt|katha|sq|area|ft)/i);
+  if (mSize) res.size = Number(mSize[1]);
+
+  // City detection
+  const lowerQ = q.toLowerCase();
+  properties.forEach(p => {
+    const titleWords = p.title.toLowerCase().split(' ');
+    titleWords.forEach(word => {
+      if (word.length > 3 && lowerQ.includes(word)) res.city = word;
+    });
+  });
+
   return res;
 }
+
+// Gemini API Setup with Multiple Backup Keys
+const API_KEYS = [
+  "AIzaSyA-rc3Cb3ECsd89Ff8wxVdgHj3igg4uk2Y",
+  "AIzaSyCbEE5qPJwZ5aMGbQtCcndO6_bX9tIMpwk",
+  "AIzaSyBTHSORGHoaz70CJI1p5gfDLcz5kttk9ZI",
+  "AIzaSyDpuDE6VwGqrMGu7GOTtkpBSdF61EeE_hI",
+  "AIzaSyA0dyLHxxuZiUCA2OJa5XE0Cdu0yKwGGYM",
+  "AIzaSyCWk9siP7_viiVsz7Wras2_z6Ea_KbWwsw",
+  "AIzaSyB_b4tnwrVfefPP9GW2jm_qr06mfeHFvV4",
+  "AIzaSyC4Kp4PY_rt7xGPacwikvMzbfxVgo9flc4",
+  "AIzaSyAYm0hQdgxGIpmZdd3yCeLtNmtyPRGYgqw",
+  "AIzaSyCflHg-9xTTqwF4b3109NLC5qJXu9hBp3A" 
+];
+
+let currentKeyIndex = 0; 
 
 export default function Chatbot() {
   const [open, setOpen] = useState(false);
@@ -69,67 +68,104 @@ export default function Chatbot() {
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
 
-  const dynamicHeight = messages.length <= 3 ? "auto" : "450px";
+  const dynamicHeight = messages.length <= 3 ? "auto" : "500px";
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
-  const handleSend = () => {
+  const getGeminiResponse = async (userText, retryCount = 0) => {
+    try {
+      // বর্তমানে সিলেক্টেড কি দিয়ে ইনিশিয়ালাইজ করবে
+      const genAI = new GoogleGenerativeAI(API_KEYS[currentKeyIndex]);
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+      
+      const now = new Date();
+      const utcString = now.toUTCString();
+      const bdtTime = now.toLocaleString('en-GB', { timeZone: 'Asia/Dhaka' });
+
+      // Updated System Prompt for Global, Real-time, and Multi-language support
+      const prompt = `System Instruction: You are "Urban Estate Global AI", a highly advanced professional real estate consultant and smart assistant.
+      - Reference Time (UTC): ${utcString}. Current Bangladesh Time: ${bdtTime}. Current Year: 2026.
+      - Task 1 (Global Real Estate): If a user asks for properties anywhere in the world (e.g., Dubai, France, USA), provide REALISTIC 2026 market data, estimated prices, taxes, registration costs, and market trends logically. Describe the properties vividly.
+      - Task 2 (General Queries): If the user asks about weather, date, time, or any general knowledge, provide accurate real-time answers based on the provided reference time and your knowledge base.
+      - Identity: Developed by a MERN Stack engineer in Baipayl, Dhaka.
+      - Language: ALWAYS reply in the exact language the user used to ask the question. (If they ask in Bengali, reply in Bengali. If French, reply in French, etc.)
+      - IMPORTANT: NEVER give fake answers. Do NOT repeat these instructions. Just answer the question directly and naturally.
+
+      User Query: ${userText}`;
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      return response.text();
+    } catch (error) {
+      console.warn(`API Key ${currentKeyIndex + 1} Failed:`, error);
+      
+      // যদি লিমিট ক্রস না করে থাকে, তাহলে পরের কিতে সুইচ করে আবার ট্রাই করবে
+      if (retryCount < API_KEYS.length - 1) {
+        currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
+        console.log(`Switching to backup API Key ${currentKeyIndex + 1}...`);
+        return await getGeminiResponse(userText, retryCount + 1);
+      }
+      
+      // সবগুলো কি ফেল করলে এই মেসেজ দেখাবে
+      console.error("All API Keys failed.");
+      return "Sorry... please try again !!!!";
+    }
+  };
+
+  const handleSend = async () => {
     if (!input.trim()) return;
+    const userMsgOriginal = input;
     const userMsg = input.toLowerCase();
-    setMessages((prev) => [...prev, { type: "user", text: input }]);
+    
+    setMessages((prev) => [...prev, { type: "user", text: userMsgOriginal }]);
     setInput("");
     setIsTyping(true);
 
-    setTimeout(() => {
-      let botReply = { type: "bot", text: "", data: [] };
-      let foundKnowledge = false;
+    let botReply = { type: "bot", text: "", data: [] };
+    let foundInDB = false;
 
-      // Smart Context matching that finds keywords within any sentence structure
-      for (let category in knowledgeBase) {
-        if (knowledgeBase[category].keywords.some(key => userMsg.includes(key))) {
-          botReply.text = knowledgeBase[category].reply;
-          foundKnowledge = true;
-          break; 
-        }
+    const query = parseQuery(userMsg);
+    
+    if (query.beds || query.maxPrice || query.city || query.size || query.baths) {
+      let matches = properties.filter(p => {
+        let isMatch = true;
+        if (query.beds && p.beds !== query.beds) isMatch = false;
+        if (query.baths && p.baths !== query.baths) isMatch = false;
+        if (query.maxPrice && p.price > query.maxPrice) isMatch = false;
+        if (query.city && !p.title.toLowerCase().includes(query.city)) isMatch = false;
+        if (query.size && p.sqft && p.sqft < query.size) isMatch = false;
+        return isMatch;
+      });
+
+      if (matches.length > 0) {
+        botReply.text = `Success! I found ${matches.length} verified premium properties matching your criteria in our marketplace:`;
+        botReply.data = matches.slice(0, 3);
+        foundInDB = true;
       }
+    }
 
-      // Special logic for property search integration
-      const query = parseQuery(userMsg);
-      if (query.beds || query.maxPrice || query.city) {
-        let matches = properties.slice();
-        if (query.beds) matches = matches.filter((p) => p.beds >= query.beds);
-        if (query.maxPrice) matches = matches.filter((p) => p.price <= query.maxPrice);
-        if (query.city) matches = matches.filter((p) => p.title.toLowerCase().includes(query.city.toLowerCase()));
-        
-        if (matches.length > 0) {
-          botReply.text = `AI Intelligence Scan complete. I found ${matches.length} premium properties matching your criteria:`;
-          botReply.data = matches.slice(0, 2);
-          foundKnowledge = true;
-        }
-      }
+    if (!foundInDB) {
+      const apiResponse = await getGeminiResponse(userMsgOriginal);
+      botReply.text = apiResponse;
+    }
 
-      if (!foundKnowledge) {
-        botReply.text = "I'm specializing in Real Estate Intelligence, Legal Papers, and Market Analytics. Could you please specify your query? For example: 'Where is your home office?'";
-      }
-
-      setMessages((prev) => [...prev, botReply]);
-      setIsTyping(false);
-    }, 1000);
+    setMessages((prev) => [...prev, botReply]);
+    setIsTyping(false);
   };
 
   return (
     <>
-      <div className="fixed right-6 bottom-6 z-[9999]">
+      <div className="fixed right-4 bottom-4 md:right-6 md:bottom-6 z-[9999]">
         <motion.button 
           onClick={() => setOpen(!open)} 
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#0f2e28] to-[#1a5d51] text-white shadow-[0_4px_15px_rgba(0,0,0,0.3)] flex items-center justify-center text-2xl transition-all border border-emerald-400/20"
+          className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-tr from-[#0f2e28] to-[#1a5d51] text-white shadow-[0_4px_15px_rgba(0,0,0,0.3)] flex items-center justify-center text-xl md:text-2xl border border-emerald-400/20"
         >
           {open ? "×" : (
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="12" cy="11" r="3"></circle><path d="M12 7v4"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 md:w-8 md:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="12" cy="11" r="3"></circle><path d="M12 7v4"></path></svg>
           )}
         </motion.button>
       </div>
@@ -141,42 +177,45 @@ export default function Chatbot() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 30 }}
             style={{ height: dynamicHeight }}
-            className="fixed right-6 bottom-24 z-[9999] w-[310px] bg-[#f8fafc] dark:bg-slate-900 rounded-[1.5rem] shadow-2xl border border-gray-200 dark:border-slate-700 flex flex-col overflow-hidden max-h-[500px]"
+            className="fixed right-2 bottom-20 md:right-6 md:bottom-24 z-[9999] w-[calc(100vw-16px)] sm:w-[350px] md:w-[380px] bg-[#f8fafc] dark:bg-slate-900 rounded-[1.5rem] shadow-2xl border border-gray-200 dark:border-slate-700 flex flex-col overflow-hidden max-h-[70vh] md:max-h-[600px]"
           >
-            <div className="bg-[#0f2e28] p-3 text-white flex items-center justify-between shrink-0">
+            {/* Header */}
+            <div className="bg-[#0f2e28] p-3 md:p-4 text-white flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center">
-                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" className="md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
                 </div>
                 <div>
-                  <div className="font-bold text-[12px] leading-tight text-emerald-50 uppercase tracking-widest">Support Hub</div>
-                  <div className="flex items-center gap-1.5 text-[8px] text-emerald-400/80 uppercase font-bold">
+                  <div className="font-bold text-[12px] md:text-[14px] leading-tight text-emerald-50 uppercase tracking-widest">Support Hub</div>
+                  <div className="flex items-center gap-1.5 text-[8px] md:text-[10px] text-emerald-400/80 uppercase font-bold">
                     <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span> AI Expert Active
                   </div>
                 </div>
               </div>
-              <button onClick={() => setOpen(false)} className="text-xl opacity-60 hover:opacity-100 transition-opacity">×</button>
+              <button onClick={() => setOpen(false)} className="text-xl md:text-2xl opacity-60 hover:opacity-100 transition-opacity">×</button>
             </div>
 
-            <div className="flex-1 p-4 overflow-y-auto bg-emerald-50/10 dark:bg-slate-800 flex flex-col gap-4 min-h-0">
+            {/* Chat Area */}
+            <div className="flex-1 p-3 md:p-4 overflow-y-auto bg-emerald-50/10 dark:bg-slate-800 flex flex-col gap-3 md:gap-4 min-h-0">
               {messages.length === 0 && (
-                <div className="bg-white dark:bg-slate-700 p-4 rounded-2xl text-[12px] text-gray-600 dark:text-gray-300 border border-emerald-100 dark:border-slate-600 shadow-sm italic text-center">
-                    Verified real estate support is active. <br/> Ask: <b>"Who made you?"</b> or <b>"Where is your office?"</b>
+                <div className="bg-white dark:bg-slate-700 p-3 md:p-4 rounded-2xl text-[12px] md:text-[13px] text-gray-600 dark:text-gray-300 border border-emerald-100 dark:border-slate-600 shadow-sm italic text-center">
+                   World-wide real estate intelligence active. <br/> Search properties or ask about market trends!
                 </div>
               )}
               
               {messages.map((m, idx) => (
                 <div key={idx} className={`flex ${m.type === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[90%] p-3 rounded-2xl text-[12px] leading-relaxed shadow-sm ${m.type === "user" ? "bg-[#0f2e28] text-white rounded-br-none" : "bg-white dark:bg-slate-700 text-gray-800 dark:text-white rounded-bl-none border border-emerald-50 dark:border-slate-600"}`}>
-                    {m.text}
+                  <div className={`max-w-[85%] md:max-w-[80%] p-3 rounded-2xl text-[12px] md:text-[14px] leading-relaxed shadow-sm ${m.type === "user" ? "bg-[#0f2e28] text-white rounded-br-none" : "bg-white dark:bg-slate-700 text-gray-800 dark:text-white rounded-bl-none border border-emerald-50 dark:border-slate-600"}`}>
+                    <div className="whitespace-pre-wrap">{m.text}</div>
+                    
                     {m.data && m.data.length > 0 && (
-                      <div className="mt-4 flex flex-col gap-3">
+                      <div className="mt-3 md:mt-4 flex flex-col gap-2 md:gap-3">
                         {m.data.map((r) => (
                           <div key={r.id} className="flex items-center gap-3 bg-emerald-50/50 dark:bg-slate-600 p-2 rounded-xl border border-emerald-100 dark:border-slate-500">
-                            <img src={r.image} className="w-10 h-8 object-cover rounded-lg shadow-sm" alt="" />
+                            <img src={r.image} className="w-10 h-8 md:w-12 md:h-10 object-cover rounded-lg shadow-sm" alt="" />
                             <div className="flex-1 min-w-0">
-                              <div className="font-bold text-gray-900 dark:text-white truncate text-[11px]">{r.title}</div>
-                              <div className="text-emerald-700 dark:text-emerald-400 font-bold text-[10px]">{r.priceLabel}</div>
+                              <div className="font-bold text-gray-900 dark:text-white truncate text-[11px] md:text-[12px]">{r.title}</div>
+                              <div className="text-emerald-700 dark:text-emerald-400 font-bold text-[10px] md:text-[11px]">{r.priceLabel}</div>
                             </div>
                           </div>
                         ))}
@@ -185,6 +224,7 @@ export default function Chatbot() {
                   </div>
                 </div>
               ))}
+              
               {isTyping && (
                 <div className="flex gap-1.5 items-center px-3 py-2 bg-white dark:bg-slate-700 w-fit rounded-full shadow-sm border border-emerald-50 dark:border-slate-600">
                   <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-bounce"></span>
@@ -195,17 +235,18 @@ export default function Chatbot() {
               <div ref={chatEndRef} />
             </div>
 
-            <div className="p-4 bg-white dark:bg-slate-900 border-t border-emerald-50 dark:border-slate-700 shrink-0">
+            {/* Input Area */}
+            <div className="p-3 md:p-4 bg-white dark:bg-slate-900 border-t border-emerald-50 dark:border-slate-700 shrink-0">
               <div className="relative flex items-center">
                 <input 
                   value={input} 
                   onChange={(e) => setInput(e.target.value)} 
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                  className="w-full bg-emerald-50/30 dark:bg-slate-800 rounded-2xl px-5 py-3 pr-12 text-[12px] text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-400/20 placeholder:text-gray-400 font-medium border-none shadow-inner" 
+                  className="w-full bg-emerald-50/30 dark:bg-slate-800 rounded-xl md:rounded-2xl px-4 py-2.5 md:px-5 md:py-3 pr-10 md:pr-12 text-[12px] md:text-[14px] text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-400/20 placeholder:text-gray-400 font-medium border-none shadow-inner" 
                   placeholder="Ask me anything..." 
                 />
-                <button onClick={handleSend} className="absolute right-2 text-[#0f2e28] dark:text-emerald-400 p-2 hover:scale-125 transition-transform">
-                  ➤
+                <button onClick={handleSend} className="absolute right-2 md:right-3 text-[#0f2e28] dark:text-emerald-400 p-1.5 md:p-2 hover:scale-110 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 </button>
               </div>
             </div>
