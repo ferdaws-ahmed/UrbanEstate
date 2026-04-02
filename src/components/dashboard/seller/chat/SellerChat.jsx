@@ -19,6 +19,9 @@ import {
   X,
   Trash2
 } from "lucide-react";
+import { useTheme } from "@/src/components/Theme/ThemeContext";
+import { useChat } from "@/src/context/ChatContext";
+import toast from "react-hot-toast";
 
 export default function SellerChat() {
   const { data: session } = useSession();
