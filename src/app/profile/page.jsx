@@ -38,11 +38,11 @@ const ProfilePage = () => {
   const themeClass = isSeller ? 'emerald' : 'blue';
 
   if (status === "loading") {
-    return <div className="min-h-screen bg-white dark:bg-[#061510] flex items-center justify-center text-slate-900 dark:text-white font-bold uppercase tracking-widest animate-pulse transition-colors duration-300">Loading Profile...</div>;
+    return <div className="min-h-screen bg-white dark:bg-[#099880] flex items-center justify-center text-slate-900 dark:text-white font-bold uppercase tracking-widest animate-pulse transition-colors duration-300">Loading Profile...</div>;
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#061510] text-slate-900 dark:text-white flex flex-col items-center pt-32 pb-12 px-6 relative overflow-hidden transition-colors duration-300">
+    <div className="min-h-screen bg-white dark:bg-[#099880] text-slate-900 dark:text-white flex flex-col items-center pt-32 pb-12 px-6 relative overflow-hidden transition-colors duration-300">
       
       {/* Dynamic Background Glow */}
       <div 
@@ -71,9 +71,9 @@ const ProfilePage = () => {
             <img 
               src={profileImage} 
               alt="Profile" 
-              className={`w-full h-full rounded-full object-cover border-2 border-${themeClass}-400/50 shadow-xl relative z-10 bg-slate-100 dark:bg-[#061510]`}
+              className={`w-full h-full rounded-full object-cover border-2 border-${themeClass}-400/50 shadow-xl relative z-10 bg-slate-100 dark:bg-[#099880]`}
             />
-            <span className={`absolute bottom-2 right-2 w-5 h-5 border-2 border-white dark:border-[#061510] rounded-full z-20 ${isSeller ? 'bg-emerald-400' : 'bg-blue-500'}`}></span>
+            <span className={`absolute bottom-2 right-2 w-5 h-5 border-2 border-white dark:border-[#099880] rounded-full z-20 ${isSeller ? 'bg-emerald-400' : 'bg-blue-500'}`}></span>
           </div>
 
           <div className="space-y-1 mb-8">
@@ -115,7 +115,7 @@ const ProfilePage = () => {
           <div className="mt-12 pt-6 border-t border-slate-100 dark:border-white/5">
             <Link 
               href="/updateprofile" 
-              className="w-full flex items-center justify-center gap-2 bg-[#cddfa0] text-[#061510] py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-teal-700 hover:text-white hover:shadow-[0_0_20px_rgba(205,223,160,0.3)] transition-all shadow-lg"
+              className="w-full flex items-center justify-center gap-2 bg-[#cddfa0] text-[#099880] py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-teal-700 hover:text-white hover:shadow-[0_0_20px_rgba(205,223,160,0.3)] transition-all shadow-lg"
             >
               <FaUserEdit size={16} />
               Modify Profile Info
@@ -132,3 +132,4 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+

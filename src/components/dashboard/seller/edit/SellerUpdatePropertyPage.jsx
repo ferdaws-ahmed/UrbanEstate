@@ -127,7 +127,7 @@ export default function SellerUpdatePropertyPage({ propertyId }) {
         <button 
           onClick={() => router.push("/dashboard/seller/listings")}
           className={`flex items-center gap-3 font-black text-[10px] uppercase tracking-[0.2em] transition-all px-6 py-3 rounded-xl border ${
-            isDark ? "border-[#1a4a40] text-slate-400 hover:text-white hover:bg-white/5" : "border-slate-200 text-slate-500 hover:text-teal-600 hover:bg-slate-50"
+            isDark ? "border-white/10 text-slate-400 hover:text-white hover:bg-white/5" : "border-slate-200 text-slate-500 hover:text-teal-600 hover:bg-slate-50"
           }`}
         >
           <ArrowLeft size={14} /> Back to My Listings
@@ -146,7 +146,7 @@ export default function SellerUpdatePropertyPage({ propertyId }) {
         <div className="lg:col-span-1 lg:sticky lg:top-12 transition-all duration-500">
           <div className="space-y-8">
             <div className={`p-10 rounded-[3rem] border shadow-2xl transition-all duration-500 ${
-              isDark ? "bg-[#0b1f1a] border-[#1a4a40]/50 shadow-black/40" : "bg-white border-slate-200 shadow-sm"
+              isDark ? "bg-[var(--card)] border-white/10 shadow-black/40" : "bg-white border-slate-200 shadow-sm"
             }`}>
               <div className="flex items-center gap-4 mb-10">
                 <div className={`p-4 rounded-2xl shadow-inner ${isDark ? "bg-white/5 text-[#cddfa0]" : "bg-teal-50 text-teal-600"}`}>
@@ -212,7 +212,7 @@ export default function SellerUpdatePropertyPage({ propertyId }) {
                   onClick={() => router.back()}
                   className={`w-full py-5 rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-3 border-2 ${
                     isDark 
-                      ? "border-[#1a4a40] text-slate-300 hover:bg-white/5 hover:text-white" 
+                      ? "border-white/10 text-slate-300 hover:bg-white/5 hover:text-white" 
                       : "border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-teal-600 hover:border-teal-200"
                   }`}
                 >
@@ -237,3 +237,4 @@ export default function SellerUpdatePropertyPage({ propertyId }) {
     </div>
   );
 }
+

@@ -43,7 +43,7 @@ export default function PendingApprovals({ approvals }) {
       {/* Global Dynamic Toast Message */}
       <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[100] px-6 py-4 rounded-2xl backdrop-blur-xl border shadow-2xl flex items-center gap-3 transition-all duration-500 ease-out w-[90%] sm:w-auto justify-center ${
         toastMessage ? "translate-y-0 opacity-100 scale-100" : "-translate-y-10 opacity-0 scale-95 pointer-events-none"
-      } ${isDark ? "bg-[#133c34]/95 border-[#cddfa0]/50 text-[#cddfa0]" : "bg-white/95 border-emerald-200 text-emerald-600"}`}>
+      } ${isDark ? "bg-[var(--card)]/95 border-[#cddfa0]/50 text-[#cddfa0]" : "bg-white/95 border-emerald-200 text-emerald-600"}`}>
         <CheckCircle2 size={24} className="shrink-0" />
         <span className="text-[14px] sm:text-[16px] font-black tracking-wide">{toastMessage}</span>
       </div>
@@ -51,7 +51,7 @@ export default function PendingApprovals({ approvals }) {
       {/* Main Card with Premium Dark Theme */}
       <div className={`p-6 rounded-[2rem] border backdrop-blur-xl transition-all duration-500 shadow-xl flex flex-col h-[420px] ${
         isDark 
-          ? 'bg-gradient-to-b from-[#133c34]/80 to-[#091a16] border-[#1a4a40] shadow-black/40 text-white' 
+          ? 'bg-gradient-to-b from-[var(--card)]/80 to-[var(--background)] border-white/10 shadow-black/40 text-white' 
           : 'bg-white/80 border-white text-gray-900'
       }`}>
         
@@ -73,13 +73,13 @@ export default function PendingApprovals({ approvals }) {
         <div className="flex-1 overflow-auto custom-scrollbar pr-1 pb-1">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className={`border-b text-[10px] font-black uppercase tracking-widest ${isDark ? 'border-[#1a4a40] text-gray-400' : 'border-gray-100 text-gray-400'}`}>
+              <tr className={`border-b text-[10px] font-black uppercase tracking-widest ${isDark ? 'border-white/10 text-gray-400' : 'border-gray-100 text-gray-400'}`}>
                 <th className="pb-3 px-2 whitespace-nowrap">Seller</th>
                 <th className="pb-3 text-center whitespace-nowrap">Sales</th>
                 <th className="pb-3 pr-2 text-right whitespace-nowrap">Status</th>
               </tr>
             </thead>
-            <tbody className={`divide-y ${isDark ? 'divide-[#1a4a40]/30' : 'divide-gray-50'}`}>
+            <tbody className={`divide-y ${isDark ? 'divide-[var(--card)]/30' : 'divide-gray-50'}`}>
               {data.map((item) => (
                 <tr key={item.id} className="group hover:bg-white/5 transition-colors">
                   <td className="py-3 px-2 min-w-[140px]">
@@ -114,7 +114,7 @@ export default function PendingApprovals({ approvals }) {
                     {/* Dropdown Menu */}
                     {openDropdownId === item.id && (
                       <div className={`absolute right-2 top-10 mt-1 w-24 rounded-lg shadow-2xl border z-50 overflow-hidden backdrop-blur-xl ${
-                        isDark ? "bg-[#091a16]/95 border-[#1a4a40]" : "bg-white/95 border-gray-200"
+                        isDark ? "bg-[var(--background)]/95 border-white/10" : "bg-white/95 border-gray-200"
                       }`}>
                         {statusOptions.map(opt => (
                           <button
@@ -141,7 +141,7 @@ export default function PendingApprovals({ approvals }) {
         {/* Action Button */}
         <button className={`w-full mt-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 shadow-md ${
           isDark 
-            ? 'bg-[#1a4a40] text-[#cddfa0] border border-[#cddfa0]/20 hover:bg-[#cddfa0] hover:text-[#091a16] hover:shadow-[0_0_15px_rgba(205,223,160,0.3)]' 
+            ? 'bg-[var(--card)] text-[#cddfa0] border border-[#cddfa0]/20 hover:bg-[#cddfa0] hover:text-[var(--background)] hover:shadow-[0_0_15px_rgba(205,223,160,0.3)]' 
             : 'bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-600 hover:text-white'
         }`}>
           Process All Requests
@@ -157,7 +157,7 @@ export default function PendingApprovals({ approvals }) {
             background: transparent;
           }
           .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: ${isDark ? '#1a4a40' : '#e2e8f0'};
+            background: ${isDark ? 'var(--card)' : '#e2e8f0'};
             border-radius: 10px;
           }
           .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -168,3 +168,4 @@ export default function PendingApprovals({ approvals }) {
     </>
   );
 }
+

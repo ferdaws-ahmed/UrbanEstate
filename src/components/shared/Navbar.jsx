@@ -99,7 +99,7 @@ const Navbar = () => {
       className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${
         manrope.className
       }
-      bg-[#0f2e28]/95 backdrop-blur-md shadow-md py-4 text-white`}
+      bg-[var(--card)]/95 backdrop-blur-md shadow-md py-4`}
     >
       <div className="container mx-auto flex justify-between items-center px-6 lg:px-12">
         {/* Logo Section */}
@@ -133,18 +133,18 @@ const Navbar = () => {
               />
             </g>
           </svg>
-          <span className="text-[26px] font-extrabold text-white tracking-tight drop-shadow-md transition-colors duration-300">
-            Urban<span className="text-[#cddfa0]">E</span>state
+          <span className="text-[26px] font-extrabold text-[var(--foreground)] tracking-tight drop-shadow-md transition-colors duration-300">
+            Urban<span className="text-[var(--accent)]">E</span>state
           </span>
         </Link>
 
         {/* Desktop Menu */}
-        <ul className="hidden lg:flex gap-10 font-bold text-[17px] tracking-wide items-center transition-colors duration-300 text-white">
+        <ul className="hidden lg:flex gap-10 font-bold text-[17px] tracking-wide items-center transition-colors duration-300 text-[var(--foreground)]">
           {navItems.map((item, index) => (
             <li key={index}>
               <Link
                 href={item.path}
-                className="hover:text-[#cddfa0] transition duration-300"
+                className="hover:text-[var(--accent)] transition duration-300"
               >
                 {item.name}
               </Link>
@@ -160,13 +160,13 @@ const Navbar = () => {
             <>
               <Link
                 href="/register"
-                className="font-bold text-[16px] transition duration-300 text-white hover:text-[#cddfa0]"
+                className="font-bold text-[16px] transition duration-300 text-[var(--foreground)] hover:text-[var(--accent)]"
               >
                 Get Started
               </Link>
               <Link
                 href="/login"
-                className="px-7 py-2.5 rounded-md font-bold text-[16px] transition shadow-lg bg-[#cddfa0] text-[#0f2e28] hover:bg-[#b8cc89]"
+                className="px-7 py-2.5 rounded-md font-bold text-[16px] transition shadow-lg bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90"
               >
                 Login
               </Link>
@@ -175,30 +175,30 @@ const Navbar = () => {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-3 p-1.5 pr-4 rounded-full transition-all duration-300 border bg-white/10 hover:bg-white/20 border-white/20"
+                className="flex items-center gap-3 p-1.5 pr-4 rounded-full transition-all duration-300 border bg-[var(--foreground)]/10 hover:bg-[var(--foreground)]/20 border-[var(--border)]"
               >
                 {user.image ? (
                   <img
                    referrerPolicy="no-referrer"
                     src={user.image}
                     alt="Profile"
-                    className="w-9 h-9 rounded-full border-2 border-[#cddfa0]"
+                    className="w-9 h-9 rounded-full border-2 border-[var(--accent)]"
                   />
                 ) : (
-                  <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold bg-[#cddfa0] text-[#0f2e28]">
+                  <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold bg-[var(--primary)] text-[var(--primary-foreground)]">
                     {user.name ? user.name[0] : "U"}
                   </div>
                 )}
                 <div className="text-left hidden xl:block">
-                  <p className="text-xs font-bold leading-tight text-white">
+                  <p className="text-xs font-bold leading-tight text-[var(--foreground)]">
                     {user.name || "User"}
                   </p>
-                  <p className="text-[10px] uppercase tracking-tighter text-[#cddfa0]">
+                  <p className="text-[10px] uppercase tracking-tighter text-[var(--accent)]">
                     {user.role}
                   </p>
                 </div>
                 <HiChevronDown
-                  className={`transition-transform duration-300 text-white ${
+                  className={`transition-transform duration-300 text-[var(--foreground)] ${
                     isDropdownOpen ? "rotate-180" : ""
                   }`}
                 />
@@ -206,12 +206,12 @@ const Navbar = () => {
 
               {/* Unique Dropdown Menu */}
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-3 w-56 bg-[#0f2e28] border border-white/10 rounded-2xl shadow-2xl py-2 overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in duration-200">
-                  <div className="px-4 py-3 border-b border-white/5 bg-white/5 mb-2">
-                    <p className="text-white text-sm font-bold truncate">
+                <div className="absolute right-0 mt-3 w-56 bg-[var(--card)] border border-[var(--border)] rounded-2xl shadow-2xl py-2 overflow-hidden backdrop-blur-xl animate-in fade-in zoom-in duration-200">
+                  <div className="px-4 py-3 border-b border-[var(--border)] bg-[var(--foreground)]/5 mb-2">
+                    <p className="text-[var(--foreground)] text-sm font-bold truncate">
                       {user.email}
                     </p>
-                    <p className="text-[#cddfa0] text-[10px] font-mono mt-0.5 capitalize">
+                    <p className="text-[var(--accent)] text-[10px] font-mono mt-0.5 capitalize">
                       {user.role}{" "}
                     </p>
                   </div>
@@ -219,9 +219,9 @@ const Navbar = () => {
                   <Link
                     href={`/dashboard/${user?.role}/profile`}
                     onClick={() => setIsDropdownOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:text-white hover:bg-[#cddfa0]/10 transition-colors"
+                    className="flex items-center gap-3 px-4 py-2.5 text-[var(--foreground)]/80 hover:text-[var(--foreground)] hover:bg-[var(--primary)]/10 transition-colors"
                   >
-                    <HiUser className="text-[#cddfa0]" />
+                    <HiUser className="text-[var(--accent)]" />
                     <span className="text-sm font-medium">My Profile</span>
                   </Link>
 
@@ -229,13 +229,13 @@ const Navbar = () => {
                   <Link
                     href={`/dashboard/${user?.role}`}
                     onClick={() => setIsDropdownOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:text-white hover:bg-[#cddfa0]/10 transition-colors"
+                    className="flex items-center gap-3 px-4 py-2.5 text-[var(--foreground)]/80 hover:text-[var(--foreground)] hover:bg-[var(--primary)]/10 transition-colors"
                   >
-                    <HiCog className="text-[#cddfa0]" />
+                    <HiCog className="text-[var(--accent)]" />
                     <span className="text-sm font-medium">Dashboard</span>
                   </Link>
 
-                  <div className="mt-2 pt-2 border-t border-white/5 px-2">
+                  <div className="mt-2 pt-2 border-t border-[var(--border)] px-2">
                     <button
                       onClick={() => signOut()}
                       className="flex items-center gap-3 w-full px-4 py-2.5 text-red-400 hover:bg-red-500/10 rounded-xl transition-colors text-sm font-bold"
@@ -251,7 +251,7 @@ const Navbar = () => {
 
         {/* Mobile Toggle Button */}
         <button
-          className={`lg:hidden text-white text-3xl relative z-[110] transition-opacity duration-300 ${
+          className={`lg:hidden text-[var(--foreground)] text-3xl relative z-[110] transition-opacity duration-300 ${
             isMenuOpen ? "opacity-0 pointer-events-none" : "opacity-100"
           }`}
           onClick={() => setIsMenuOpen(true)}
@@ -262,24 +262,24 @@ const Navbar = () => {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-screen w-full sm:w-80 bg-[#0f2e28]/95 backdrop-blur-[25px] border-l border-white/20 z-[105] transform transition-transform duration-500 ease-in-out lg:hidden
+        className={`fixed top-0 right-0 h-screen w-full sm:w-80 bg-[var(--card)]/95 backdrop-blur-[25px] border-l border-[var(--border)] z-[105] transform transition-transform duration-500 ease-in-out lg:hidden
         ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         <div className="flex flex-col h-full p-10 justify-center relative">
           <button
-            className="absolute top-8 right-8 text-4xl text-[#cddfa0]"
+            className="absolute top-8 right-8 text-4xl text-[var(--accent)]"
             onClick={() => setIsMenuOpen(false)}
           >
             <HiX />
           </button>
 
-          <ul className="flex flex-col gap-8 text-white font-black text-2xl tracking-widest uppercase">
+          <ul className="flex flex-col gap-8 text-[var(--foreground)] font-black text-2xl tracking-widest uppercase">
             {navItems.map((item, index) => (
               <li key={index}>
                 <Link
                   href={item.path}
                   onClick={() => setIsMenuOpen(false)}
-                  className="hover:text-[#cddfa0] transition"
+                  className="hover:text-[var(--accent)] transition"
                 >
                   {item.name}
                 </Link>
@@ -287,7 +287,7 @@ const Navbar = () => {
             ))}
           </ul>
 
-          <div className="flex flex-col gap-4 mt-12 pt-10 border-t border-white/10">
+          <div className="flex flex-col gap-4 mt-12 pt-10 border-t border-[var(--border)]">
             <div className="flex justify-center mb-4">
               <ThemeToggle size="lg" />
             </div>
@@ -296,14 +296,14 @@ const Navbar = () => {
                 <Link
                   href="/register"
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-[#cddfa0] text-center font-bold text-xl py-3 border border-[#cddfa0]/30 rounded-xl"
+                  className="text-[var(--accent)] text-center font-bold text-xl py-3 border border-[var(--accent)]/30 rounded-xl"
                 >
                   Get Started
                 </Link>
                 <Link
                   href="/login"
                   onClick={() => setIsMenuOpen(false)}
-                  className="bg-[#cddfa0] text-[#0f2e28] text-center font-black text-xl py-4 rounded-xl shadow-lg"
+                  className="bg-[var(--primary)] text-[var(--primary-foreground)] text-center font-black text-xl py-4 rounded-xl shadow-lg"
                 >
                   Login
                 </Link>
@@ -313,7 +313,7 @@ const Navbar = () => {
                 <Link
                   href="/profile"
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-[#cddfa0] text-center font-bold text-xl py-3 border border-[#cddfa0]/30 rounded-xl"
+                  className="text-[var(--accent)] text-center font-bold text-xl py-3 border border-[var(--accent)]/30 rounded-xl"
                 >
                   My Profile
                 </Link>
@@ -345,3 +345,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

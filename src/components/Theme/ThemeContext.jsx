@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { themeColors } from "./themeConfig";
 
 const ThemeContext = createContext();
 
@@ -44,13 +45,18 @@ export const ThemeProvider = ({ children }) => {
     setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
   };
 
+  // Get current theme colors
+  const colors = themeColors[theme];
+
   const value = {
     theme,
     toggleTheme,
     isDark: theme === "dark",
+    colors, // Expose the centralized color config!
   };
 
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 };
+

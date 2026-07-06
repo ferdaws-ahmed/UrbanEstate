@@ -86,18 +86,18 @@ export default function SmartHomeCommandCenter() {
   return (
     <section
       className={`w-full py-24 px-6 lg:px-12 ${
-        isDark ? "bg-[#0f2e28]" : "bg-white"
+        isDark ? "bg-[var(--background)]" : "bg-white"
       } relative overflow-hidden ${manrope.className}`}
     >
       {/* Background Cybernetic Glow */}
       <div
         className={`absolute -top-32 -left-32 w-[600px] h-[600px] ${
-          isDark ? "bg-[#cddfa0]/10 blur-[150px]" : "bg-white/10"
+          isDark ? "bg-[var(--primary)]/10 blur-[150px]" : "bg-white/10"
         } rounded-full pointer-events-none z-0`}
       ></div>
       <div
         className={`absolute bottom-0 right-0 w-[500px] h-[500px] ${
-          isDark ? "bg-[#081d19] blur-[100px]" : "bg-white blur-[100px]"
+          isDark ? "bg-[var(--card)] blur-[100px]" : "bg-white blur-[100px]"
         } rounded-full pointer-events-none z-0`}
       ></div>
 
@@ -152,26 +152,26 @@ export default function SmartHomeCommandCenter() {
         <div className="flex flex-col items-center text-center mb-16">
           <div
             className={`inline-flex items-center gap-2 ${
-              isDark ? "text-[#cddfa0]" : "text-[#0f2e28]"
+              isDark ? "text-[var(--accent)]" : "text-[#099880]"
             } font-bold tracking-[0.4em] text-[10px] uppercase ${
-              isDark ? "bg-[#cddfa0]/5" : "bg-[#0f2e28]/5"
+              isDark ? "bg-[var(--primary)]/5" : "bg-[var(--background)]/5"
             } px-5 py-2 rounded-full border ${
-              isDark ? "border-[#cddfa0]/20" : "border-[#0f2e28]/20"
+              isDark ? "border-[var(--accent)]/20" : "border-[var(--primary)]/20"
             } mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]`}
           >
             <Activity size={14} className="animate-pulse" /> Core Infrastructure
           </div>
           <h2
             className={`text-4xl lg:text-5xl font-black ${
-              isDark ? "text-white" : "text-[#0f2e28]"
+              isDark ? "text-white" : "text-[#099880]"
             } mb-6 tracking-tight leading-[1.1]`}
           >
             Space Command{" "}
-            <span className="text-[#cddfa0] italic font-light">Center</span>
+            <span className="text-[var(--accent)] italic font-light">Center</span>
           </h2>
           <p
             className={`${
-              isDark ? "text-white/60" : "text-[#0f2e28]/60"
+              isDark ? "text-white/60" : "text-[#099880]/60"
             } text-lg leading-relaxed max-w-2xl mx-auto`}
           >
             Interact with the holographic blueprint to explore the invisible
@@ -186,24 +186,24 @@ export default function SmartHomeCommandCenter() {
             {/* Outer Glassmorphism Tech Frame */}
             <div
               className={`p-3 ${
-                isDark ? "bg-[#081d19]/80" : "bg-white/80"
+                isDark ? "bg-[var(--card)]/80" : "bg-white/80"
               } backdrop-blur-2xl rounded-[2.5rem] border ${
-                isDark ? "border-[#cddfa0]/20 shadow-[0_40px_100px_rgba(0,0,0,0.8)]" : "border-[#0f2e28]/20"
+                isDark ? "border-[var(--accent)]/20 shadow-[0_40px_100px_rgba(0,0,0,0.8)]" : "border-[var(--primary)]/20"
               }  relative overflow-hidden`}
             >
               {/* Sci-Fi Top Bar Overlay */}
               <div className="absolute top-6 left-8 right-8 z-30 flex justify-between items-center pointer-events-none">
                 <div
                   className={`flex items-center gap-2 ${
-                    isDark ? "bg-[#081d19]/80" : "bg-white/80"
+                    isDark ? "bg-[var(--card)]/80" : "bg-white/80"
                   } px-4 py-1.5 rounded-lg backdrop-blur-md border ${
-                    isDark ? "border-[#cddfa0]/30" : "border-[#0f2e28]/30"
+                    isDark ? "border-[var(--accent)]/30" : "border-[var(--primary)]/30"
                   } shadow-[0_0_15px_rgba(205,223,160,0.1)]`}
                 >
                   <div className="w-2 h-2 rounded-full bg-[#ef4444] animate-pulse"></div>
                   <span
                     className={`${
-                      isDark ? "text-[#cddfa0]" : "text-[#0f2e28]"
+                      isDark ? "text-[var(--accent)]" : "text-[#099880]"
                     } text-[9px] font-bold tracking-[0.2em] uppercase`}
                   >
                     Security Feed
@@ -211,7 +211,7 @@ export default function SmartHomeCommandCenter() {
                 </div>
                 <div
                   className={`${
-                    isDark ? "text-[#cddfa0]/60" : "text-[#0f2e28]/60"
+                    isDark ? "text-[var(--accent)]/60" : "text-[#099880]/60"
                   } text-[10px] font-mono tracking-widest ${
                     isDark ? "bg-black/60" : "bg-white/60"
                   } px-3 py-1.5 rounded-lg backdrop-blur-md border ${
@@ -225,7 +225,7 @@ export default function SmartHomeCommandCenter() {
               {/* Main Hologram Image Area */}
               <div
                 className={`relative w-full aspect-[4/3] rounded-[1.8rem] overflow-hidden ${
-                  isDark ? "bg-[#040f0c]" : "bg-gray-200"
+                  isDark ? "bg-[var(--card)]" : "bg-gray-200"
                 } flex items-center justify-center border ${
                   isDark ? "border-white/5" : "border-black/5"
                 }`}
@@ -243,14 +243,14 @@ export default function SmartHomeCommandCenter() {
                 {/* 2. Premium Dark Green Color Tint Overlay (Mix-Blend) */}
                 <div
                   className={`absolute inset-0 ${
-                    isDark ? "bg-[#0f2e28]" : "bg-[#cddfa0]"
+                    isDark ? "bg-[var(--background)]" : "bg-[var(--primary)]"
                   } mix-blend-color opacity-60 pointer-events-none z-0`}
                 ></div>
                 <div
                   className={`absolute inset-0 bg-gradient-to-tr ${
-                    isDark ? "from-[#081d19]/90" : "from-white/90"
+                    isDark ? "from-[#066e5b]/90" : "from-white/90"
                   } via-transparent ${
-                    isDark ? "to-[#081d19]/50" : "to-white/50"
+                    isDark ? "to-[#066e5b]/50" : "to-white/50"
                   } pointer-events-none z-0`}
                 ></div>
 
@@ -293,7 +293,7 @@ export default function SmartHomeCommandCenter() {
                     <div
                       className={`absolute inset-0 rounded-full transition-all duration-500 ${
                         activeSystem.id === sys.id
-                          ? "border-[2px] border-[#cddfa0] scale-[3.5] opacity-0 animate-ping"
+                          ? "border-[2px] border-[var(--accent)] scale-[3.5] opacity-0 animate-ping"
                           : "opacity-0"
                       }`}
                     ></div>
@@ -302,12 +302,12 @@ export default function SmartHomeCommandCenter() {
                     <div
                       className={`relative w-4 h-4 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-md border-2 ${
                         activeSystem.id === sys.id
-                          ? "bg-[#cddfa0] border-white shadow-[0_0_20px_#cddfa0] scale-125"
-                          : "bg-[#0f2e28]/80 border-[#cddfa0]/50 hover:bg-[#cddfa0] hover:scale-110"
+                          ? "bg-[var(--primary)] border-white shadow-[0_0_20px_#cddfa0] scale-125"
+                          : "bg-[var(--background)]/80 border-[var(--accent)]/50 hover:bg-[var(--primary)] hover:scale-110"
                       }`}
                     >
                       {activeSystem.id === sys.id && (
-                        <div className="w-1.5 h-1.5 bg-[#0f2e28] rounded-full"></div>
+                        <div className="w-1.5 h-1.5 bg-[var(--background)] rounded-full"></div>
                       )}
                     </div>
 
@@ -315,7 +315,7 @@ export default function SmartHomeCommandCenter() {
                     {activeSystem.id === sys.id && (
                       <Crosshair
                         size={50}
-                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[#cddfa0] opacity-60 animate-spin-slow pointer-events-none"
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[var(--accent)] opacity-60 animate-spin-slow pointer-events-none"
                         strokeWidth={1}
                       />
                     )}
@@ -347,9 +347,9 @@ export default function SmartHomeCommandCenter() {
                 isDark ? "opacity-50" : "opacity-30"
               }`}
             >
-              <div className="w-12 h-1 bg-[#cddfa0] rounded-full"></div>
-              <div className="w-4 h-1 bg-[#cddfa0] rounded-full"></div>
-              <div className="w-2 h-1 bg-[#cddfa0] rounded-full"></div>
+              <div className="w-12 h-1 bg-[var(--primary)] rounded-full"></div>
+              <div className="w-4 h-1 bg-[var(--primary)] rounded-full"></div>
+              <div className="w-2 h-1 bg-[var(--primary)] rounded-full"></div>
             </div>
           </div>
 
@@ -357,31 +357,31 @@ export default function SmartHomeCommandCenter() {
           <div className="lg:col-span-5 flex flex-col gap-6 relative z-10 mt-8 lg:mt-0">
             {/* Dynamic Active System Display Card */}
             <div
-              className={`bg-[#081d19]/40 backdrop-blur-xl border border-[#cddfa0]/20 p-8 rounded-[2rem] relative overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.4)] ${
-                isDark ? "" : "bg-white/40 border-[#0f2e28]/20"
+              className={`bg-[var(--card)]/40 backdrop-blur-xl border border-[var(--accent)]/20 p-8 rounded-[2rem] relative overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.4)] ${
+                isDark ? "" : "bg-white/40 border-[var(--primary)]/20"
               }`}
             >
               {/* Subtle accent glow inside card */}
-              <div className="absolute top-0 right-0 w-40 h-40 bg-[#cddfa0]/10 blur-[60px] rounded-full pointer-events-none"></div>
+              <div className="absolute top-0 right-0 w-40 h-40 bg-[var(--primary)]/10 blur-[60px] rounded-full pointer-events-none"></div>
 
               <div className="flex items-center gap-4 mb-6 relative z-10">
-                <div className="w-14 h-14 rounded-2xl bg-[#cddfa0] flex items-center justify-center text-[#0f2e28] shadow-[0_0_20px_rgba(205,223,160,0.4)]">
+                <div className="w-14 h-14 rounded-2xl bg-[var(--primary)] flex items-center justify-center text-[#099880] shadow-[0_0_20px_rgba(205,223,160,0.4)]">
                   {activeSystem.icon}
                 </div>
                 <div>
                   <h3
                     className={`text-2xl font-bold ${
-                      isDark ? "text-white" : "text-[#0f2e28]"
+                      isDark ? "text-white" : "text-[#099880]"
                     } tracking-wide`}
                   >
                     {activeSystem.name}
                   </h3>
                   <p
                     className={`${
-                      isDark ? "text-[#cddfa0]" : "text-[#0f2e28]"
+                      isDark ? "text-[var(--accent)]" : "text-[#099880]"
                     } text-[10px] font-black tracking-[0.2em] uppercase mt-1 flex items-center gap-2`}
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#cddfa0] animate-pulse"></span>{" "}
+                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)] animate-pulse"></span>{" "}
                     System Online
                   </p>
                 </div>
@@ -389,43 +389,43 @@ export default function SmartHomeCommandCenter() {
 
               <p
                 className={`${
-                  isDark ? "text-white/60" : "text-[#0f2e28]/60"
+                  isDark ? "text-white/60" : "text-[#099880]/60"
                 } text-sm leading-relaxed mb-8 relative z-10`}
               >
                 {activeSystem.desc}
               </p>
 
               {/* Data Stat Box */}
-              <div className="bg-black/40 backdrop-blur-md border border-[#cddfa0]/10 rounded-2xl p-5 flex justify-between items-center relative z-10">
+              <div className="bg-black/40 backdrop-blur-md border border-[var(--accent)]/10 rounded-2xl p-5 flex justify-between items-center relative z-10">
                 <div>
                   <p
                     className={`${
-                      isDark ? "text-white/40" : "text-[#0f2e28]/40"
+                      isDark ? "text-white/40" : "text-[#099880]/40"
                     } text-[10px] uppercase tracking-widest font-bold mb-1`}
                   >
                     {activeSystem.label}
                   </p>
-                  <p className="text-[#cddfa0] text-4xl font-black font-mono tracking-tighter shadow-[#cddfa0] drop-shadow-md">
+                  <p className="text-[var(--accent)] text-4xl font-black font-mono tracking-tighter shadow-[#cddfa0] drop-shadow-md">
                     {activeSystem.stat}
                   </p>
                 </div>
                 {/* Decorative Audio/Wave bars */}
                 <div className="flex items-end gap-1.5 h-10 opacity-80">
-                  <div className="w-2 bg-[#cddfa0] rounded-t-sm h-[30%] animate-pulse shadow-[0_0_5px_#cddfa0]"></div>
+                  <div className="w-2 bg-[var(--primary)] rounded-t-sm h-[30%] animate-pulse shadow-[0_0_5px_#cddfa0]"></div>
                   <div
-                    className="w-2 bg-[#cddfa0] rounded-t-sm h-[80%] animate-pulse shadow-[0_0_5px_#cddfa0]"
+                    className="w-2 bg-[var(--primary)] rounded-t-sm h-[80%] animate-pulse shadow-[0_0_5px_#cddfa0]"
                     style={{ animationDelay: "0.1s" }}
                   ></div>
                   <div
-                    className="w-2 bg-[#cddfa0] rounded-t-sm h-[50%] animate-pulse shadow-[0_0_5px_#cddfa0]"
+                    className="w-2 bg-[var(--primary)] rounded-t-sm h-[50%] animate-pulse shadow-[0_0_5px_#cddfa0]"
                     style={{ animationDelay: "0.2s" }}
                   ></div>
                   <div
-                    className="w-2 bg-[#cddfa0] rounded-t-sm h-[100%] animate-pulse shadow-[0_0_5px_#cddfa0]"
+                    className="w-2 bg-[var(--primary)] rounded-t-sm h-[100%] animate-pulse shadow-[0_0_5px_#cddfa0]"
                     style={{ animationDelay: "0.3s" }}
                   ></div>
                   <div
-                    className="w-2 bg-[#cddfa0] rounded-t-sm h-[60%] animate-pulse shadow-[0_0_5px_#cddfa0]"
+                    className="w-2 bg-[var(--primary)] rounded-t-sm h-[60%] animate-pulse shadow-[0_0_5px_#cddfa0]"
                     style={{ animationDelay: "0.4s" }}
                   ></div>
                 </div>
@@ -441,23 +441,23 @@ export default function SmartHomeCommandCenter() {
                   className={`flex flex-col items-start p-5 rounded-2xl border transition-all duration-300 text-left ${
                     activeSystem.id === sys.id
                       ? (isDark
-                          ? "bg-[#cddfa0]/20 border-[#cddfa0]/50"
-                          : "bg-[#0f2e28]/20 border-[#0f2e28]/50") +
+                          ? "bg-[var(--primary)]/20 border-[var(--accent)]/50"
+                          : "bg-[var(--background)]/20 border-[var(--primary)]/50") +
                         " shadow-[0_0_20px_rgba(205,223,160,0.1)]"
                       : isDark
-                      ? "bg-[#081d19]/40 backdrop-blur-md border-white/5 hover:bg-[#cddfa0]/5 hover:border-[#cddfa0]/20"
-                      : "bg-white/40 backdrop-blur-md border-black/5 hover:bg-[#0f2e28]/5 hover:border-[#0f2e28]/20"
+                      ? "bg-[var(--card)]/40 backdrop-blur-md border-white/5 hover:bg-[var(--primary)]/5 hover:border-[var(--accent)]/20"
+                      : "bg-white/40 backdrop-blur-md border-black/5 hover:bg-[var(--background)]/5 hover:border-[var(--primary)]/20"
                   }`}
                 >
                   <div
                     className={`mb-3 transition-colors ${
                       activeSystem.id === sys.id
                         ? isDark
-                          ? "text-[#cddfa0]"
-                          : "text-[#0f2e28]"
+                          ? "text-[var(--accent)]"
+                          : "text-[#099880]"
                         : isDark
                         ? "text-white/40"
-                        : "text-[#0f2e28]/40"
+                        : "text-[#099880]/40"
                     }`}
                   >
                     {sys.icon}
@@ -467,10 +467,10 @@ export default function SmartHomeCommandCenter() {
                       activeSystem.id === sys.id
                         ? isDark
                           ? "text-white"
-                          : "text-[#0f2e28]"
+                          : "text-[#099880]"
                         : isDark
                         ? "text-white/50"
-                        : "text-[#0f2e28]/50"
+                        : "text-[#099880]/50"
                     }`}
                   >
                     {sys.id}
@@ -484,3 +484,4 @@ export default function SmartHomeCommandCenter() {
     </section>
   );
 }
+

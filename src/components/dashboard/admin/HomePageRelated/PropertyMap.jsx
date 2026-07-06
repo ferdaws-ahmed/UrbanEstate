@@ -108,9 +108,18 @@ export default function PropertyMap() {
       }).setView(userLocation, 15); 
 
 
-      L.tileLayer('http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}', {
+      // ডার্ক মোডে সঠিক ম্যাপ টাইল ব্যবহার
+      const tileUrl = isDark 
+        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+        : 'http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}';
+      
+      const attribution = isDark
+        ? '&copy; OpenStreetMap &copy; CARTO'
+        : 'Map data &copy; Google';
+
+      L.tileLayer(tileUrl, {
         maxZoom: 20,
-        attribution: 'Map data &copy; Google'
+        attribution: attribution
       }).addTo(map);
 
       L.circle(userLocation, {
@@ -133,7 +142,7 @@ export default function PropertyMap() {
             width: 28px; 
             height: 28px; 
             border-radius: 50%; 
-            border: 3px solid ${isDark ? '#1a4a40' : '#ffffff'}; 
+            border: 3px solid ${isDark ? 'var(--card)' : '#ffffff'}; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.5); 
             display: flex; 
             align-items: center; 
@@ -184,7 +193,7 @@ export default function PropertyMap() {
 
   return (
    
-    <section className={`w-full h-[60vh] md:h-[500px] lg:h-[600px] relative rounded-xl md:rounded-2xl overflow-hidden border shadow-sm transition-colors duration-300 ${isDark ? 'border-[#1a4a40] bg-[#0f2e28]' : 'border-gray-200 bg-gray-50'} ${manrope.className}`}>
+    <section className={`w-full h-[60vh] md:h-[500px] lg:h-[600px] relative rounded-xl md:rounded-2xl overflow-hidden border shadow-sm transition-colors duration-300 ${isDark ? 'border-white/10 bg-[var(--primary)]' : 'border-gray-200 bg-gray-50'} ${manrope.className}`}>
       
       {/* Map Area */}
       <div 
@@ -194,17 +203,17 @@ export default function PropertyMap() {
 
       {/* Custom Zoom Controls (Responsive Positioning) */}
       <div className="absolute top-4 right-4 md:top-6 md:right-6 z-[20] flex flex-col gap-2 md:gap-3">
-        <button onClick={() => handleZoom("in")} className={`w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg transition-all ${isDark ? 'bg-[#1a4a40]/90 backdrop-blur text-white hover:bg-[#cddfa0] hover:text-[#0f2e28] border border-[#2b2b36]' : 'bg-white/90 backdrop-blur text-gray-800 hover:bg-blue-600 hover:text-white border border-gray-200'}`}>
+        <button onClick={() => handleZoom("in")} className={`w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg transition-all ${isDark ? 'bg-[var(--card)]/90 backdrop-blur text-white hover:bg-[#cddfa0] hover:text-[var(--primary)] border border-[#2b2b36]' : 'bg-white/90 backdrop-blur text-gray-800 hover:bg-blue-600 hover:text-white border border-gray-200'}`}>
           <Plus size={18} strokeWidth={2.5} />
         </button>
-        <button onClick={() => handleZoom("out")} className={`w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg transition-all ${isDark ? 'bg-[#1a4a40]/90 backdrop-blur text-white hover:bg-[#cddfa0] hover:text-[#0f2e28] border border-[#2b2b36]' : 'bg-white/90 backdrop-blur text-gray-800 hover:bg-blue-600 hover:text-white border border-gray-200'}`}>
+        <button onClick={() => handleZoom("out")} className={`w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center shadow-lg transition-all ${isDark ? 'bg-[var(--card)]/90 backdrop-blur text-white hover:bg-[#cddfa0] hover:text-[var(--primary)] border border-[#2b2b36]' : 'bg-white/90 backdrop-blur text-gray-800 hover:bg-blue-600 hover:text-white border border-gray-200'}`}>
           <Minus size={18} strokeWidth={2.5} />
         </button>
       </div>
 
       {/* Top Overlay Heading (Responsive) */}
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[10] text-center w-[90%] md:w-full pointer-events-none">
-        <div className={`inline-flex items-center gap-1.5 md:gap-2 font-bold tracking-[0.2em] md:tracking-[0.3em] text-[9px] md:text-[10px] uppercase px-3 md:px-4 py-1 md:py-1.5 rounded-full border shadow-sm pointer-events-auto transition-colors ${isDark ? 'bg-[#0f2e28]/90 backdrop-blur border-[#1a4a40] text-[#cddfa0]' : 'bg-white/90 backdrop-blur border-gray-200 text-blue-700'}`}>
+        <div className={`inline-flex items-center gap-1.5 md:gap-2 font-bold tracking-[0.2em] md:tracking-[0.3em] text-[9px] md:text-[10px] uppercase px-3 md:px-4 py-1 md:py-1.5 rounded-full border shadow-sm pointer-events-auto transition-colors ${isDark ? 'bg-[var(--primary)]/90 backdrop-blur border-white/10 text-[#cddfa0]' : 'bg-white/90 backdrop-blur border-gray-200 text-blue-700'}`}>
           <Navigation size={12} /> Live Street View
         </div>
       </div>
@@ -227,7 +236,7 @@ export default function PropertyMap() {
 
               <div className="relative h-32 md:h-40 w-full">
                 <img src={selectedProperty.image} alt="" className="w-full h-full object-cover" />
-                <div className={`absolute bottom-3 left-3 px-2 md:px-3 py-1 rounded-lg text-[10px] md:text-xs font-black shadow-lg ${isDark ? 'bg-[#cddfa0] text-[#0f2e28]' : 'bg-blue-600 text-white'}`}>
+                <div className={`absolute bottom-3 left-3 px-2 md:px-3 py-1 rounded-lg text-[10px] md:text-xs font-black shadow-lg ${isDark ? 'bg-[#cddfa0] text-[var(--primary)]' : 'bg-blue-600 text-white'}`}>
                   {selectedProperty.price}
                 </div>
               </div>
@@ -240,7 +249,7 @@ export default function PropertyMap() {
                 </div>
                 <button 
                   onClick={() => handleViewDetails(selectedProperty.id)}
-                  className={`w-full mt-4 md:mt-5 py-2 md:py-2.5 rounded-lg md:rounded-xl font-black transition-all flex items-center justify-center gap-2 tracking-widest text-[10px] md:text-[11px] shadow-md ${isDark ? 'bg-[#cddfa0] text-[#0f2e28] hover:bg-white' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
+                  className={`w-full mt-4 md:mt-5 py-2 md:py-2.5 rounded-lg md:rounded-xl font-black transition-all flex items-center justify-center gap-2 tracking-widest text-[10px] md:text-[11px] shadow-md ${isDark ? 'bg-[#cddfa0] text-[var(--primary)] hover:bg-white' : 'bg-blue-600 text-white hover:bg-blue-700'}`}
                 >
                   <Sparkles size={14}/> VIEW LISTING
                 </button>
@@ -258,15 +267,8 @@ export default function PropertyMap() {
         }
         
         .leaflet-control-attribution { display: none !important; }
-        
-        /* ডার্ক মোডে ম্যাপ ডার্ক করার স্পেশাল হ্যাক */
-        .map-dark-mode .leaflet-layer,
-        .map-dark-mode .leaflet-control-zoom-in,
-        .map-dark-mode .leaflet-control-zoom-out,
-        .map-dark-mode .leaflet-control-attribution {
-          filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
-        }
       `}</style>
     </section>
   );
 }
+

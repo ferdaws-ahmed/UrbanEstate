@@ -51,7 +51,7 @@ export default function FloatingChatButton() {
         <MessageSquare size={24} fill="currentColor" />
         
         {unreadChatCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-[10px] font-black text-white ring-4 ring-white dark:ring-[#0b1f1a] animate-bounce">
+          <span className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-[10px] font-black text-white ring-4 ring-white dark:ring-[var(--card)] animate-bounce">
             {unreadChatCount > 99 ? '99+' : unreadChatCount}
           </span>
         )}
@@ -59,3 +59,4 @@ export default function FloatingChatButton() {
     </motion.div>
   );
 }
+

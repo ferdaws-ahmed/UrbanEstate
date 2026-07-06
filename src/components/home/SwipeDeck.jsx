@@ -65,11 +65,11 @@ export default function SwipeDeck() {
 
   if (!current && localProperties.length > 0) {
     return (
-      <section className={`w-full py-24 px-6 ${isDark ? 'bg-[#0f2e28]' : 'bg-white'} ${isDark ? 'text-white' : 'text-black'} flex flex-col items-center justify-center min-h-[80vh] ${manrope.className}`}>
-        <Sparkles size={64} className="text-[#cddfa0] mb-6 animate-bounce" />
+      <section className={`w-full py-24 px-6 ${isDark ? 'bg-[var(--background)]' : 'bg-white'} ${isDark ? 'text-white' : 'text-black'} flex flex-col items-center justify-center min-h-[80vh] ${manrope.className}`}>
+        <Sparkles size={64} className="text-[var(--accent)] mb-6 animate-bounce" />
         <h2 className="text-4xl lg:text-5xl font-black mb-4 tracking-tight">You're All Caught Up!</h2>
         <p className="text-white/60 mb-10 text-lg">We'll notify you when new properties match your profile.</p>
-        <button onClick={() => {setIndex(0); setSaved([]);}} className="bg-[#cddfa0] text-[#0f2e28] px-10 py-4 rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-white hover:scale-105 transition-all shadow-[0_0_30px_rgba(205,223,160,0.3)]">
+        <button onClick={() => {setIndex(0); setSaved([]);}} className="bg-[var(--primary)] text-[#099880] px-10 py-4 rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-white hover:scale-105 transition-all shadow-[0_0_30px_rgba(205,223,160,0.3)]">
           Restart Matchmaker
         </button>
       </section>
@@ -77,20 +77,20 @@ export default function SwipeDeck() {
   }
 
   return (
-    <section className={`w-full py-24 px-6 lg:px-12 ${isDark ? 'bg-[#0f2e28]' : 'bg-white'}  overflow-hidden relative min-h-screen flex flex-col justify-center ${manrope.className}`}>
+    <section className={`w-full py-24 px-6 lg:px-12 ${isDark ? 'bg-[var(--background)]' : 'bg-white'}  overflow-hidden relative min-h-screen flex flex-col justify-center ${manrope.className}`}>
       
       {/* Background ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] ${isDark ? 'bg-[#cddfa0]/5' : 'bg-white/5'} blur-[150px] rounded-full pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] ${isDark ? 'bg-[var(--primary)]/5' : 'bg-white/5'} blur-[150px] rounded-full pointer-events-none"></div>
 
       <div className="max-w-6xl mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         
         {/* Left Side: Header & Info */}
         <div className="lg:col-span-5 text-center lg:text-left">
-          <div className={`inline-flex items-center gap-2 ${isDark?"text-[#cddfa0]":"text-[#13332c]"}  font-bold tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[#cddfa0]/10"} px-5 py-2 rounded-full border ${isDark ? "border-white/10" : "border-[#0f2e28]/10"} mb-6`}>
+          <div className={`inline-flex items-center gap-2 ${isDark?"text-[var(--accent)]":"text-[var(--card-foreground)]"}  font-bold tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[var(--primary)]/10"} px-5 py-2 rounded-full border ${isDark ? "border-white/10" : "border-[var(--primary)]/10"} mb-6`}>
             <Fingerprint size={14} /> AI Property Match
           </div>
           <h2 className={`text-4xl lg:text-5xl font-black ${isDark?"text-white":"text-black"} mb-4 tracking-tight leading-tight`}>
-            Discover Your <br /> <span className={`text-[#cddfa0] ${isDark?"text-[#cddfa0]":"text-[#13332c]"} italic font-light`}>Dream Home</span>
+            Discover Your <br /> <span className={`text-[var(--accent)] ${isDark?"text-[var(--accent)]":"text-[var(--card-foreground)]"} italic font-light`}>Dream Home</span>
           </h2>
           <p className={`font-medium text-lg mb-10 max-w-md mx-auto lg:mx-0 ${isDark?"text-white/60":"text-black/60"}`}>
             Swipe right to shortlist properties you love, or swipe left to pass. You can also skip to the next property directly.
@@ -106,7 +106,7 @@ export default function SwipeDeck() {
               <Undo2 size={20} strokeWidth={2.5} />
             </button>
             
-            <button onClick={() => handleSwipe("right")} className={`w-16 h-16 flex items-center justify-center ${isDark?"bg-[#cddfa0]/10":"bg-white"} border ${isDark ? "border-[#cddfa0]/30" : "border-white/10"} rounded-full text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[#0f2e28] hover:scale-110 transition-all shadow-[0_0_20px_rgba(205,223,160,0.2)] group`}>
+            <button onClick={() => handleSwipe("right")} className={`w-16 h-16 flex items-center justify-center ${isDark?"bg-[var(--primary)]/10":"bg-white"} border ${isDark ? "border-[var(--accent)]/30" : "border-white/10"} rounded-full text-[var(--accent)] hover:bg-[var(--primary)] hover:text-[#099880] hover:scale-110 transition-all shadow-[0_0_20px_rgba(205,223,160,0.2)] group`}>
               <Heart size={28} strokeWidth={3} fill="currentColor" className="group-active:scale-90 transition-transform" />
             </button>
 
@@ -131,7 +131,7 @@ export default function SwipeDeck() {
                       style={{ scale: backgroundScale }}
                       initial={{ y: 20, opacity: 0.4 }}
                       animate={{ y: 20, opacity: 0.6 }}
-                      className="absolute inset-0 bg-[#13332c] rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/5"
+                      className="absolute inset-0 bg-[var(--card)] rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/5"
                     >
                       <img src={nextCard.image} alt={nextCard.title} className="w-full h-full object-cover grayscale-[50%]" />
                     </motion.div>
@@ -149,17 +149,17 @@ export default function SwipeDeck() {
                     animate={{ scale: 1, y: 0, opacity: 1 }}
                     exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
                     whileDrag={{ scale: 1.02, cursor: "grabbing" }}
-                    className="absolute inset-0 bg-[#13332c] rounded-[2.5rem] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.6)] border border-white/10 cursor-grab touch-none z-20 group"
+                    className="absolute inset-0 bg-[var(--card)] rounded-[2.5rem] overflow-hidden shadow-[0_30px_60px_rgba(0,0,0,0.6)] border border-white/10 cursor-grab touch-none z-20 group"
                   >
                     <img src={current.image} alt={current.title} className="w-full h-full object-cover pointer-events-none transition-transform duration-700 group-hover:scale-105" />
                     
                     {/* Card Content Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0f2e28] via-[#0f2e28]/80 to-transparent pointer-events-none flex flex-col justify-end p-8">
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#099880] via-[#099880]/80 to-transparent pointer-events-none flex flex-col justify-end p-8">
                       <div className="flex items-center gap-2 text-white/80 mb-2 text-xs font-bold uppercase tracking-widest">
-                        <MapPin size={14} className="text-[#cddfa0]" /> {current.location}
+                        <MapPin size={14} className="text-[var(--accent)]" /> {current.location}
                       </div>
                       <h4 className="text-3xl font-black text-white mb-1 leading-tight drop-shadow-lg">{current.title}</h4>
-                      <div className="text-2xl font-black text-[#cddfa0] mb-5 drop-shadow-lg">{current.price}</div>
+                      <div className="text-2xl font-black text-[var(--accent)] mb-5 drop-shadow-lg">{current.price}</div>
                       
                       {/* Features Row */}
                       <div className="flex items-center justify-between border-t border-white/10 pt-4">
@@ -181,10 +181,10 @@ export default function SwipeDeck() {
                     </div>
 
                     {/* Swipe Indicators (LIKE / PASS) */}
-                    <motion.div style={{ opacity: opacityRight }} className="absolute top-12 left-8 border-4 border-[#cddfa0] text-[#cddfa0] bg-[#0f2e28]/50 backdrop-blur-sm px-6 py-2 rounded-2xl text-4xl font-black uppercase tracking-widest transform -rotate-12 pointer-events-none shadow-2xl">
+                    <motion.div style={{ opacity: opacityRight }} className="absolute top-12 left-8 border-4 border-[var(--accent)] text-[var(--accent)] bg-[var(--background)]/50 backdrop-blur-sm px-6 py-2 rounded-2xl text-4xl font-black uppercase tracking-widest transform -rotate-12 pointer-events-none shadow-2xl">
                       SAVE
                     </motion.div>
-                    <motion.div style={{ opacity: opacityLeft }} className="absolute top-12 right-8 border-4 border-red-500 text-red-500 bg-[#0f2e28]/50 backdrop-blur-sm px-6 py-2 rounded-2xl text-4xl font-black uppercase tracking-widest transform rotate-12 pointer-events-none shadow-2xl">
+                    <motion.div style={{ opacity: opacityLeft }} className="absolute top-12 right-8 border-4 border-red-500 text-red-500 bg-[var(--background)]/50 backdrop-blur-sm px-6 py-2 rounded-2xl text-4xl font-black uppercase tracking-widest transform rotate-12 pointer-events-none shadow-2xl">
                       PASS
                     </motion.div>
                   </motion.div>
@@ -201,7 +201,7 @@ export default function SwipeDeck() {
             <button onClick={undoSwipe} disabled={index === 0} className={`w-10 h-10 flex items-center justify-center rounded-full shadow-xl active:scale-90 transition-transform ${index === 0 ? 'bg-white/5 text-white/20 border border-white/5' : 'bg-white/10 border border-white/20 text-white'}`}>
               <Undo2 size={18} strokeWidth={2.5} />
             </button>
-            <button onClick={() => handleSwipe("right")} className="w-14 h-14 flex items-center justify-center bg-[#cddfa0]/10 border border-[#cddfa0]/30 rounded-full text-[#cddfa0] shadow-xl active:scale-90 transition-transform">
+            <button onClick={() => handleSwipe("right")} className="w-14 h-14 flex items-center justify-center bg-[var(--primary)]/10 border border-[var(--accent)]/30 rounded-full text-[var(--accent)] shadow-xl active:scale-90 transition-transform">
               <Heart size={24} strokeWidth={3} fill="currentColor" />
             </button>
             <button onClick={() => handleSwipe("skip")} className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-full text-white/70 shadow-xl active:scale-90 transition-transform">
@@ -213,18 +213,18 @@ export default function SwipeDeck() {
       </div>
 
       {/* Shortlisted Mini-tray (Fixed at bottom) */}
-      <div className="absolute bottom-0 left-0 w-full bg-[#13332c]/80 backdrop-blur-xl border-t border-white/10 z-30 transition-transform duration-500" style={{ transform: saved.length > 0 ? 'translateY(0)' : 'translateY(100%)' }}>
+      <div className="absolute bottom-0 left-0 w-full bg-[var(--card)]/80 backdrop-blur-xl border-t border-white/10 z-30 transition-transform duration-500" style={{ transform: saved.length > 0 ? 'translateY(0)' : 'translateY(100%)' }}>
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-6 overflow-x-auto custom-scrollbar">
           <div className="flex-shrink-0 text-white">
-            <div className="text-xs font-bold uppercase tracking-widest text-[#cddfa0] mb-1">Shortlisted</div>
+            <div className="text-xs font-bold uppercase tracking-widest text-[var(--accent)] mb-1">Shortlisted</div>
             <div className="text-2xl font-black">{saved.length} <span className="text-sm font-medium text-white/50">Properties</span></div>
           </div>
           <div className="w-px h-10 bg-white/10 flex-shrink-0" />
           {saved.map((item, i) => (
             <div key={i} className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border border-white/20 relative group cursor-pointer shadow-lg">
               <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-[#0f2e28]/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <Heart size={16} className="text-[#cddfa0]" fill="currentColor" />
+              <div className="absolute inset-0 bg-[var(--background)]/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <Heart size={16} className="text-[var(--accent)]" fill="currentColor" />
               </div>
             </div>
           ))}
@@ -234,3 +234,4 @@ export default function SwipeDeck() {
     </section>
   );
 }
+

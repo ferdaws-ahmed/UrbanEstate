@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTheme } from "../Theme/ThemeContext";
 
 export default function SidebarFilters({ onFilterChange }) {
   const [filters, setFilters] = useState({
@@ -11,6 +12,7 @@ export default function SidebarFilters({ onFilterChange }) {
     amenities: [],
     priceRange: [],
   });
+  const { isDark } = useTheme();
 
   const locations = [
     "Dhaka", "Chattogram", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur",
@@ -53,8 +55,8 @@ export default function SidebarFilters({ onFilterChange }) {
 
   // UI Components
   const Section = ({ title, children }) => (
-    <div className="space-y-3 pb-5 border-b border-[var(--ue-border)] last:border-0 last:pb-0">
-      <h4 className="text-[12px] font-bold text-[var(--ue-foreground)] uppercase tracking-wider opacity-60">
+    <div className="space-y-3 pb-5 border-b last:border-0 last:pb-0" style={{ borderColor: "var(--border)" }}>
+      <h4 className="text-[12px] font-bold uppercase tracking-wider opacity-60" style={{ color: "var(--foreground)" }}>
         {title}
       </h4>
       <div className="space-y-2.5">{children}</div>
@@ -68,13 +70,14 @@ export default function SidebarFilters({ onFilterChange }) {
           type="checkbox"
           checked={checked}
           onChange={onChange}
-          className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-[var(--ue-border)] bg-transparent transition-all checked:bg-[var(--ue-primary)] checked:border-[var(--ue-primary)]"
+          className="peer h-5 w-5 cursor-pointer appearance-none rounded border bg-transparent transition-all checked:bg-[var(--primary)] checked:border-[var(--primary)]"
+          style={{ borderColor: "var(--border)" }}
         />
         <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none text-[10px]">
           ✓
         </span>
       </div>
-      <span className="text-sm text-[var(--ue-foreground)] group-hover:text-[var(--ue-primary)] transition-colors capitalize">
+      <span className="text-sm capitalize transition-colors" style={{ color: "var(--foreground)" }}>
         {label}
       </span>
     </label>
@@ -82,9 +85,9 @@ export default function SidebarFilters({ onFilterChange }) {
 
   return (
     <div className="w-full max-w-xs">
-      <div className="bg-[var(--ue-card)] border border-[var(--ue-border)] p-6 rounded-2xl shadow-sm flex flex-col max-h-[82vh]">
-        <div className="flex items-center justify-between pb-5 border-b border-[var(--ue-border)] mb-5 shrink-0">
-          <h3 className="text-xl font-bold text-[var(--ue-foreground)]">Filters</h3>
+      <div className="p-6 rounded-2xl shadow-sm flex flex-col max-h-[82vh] border" style={{ backgroundColor: "var(--card)", borderColor: "var(--border)" }}>
+        <div className="flex items-center justify-between pb-5 mb-5 shrink-0 border-b" style={{ borderColor: "var(--border)" }}>
+          <h3 className="text-xl font-bold" style={{ color: "var(--foreground)" }}>Filters</h3>
           <button onClick={handleClear} className="text-xs font-semibold text-red-500 hover:underline">
             Reset
           </button>

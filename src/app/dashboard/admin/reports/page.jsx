@@ -238,7 +238,7 @@ export default function ReportsPage() {
         {/* Reply Modal */}
         {replyingTo && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <div className={`w-full max-w-lg p-8 rounded-[2.5rem] border-2 shadow-2xl transition-all duration-300 ${isDark ? 'bg-[#0b1f1a] border-[#1a4a40]' : 'bg-white border-slate-100'}`}>
+            <div className={`w-full max-w-lg p-8 rounded-[2.5rem] border-2 shadow-2xl transition-all duration-300 ${isDark ? 'bg-[#066e5b] border-[#1a4a40]' : 'bg-white border-slate-100'}`}>
               <div className="flex items-center justify-between mb-6">
                 <h2 className={`text-2xl font-black tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   Reply to <span className="text-red-500">Report</span>
@@ -303,3 +303,4 @@ export default function ReportsPage() {
     </div>
   );
 }
+

@@ -237,24 +237,24 @@ export default function VoiceSearch() {
     }
   };
 
-  if (!supported) return <div className="p-10 text-center bg-gray-50 dark:bg-[#0f2e28] text-gray-800 dark:text-white">Browser not supported for voice recognition. Use Chrome or Edge.</div>;
+  if (!supported) return <div className="p-10 text-center bg-[var(--secondary)] text-[var(--foreground)]">Browser not supported for voice recognition. Use Chrome or Edge.</div>;
 
   return (
-    <section className={`w-full py-24 px-6 lg:px-12 bg-slate-50 dark:bg-[#0f2e28] min-h-screen relative overflow-hidden transition-colors duration-500 ${manrope.className}`}>
+    <section className={`w-full py-24 px-6 lg:px-12 bg-[var(--secondary)] min-h-screen relative overflow-hidden transition-colors duration-500 ${manrope.className}`}>
       
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] blur-[150px] rounded-full pointer-events-none bg-emerald-100/50 dark:bg-[#cddfa0]/5"></div>
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] blur-[150px] rounded-full pointer-events-none bg-[var(--accent)]/20"></div>
 
       <div className="max-w-5xl mx-auto w-full relative z-10 flex flex-col items-center">
         
-        <div className="inline-flex items-center gap-2 text-emerald-600 dark:text-[#cddfa0] font-bold tracking-[0.4em] text-[10px] uppercase bg-white dark:bg-white/5 px-5 py-2 rounded-full border border-gray-200 dark:border-white/10 mb-8 shadow-sm">
+        <div className="inline-flex items-center gap-2 text-[var(--accent)] font-bold tracking-[0.4em] text-[10px] uppercase bg-[var(--card)] px-5 py-2 rounded-full border border-[var(--border)] mb-8 shadow-sm">
           <Sparkles size={14} /> Intelligence Voice Search
         </div>
 
-        <h2 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4 tracking-tight text-center leading-none">
-          Urban Estate <span className="text-emerald-500 dark:text-[#cddfa0] italic font-light">AI Voice</span>
+        <h2 className="text-4xl lg:text-5xl font-black text-[var(--foreground)] mb-4 tracking-tight text-center leading-none">
+          Urban Estate <span className="text-[var(--accent)] italic font-light">AI Voice</span>
         </h2>
         
-        <p className="text-gray-500 dark:text-white/60 text-center mb-12 max-w-lg text-sm md:text-base">
+        <p className="text-[var(--muted-foreground)] text-center mb-12 max-w-lg text-sm md:text-base">
           Tap the microphone and ask about any property, location, or general questions!
         </p>
 
@@ -262,14 +262,14 @@ export default function VoiceSearch() {
           <motion.div 
             animate={{ opacity: [0.1, 0.3, 0.1], scale: [0.95, 1.05, 0.95] }} 
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }} 
-            className="absolute w-2/3 h-full bg-emerald-400/20 dark:bg-[#cddfa0]/10 blur-2xl rounded-full pointer-events-none"
+            className="absolute w-2/3 h-full bg-[var(--accent)]/20 blur-2xl rounded-full pointer-events-none"
           />
 
           {listening ? (
             [...Array(25)].map((_, i) => (
               <motion.div
                 key={i}
-                className="w-1.5 bg-emerald-500 dark:bg-[#cddfa0] rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)] dark:shadow-[0_0_15px_#cddfa0] relative z-10"
+                className="w-1.5 bg-[var(--accent)] rounded-full shadow-[0_0_15px_var(--accent)] relative z-10"
                 animate={{ 
                   height: [8, Math.random() * 50 + 15, 8],
                   y: [0, (Math.random() * 6) - 3, 0] 
@@ -282,7 +282,7 @@ export default function VoiceSearch() {
               {[...Array(25)].map((_, i) => (
                 <motion.div 
                   key={i} 
-                  className="w-1.5 h-1.5 bg-emerald-500 dark:bg-[#cddfa0] rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)] dark:shadow-[0_0_10px_#cddfa0]" 
+                  className="w-1.5 h-1.5 bg-[var(--accent)] rounded-full shadow-[0_0_10px_var(--accent)]" 
                   animate={{ 
                     y: [0, 4, 0], 
                     opacity: [0.4, 1, 0.4] 
@@ -298,17 +298,17 @@ export default function VoiceSearch() {
           <motion.div 
             animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.6, 0.3] }} 
             transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }} 
-            className="absolute w-28 h-28 bg-emerald-400/20 dark:bg-[#cddfa0]/20 rounded-full blur-md" 
+            className="absolute w-28 h-28 bg-[var(--accent)]/20 rounded-full blur-md" 
           />
           <motion.div 
             animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.4, 0.1] }} 
             transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }} 
-            className="absolute w-32 h-32 bg-emerald-400/10 dark:bg-[#cddfa0]/10 rounded-full blur-xl" 
+            className="absolute w-32 h-32 bg-[var(--accent)]/10 rounded-full blur-xl" 
           />
 
           <AnimatePresence>
             {listening && (
-              <motion.div initial={{ scale: 1, opacity: 0.8 }} animate={{ scale: 2.5, opacity: 0 }} transition={{ repeat: Infinity, duration: 1 }} className="absolute w-20 h-20 bg-emerald-400/50 dark:bg-[#cddfa0]/50 rounded-full" />
+              <motion.div initial={{ scale: 1, opacity: 0.8 }} animate={{ scale: 2.5, opacity: 0 }} transition={{ repeat: Infinity, duration: 1 }} className="absolute w-20 h-20 bg-[var(--accent)]/50 rounded-full" />
             )}
           </AnimatePresence>
           
@@ -316,8 +316,8 @@ export default function VoiceSearch() {
             onClick={toggleListen} 
             className={`relative z-10 w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center transition-all duration-300 ${
               listening 
-                ? 'bg-emerald-500 dark:bg-[#cddfa0] text-white dark:text-[#0f2e28] scale-110 shadow-[0_0_40px_rgba(16,185,129,0.6)] dark:shadow-[0_0_50px_rgba(205,223,160,0.8)]' 
-                : 'bg-white dark:bg-[#13332c] text-emerald-600 dark:text-[#cddfa0] shadow-xl dark:shadow-[0_0_25px_rgba(205,223,160,0.5)] hover:scale-105 border border-gray-100 dark:border-none'
+                ? 'bg-[var(--accent)] text-[var(--accent-foreground)] scale-110 shadow-[0_0_40px_var(--accent)]' 
+                : 'bg-[var(--card)] text-[var(--accent)] shadow-xl hover:scale-105 border border-[var(--border)]'
             }`}
           >
             {listening ? <Mic size={36} className="animate-pulse" /> : <Mic size={36} />}
@@ -326,22 +326,22 @@ export default function VoiceSearch() {
 
         <div className="w-full max-w-3xl space-y-6 px-4 md:px-0">
           {transcript && (
-            <div className="bg-white dark:bg-white/5 backdrop-blur-md p-5 md:p-6 rounded-2xl border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-none">
-              <span className="text-[10px] font-bold text-emerald-500 dark:text-[#cddfa0] uppercase tracking-widest block mb-2 opacity-80 dark:opacity-50">User Input</span>
-              <p className="text-lg md:text-xl text-gray-800 dark:text-white font-medium italic">"{transcript}"</p>
+            <div className="bg-[var(--card)] backdrop-blur-md p-5 md:p-6 rounded-2xl border border-[var(--border)] shadow-sm">
+              <span className="text-[10px] font-bold text-[var(--accent)] uppercase tracking-widest block mb-2 opacity-80">User Input</span>
+              <p className="text-lg md:text-xl text-[var(--foreground)] font-medium italic">"{transcript}"</p>
             </div>
           )}
 
           {isAnalyzing ? (
-            <div className="flex items-center gap-3 text-emerald-600 dark:text-[#cddfa0] font-mono text-xs md:text-sm animate-pulse bg-white dark:bg-transparent p-4 rounded-xl shadow-sm dark:shadow-none border border-gray-100 dark:border-none">
+            <div className="flex items-center gap-3 text-[var(--accent)] font-mono text-xs md:text-sm animate-pulse bg-[var(--card)] p-4 rounded-xl shadow-sm border border-[var(--border)]">
               <Loader2 className="animate-spin" size={18} /> PROCESSING_AI_RESPONSE...
             </div>
           ) : aiResponse && (
-            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="bg-emerald-50 dark:bg-[#cddfa0]/10 border-l-4 border-emerald-500 dark:border-[#cddfa0] p-5 md:p-6 rounded-r-2xl shadow-lg dark:shadow-2xl backdrop-blur-md">
-               <p className="text-xs md:text-sm text-emerald-600 dark:text-[#cddfa0] font-black uppercase tracking-widest mb-2 flex items-center gap-2">
+            <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="bg-[var(--accent)]/10 border-l-4 border-[var(--accent)] p-5 md:p-6 rounded-r-2xl shadow-lg backdrop-blur-md">
+               <p className="text-xs md:text-sm text-[var(--accent)] font-black uppercase tracking-widest mb-2 flex items-center gap-2">
                 <MessageSquareText size={16} /> AI Assistant Response
               </p>
-              <p className="text-base md:text-lg text-gray-800 dark:text-white leading-relaxed">{aiResponse}</p>
+              <p className="text-base md:text-lg text-[var(--foreground)] leading-relaxed">{aiResponse}</p>
             </motion.div>
           )}
         </div>
@@ -349,22 +349,22 @@ export default function VoiceSearch() {
         {!isAnalyzing && results.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 w-full px-4 md:px-0">
             {results.map((r) => (
-              <div key={r.id} className="bg-white dark:bg-[#13332c] rounded-2xl overflow-hidden border border-gray-200 dark:border-white/10 group shadow-lg dark:shadow-none hover:border-emerald-400 dark:hover:border-[#cddfa0]/50 transition-all">
+              <div key={r.id} className="bg-[var(--card)] rounded-2xl overflow-hidden border border-[var(--border)] group shadow-lg hover:border-[var(--accent)] transition-all">
                 <div className="h-40 overflow-hidden relative">
                   <img src={r.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={r.title} />
-                  <div className="absolute top-2 left-2 bg-emerald-600 dark:bg-[#0f2e28] text-white dark:text-[#cddfa0] px-3 py-1 rounded-lg text-[10px] font-black tracking-wide shadow-md">
+                  <div className="absolute top-2 left-2 bg-[var(--accent)] text-[var(--accent-foreground)] px-3 py-1 rounded-lg text-[10px] font-black tracking-wide shadow-md">
                     {r.priceLabel || `$${r.price}`}
                   </div>
                 </div>
                 <div className="p-5">
-                  <h4 className="text-gray-900 dark:text-white font-bold mb-1 truncate text-sm">{r.title}</h4>
-                  <p className="text-gray-500 dark:text-white/50 text-[10px] uppercase mb-4 flex items-center gap-1 font-medium">
-                    <MapPin size={12} className="text-emerald-500 dark:text-[#cddfa0]"/> {r.location}
+                  <h4 className="text-[var(--foreground)] font-bold mb-1 truncate text-sm">{r.title}</h4>
+                  <p className="text-[var(--muted-foreground)] text-[10px] uppercase mb-4 flex items-center gap-1 font-medium">
+                    <MapPin size={12} className="text-[var(--accent)]"/> {r.location}
                   </p>
-                  <div className="flex justify-between border-t border-gray-100 dark:border-white/5 pt-3">
-                    <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-white/60 font-semibold"><BedDouble size={14} className="text-emerald-500 dark:text-white/40"/> {r.beds} Beds</div>
-                    <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-white/60 font-semibold"><Bath size={14} className="text-emerald-500 dark:text-white/40"/> {r.baths || 0} Baths</div>
-                    <div className="flex items-center gap-1.5 text-[10px] text-gray-600 dark:text-white/60 font-semibold"><Maximize size={14} className="text-emerald-500 dark:text-white/40"/> {r.sqft || 0} sqft</div>
+                  <div className="flex justify-between border-t border-[var(--border)] pt-3">
+                    <div className="flex items-center gap-1.5 text-[10px] text-[var(--muted-foreground)] font-semibold"><BedDouble size={14} className="text-[var(--accent)]"/> {r.beds} Beds</div>
+                    <div className="flex items-center gap-1.5 text-[10px] text-[var(--muted-foreground)] font-semibold"><Bath size={14} className="text-[var(--accent)]"/> {r.baths || 0} Baths</div>
+                    <div className="flex items-center gap-1.5 text-[10px] text-[var(--muted-foreground)] font-semibold"><Maximize size={14} className="text-[var(--accent)]"/> {r.sqft || 0} sqft</div>
                   </div>
                 </div>
               </div>
@@ -376,3 +376,4 @@ export default function VoiceSearch() {
     </section>
   );
 }
+

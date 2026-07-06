@@ -96,7 +96,7 @@ export default function PropertyMap() {
       // 3. Initialize Map
       const map = L.map(containerRef.current, {
         zoomControl: false,
-        scrollWheelZoom: true,
+        scrollWheelZoom: false,
         dragging: true,
         touchZoom: true
       }).setView(userLocation, 14);
@@ -176,8 +176,8 @@ export default function PropertyMap() {
     <section className={`w-full h-screen relative bg-gray-100 overflow-hidden ${manrope.className}`}>
       
       {!userLocation && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white z-[9999] text-[#0f2e28]">
-          <div className="w-12 h-12 border-4 border-[#0f2e28] border-t-transparent rounded-full animate-spin mb-4"></div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white z-[9999] text-[#099880]">
+          <div className="w-12 h-12 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mb-4"></div>
           <p className="font-bold uppercase tracking-widest animate-pulse">Initializing Map View...</p>
         </div>
       )}
@@ -185,19 +185,19 @@ export default function PropertyMap() {
       <div ref={containerRef} style={{ height: '100vh', width: '100vw', position: 'absolute', top: 0, left: 0, zIndex: 1 }} />
 
       <div className="absolute top-10 right-10 z-[20] flex flex-col gap-4">
-        <button onClick={() => handleZoom("in")} className="w-12 h-12 bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl text-[#0f2e28] flex items-center justify-center shadow-lg hover:bg-[#0f2e28] hover:text-white transition-all">
+        <button onClick={() => handleZoom("in")} className="w-12 h-12 bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl text-[#099880] flex items-center justify-center shadow-lg hover:bg-[var(--background)] hover:text-white transition-all">
           <Plus size={24} strokeWidth={3} />
         </button>
-        <button onClick={() => handleZoom("out")} className="w-12 h-12 bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl text-[#0f2e28] flex items-center justify-center shadow-lg hover:bg-[#0f2e28] hover:text-white transition-all">
+        <button onClick={() => handleZoom("out")} className="w-12 h-12 bg-white/90 backdrop-blur-xl border border-gray-200 rounded-xl text-[#099880] flex items-center justify-center shadow-lg hover:bg-[var(--background)] hover:text-white transition-all">
           <Minus size={24} strokeWidth={3} />
         </button>
       </div>
 
       <div className="absolute top-10 left-1/2 -translate-x-1/2 z-[10] text-center w-full px-6 pointer-events-none">
-        <div className="inline-flex items-center gap-2 text-[#0f2e28] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-gray-200 mb-3 pointer-events-auto shadow-sm">
+        <div className="inline-flex items-center gap-2 text-[#099880] font-bold tracking-[0.4em] text-[10px] uppercase bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-gray-200 mb-3 pointer-events-auto shadow-sm">
           <Navigation size={12} /> Live Real-Time View
         </div>
-        <h2 className="text-4xl lg:text-5xl font-black text-[#0f2e28] leading-tight drop-shadow-sm">
+        <h2 className="text-4xl lg:text-5xl font-black text-[#099880] leading-tight drop-shadow-sm">
           Properties <span className="text-green-600 italic font-light">Near You</span>
         </h2>
       </div>
@@ -219,7 +219,7 @@ export default function PropertyMap() {
 
               <div className="relative h-44 w-full">
                 <img src={selectedProperty.image} alt="" className="w-full h-full object-cover" />
-                <div className="absolute bottom-4 left-4 bg-[#0f2e28] text-white px-3 py-1 rounded-lg text-xs font-black shadow-lg">{selectedProperty.price}</div>
+                <div className="absolute bottom-4 left-4 bg-[var(--background)] text-white px-3 py-1 rounded-lg text-xs font-black shadow-lg">{selectedProperty.price}</div>
               </div>
               <div className="p-6 text-gray-800">
                 <h3 className="text-xl font-black mb-4 leading-tight">{selectedProperty.title}</h3>
@@ -230,7 +230,7 @@ export default function PropertyMap() {
                 </div>
                 <button 
                   onClick={() => handleViewDetails(selectedProperty.id)}
-                  className="w-full mt-6 bg-[#0f2e28] text-white py-3 rounded-xl font-black hover:bg-green-700 transition-all flex items-center justify-center gap-2 tracking-widest text-xs shadow-md"
+                  className="w-full mt-6 bg-[var(--background)] text-white py-3 rounded-xl font-black hover:bg-green-700 transition-all flex items-center justify-center gap-2 tracking-widest text-xs shadow-md"
                 >
                   <Sparkles size={14}/> VIEW FULL LISTING
                 </button>
@@ -252,7 +252,7 @@ export default function PropertyMap() {
         }
 
         .prop-pin {
-          background: #0f2e28;
+          background: #099880;
           width: 22px;
           height: 22px;
           border-radius: 50%;
@@ -297,9 +297,10 @@ export default function PropertyMap() {
         }
 
         .dark .leaflet-container {
-          background: #0b1f1a !important;
+          background: #066e5b !important;
         }
       `}</style>
     </section>
   );
 }
+

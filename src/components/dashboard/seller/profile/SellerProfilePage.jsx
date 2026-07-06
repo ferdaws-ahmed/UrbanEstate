@@ -145,13 +145,13 @@ export default function SellerProfilePage() {
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
       <div className={`rounded-[2.5rem] border overflow-hidden transition-all duration-500 shadow-xl ${
-        isDark ? "border-[#1a4a40]/50 bg-[#0f2e28]/80" : "border-slate-100 bg-white"
+        isDark ? "border-white/10 bg-[var(--card)]" : "border-slate-100 bg-white"
       }`}>
         {/* Header/Banner */}
         <div className="h-32 bg-gradient-to-r from-teal-600 to-emerald-600 relative">
           <div className="absolute -bottom-12 left-10">
             <div className="relative group">
-              <div className="h-24 w-24 rounded-3xl bg-white dark:bg-[#0b1f1a] p-1 shadow-2xl">
+              <div className="h-24 w-24 rounded-3xl bg-white dark:bg-[var(--card)] p-1 shadow-2xl">
                 {profileData.image ? (
                   <img 
                     src={profileData.image} 
@@ -164,7 +164,7 @@ export default function SellerProfilePage() {
                   </div>
                 )}
               </div>
-              <label className="absolute bottom-0 right-0 h-10 w-10 rounded-2xl bg-slate-900 dark:bg-[#0b1f1a] text-white flex items-center justify-center cursor-pointer hover:bg-teal-600 transition-all shadow-xl border-4 border-white dark:border-[#0b1f1a] group-hover:scale-110">
+              <label className="absolute bottom-0 right-0 h-10 w-10 rounded-2xl bg-slate-900 dark:bg-[var(--card)] text-white flex items-center justify-center cursor-pointer hover:bg-teal-600 transition-all shadow-xl border-4 border-white dark:border-[var(--card)] group-hover:scale-110">
                 {uploading ? <Loader2 size={16} className="animate-spin" /> : <Camera size={18} />}
                 <input 
                   type="file" 
@@ -215,7 +215,7 @@ export default function SellerProfilePage() {
                     onChange={(e) => setProfileData({...profileData, name: e.target.value})}
                     className={`w-full pl-14 pr-6 py-5 rounded-3xl border outline-none transition-all text-sm font-bold ${
                       isDark 
-                      ? "bg-[#0b1f1a] border-[#1a4a40] text-white focus:border-[#cddfa0] focus:ring-4 focus:ring-[#cddfa0]/5" 
+                      ? "bg-[var(--card)] border-white/10 text-white focus:border-[#cddfa0] focus:ring-4 focus:ring-[#cddfa0]/5" 
                       : "bg-white border-slate-200 text-slate-900 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/5 shadow-inner"
                     }`}
                     placeholder="Enter your name"
@@ -232,7 +232,7 @@ export default function SellerProfilePage() {
                     value={profileData.email}
                     disabled
                     className={`w-full pl-14 pr-6 py-5 rounded-3xl border outline-none cursor-not-allowed text-sm font-bold ${
-                      isDark ? "bg-[#0b1f1a] border-[#1a4a40] text-white" : "bg-slate-50 border-slate-200 text-slate-500"
+                      isDark ? "bg-[var(--card)] border-white/10 text-white" : "bg-slate-50 border-slate-200 text-slate-500"
                     }`}
                   />
                 </div>
@@ -245,7 +245,7 @@ export default function SellerProfilePage() {
                 <label className={`text-[11px] font-black uppercase tracking-[0.25em] ml-1 transition-colors duration-300 ${isDark ? 'text-slate-500' : 'text-slate-600'}`}>Asset Avatar Protocol</label>
                 <div 
                   className={`relative p-5 rounded-3xl border flex items-center gap-4 transition-all ${
-                    isDark ? "bg-[#0b1f1a] border-[#1a4a40]" : "bg-white border-slate-200 shadow-inner"
+                    isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-200 shadow-inner"
                   }`}
                 >
                   <div className="h-14 w-14 rounded-2xl bg-teal-600/10 text-teal-600 flex items-center justify-center shrink-0 shadow-lg">
@@ -282,7 +282,7 @@ export default function SellerProfilePage() {
                     value={profileData.role}
                     disabled
                     className={`w-full pl-14 pr-6 py-5 rounded-3xl border outline-none cursor-not-allowed uppercase font-black text-[11px] tracking-[0.2em] ${
-                      isDark ? "bg-[#0b1f1a] border-[#1a4a40] text-white" : "bg-slate-50 border-slate-200 text-slate-500"
+                      isDark ? "bg-[var(--card)] border-white/10 text-white" : "bg-slate-50 border-slate-200 text-slate-500"
                     }`}
                   />
                 </div>
@@ -318,3 +318,4 @@ export default function SellerProfilePage() {
     </div>
   );
 }
+

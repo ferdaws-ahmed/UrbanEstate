@@ -15,6 +15,7 @@ import LiveSupportChat from "../components/home/LiveSupportChat";
 import BeforeAfterSlider from "../components/home/BeforeAfterSlider";
 import AIDecorator from "../components/home/AIDecorator";
 import FAQSection from "../components/home/FAQSection";
+import FeaturedProperties from "../components/home/FeaturedProperties";
 
 // --- Dynamic Imports 
 
@@ -28,11 +29,12 @@ const VoiceSearch = dynamic(() => import("../components/home/VoiceSearch"), { ss
 export default function Home() {
   return (
     <main>
-  
+      
   <Hero /> 
   <Features />
   <VoiceSearch /> 
   <ExploreLocations /> 
+  <FeaturedProperties />
   <SwipeDeck />
   <PropertyMap />
   <Property3D /> 
@@ -51,3 +53,4 @@ export default function Home() {
 </main>
   );
 }
+

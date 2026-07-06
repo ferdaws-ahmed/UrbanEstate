@@ -10,7 +10,7 @@ export default function LeadSourcesChart({ data }) {
       return (
         <div className="bg-white dark:bg-[#1a4a40] border border-gray-200 dark:border-[#1a4a40]/60 rounded-lg p-3 shadow-lg">
           <p className="text-sm font-medium text-gray-900 dark:text-white">{label}</p>
-          <p className="text-sm text-[#cddfa0]">{`Leads: ${data.leads}`}</p>
+          <p className="text-sm text-[var(--accent)]">{`Leads: ${data.leads}`}</p>
           <p className="text-sm text-green-600 dark:text-green-400">{`Conversions: ${data.conversions}`}</p>
           <p className="text-sm text-blue-600 dark:text-blue-400">{`Rate: ${conversionRate}%`}</p>
         </div>
@@ -55,3 +55,4 @@ export default function LeadSourcesChart({ data }) {
     </div>
   );
 }
+

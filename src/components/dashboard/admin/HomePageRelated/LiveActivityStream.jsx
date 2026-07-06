@@ -12,7 +12,7 @@ export default function LiveActivityStream({ activities }) {
   return (
     <div className={`p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] border backdrop-blur-xl transition-all duration-500 shadow-xl flex flex-col h-full relative overflow-hidden ${
       isDark 
-        ? 'bg-gradient-to-b from-[#133c34]/80 to-[#091a16] border-[#1a4a40] shadow-black/40 text-white' 
+        ? 'bg-gradient-to-b from-[var(--card)]/80 to-[var(--background)] border-white/10 shadow-black/40 text-white' 
         : 'bg-white/80 border-gray-200 shadow-gray-200/50 text-gray-900'
     }`}>
       
@@ -39,7 +39,7 @@ export default function LiveActivityStream({ activities }) {
         <div className="pl-3 sm:pl-4 pt-2 pb-2">
           
           {/* Timeline Line*/}
-          <div className={`relative border-l-2 flex flex-col gap-6 ${isDark ? 'border-[#1a4a40]' : 'border-gray-200'}`}>
+          <div className={`relative border-l-2 flex flex-col gap-6 ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
 
             {activities.map((act, index) => (
               <div key={act.id} className="relative pl-4 sm:pl-5 group cursor-default">
@@ -47,7 +47,7 @@ export default function LiveActivityStream({ activities }) {
                 {/* Timeline Dot Perfectly Centered */}
                 <div className={`absolute -left-[7px] top-1 w-3 h-3 rounded-full border-2 transition-all duration-300 group-hover:scale-125 z-10 ${
                   isDark 
-                    ? index === 0 ? 'bg-[#cddfa0] border-[#cddfa0] shadow-[0_0_10px_#cddfa0]' : 'bg-[#091a16] border-[#cddfa0]' 
+                    ? index === 0 ? 'bg-[#cddfa0] border-[#cddfa0] shadow-[0_0_10px_#cddfa0]' : 'bg-[var(--background)] border-[#cddfa0]' 
                     : index === 0 ? 'bg-blue-500 border-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]' : 'bg-white border-blue-500'
                 }`}></div>
 
@@ -58,7 +58,7 @@ export default function LiveActivityStream({ activities }) {
                   </p>
                   <div>
                     <span className={`inline-block text-[7px] sm:text-[8px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest whitespace-nowrap ${
-                      isDark ? 'bg-[#1a4a40] text-[#cddfa0]' : 'bg-blue-50 text-blue-600'
+                      isDark ? 'bg-[var(--card)] text-[#cddfa0]' : 'bg-blue-50 text-blue-600'
                     }`}>
                       {act.time}
                     </span>
@@ -84,7 +84,7 @@ export default function LiveActivityStream({ activities }) {
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: ${isDark ? '#1a4a40' : '#e2e8f0'};
+          background: ${isDark ? 'var(--card)' : '#e2e8f0'};
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -97,3 +97,4 @@ export default function LiveActivityStream({ activities }) {
     </div>
   );
 }
+

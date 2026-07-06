@@ -65,7 +65,6 @@ const sliderData = [
 export default function Hero() {
   const targetRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const { isDark } = useTheme();
 
   const { scrollYProgress } = useScroll({
     target: targetRef,
@@ -98,9 +97,7 @@ export default function Hero() {
   return (
     <section
       ref={targetRef}
-      className={`relative min-h-[180vh] w-full ${
-        isDark ? "bg-[#0f2e28]" : "bg-white"
-      }`}
+      className="relative min-h-[180vh] w-full bg-[var(--background)]"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         <motion.div
@@ -123,11 +120,7 @@ export default function Hero() {
                 >
                   <div className="absolute inset-0 bg-black/40 mix-blend-multiply"></div>
                   <div
-                    className={`absolute inset-0 bg-gradient-to-b from-transparent ${
-                      isDark
-                        ? "via-[#0f2e28]/30 to-[#0f2e28]"
-                        : "via-[#0f2e28]/30 to-white"
-                    }`}
+                    className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/30 to-[var(--background)]"
                   ></div>
                 </div>
               </SwiperSlide>
@@ -151,11 +144,7 @@ export default function Hero() {
                 className="mb-4"
               >
                 <span
-                  className={`flex items-center gap-2 ${
-                    isDark
-                      ? "bg-white/10 text-[#cddfa0]"
-                      : "bg-black/10 text-[#bde84f]"
-                  } backdrop-blur-md px-5 py-2 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border border-white/20`}
+                  className="flex items-center gap-2 bg-[var(--foreground)]/10 text-[var(--accent)] backdrop-blur-md px-5 py-2 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border border-[var(--border)]"
                 >
                   <Sparkles size={14} /> Premium Marketplace
                 </span>
@@ -169,20 +158,14 @@ export default function Hero() {
                   opacity: useTransform(scrollYProgress, [0, 0.4], [1, 0]),
                   y: useTransform(scrollYProgress, [0, 0.4], [0, -30]),
                 }}
-                className={`text-5xl md:text-7xl font-bold mb-6 drop-shadow-2xl leading-tight ${
-                  isDark ? "text-white" : "text-[#bde84f]"
-                }`}
+                className="text-5xl md:text-7xl font-bold mb-6 drop-shadow-2xl leading-tight text-[var(--foreground)]"
               >
                 {sliderData[activeIndex].title.split("").map((char, index) => (
                   <motion.span
                     key={char + "-" + index}
                     variants={letter}
                     className={
-                      index > 6 && index < 14
-                        ? "text-[#cddfa0]"
-                        : isDark
-                        ? "text-white"
-                        : "text-black"
+                      index > 6 && index < 14 ? "text-[var(--accent)]" : ""
                     }
                   >
                     {char}
@@ -198,9 +181,7 @@ export default function Hero() {
                 style={{
                   opacity: useTransform(scrollYProgress, [0, 0.4], [1, 0]),
                 }}
-                className={`max-w-2xl mx-auto text-base md:text-lg font-medium mb-10 drop-shadow-md ${
-                  isDark ? "text-gray-100" : "text-black font-bold"
-                }`}
+                className="max-w-2xl mx-auto text-base md:text-lg font-medium mb-10 drop-shadow-md text-[var(--muted-foreground)]"
               >
                 {sliderData[activeIndex].desc}
               </motion.p>
@@ -213,11 +194,7 @@ export default function Hero() {
                 style={{
                   opacity: useTransform(scrollYProgress, [0, 0.4], [1, 0]),
                 }}
-                className={`${
-                  isDark
-                    ? "bg-[#cddfa0] text-[#0f2e28] hover:bg-white"
-                    : "bg-[#0f2e28] text-white hover:bg-black"
-                } px-10 py-4 rounded-full font-bold text-base transition-all shadow-xl flex items-center gap-2 group`}
+                className="bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--accent)] px-10 py-4 rounded-full font-bold text-base transition-all shadow-xl flex items-center gap-2 group"
               >
                 Explore More{" "}
                 <ArrowRight
@@ -232,3 +209,4 @@ export default function Hero() {
     </section>
   );
 }
+

@@ -102,11 +102,10 @@ export default function Property3D() {
 
   return (
     <section
-      className={`w-full py-24 px-6 lg:px-12 relative overflow-hidden ${
-        isDark ? "bg-[#0f2e28]" : "bg-white"
-      } ${manrope.className}`}
+      className={`w-full py-24 px-6 lg:px-12 relative overflow-hidden ${manrope.className}`}
+      style={{ backgroundColor: "var(--background)" }}
     >
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#cddfa0]/10 blur-[150px] rounded-full" />
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[var(--primary)]/10 blur-[150px] rounded-full" />
 
       <div className="container mx-auto max-w-7xl relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
@@ -115,27 +114,25 @@ export default function Property3D() {
             <div
               className={`inline-flex items-center gap-2 font-bold tracking-[0.4em] text-[10px] uppercase px-5 py-2 rounded-full border mb-8 ${
                 isDark
-                  ? "text-[#cddfa0] bg-white/5 border-white/10"
-                  : "text-[#0f2e28] bg-black/5 border-black/10"
+                  ? "text-[var(--accent)] bg-white/5 border-white/10"
+                  : "text-[var(--primary)] bg-black/5 border-black/10"
               }`}
             >
               <Rotate3d size={14} /> 360° Visual Tour
             </div>
 
             <h2
-              className={`text-4xl lg:text-5xl font-black mb-8 ${
-                isDark ? "text-white" : "text-[#0f2e28]"
-              }`}
+              className={`text-4xl lg:text-5xl font-black mb-8`}
+              style={{ color: "var(--foreground)" }}
             >
               Reimagine{" "}
-              <span className="text-[#cddfa0] italic font-light">Space</span> in
+              <span style={{ color: "var(--accent)" }} className="italic font-light">Space</span> in
               3D
             </h2>
 
             <p
-              className={`${
-                isDark ? "text-white" : "text-black"
-              } text-lg mb-10 max-w-lg`}
+              className={`text-lg mb-10 max-w-lg`}
+              style={{ color: "var(--foreground)" }}
             >
               Experience the future of real estate with an interactive 3D
               property preview.
@@ -149,23 +146,24 @@ export default function Property3D() {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className={`flex gap-5 p-5 rounded-2xl ${
-                    isDark ? "bg-white/5" : "bg-black/5"
-                  } border ${isDark ? "border-white/5" : "border-black/5"}`}
+                  className={`flex gap-5 p-5 rounded-2xl border`}
+                  style={{
+                    backgroundColor: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
+                    borderColor: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)"
+                  }}
                 >
                   <div
-                    className={`w-12 h-12 rounded-xl ${
-                      isDark ? "bg-white/5" : "bg-black/5"
-                    } flex items-center justify-center ${
-                      isDark ? "text-[#cddfa0]" : "text-black"
-                    }`}
+                    className={`w-12 h-12 rounded-xl flex items-center justify-center`}
+                    style={{
+                      backgroundColor: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
+                      color: "var(--accent)"
+                    }}
                   >
                     {item.icon}
                   </div>
                   <h4
-                    className={`${
-                      isDark ? "text-white" : "text-black"
-                    } font-bold`}
+                    className={`font-bold`}
+                    style={{ color: "var(--foreground)" }}
                   >
                     {item.title}
                   </h4>
@@ -176,11 +174,25 @@ export default function Property3D() {
 
           {/* RIGHT 3D */}
           <div className="lg:col-span-7 relative">
-            <div className="relative w-full aspect-video rounded-[3rem] overflow-hidden bg-[#081d19] border border-white/10">
-              <div className="absolute top-8 left-8 z-20 bg-[#0f2e28]/80 px-5 py-2 rounded-full text-[10px] text-white font-black">
+            <div 
+              className="relative w-full aspect-video rounded-[3rem] overflow-hidden border"
+              style={{ 
+                backgroundColor: "var(--card)", 
+                borderColor: "var(--border)" 
+              }}
+            >
+              <div 
+                className="absolute top-8 left-8 z-20 px-5 py-2 rounded-full text-[10px] font-black"
+                style={{ 
+                  backgroundColor: "rgba(var(--background), 0.8)", 
+                  color: "var(--foreground)",
+                  background: isDark ? "rgba(6, 110, 91, 0.8)" : "rgba(255, 255, 255, 0.8)"
+                }}
+              >
                 <MousePointer2
                   size={14}
-                  className="inline mr-2 text-[#cddfa0]"
+                  className="inline mr-2"
+                  style={{ color: "var(--accent)" }}
                 />
                 Click & Drag
               </div>
@@ -209,7 +221,13 @@ export default function Property3D() {
                 </Suspense>
               </Canvas>
 
-              <div className="absolute bottom-8 right-8 bg-[#cddfa0] px-5 py-2 rounded-xl text-[10px] font-black flex items-center gap-2">
+              <div 
+                className="absolute bottom-8 right-8 px-5 py-2 rounded-xl text-[10px] font-black flex items-center gap-2"
+                style={{ 
+                  backgroundColor: "var(--primary)",
+                  color: "var(--primary-foreground)"
+                }}
+              >
                 <CheckCircle2 size={14} /> 3D Engine Active
               </div>
             </div>
@@ -219,3 +237,4 @@ export default function Property3D() {
     </section>
   );
 }
+

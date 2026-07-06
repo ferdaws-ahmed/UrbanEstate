@@ -5,6 +5,7 @@ import PropertyHero from "@/src/components/AllProperty/PropertyHero";
 import SidebarFilters from "@/src/components/AllProperty/SidebarFilters";
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useTheme } from "@/src/components/Theme/ThemeContext";
 
 export default function AllPropertiesPage() {
   const { status } = useSession();
@@ -41,13 +42,13 @@ export default function AllPropertiesPage() {
       }
     };
     fetchProperties();
-  }, [status]); // status এড করা হলো যাতে লগইন/আউট হলে ফেভারিট স্টেট আপডেট হয়
+  }, [status]); // status এড করা হলো যাতে লগইন/আউট হলে ফেভারিট স্টেট আপডেট হয়
 
   // কনসোলিডেটেড ফিল্টার এবং সর্টিং লজিক
   useEffect(() => {
     let tempProperties = [...properties];
 
-    // ১. সার্চ কুয়েরি (Title, Address, District)
+    // ১. সার্চ কুয়েরি (Title, Address, District)
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       tempProperties = tempProperties.filter(
@@ -146,33 +147,41 @@ export default function AllPropertiesPage() {
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 py-12">
         <div className="flex flex-col lg:flex-row gap-8">
           
+          {/* Sidebar - Sticky */}
           <aside className="w-full lg:w-80 shrink-0">
-            <SidebarFilters onFilterChange={handleFilterChange} />
+            <div className="sticky top-[88px]">
+              <SidebarFilters onFilterChange={handleFilterChange} />
+            </div>
           </aside>
 
+          {/* Property Section */}
           <div className="flex-1">
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
-              <div>
-                <h2 className="text-3xl md:text-4xl font-extrabold">
-                  Available <span className="text-[var(--primary)]">Listings</span>
-                </h2>
-                <p className="text-[var(--muted-foreground)] mt-1">
-                  Showing {filteredProperties.length} results{" "}
-                  {searchQuery && `for "${searchQuery}"`}
-                </p>
-              </div>
+            {/* Sticky Header */}
+            <div className="sticky top-[88px] z-[10] py-4 -mx-4 -mt-12 mb-12 px-4 md:px-8" style={{backgroundColor: "var(--background)"}}>
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-extrabold">
+                    Available <span className="text-[var(--primary)]">Listings</span>
+                  </h2>
+                  <p className="text-[var(--muted-foreground)] mt-1">
+                    Showing {filteredProperties.length} results{" "}
+                    {searchQuery && `for "${searchQuery}"`}
+                  </p>
+                </div>
 
-              <select 
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="bg-[var(--card)] border border-[var(--border)] px-4 py-2 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-[var(--ring)] cursor-pointer"
-              >
-                <option>Newest First</option>
-                <option>Price Low → High</option>
-                <option>Price High → Low</option>
-              </select>
+                <select 
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="bg-[var(--card)] border border-[var(--border)] px-4 py-2 rounded-xl text-sm font-semibold outline-none focus:ring-2 focus:ring-[var(--ring)] cursor-pointer"
+                >
+                  <option>Newest First</option>
+                  <option>Price Low → High</option>
+                  <option>Price High → Low</option>
+                </select>
+              </div>
             </div>
 
+            {/* Property Grid */}
             <PropertyGrid properties={filteredProperties} loading={loading} />
           </div>
         </div>

@@ -63,3 +63,4 @@ export default function LocationName({ lat, lon, full = false, fallback = "Unkno
     </button>
   );
 }
+

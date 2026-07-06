@@ -121,20 +121,35 @@ function MapOverlays({ showNoise, showCrime, showAQI }) {
     defaultCenter.lng,
   ]);
 
-  // One-shot location (watchPosition + permission denied = noisy errors; Strict Mode doubles subscriptions)
+  // One-shot location handler FIXED against Leaflet dynamic structure race conditions
   useEffect(() => {
-    if (typeof window === "undefined" || !navigator.geolocation) return;
+    if (typeof window === "undefined" || !navigator.geolocation || !map) return;
 
     let cancelled = false;
+    
     navigator.geolocation.getCurrentPosition(
       (position) => {
         if (cancelled) return;
         const { latitude, longitude } = position.coords;
         setUserLocation([latitude, longitude]);
-        map.flyTo([latitude, longitude], 14, { duration: 1.2 });
+        
+        // Leaflet internal positioning engine sequence verify kora hocche
+        if (map && typeof map.getCenter === 'function') {
+          try {
+            map.flyTo([latitude, longitude], 14, { duration: 1.2 });
+          } catch (e) {
+            // Safety dynamic validation runtime fall-back execution
+            map.setView([latitude, longitude], 14);
+          }
+        }
       },
       () => {
-        map.flyTo([defaultCenter.lat, defaultCenter.lng], 13, { duration: 0 });
+        if (cancelled) return;
+        // Safeguard verification layer explicitly set kora holo
+        if (map && typeof map.getCenter === 'function') {
+          // Duration: 0 mane kono zoom animation thakbena, tai safe runtime wrapper `setView` use kora tracking-er jonno best practice.
+          map.setView([defaultCenter.lat, defaultCenter.lng], 13);
+        }
       },
       { enableHighAccuracy: false, maximumAge: 120000, timeout: 12000 }
     );
@@ -263,16 +278,19 @@ export default function EnvironmentalLayers() {
 
   const ToggleSwitch = ({ checked, onChange }) => (
     <button
-      onClick={onChange}
+      onClick={(e) => {
+        e.stopPropagation(); // Event bubble bypass control step
+        onChange();
+      }}
       className={`w-12 h-6 rounded-full flex items-center transition-all duration-300 px-1 focus:outline-none border ${
         checked
-          ? "bg-[#cddfa0] border-[#cddfa0]"
+          ? "bg-[var(--primary)] border-[var(--accent)]"
           : "bg-white/10 border-white/20 hover:border-white/40"
       }`}
     >
       <div
         className={`w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${
-          checked ? "translate-x-6 bg-[#0f2e28]" : "translate-x-0 bg-white"
+          checked ? "translate-x-6 bg-[var(--background)]" : "translate-x-0 bg-white"
         }`}
       />
     </button>
@@ -281,22 +299,22 @@ export default function EnvironmentalLayers() {
   return (
     <section
       className={`w-full py-24 px-6 lg:px-12 ${
-        isDark ? "bg-[#0f2e28]" : "bg-white"
+        isDark ? "bg-[var(--background)]" : "bg-white"
       } relative overflow-hidden ${manrope.className}`}
     >
-      <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] bg-[#cddfa0]/5 blur-[150px] rounded-full pointer-events-none z-0"></div>
+      <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] bg-[var(--primary)]/5 blur-[150px] rounded-full pointer-events-none z-0"></div>
 
       <style
         dangerouslySetInnerHTML={{
           __html: `
         .leaflet-bar a {
-          background-color: #081d19 !important;
+          background-color: #066e5b !important;
           color: #cddfa0 !important;
           border: 1px solid rgba(255, 255, 255, 0.1) !important;
           transition: all 0.3s ease;
         }
         .leaflet-bar a:hover {
-          background-color: #0f2e28 !important;
+          background-color: #099880 !important;
           color: #ffffff !important;
         }
         .leaflet-control-zoom {
@@ -309,7 +327,7 @@ export default function EnvironmentalLayers() {
         }
 
         .leaflet-popup-content-wrapper, .leaflet-popup-tip {
-          background-color: #081d19 !important;
+          background-color: #066e5b !important;
           color: white !important;
           border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 1rem !important;
@@ -344,7 +362,7 @@ export default function EnvironmentalLayers() {
         <div className="flex flex-col items-center text-center mb-16">
           <div
             className={`inline-flex items-center gap-2 ${
-              isDark ? "text-[#cddfa0]" : "text-[#0f2e28]"
+              isDark ? "text-[var(--accent)]" : "text-[#099880]"
             } font-bold tracking-[0.4em] text-[10px] uppercase ${
               isDark ? "bg-white/5" : "bg-black/5"
             } px-5 py-2 rounded-full border ${
@@ -355,15 +373,15 @@ export default function EnvironmentalLayers() {
           </div>
           <h2
             className={`text-4xl lg:text-5xl font-black ${
-              isDark ? "text-white" : "text-[#0f2e28]"
+              isDark ? "text-white" : "text-[#099880]"
             } mb-6 tracking-tight leading-[1.1]`}
           >
             Neighborhood{" "}
-            <span className="text-[#cddfa0] italic font-light">Insights</span>
+            <span className="text-[var(--accent)] italic font-light">Insights</span>
           </h2>
           <p
             className={`${
-              isDark ? "text-white/60" : "text-[#0f2e28]/60"
+              isDark ? "text-white/60" : "text-[#099880]/60"
             } text-lg leading-relaxed max-w-2xl mx-auto`}
           >
             Explore environmental factors, safety zones, and noise levels with
@@ -373,7 +391,7 @@ export default function EnvironmentalLayers() {
 
         <div
           className={`grid grid-cols-1 lg:grid-cols-12 gap-0 ${
-            isDark ? "bg-[#081d19]/80" : "bg-white/80"
+            isDark ? "bg-[var(--card)]/80" : "bg-white/80"
           } backdrop-blur-xl rounded-[2.5rem] ${isDark ? "shadow-[0_40px_100px_rgba(0,0,0,0.5)]" : ""} border ${
             isDark ? "border-white/10" : "border-black/10"
           } overflow-hidden`}
@@ -420,14 +438,14 @@ export default function EnvironmentalLayers() {
             <div>
               <h3
                 className={`text-2xl font-bold ${
-                  isDark ? "text-white" : "text-[#0f2e28]"
+                  isDark ? "text-white" : "text-[#099880]"
                 } mb-2 flex items-center gap-3`}
               >
-                <MapPin className="text-[#cddfa0]" size={24} /> Controls
+                <MapPin className="text-[var(--accent)]" size={24} /> Controls
               </h3>
               <p
                 className={`text-sm ${
-                  isDark ? "text-white/50" : "text-[#0f2e28]/50"
+                  isDark ? "text-white/50" : "text-[#099880]/50"
                 } mb-10`}
               >
                 Toggle the layers to visualize specific area data.
@@ -459,14 +477,14 @@ export default function EnvironmentalLayers() {
                     <div>
                       <div
                         className={`font-bold ${
-                          isDark ? "text-white" : "text-[#0f2e28]"
+                          isDark ? "text-white" : "text-[#099880]"
                         } tracking-wide`}
                       >
                         Noise Pollution
                       </div>
                       <div
                         className={`text-xs ${
-                          isDark ? "text-white" : "text-[#0f2e28]"
+                          isDark ? "text-white/60" : "text-[#099880]/60"
                         } mt-1`}
                       >
                         Highways & intersections
@@ -474,14 +492,15 @@ export default function EnvironmentalLayers() {
                     </div>
                   </div>
                   <ToggleSwitch
-              
                     checked={showNoise}
                     onChange={() => setShowNoise(!showNoise)}
                   />
                 </div>
 
                 <div
-                  className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 cursor-pointer hover:bg-white/5 ${
+                  className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 cursor-pointer ${
+                    isDark ? "hover:bg-white/5" : "hover:bg-black/5"
+                  } ${
                     showCrime
                       ? "border-[#10b981]/50 bg-[#10b981]/10"
                       : isDark ? "border-white/10" : "border-black/10"
@@ -499,23 +518,24 @@ export default function EnvironmentalLayers() {
                       <ShieldCheck size={20} />
                     </div>
                     <div>
-                      <div className={`font-bold ${isDark ? "text-white" : "text-[#0f2e28]"} tracking-wide`}>
+                      <div className={`font-bold ${isDark ? "text-white" : "text-[#099880]"} tracking-wide`}>
                         Safety Rate
                       </div>
-                      <div className={`text-xs ${isDark ? "text-white/40" : "text-[#0f2e28]/40"} mt-1`}>
+                      <div className={`text-xs ${isDark ? "text-white/60" : "text-[#099880]/60"} mt-1`}>
                         Highlights secure areas
                       </div>
                     </div>
                   </div>
                   <ToggleSwitch
                     checked={showCrime}
-                    
                     onChange={() => setShowCrime(!showCrime)}
                   />
                 </div>
 
                 <div
-                  className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 cursor-pointer hover:bg-white/5 ${
+                  className={`flex items-center justify-between p-5 rounded-2xl border transition-all duration-300 cursor-pointer ${
+                    isDark ? "hover:bg-white/5" : "hover:bg-black/5"
+                  } ${
                     showAQI
                       ? "border-[#facc15]/50 bg-[#facc15]/10"
                       : isDark ? "border-white/10" : "border-black/10"
@@ -526,17 +546,17 @@ export default function EnvironmentalLayers() {
                     <div
                       className={`p-3 rounded-xl transition-colors ${
                         showAQI
-                          ? "bg-[#facc15] text-[#0f2e28] shadow-[0_0_15px_rgba(250,204,21,0.5)]"
+                          ? "bg-[#facc15] text-[#099880] shadow-[0_0_15px_rgba(250,204,21,0.5)]"
                           : isDark ? "bg-white/10 text-white/60" : "bg-white text-black"
                       }`}
                     >
                       <Wind size={20} />
                     </div>
                     <div>
-                      <div className={`font-bold ${isDark ? "text-white" : "text-[#0f2e28]"} tracking-wide`}>
+                      <div className={`font-bold ${isDark ? "text-white" : "text-[#099880]"} tracking-wide`}>
                         Air Quality (AQI)
                       </div>
-                      <div className={`text-xs ${isDark ? "text-white" : "text-[#0f2e28]"} mt-1`}>
+                      <div className={`text-xs ${isDark ? "text-white/60" : "text-[#099880]/60"} mt-1`}>
                         Good vs Poor air zones
                       </div>
                     </div>
@@ -550,7 +570,7 @@ export default function EnvironmentalLayers() {
             </div>
 
             <div className="mt-10 pt-6 border-t border-white/10">
-              <div className={`text-sm font-bold ${isDark ? "text-[#cddfa0]":"text-black"} mb-4 uppercase tracking-widest`}>
+              <div className={`text-sm font-bold ${isDark ? "text-[var(--accent)]":"text-black"} mb-4 uppercase tracking-widest`}>
                 Map Legend
               </div>
               <div className={`grid grid-cols-2 gap-4 text-xs ${isDark ? "text-white/70":"text-black/70"} font-medium`}>
@@ -578,3 +598,4 @@ export default function EnvironmentalLayers() {
     </section>
   );
 }
+

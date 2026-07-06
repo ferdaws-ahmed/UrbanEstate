@@ -21,11 +21,55 @@ export default function UserProfile() {
   const { data: session, update } = useSession();
   const { isDark } = useTheme();
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     avatar: "",
   });
+
+  const uploadToImgBB = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    const apiKey = process.env.NEXT_PUBLIC_IMG_BB_API; 
+
+    try {
+      const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (data.success) {
+        return data.data.url;
+      }
+      return null;
+    } catch (error) {
+      console.error("ImgBB Upload Error:", error);
+      return null;
+    }
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    const tid = toast.loading("Uploading image...");
+
+    try {
+      const url = await uploadToImgBB(file);
+      if (url) {
+        setFormData({ ...formData, avatar: url });
+        toast.success("Image uploaded! Click Save to confirm.", { id: tid });
+      } else {
+        toast.error("Upload failed", { id: tid });
+      }
+    } catch (error) {
+      toast.error("Error uploading image", { id: tid });
+    } finally {
+      setUploading(false);
+    }
+  };
 
   useEffect(() => {
     if (session?.user) {
@@ -48,7 +92,7 @@ export default function UserProfile() {
       });
 
       if (res.ok) {
-        await update({ ...session, user: { ...session.user, ...formData } });
+        await update({ ...session, user: { ...session.user, image: formData.avatar, name: formData.name } });
         toast.success("Profile updated successfully!");
       } else {
         throw new Error("Update failed");
@@ -65,10 +109,10 @@ export default function UserProfile() {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Profile Card */}
         <div className={`lg:w-1/3 p-8 rounded-[3rem] border flex flex-col items-center text-center ${
-          isDark ? "bg-[#0b1f1a] border-[#1a4a40]/40" : "bg-white border-slate-100 shadow-sm"
+          isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-100 shadow-sm"
         }`}>
           <div className="relative group mb-6">
-            <div className={`w-32 h-32 rounded-3xl overflow-hidden border-4 ${isDark ? "border-[#1a4a40]" : "border-slate-50"}`}>
+            <div className={`w-32 h-32 rounded-3xl overflow-hidden border-4 ${isDark ? "border-[var(--accent)]/30" : "border-slate-50"}`}>
               {formData.avatar ? (
                 <img src={formData.avatar} className="w-full h-full object-cover" alt="" />
               ) : (
@@ -77,9 +121,16 @@ export default function UserProfile() {
                 </div>
               )}
             </div>
-            <button className="absolute -bottom-2 -right-2 p-3 bg-blue-600 text-white rounded-2xl shadow-xl hover:scale-110 transition-transform">
-              <Camera size={18} />
-            </button>
+            <label className="absolute -bottom-2 -right-2 p-3 bg-blue-600 text-white rounded-2xl shadow-xl hover:scale-110 transition-transform cursor-pointer">
+              {uploading ? <Loader2 size={18} className="animate-spin" /> : <Camera size={18} />}
+              <input 
+                type="file" 
+                accept="image/*"
+                className="hidden" 
+                onChange={handleImageUpload}
+                disabled={uploading}
+              />
+            </label>
           </div>
           
           <h3 className={`text-2xl font-black mb-1 ${isDark ? "text-white" : "text-slate-900"}`}>{formData.name}</h3>
@@ -111,7 +162,7 @@ export default function UserProfile() {
 
         {/* Settings Form */}
         <div className={`flex-1 p-8 lg:p-12 rounded-[3rem] border ${
-          isDark ? "bg-[#0b1f1a] border-[#1a4a40]/40" : "bg-white border-slate-100 shadow-sm"
+          isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-100 shadow-sm"
         }`}>
           <h3 className={`text-2xl font-black mb-8 tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>Identity Settings</h3>
           
@@ -174,3 +225,4 @@ export default function UserProfile() {
     </div>
   );
 }
+

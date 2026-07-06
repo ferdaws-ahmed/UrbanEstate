@@ -222,12 +222,12 @@ export default function AdminChat() {
 
   return (
     <div className={`flex h-[calc(100vh-120px)] rounded-[2.5rem] overflow-hidden border transition-all ${
-      isDark ? "bg-[#0b1f1a] border-[#1a4a40]/40" : "bg-white border-slate-100 shadow-2xl"
+      isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-100 shadow-2xl"
     }`}>
       {/* Sidebar: Conversations */}
       <div className={`w-full md:w-80 lg:w-96 flex flex-col border-r transition-all ${
         activeChat ? "hidden md:flex" : "flex"
-      } ${isDark ? "border-[#1a4a40]/40" : "border-slate-100"}`}>
+      } ${isDark ? "border-white/10" : "border-slate-100"}`}>
         <div className="p-6 border-b border-inherit">
           <div className="flex items-center justify-between mb-4">
             <h2 className={`text-xl font-black ${isDark ? "text-white" : "text-slate-900"}`}>All Conversations</h2>
@@ -268,7 +268,7 @@ export default function AdminChat() {
                     <img src={contact.image || `https://ui-avatars.com/api/?name=${contact.name}&background=random`} className="w-full h-full object-cover" alt="" />
                   </div>
                   {contact.unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-600 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-[#0b1f1a]">
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-emerald-600 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-[var(--card)]">
                       {contact.unreadCount}
                     </span>
                   )}
@@ -304,7 +304,7 @@ export default function AdminChat() {
           <>
             {/* Chat Header */}
             <div className={`p-4 md:p-6 border-b flex items-center justify-between transition-all ${
-              isDark ? "border-[#1a4a40]/40 bg-white/5" : "border-slate-100 bg-white"
+              isDark ? "border-white/10 bg-white/5" : "border-slate-100 bg-white"
             }`}>
               <div className="flex items-center gap-4">
                 <button onClick={() => setActiveChat(null)} className="md:hidden p-2 hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl">
@@ -383,7 +383,7 @@ export default function AdminChat() {
             </div>
 
             {/* Input Area */}
-            <div className={`p-6 transition-all ${isDark ? "bg-[#0b1f1a]" : "bg-white"}`}>
+            <div className={`p-6 transition-all ${isDark ? "bg-[var(--card)]" : "bg-white"}`}>
               <form onSubmit={handleSendMessage} className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <button type="button" className="p-2 text-slate-400 hover:text-emerald-600 transition-colors">
@@ -428,7 +428,7 @@ export default function AdminChat() {
       {/* New Chat Modal */}
       {isNewChatModalOpen && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className={`w-full max-w-md rounded-[2rem] p-6 shadow-2xl ${isDark ? 'bg-[#0b1f1a] border border-[#1a4a40]' : 'bg-white border border-slate-200'}`}>
+          <div className={`w-full max-w-md rounded-[2rem] p-6 shadow-2xl ${isDark ? 'bg-[var(--card)] border border-white/10' : 'bg-white border border-slate-200'}`}>
             <div className="flex items-center justify-between mb-6">
               <h3 className={`text-xl font-black ${isDark ? 'text-white' : 'text-slate-900'}`}>Start New Chat</h3>
               <button 
@@ -490,3 +490,4 @@ export default function AdminChat() {
     </div>
   );
 }
+

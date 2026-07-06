@@ -11,6 +11,7 @@ export default function Profile() {
   const { isDark } = useTheme();
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [profile, setProfile] = useState({
     name: '',
     email: '',
@@ -20,6 +21,49 @@ export default function Profile() {
     bio: '',
     role: 'Admin'
   });
+
+  const uploadToImgBB = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    const apiKey = process.env.NEXT_PUBLIC_IMG_BB_API; 
+
+    try {
+      const response = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (data.success) {
+        return data.data.url;
+      }
+      return null;
+    } catch (error) {
+      console.error("ImgBB Upload Error:", error);
+      return null;
+    }
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    const tid = toast.loading("Uploading image...");
+
+    try {
+      const url = await uploadToImgBB(file);
+      if (url) {
+        setProfile({ ...profile, image: url });
+        toast.success("Image uploaded! Click Save to confirm.", { id: tid });
+      } else {
+        toast.error("Upload failed", { id: tid });
+      }
+    } catch (error) {
+      toast.error("Error uploading image", { id: tid });
+    } finally {
+      setUploading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -59,7 +103,6 @@ export default function Profile() {
 
       if (response.ok) {
         toast.success('Profile updated successfully');
-        // Update session if needed
         await update({
           ...session,
           user: {
@@ -90,7 +133,7 @@ export default function Profile() {
     <div suppressHydrationWarning className={`max-w-4xl mx-auto p-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>
       <div className={`relative p-8 rounded-[2.5rem] border backdrop-blur-xl transition-all duration-500 shadow-xl ${
         isDark 
-          ? 'bg-gradient-to-b from-[#133c34]/80 to-[#091a16] border-[#1a4a40] shadow-black/40' 
+          ? 'bg-gradient-to-b from-[var(--card)]/80 to-[var(--background)] border-white/10 shadow-black/40' 
           : 'bg-white/80 border-gray-200 shadow-gray-200/50'
       }`}>
         {/* Header */}
@@ -102,9 +145,16 @@ export default function Profile() {
                 alt="Admin Profile" 
                 className="w-full h-full object-cover"
               />
-              <button className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
-                <Camera size={24} />
-              </button>
+              <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white cursor-pointer">
+                {uploading ? <Loader2 size={24} className="animate-spin" /> : <Camera size={24} />}
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  className="hidden" 
+                  onChange={handleImageUpload}
+                  disabled={uploading}
+                />
+              </label>
             </div>
             <div className="absolute -bottom-2 -right-2 bg-emerald-500 p-2 rounded-xl shadow-lg text-white">
               <ShieldCheck size={20} />
@@ -134,7 +184,7 @@ export default function Profile() {
                 onChange={(e) => setProfile({...profile, name: e.target.value})}
                 className={`w-full pl-12 pr-4 py-4 rounded-2xl border outline-none transition-all ${
                   isDark 
-                    ? 'bg-[#0b1f1a] border-[#1a4a40] focus:border-emerald-500/50' 
+                    ? 'bg-[var(--card)] border-white/10 focus:border-emerald-500/50' 
                     : 'bg-gray-50 border-gray-100 focus:border-emerald-500/50'
                 }`}
                 placeholder="Enter your name"
@@ -151,7 +201,7 @@ export default function Profile() {
                 value={profile.email}
                 disabled
                 className={`w-full pl-12 pr-4 py-4 rounded-2xl border outline-none opacity-50 cursor-not-allowed ${
-                  isDark ? 'bg-[#0b1f1a] border-[#1a4a40]' : 'bg-gray-50 border-gray-100'
+                  isDark ? 'bg-[var(--card)] border-white/10' : 'bg-gray-50 border-gray-100'
                 }`}
               />
             </div>
@@ -167,7 +217,7 @@ export default function Profile() {
                 onChange={(e) => setProfile({...profile, phone: e.target.value})}
                 className={`w-full pl-12 pr-4 py-4 rounded-2xl border outline-none transition-all ${
                   isDark 
-                    ? 'bg-[#0b1f1a] border-[#1a4a40] focus:border-emerald-500/50' 
+                    ? 'bg-[var(--card)] border-white/10 focus:border-emerald-500/50' 
                     : 'bg-gray-50 border-gray-100 focus:border-emerald-500/50'
                 }`}
                 placeholder="+1 234 567 890"
@@ -185,7 +235,7 @@ export default function Profile() {
                 onChange={(e) => setProfile({...profile, address: e.target.value})}
                 className={`w-full pl-12 pr-4 py-4 rounded-2xl border outline-none transition-all ${
                   isDark 
-                    ? 'bg-[#0b1f1a] border-[#1a4a40] focus:border-emerald-500/50' 
+                    ? 'bg-[var(--card)] border-white/10 focus:border-emerald-500/50' 
                     : 'bg-gray-50 border-gray-100 focus:border-emerald-500/50'
                 }`}
                 placeholder="New York, USA"
@@ -201,7 +251,7 @@ export default function Profile() {
               rows={4}
               className={`w-full px-6 py-4 rounded-2xl border outline-none transition-all resize-none ${
                 isDark 
-                  ? 'bg-[#0b1f1a] border-[#1a4a40] focus:border-emerald-500/50' 
+                  ? 'bg-[var(--card)] border-white/10 focus:border-emerald-500/50' 
                   : 'bg-gray-50 border-gray-100 focus:border-emerald-500/50'
               }`}
               placeholder="Tell us about yourself..."
@@ -231,3 +281,4 @@ export default function Profile() {
     </div>
   );
 }
+

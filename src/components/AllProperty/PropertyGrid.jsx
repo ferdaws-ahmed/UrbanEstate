@@ -75,7 +75,7 @@ export default function PropertyGrid({ properties, loading }) {
             disabled={currentPage === 1}
             className={`p-3 rounded-2xl border transition-all disabled:opacity-20 ${
               isDark 
-                ? "border-white/5 bg-[#0f2e28] text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[#0f2e28]" 
+                ? "border-white/5 bg-[#099880] text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[#099880]" 
                 : "border-slate-200 bg-white text-slate-600 hover:bg-teal-500 hover:text-white"
             }`}
           >
@@ -91,7 +91,7 @@ export default function PropertyGrid({ properties, loading }) {
                 className={`w-12 h-12 rounded-2xl font-black text-[11px] transition-all border ${
                   currentPage === i + 1 
                     ? (isDark 
-                        ? "bg-[#cddfa0] text-[#0f2e28] border-[#cddfa0] shadow-[0_0_20px_rgba(205,223,160,0.3)]" 
+                        ? "bg-[#cddfa0] text-[#099880] border-[#cddfa0] shadow-[0_0_20px_rgba(205,223,160,0.3)]" 
                         : "bg-teal-500 text-white border-teal-500 shadow-lg shadow-teal-500/20")
                     : (isDark 
                         ? "bg-white/5 text-white/40 border-white/5 hover:border-white/20" 
@@ -109,7 +109,7 @@ export default function PropertyGrid({ properties, loading }) {
             disabled={currentPage === totalPages}
             className={`p-3 rounded-2xl border transition-all disabled:opacity-20 ${
               isDark 
-                ? "border-white/5 bg-[#0f2e28] text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[#0f2e28]" 
+                ? "border-white/5 bg-[#099880] text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[#099880]" 
                 : "border-slate-200 bg-white text-slate-600 hover:bg-teal-500 hover:text-white"
             }`}
           >
@@ -120,7 +120,7 @@ export default function PropertyGrid({ properties, loading }) {
 
       {/* Floating UI & Modal (আগের মতোই থাকবে) */}
       {selectedProperties.length > 0 && (
-        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 bg-[#0f2e28] text-white px-6 py-4 rounded-full shadow-2xl border border-[#cddfa0]/20 flex items-center gap-6 backdrop-blur-md">
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 bg-[#099880] text-white px-6 py-4 rounded-full shadow-2xl border border-[#cddfa0]/20 flex items-center gap-6 backdrop-blur-md">
            {/* ... আগের কোড ... */}
            <div className="flex flex-col">
             <span className="text-[10px] uppercase tracking-widest text-[#cddfa0] font-bold">Comparison</span>
@@ -136,7 +136,7 @@ export default function PropertyGrid({ properties, loading }) {
             </button>
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="bg-[#cddfa0] text-[#0f2e28] px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-2 hover:bg-white transition-all shadow-lg"
+              className="bg-[#cddfa0] text-[#099880] px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-2 hover:bg-white transition-all shadow-lg"
             >
               Compare Now <ArrowRight size={14} />
             </button>
@@ -152,3 +152,4 @@ export default function PropertyGrid({ properties, loading }) {
     </>
   );
 }
+

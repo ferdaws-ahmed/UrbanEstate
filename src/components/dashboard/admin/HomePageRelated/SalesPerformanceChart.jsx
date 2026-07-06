@@ -9,8 +9,8 @@ export default function SalesPerformanceChart({ data }) {
 
   
   const colors = {
-    bg: isDark ? 'bg-[#133c34]/50' : 'bg-white/80',
-    border: isDark ? 'border-[#1a4a40]/60' : 'border-white',
+    bg: isDark ? 'bg-[var(--card)]/50' : 'bg-white/80',
+    border: isDark ? 'border-[var(--card)]/60' : 'border-white',
     barFill: isDark ? '#cddfa0' : '#2563eb',
     grid: isDark ? 'rgba(26, 74, 64, 0.4)' : 'rgba(229, 231, 235, 0.5)',
     text: isDark ? '#9ca3af' : '#64748b'
@@ -66,7 +66,7 @@ export default function SalesPerformanceChart({ data }) {
             content={({ active, payload }) => {
               if (active && payload && payload.length) {
                 return (
-                  <div className={`p-4 rounded-2xl border shadow-2xl backdrop-blur-2xl ${isDark ? 'bg-[#0a2e26]/95 border-[#cddfa0]/30' : 'bg-white/95 border-blue-100'}`}>
+                  <div className={`p-4 rounded-2xl border shadow-2xl backdrop-blur-2xl ${isDark ? 'bg-[var(--primary)]/95 border-[#cddfa0]/30' : 'bg-white/95 border-blue-100'}`}>
                     <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                       {payload[0].payload.month}
                     </p>
@@ -101,3 +101,4 @@ export default function SalesPerformanceChart({ data }) {
     </div>
   );
 }
+

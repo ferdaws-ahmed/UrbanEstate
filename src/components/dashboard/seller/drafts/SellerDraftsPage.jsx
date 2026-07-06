@@ -106,7 +106,7 @@ export default function SellerDraftsPage() {
 
       {drafts.length === 0 ? (
         <div 
-          className="p-24 rounded-[3rem] border-2 border-dashed flex flex-col items-center justify-center text-center transition-all border-slate-200 dark:border-[#1a4a40] bg-white/5 dark:bg-white/5"
+          className="p-24 rounded-[3rem] border-2 border-dashed flex flex-col items-center justify-center text-center transition-all border-slate-200 dark:border-white/10 bg-white/5 dark:bg-white/5"
         >
           <div className="h-24 w-24 rounded-[2rem] bg-teal-600/10 text-teal-600 flex items-center justify-center mb-8 shadow-inner">
             <FileText size={48} />
@@ -186,7 +186,7 @@ export default function SellerDraftsPage() {
                     disabled={processingId === draft._id}
                     className={`flex-1 py-4 rounded-2xl flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.25em] transition-all disabled:opacity-50 ${
                       isDark 
-                      ? "bg-[#cddfa0] text-[#0b1f1a] hover:bg-white shadow-lg shadow-[#cddfa0]/10" 
+                      ? "bg-[#cddfa0] text-[var(--card)] hover:bg-white shadow-lg shadow-[#cddfa0]/10" 
                       : "bg-teal-600 text-white hover:bg-teal-700 shadow-lg shadow-teal-100"
                     }`}
                   >
@@ -204,7 +204,7 @@ export default function SellerDraftsPage() {
       )}
 
       <div 
-        className="p-8 rounded-[2.5rem] border flex items-start gap-5 transition-colors bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-[#1a4a40]/30"
+        className="p-8 rounded-[2.5rem] border flex items-start gap-5 transition-colors bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-[var(--card)]/30"
       >
         <AlertCircle className="text-teal-600 shrink-0" size={24} />
         <p className="text-xs leading-relaxed font-bold uppercase tracking-tight" style={{ color: 'var(--ue-text-muted)' }}>
@@ -214,3 +214,4 @@ export default function SellerDraftsPage() {
     </div>
   );
 }
+

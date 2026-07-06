@@ -33,7 +33,7 @@ const CustomTooltip = ({ active, payload, label, isDark }) => {
 const StatCard = ({ title, value, icon: Icon, color, isDark }) => (
   <div className={`relative p-5 rounded-[2.5rem] border backdrop-blur-xl transition-all duration-500 shadow-xl group overflow-hidden flex flex-col justify-between ${
     isDark 
-      ? 'bg-gradient-to-b from-[#133c34]/80 to-[#091a16] border-[#1a4a40] shadow-black/40 hover:border-[#cddfa0]/30 hover:shadow-2xl' 
+      ? 'bg-gradient-to-b from-[var(--card)]/80 to-[var(--background)] border-white/10 shadow-black/40 hover:border-[#cddfa0]/30 hover:shadow-2xl' 
       : 'bg-white/80 border-gray-200 shadow-gray-200/50 hover:shadow-2xl hover:border-blue-100'
   }`}>
     {/* Background Glow Effect */}
@@ -45,7 +45,7 @@ const StatCard = ({ title, value, icon: Icon, color, isDark }) => (
       {/* Icon Section */}
       <div className={`w-9 h-9 rounded-xl flex items-center justify-center border transition-transform duration-500 group-hover:scale-110 shadow-sm shrink-0 ${
         isDark 
-          ? 'bg-[#133c34] border-[#1a4a40] text-emerald-400' 
+          ? 'bg-[var(--card)] border-white/10 text-emerald-400' 
           : 'bg-white border-gray-100 text-emerald-600'
       }`}>
         <Icon size={16} />
@@ -69,7 +69,7 @@ const StatCard = ({ title, value, icon: Icon, color, isDark }) => (
 const ChartContainer = ({ title, children, isDark }) => (
   <div className={`relative p-6 rounded-[2.5rem] border backdrop-blur-xl transition-all duration-500 shadow-xl ${
     isDark 
-      ? 'bg-gradient-to-b from-[#133c34]/80 to-[#091a16] border-[#1a4a40] shadow-black/40' 
+      ? 'bg-gradient-to-b from-[var(--card)]/80 to-[var(--background)] border-white/10 shadow-black/40' 
       : 'bg-white/80 border-gray-200 shadow-gray-200/50'
   }`}>
     <h3 className={`text-sm font-black uppercase tracking-widest mb-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>{title}</h3>
@@ -149,7 +149,7 @@ export default function Analytics() {
 
   if (isLoading || !data) {
     return (
-      <div className={`min-h-screen flex items-center justify-center ${isDark ? 'bg-[#091a16]' : 'bg-[#f4f7f6]'}`}>
+      <div className={`min-h-screen flex items-center justify-center ${isDark ? 'bg-[var(--background)]' : 'bg-[#f4f7f6]'}`}>
         <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
@@ -167,15 +167,15 @@ export default function Analytics() {
           </div>
           <div className="flex items-center gap-2">
             <div className="relative">
-              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium ${isDark ? 'bg-[#0f2d27]/50 border-[#1a4a40] hover:bg-[#1a4a40]' : 'bg-white border-gray-200/80 hover:bg-gray-100'}`}>
+              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium ${isDark ? 'bg-[#0f2d27]/50 border-white/10 hover:bg-[var(--card)]' : 'bg-white border-gray-200/80 hover:bg-gray-100'}`}>
                 <Calendar size={16} />
                 {timeRanges[timeRange]}
                 <ChevronDown size={16} className={`transition-transform ${isMenuOpen ? 'rotate-180' : ''}`} />
               </button>
               {isMenuOpen && (
-                <div className={`absolute top-full right-0 mt-2 w-48 border rounded-lg shadow-lg z-10 ${isDark ? 'bg-[#0f2d27] border-[#1a4a40]' : 'bg-white border-gray-200'}`}>
+                <div className={`absolute top-full right-0 mt-2 w-48 border rounded-lg shadow-lg z-10 ${isDark ? 'bg-[#0f2d27] border-white/10' : 'bg-white border-gray-200'}`}>
                   {Object.entries(timeRanges).map(([key, value]) => (
-                    <button key={key} onClick={() => { setTimeRange(key); setIsMenuOpen(false); }} className={`w-full text-left px-4 py-2 text-sm ${isDark ? 'hover:bg-[#1a4a40]' : 'hover:bg-gray-100'}`}>
+                    <button key={key} onClick={() => { setTimeRange(key); setIsMenuOpen(false); }} className={`w-full text-left px-4 py-2 text-sm ${isDark ? 'hover:bg-[var(--card)]' : 'hover:bg-gray-100'}`}>
                       {value}
                     </button>
                   ))}
@@ -259,7 +259,7 @@ export default function Analytics() {
         {/* Leaderboards */}
         <div className={`relative p-8 rounded-[2.5rem] border backdrop-blur-xl transition-all duration-500 shadow-xl ${
           isDark 
-            ? 'bg-gradient-to-b from-[#133c34]/80 to-[#091a16] border-[#1a4a40] shadow-black/40' 
+            ? 'bg-gradient-to-b from-[var(--card)]/80 to-[var(--background)] border-white/10 shadow-black/40' 
             : 'bg-white/80 border-gray-200 shadow-gray-200/50'
         }`}>
           <h3 className={`text-sm font-black uppercase tracking-widest mb-8 ${isDark ? 'text-white' : 'text-gray-800'}`}>Leaderboards</h3>
@@ -269,7 +269,7 @@ export default function Analytics() {
               <div className="space-y-4">
                 {data.leaderboards.topFavoritedProperties.map(prop => (
                   <div key={prop.id} className={`flex items-center gap-5 p-4 rounded-2xl border transition-all duration-300 group ${
-                    isDark ? 'bg-[#133c34]/30 border-[#1a4a40] hover:border-[#cddfa0]/30' : 'bg-gray-50/50 border-gray-100 hover:border-emerald-200'
+                    isDark ? 'bg-[var(--card)]/30 border-white/10 hover:border-[#cddfa0]/30' : 'bg-gray-50/50 border-gray-100 hover:border-emerald-200'
                   }`}>
                     <div className="relative w-14 h-14 rounded-xl overflow-hidden shadow-md">
                       <img src={prop.image} alt={prop.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
@@ -294,3 +294,4 @@ export default function Analytics() {
     </div>
   );
 }
+

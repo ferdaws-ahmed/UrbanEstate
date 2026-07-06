@@ -18,7 +18,7 @@ export default function InquiriesTrendChart({ data = [] }) {
   return (
     <div
       className={`min-w-0 h-full min-h-[320px] rounded-[2rem] border p-6 shadow-sm transition-all duration-300 ${
-        isDark ? "border-[#1a4a40]/50 bg-[#0b1f1a]" : "border-slate-200 bg-white"
+        isDark ? "border-white/10 bg-[var(--card)]" : "border-slate-200 bg-white"
       }`}
     >
       <div className="mb-6 flex items-center justify-between">
@@ -41,7 +41,7 @@ export default function InquiriesTrendChart({ data = [] }) {
                 <stop offset="95%" stopColor={isDark ? "#cddfa0" : "#0d9488"} stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={isDark ? "#1a4a40" : "#f1f5f9"} />
+            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={isDark ? "var(--card)" : "#f1f5f9"} />
             <XAxis 
               dataKey="month" 
               axisLine={false}
@@ -55,8 +55,8 @@ export default function InquiriesTrendChart({ data = [] }) {
             />
             <Tooltip
               contentStyle={{
-                background: isDark ? "#0b1f1a" : "#fff",
-                border: isDark ? "1px solid #1a4a40" : "1px solid #e2e8f0",
+                background: isDark ? "var(--card)" : "#fff",
+                border: isDark ? "1px solid var(--card)" : "1px solid #e2e8f0",
                 borderRadius: 16,
                 fontSize: 12,
                 fontWeight: 700,
@@ -77,3 +77,4 @@ export default function InquiriesTrendChart({ data = [] }) {
     </div>
   );
 }
+

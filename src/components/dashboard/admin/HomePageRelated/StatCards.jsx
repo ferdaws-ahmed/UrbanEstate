@@ -56,7 +56,7 @@ export default function StatCards({ stats }) {
             key={index} 
             className={`relative p-5 rounded-[2.5rem] border backdrop-blur-xl transition-all duration-500 shadow-xl group overflow-hidden flex flex-col justify-between ${
               isDark 
-                ? 'bg-gradient-to-b from-[#133c34]/80 to-[#091a16] border-[#1a4a40] shadow-black/40 hover:border-[#cddfa0]/30 hover:shadow-2xl' 
+                ? 'bg-gradient-to-b from-[var(--card)]/80 to-[var(--background)] border-white/10 shadow-black/40 hover:border-[#cddfa0]/30 hover:shadow-2xl' 
                 : 'bg-white/80 border-gray-200 shadow-gray-200/50 hover:shadow-2xl hover:border-blue-100'
             }`}
           >
@@ -69,7 +69,7 @@ export default function StatCards({ stats }) {
               {/* Icon Section */}
               <div className={`w-9 h-9 rounded-xl flex items-center justify-center border transition-transform duration-500 group-hover:scale-110 shadow-sm shrink-0 ${
                 isDark 
-                  ? 'bg-[#133c34] border-[#1a4a40] text-emerald-400' 
+                  ? 'bg-[var(--card)] border-white/10 text-emerald-400' 
                   : 'bg-white border-gray-100 text-emerald-600'
               }`}>
                 {item.icon}
@@ -106,7 +106,7 @@ export default function StatCards({ stats }) {
             </div>
             
             {/* Bottom Progress Indicator */}
-            <div className={`mt-4 w-full h-[3px] rounded-full overflow-hidden ${isDark ? 'bg-[#091a16] shadow-inner' : 'bg-gray-100'}`}>
+            <div className={`mt-4 w-full h-[3px] rounded-full overflow-hidden ${isDark ? 'bg-[var(--background)] shadow-inner' : 'bg-gray-100'}`}>
                <div 
                 className={`h-full rounded-full transition-all duration-1000 ease-out opacity-70 group-hover:opacity-100 ${
                   isNegative ? 'bg-rose-500' : (isDark ? 'bg-emerald-500' : 'bg-emerald-600')
@@ -127,3 +127,4 @@ export default function StatCards({ stats }) {
     </div>
   );
 }
+

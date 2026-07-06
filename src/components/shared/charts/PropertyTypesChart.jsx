@@ -9,7 +9,7 @@ export default function PropertyTypesChart({ data }) {
       return (
         <div className="bg-white dark:bg-[#1a4a40] border border-gray-200 dark:border-[#1a4a40]/60 rounded-lg p-3 shadow-lg">
           <p className="text-sm font-medium text-gray-900 dark:text-white">{data.type}</p>
-          <p className="text-sm text-[#cddfa0]">{`Count: ${data.count}`}</p>
+          <p className="text-sm text-[var(--accent)]">{`Count: ${data.count}`}</p>
           <p className="text-sm text-gray-500 dark:text-gray-400">{`Percentage: ${data.percentage}%`}</p>
         </div>
       );
@@ -57,3 +57,4 @@ export default function PropertyTypesChart({ data }) {
     </div>
   );
 }
+

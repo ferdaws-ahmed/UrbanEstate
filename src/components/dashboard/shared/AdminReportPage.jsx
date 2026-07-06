@@ -107,7 +107,7 @@ export default function AdminReportPage({ userRole }) {
 
       {/* Submission Form */}
       <div className={`p-6 rounded-[2rem] border-2 transition-all duration-300 ${
-        isDark ? 'bg-[#0b1f1a] border-[#1a4a40]/50' : 'bg-white border-slate-100 shadow-xl'
+        isDark ? 'bg-[var(--card)] border-white/10' : 'bg-white border-slate-100 shadow-xl'
       }`}>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
@@ -219,7 +219,7 @@ export default function AdminReportPage({ userRole }) {
               <div 
                 key={report._id}
                 className={`rounded-[2rem] border-2 overflow-hidden transition-all duration-300 ${
-                  isDark ? 'bg-[#0b1f1a] border-[#1a4a40]/50' : 'bg-white border-slate-100 shadow-md'
+                  isDark ? 'bg-[var(--card)] border-white/10' : 'bg-white border-slate-100 shadow-md'
                 }`}
               >
                 <div 
@@ -280,3 +280,4 @@ export default function AdminReportPage({ userRole }) {
     </div>
   );
 }
+

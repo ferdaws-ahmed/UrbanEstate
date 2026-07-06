@@ -12,7 +12,7 @@ export default function Support() {
 
   const SupportCard = ({ icon: Icon, title, description, buttonText, color }) => (
     <div className={`p-8 rounded-[2.5rem] border backdrop-blur-xl transition-all duration-500 shadow-xl group hover:scale-105 ${
-      isDark ? 'bg-[#133c34]/40 border-[#1a4a40]' : 'bg-white border-gray-200'
+      isDark ? 'bg-[var(--card)]/40 border-white/10' : 'bg-white border-gray-200'
     }`}>
       <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 shadow-lg transition-transform group-hover:rotate-12`} style={{ backgroundColor: `${color}15`, color }}>
         <Icon size={24} />
@@ -67,7 +67,7 @@ export default function Support() {
 
         {/* Resources Section */}
         <div className={`relative p-10 rounded-[3rem] border backdrop-blur-xl transition-all duration-500 shadow-xl overflow-hidden ${
-          isDark ? 'bg-gradient-to-br from-[#133c34] to-[#091a16] border-[#1a4a40]' : 'bg-emerald-900 border-emerald-800 text-white'
+          isDark ? 'bg-gradient-to-br from-[var(--card)] to-[var(--background)] border-white/10' : 'bg-emerald-900 border-emerald-800 text-white'
         }`}>
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
             <div className="max-w-md">
@@ -77,7 +77,7 @@ export default function Support() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <button className={`flex items-center gap-3 px-6 py-3 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] transition-all active:scale-95 ${
-                  isDark ? 'bg-[#0b1f1a] text-emerald-500 border border-[#1a4a40] hover:bg-emerald-500/10' : 'bg-white text-emerald-900 hover:bg-emerald-50 shadow-xl shadow-black/20'
+                  isDark ? 'bg-[var(--card)] text-emerald-500 border border-white/10 hover:bg-emerald-500/10' : 'bg-white text-emerald-900 hover:bg-emerald-50 shadow-xl shadow-black/20'
                 }`}>
                   <ExternalLink size={16} />
                   Developer Docs
@@ -101,3 +101,4 @@ export default function Support() {
     </div>
   );
 }
+

@@ -21,3 +21,4 @@ const githubProvider = new GithubAuthProvider();
 
 
 export { auth, googleProvider, githubProvider };
+

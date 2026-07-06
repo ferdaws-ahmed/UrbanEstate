@@ -14,7 +14,7 @@ export default function AIPredictiveAnalytics({ data }) {
    
     <div className={`p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-500 shadow-2xl flex flex-col relative overflow-hidden w-full ${
       isDark 
-        ? 'bg-gradient-to-b from-[#103029] to-[#071713] border-[#1a4a40] text-white' 
+        ? 'bg-gradient-to-b from-[#103029] to-[#071713] border-white/10 text-white' 
         : 'bg-white border-gray-200 text-gray-900'
     }`}>
       
@@ -52,7 +52,7 @@ export default function AIPredictiveAnalytics({ data }) {
         
         {/* Box 1: Surge Expected */}
         <div className={`p-3 sm:p-4 rounded-[1rem] sm:rounded-[1.2rem] border transition-all duration-300 group cursor-default ${
-          isDark ? 'bg-[#153b32]/40 border-[#1a4a40] hover:bg-[#1a4a40]/60 hover:border-[#cddfa0]/30 shadow-sm' : 'bg-gray-50 border-gray-100 hover:shadow-md hover:border-emerald-200'
+          isDark ? 'bg-[#153b32]/40 border-white/10 hover:bg-[var(--card)]/60 hover:border-[#cddfa0]/30 shadow-sm' : 'bg-gray-50 border-gray-100 hover:shadow-md hover:border-emerald-200'
         }`}>
           <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-widest mb-1.5 flex items-center gap-1.5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
             <TrendingUp className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${isDark ? 'text-[#cddfa0]' : 'text-emerald-500'}`} strokeWidth={3} /> 
@@ -65,7 +65,7 @@ export default function AIPredictiveAnalytics({ data }) {
         
         {/* Box 2: Top Lead Score */}
         <div className={`p-3 sm:p-4 rounded-[1rem] sm:rounded-[1.2rem] border transition-all duration-300 group cursor-default ${
-          isDark ? 'bg-[#153b32]/40 border-[#1a4a40] hover:bg-[#1a4a40]/60 hover:border-[#cddfa0]/30 shadow-sm' : 'bg-gray-50 border-gray-100 hover:shadow-md hover:border-blue-200'
+          isDark ? 'bg-[#153b32]/40 border-white/10 hover:bg-[var(--card)]/60 hover:border-[#cddfa0]/30 shadow-sm' : 'bg-gray-50 border-gray-100 hover:shadow-md hover:border-blue-200'
         }`}>
           <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-widest mb-1.5 flex items-center gap-1.5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
             <Target className={`w-3 h-3 sm:w-3.5 sm:h-3.5 ${isDark ? 'text-[#cddfa0]' : 'text-blue-500'}`} strokeWidth={3} /> 
@@ -80,3 +80,4 @@ export default function AIPredictiveAnalytics({ data }) {
     </div>
   );
 }
+

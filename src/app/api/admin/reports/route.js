@@ -63,3 +63,4 @@ export async function PATCH() {
     return NextResponse.json({ error: "Failed to mark reports as read" }, { status: 500 });
   }
 }
+

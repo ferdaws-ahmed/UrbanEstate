@@ -37,7 +37,7 @@ export default function ShareModal({ isOpen, onClose, url, title }) {
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
       <div 
         className={`relative w-full max-w-sm rounded-[2.5rem] border shadow-2xl p-8 overflow-hidden transition-all transform scale-100 ${
-          isDark ? "bg-[#0b1f1a] border-white/10" : "bg-white border-slate-200"
+          isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-200"
         }`}
       >
         <button 
@@ -53,7 +53,7 @@ export default function ShareModal({ isOpen, onClose, url, title }) {
           <h3 className={`text-xl font-black tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
             Share Asset
           </h3>
-          <p className="text-[10px] font-bold text-teal-600 dark:text-[#cddfa0] uppercase tracking-[0.2em] mt-1">
+          <p className="text-[10px] font-bold text-teal-600 dark:text-[var(--accent)] uppercase tracking-[0.2em] mt-1">
             Spread the word about this property
           </p>
         </div>
@@ -90,7 +90,7 @@ export default function ShareModal({ isOpen, onClose, url, title }) {
             className={`p-3 rounded-xl transition-all flex items-center gap-2 ${
               copied 
                 ? "bg-emerald-500 text-white" 
-                : (isDark ? "bg-[#cddfa0] text-[#0f2e28]" : "bg-teal-600 text-white")
+                : (isDark ? "bg-[var(--primary)] text-white" : "bg-teal-600 text-white")
             }`}
           >
             {copied ? <Check size={14} /> : <LinkIcon size={14} />}
@@ -103,3 +103,4 @@ export default function ShareModal({ isOpen, onClose, url, title }) {
     </div>
   );
 }
+

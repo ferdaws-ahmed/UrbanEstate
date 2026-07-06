@@ -13,8 +13,8 @@ const FavoritesModal = ({ isOpen, onClose, favorites, propertyTitle }) => {
 
   return (
     <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-300`}>
-      <div className={`relative w-full max-w-lg rounded-[2.5rem] border shadow-2xl overflow-hidden ${isDark ? 'bg-[#0b1f1a] border-[#1a4a40]' : 'bg-white border-slate-200'}`}>
-        <div className={`p-8 border-b flex items-center justify-between ${isDark ? 'border-[#1a4a40]/40 bg-white/5' : 'border-slate-100 bg-slate-50'}`}>
+      <div className={`relative w-full max-w-lg rounded-[2.5rem] border shadow-2xl overflow-hidden ${isDark ? 'bg-[var(--card)] border-white/10' : 'bg-white border-slate-200'}`}>
+        <div className={`p-8 border-b flex items-center justify-between ${isDark ? 'border-white/10 bg-white/5' : 'border-slate-100 bg-slate-50'}`}>
           <div>
             <h3 className={`text-xl font-black tracking-tighter ${isDark ? 'text-white' : 'text-slate-900'}`}>Property Favorites</h3>
             <p className="text-[10px] font-black text-teal-600 dark:text-[#cddfa0] uppercase tracking-[0.2em] mt-1">{propertyTitle}</p>
@@ -61,7 +61,7 @@ const FavoritesModal = ({ isOpen, onClose, favorites, propertyTitle }) => {
           )}
         </div>
         
-        <div className={`p-6 border-t ${isDark ? 'border-[#1a4a40]/40' : 'border-slate-100 bg-slate-50/50'}`}>
+        <div className={`p-6 border-t ${isDark ? 'border-white/10' : 'border-slate-100 bg-slate-50/50'}`}>
           <button onClick={onClose} className="w-full py-4 rounded-2xl bg-teal-600 text-white text-[10px] font-black uppercase tracking-[0.3em] hover:bg-teal-700 transition-all shadow-xl shadow-teal-600/20 active:scale-[0.98]">
             Dismiss Panel
           </button>
@@ -116,7 +116,7 @@ export default function MyListingsTable({ listings = [] }) {
             onChange={(e) => { setQ(e.target.value); setPage(1); }}
             className={`w-full rounded-2xl border py-4 pl-12 pr-4 text-[11px] font-black uppercase tracking-widest outline-none transition-all ${
               isDark 
-                ? "border-[#1a4a40] bg-[#0b1f1a] text-white focus:border-[#cddfa0] focus:ring-4 focus:ring-[#cddfa0]/5" 
+                ? "border-white/10 bg-[var(--card)] text-white focus:border-[#cddfa0] focus:ring-4 focus:ring-[#cddfa0]/5" 
                 : "border-slate-200 bg-white text-slate-900 focus:border-teal-500 focus:ring-4 focus:ring-teal-500/5 shadow-inner"
             }`}
           />
@@ -199,7 +199,7 @@ export default function MyListingsTable({ listings = [] }) {
                       onClick={() => setSelectedProperty(p)}
                       className={`inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${
                         isDark 
-                          ? "bg-[#1a4a40] text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[#0b1f1a]" 
+                          ? "bg-[var(--card)] text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[var(--card)]" 
                           : "bg-slate-900 text-white hover:bg-teal-600 shadow-lg shadow-teal-100"
                       } active:scale-95`}
                     >
@@ -248,3 +248,4 @@ export default function MyListingsTable({ listings = [] }) {
     </div>
   );
 }
+

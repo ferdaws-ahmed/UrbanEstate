@@ -11,7 +11,7 @@ export default function AdminLayout({ children }) {
   const { isDark } = useTheme();
 
   return (
-    <div className={`min-h-screen flex ${isDark ? 'bg-[#0b1f1a]' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen flex ${isDark ? 'bg-[var(--background)]' : 'bg-gray-50'}`}>
       <Sidebar 
         isOpen={isSidebarOpen} 
         setIsOpen={setIsSidebarOpen} 
@@ -33,3 +33,4 @@ export default function AdminLayout({ children }) {
     </div>
   );
 }
+

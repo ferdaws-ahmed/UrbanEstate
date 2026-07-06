@@ -438,7 +438,7 @@
       { "type": "Apartment", "count": 450, "percentage": 37.5, "color": "#cddfa0" },
       { "type": "Villa", "count": 280, "percentage": 23.3, "color": "#94a894" },
       { "type": "Condo", "count": 220, "percentage": 18.3, "color": "#1a4a40" },
-      { "type": "Townhouse", "count": 180, "percentage": 15.0, "color": "#0f2e28" },
+      { "type": "Townhouse", "count": 180, "percentage": 15.0, "color": "#099880" },
       { "type": "Penthouse", "count": 70, "percentage": 5.8, "color": "#133c34" }
     ],
     "agentPerformance": [
@@ -452,7 +452,7 @@
       { "source": "Website", "leads": 450, "conversions": 315, "color": "#cddfa0" },
       { "source": "Social Media", "leads": 320, "conversions": 192, "color": "#94a894" },
       { "source": "Referrals", "leads": 280, "conversions": 224, "color": "#1a4a40" },
-      { "source": "Direct", "leads": 180, "conversions": 108, "color": "#0f2e28" },
+      { "source": "Direct", "leads": 180, "conversions": 108, "color": "#099880" },
       { "source": "Partnerships", "leads": 120, "conversions": 84, "color": "#133c34" }
     ],
     "geographicData": [

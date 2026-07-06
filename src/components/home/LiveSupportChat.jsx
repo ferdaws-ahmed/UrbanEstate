@@ -126,7 +126,7 @@ export default function Chatbot() {
           onClick={() => setOpen(!open)} 
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#0f2e28] to-[#1a5d51] text-white shadow-[0_4px_15px_rgba(0,0,0,0.3)] flex items-center justify-center text-2xl transition-all border border-emerald-400/20"
+          className="w-14 h-14 rounded-full bg-gradient-to-tr from-[#099880] to-[#1a5d51] text-white shadow-[0_4px_15px_rgba(0,0,0,0.3)] flex items-center justify-center text-2xl transition-all border border-emerald-400/20"
         >
           {open ? "×" : (
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="12" cy="11" r="3"></circle><path d="M12 7v4"></path></svg>
@@ -143,7 +143,7 @@ export default function Chatbot() {
             style={{ height: dynamicHeight }}
             className="fixed right-6 bottom-24 z-[9999] w-[310px] bg-[#f8fafc] dark:bg-slate-900 rounded-[1.5rem] shadow-2xl border border-gray-200 dark:border-slate-700 flex flex-col overflow-hidden max-h-[500px]"
           >
-            <div className="bg-[#0f2e28] p-3 text-white flex items-center justify-between shrink-0">
+            <div className="bg-[var(--background)] p-3 text-white flex items-center justify-between shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400 flex items-center justify-center">
                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
@@ -167,7 +167,7 @@ export default function Chatbot() {
               
               {messages.map((m, idx) => (
                 <div key={idx} className={`flex ${m.type === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[90%] p-3 rounded-2xl text-[12px] leading-relaxed shadow-sm ${m.type === "user" ? "bg-[#0f2e28] text-white rounded-br-none" : "bg-white dark:bg-slate-700 text-gray-800 dark:text-white rounded-bl-none border border-emerald-50 dark:border-slate-600"}`}>
+                  <div className={`max-w-[90%] p-3 rounded-2xl text-[12px] leading-relaxed shadow-sm ${m.type === "user" ? "bg-[var(--background)] text-white rounded-br-none" : "bg-white dark:bg-slate-700 text-gray-800 dark:text-white rounded-bl-none border border-emerald-50 dark:border-slate-600"}`}>
                     {m.text}
                     {m.data && m.data.length > 0 && (
                       <div className="mt-4 flex flex-col gap-3">
@@ -204,7 +204,7 @@ export default function Chatbot() {
                   className="w-full bg-emerald-50/30 dark:bg-slate-800 rounded-2xl px-5 py-3 pr-12 text-[12px] text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-400/20 placeholder:text-gray-400 font-medium border-none shadow-inner" 
                   placeholder="Ask me anything..." 
                 />
-                <button onClick={handleSend} className="absolute right-2 text-[#0f2e28] dark:text-emerald-400 p-2 hover:scale-125 transition-transform">
+                <button onClick={handleSend} className="absolute right-2 text-[#099880] dark:text-emerald-400 p-2 hover:scale-125 transition-transform">
                   ➤
                 </button>
               </div>
@@ -215,3 +215,4 @@ export default function Chatbot() {
     </>
   );
 }
+

@@ -222,7 +222,7 @@ export default function Translation({ isMobile = false, closeMenu }) {
       <div className="w-full relative z-[120]">
         <button 
           onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-          className="bg-[#cddfa0]/10 border border-[#cddfa0]/30 backdrop-blur-md text-white rounded-xl px-5 py-3.5 flex items-center gap-4 outline-none cursor-pointer hover:bg-[#cddfa0]/20 transition duration-300 mb-2 w-max shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
+          className="bg-[var(--foreground)]/10 border border-[var(--border)] backdrop-blur-md text-[var(--foreground)] rounded-xl px-5 py-3.5 flex items-center gap-4 outline-none cursor-pointer hover:bg-[var(--foreground)]/20 transition duration-300 mb-2 w-max shadow-[0_4px_30px_rgba(0,0,0,0.1)]"
         >
           {mounted ? (
             <img 
@@ -231,20 +231,20 @@ export default function Translation({ isMobile = false, closeMenu }) {
               className="w-12 h-auto rounded-md object-cover shadow-sm" 
             />
           ) : (
-            <div className="w-12 h-8 bg-white/20 animate-pulse rounded"></div>
+            <div className="w-12 h-8 bg-[var(--foreground)]/20 animate-pulse rounded"></div>
           )}
           <HiChevronDown className={`text-lg transition-transform ${langDropdownOpen ? "rotate-180" : "rotate-0"}`} />
         </button>
 
         {langDropdownOpen && (
-          <div className="bg-[#0f2e28]/30 backdrop-blur-xl border border-[#cddfa0]/20 rounded-2xl p-4 mb-4 w-full shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
+          <div className="bg-[var(--card)]/90 backdrop-blur-xl border border-[var(--border)] rounded-2xl p-4 mb-4 w-full shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
             <div className="relative mb-4 flex items-center">
               <input 
                 type="text" 
                 placeholder="Search Country..." 
                 value={langSearch}
                 onChange={(e) => setLangSearch(e.target.value)}
-                className="w-full bg-[#cddfa0]/10 text-white border border-[#cddfa0]/20 rounded-xl px-4 py-3 text-[16px] outline-none focus:bg-[#cddfa0]/20 focus:border-[#cddfa0]/70 placeholder-white/50 transition backdrop-blur-sm"
+                className="w-full bg-[var(--foreground)]/10 text-[var(--foreground)] border border-[var(--border)] rounded-xl px-4 py-3 text-[16px] outline-none focus:bg-[var(--foreground)]/20 focus:border-[var(--accent)]/70 placeholder-[var(--muted-foreground)]/50 transition backdrop-blur-sm"
               />
             </div>
             
@@ -255,7 +255,7 @@ export default function Translation({ isMobile = false, closeMenu }) {
                     key={`mobile-${country.code}`}
                     onClick={() => handleLanguageChange(country.code)}
                     className={`cursor-pointer px-4 py-3 rounded-xl text-[16px] flex items-center gap-4 transition-colors duration-200 whitespace-nowrap
-                      ${currentLang === country.code ? "bg-[#cddfa0]/30 text-[#cddfa0] font-bold" : "text-white/80 hover:bg-[#cddfa0]/10 hover:text-white"}`}
+                      ${currentLang === country.code ? "bg-[var(--accent)]/20 text-[var(--accent)] font-bold" : "text-[var(--muted-foreground)] hover:bg-[var(--foreground)]/10 hover:text-[var(--foreground)]"}`}
                   >
                     <img 
                       src={`https://flagcdn.com/w80/${country.flagCode}.png`} 
@@ -266,7 +266,7 @@ export default function Translation({ isMobile = false, closeMenu }) {
                   </li>
                 ))
               ) : (
-                <li className="text-white/40 text-[16px] text-center py-3">No country found</li>
+                <li className="text-[var(--muted-foreground)]/40 text-[16px] text-center py-3">No country found</li>
               )}
             </ul>
           </div>
@@ -280,7 +280,7 @@ export default function Translation({ isMobile = false, closeMenu }) {
     <div className="relative">
       <button 
         onClick={() => setLangDropdownOpen(!langDropdownOpen)}
-        className="bg-[#cddfa0]/10 border border-[#cddfa0]/30 backdrop-blur-md text-white rounded-lg px-4 py-2 flex items-center gap-3 outline-none cursor-pointer hover:bg-[#cddfa0]/20 transition duration-300 shadow-sm"
+        className="bg-[var(--foreground)]/10 border border-[var(--border)] backdrop-blur-md text-[var(--foreground)] rounded-lg px-4 py-2 flex items-center gap-3 outline-none cursor-pointer hover:bg-[var(--foreground)]/20 transition duration-300 shadow-sm"
       >
         {mounted ? (
           <img 
@@ -289,7 +289,7 @@ export default function Translation({ isMobile = false, closeMenu }) {
             className="w-10 h-auto rounded-md object-cover shadow-sm" 
           />
         ) : (
-          <div className="w-10 h-6 bg-white/20 animate-pulse rounded"></div>
+          <div className="w-10 h-6 bg-[var(--foreground)]/20 animate-pulse rounded"></div>
         )}
         <HiChevronDown className={`text-sm transition-transform ${langDropdownOpen ? "rotate-180" : "rotate-0"}`} />
       </button>
@@ -297,15 +297,15 @@ export default function Translation({ isMobile = false, closeMenu }) {
       {langDropdownOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setLangDropdownOpen(false)}></div>
-          <div className="absolute top-full mt-3 right-0 bg-[#0f2e28]/30 backdrop-blur-xl border border-[#cddfa0]/20 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-[320px] z-50 p-3">
+          <div className="absolute top-full mt-3 right-0 bg-[var(--card)]/90 backdrop-blur-xl border border-[var(--border)] rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-[320px] z-50 p-3">
             <div className="relative mb-3 flex items-center">
-              <HiSearch className="absolute left-3 text-white/50 text-[18px]" />
+              <HiSearch className="absolute left-3 text-[var(--muted-foreground)]/50 text-[18px]" />
               <input 
                 type="text" 
                 placeholder="Search Country..." 
                 value={langSearch}
                 onChange={(e) => setLangSearch(e.target.value)}
-                className="w-full bg-[#cddfa0]/10 text-white border border-[#cddfa0]/20 rounded-xl pl-10 pr-3 py-2.5 text-[15px] outline-none focus:bg-[#cddfa0]/20 focus:border-[#cddfa0]/70 placeholder-white/50 transition backdrop-blur-sm"
+                className="w-full bg-[var(--foreground)]/10 text-[var(--foreground)] border border-[var(--border)] rounded-xl pl-10 pr-3 py-2.5 text-[15px] outline-none focus:bg-[var(--foreground)]/20 focus:border-[var(--accent)]/70 placeholder-[var(--muted-foreground)]/50 transition backdrop-blur-sm"
               />
             </div>
             
@@ -316,7 +316,7 @@ export default function Translation({ isMobile = false, closeMenu }) {
                     key={country.code}
                     onClick={() => handleLanguageChange(country.code)}
                     className={`cursor-pointer px-3 py-2.5 rounded-xl text-[15px] flex items-center gap-3 transition-colors duration-200 whitespace-nowrap
-                      ${currentLang === country.code ? "bg-[#cddfa0]/30 text-[#cddfa0] font-bold" : "text-white/80 hover:bg-[#cddfa0]/10 hover:text-white"}`}
+                      ${currentLang === country.code ? "bg-[var(--accent)]/20 text-[var(--accent)] font-bold" : "text-[var(--muted-foreground)] hover:bg-[var(--foreground)]/10 hover:text-[var(--foreground)]"}`}
                   >
                     <img 
                       src={`https://flagcdn.com/w80/${country.flagCode}.png`} 
@@ -327,7 +327,7 @@ export default function Translation({ isMobile = false, closeMenu }) {
                   </li>
                 ))
               ) : (
-                <li className="text-white/40 text-[15px] text-center py-3">No country found</li>
+                <li className="text-[var(--muted-foreground)]/40 text-[15px] text-center py-3">No country found</li>
               )}
             </ul>
           </div>
@@ -336,3 +336,4 @@ export default function Translation({ isMobile = false, closeMenu }) {
     </div>
   );
 }
+

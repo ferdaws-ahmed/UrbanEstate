@@ -137,7 +137,7 @@ export default function SellerMapPage() {
       </div>
 
       <div className={`rounded-[2.5rem] border overflow-hidden shadow-2xl transition-all duration-500 ${
-        isDark ? "border-[#1a4a40]/50 bg-[#0f2e28]/80" : "border-slate-100 bg-white"
+        isDark ? "border-white/10 bg-[var(--card)]" : "border-slate-100 bg-white"
       }`}>
         <div className="h-[600px] w-full relative z-10">
           <MapContainer 
@@ -229,15 +229,15 @@ export default function SellerMapPage() {
           color: #0f172a;
         }
         .dark .custom-leaflet-popup .leaflet-popup-content-wrapper {
-          background: #0b1f1a;
+          background: var(--card);
           color: #f8fafc;
-          border: 1px solid rgba(26, 74, 64, 0.5);
+          border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .custom-leaflet-popup .leaflet-popup-tip {
           background: #ffffff;
         }
         .dark .custom-leaflet-popup .leaflet-popup-tip {
-          background: #0b1f1a;
+          background: var(--card);
         }
         .custom-leaflet-popup .leaflet-popup-content {
           margin: 0;
@@ -247,3 +247,4 @@ export default function SellerMapPage() {
     </div>
   );
 }
+

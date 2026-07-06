@@ -61,7 +61,7 @@ export default function Settings() {
 
   const Toggle = ({ enabled, onChange, label, description, icon: Icon }) => (
     <div className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${
-      isDark ? 'bg-[#0b1f1a]/50 border-[#1a4a40]' : 'bg-gray-50/50 border-gray-100'
+      isDark ? 'bg-[var(--card)]/50 border-white/10' : 'bg-gray-50/50 border-gray-100'
     }`}>
       <div className="flex gap-4 items-center">
         <div className={`p-2 rounded-xl ${isDark ? 'bg-emerald-500/10 text-emerald-500' : 'bg-emerald-100 text-emerald-600'}`}>
@@ -113,7 +113,7 @@ export default function Settings() {
           
           {/* Main Settings */}
           <div className={`lg:col-span-2 space-y-6 relative p-8 rounded-[2.5rem] border backdrop-blur-xl transition-all duration-500 shadow-xl ${
-            isDark ? 'bg-gradient-to-b from-[#133c34]/80 to-[#091a16] border-[#1a4a40]' : 'bg-white/80 border-gray-200'
+            isDark ? 'bg-gradient-to-b from-[var(--card)]/80 to-[var(--background)] border-white/10' : 'bg-white/80 border-gray-200'
           }`}>
             <h3 className="text-xs font-black uppercase tracking-[0.3em] text-emerald-500 mb-6">General Controls</h3>
             
@@ -158,7 +158,7 @@ export default function Settings() {
                     value={settings.siteName}
                     onChange={(e) => setSettings({...settings, siteName: e.target.value})}
                     className={`w-full px-6 py-4 rounded-2xl border outline-none transition-all ${
-                      isDark ? 'bg-[#0b1f1a] border-[#1a4a40] focus:border-emerald-500/50' : 'bg-gray-50 border-gray-100 focus:border-emerald-500/50'
+                      isDark ? 'bg-[var(--card)] border-white/10 focus:border-emerald-500/50' : 'bg-gray-50 border-gray-100 focus:border-emerald-500/50'
                     }`}
                   />
                 </div>
@@ -169,7 +169,7 @@ export default function Settings() {
                     value={settings.contactEmail}
                     onChange={(e) => setSettings({...settings, contactEmail: e.target.value})}
                     className={`w-full px-6 py-4 rounded-2xl border outline-none transition-all ${
-                      isDark ? 'bg-[#0b1f1a] border-[#1a4a40] focus:border-emerald-500/50' : 'bg-gray-50 border-gray-100 focus:border-emerald-500/50'
+                      isDark ? 'bg-[var(--card)] border-white/10 focus:border-emerald-500/50' : 'bg-gray-50 border-gray-100 focus:border-emerald-500/50'
                     }`}
                   />
                 </div>
@@ -179,14 +179,14 @@ export default function Settings() {
 
           {/* Info Card */}
           <div className={`space-y-6 relative p-8 rounded-[2.5rem] border backdrop-blur-xl transition-all duration-500 shadow-xl h-fit ${
-            isDark ? 'bg-[#133c34]/40 border-[#1a4a40]' : 'bg-emerald-50/50 border-emerald-100'
+            isDark ? 'bg-[var(--card)]/40 border-white/10' : 'bg-emerald-50/50 border-emerald-100'
           }`}>
             <SettingsIcon className="w-12 h-12 text-emerald-500 mb-4" />
             <h3 className="text-xl font-black tracking-tight">Admin Insights</h3>
             <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
               These settings affect the entire platform. Changes are logged and applied immediately to all connected clients and servers.
             </p>
-            <div className={`p-4 rounded-2xl ${isDark ? 'bg-[#0b1f1a]' : 'bg-white'} border border-emerald-500/10`}>
+            <div className={`p-4 rounded-2xl ${isDark ? 'bg-[var(--card)]' : 'bg-white'} border border-emerald-500/10`}>
               <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500 mb-2">Last Updated</p>
               <p className="text-xs font-bold opacity-60">{settings.updatedAt ? new Date(settings.updatedAt).toLocaleString() : 'Just now'}</p>
             </div>
@@ -197,3 +197,4 @@ export default function Settings() {
     </div>
   );
 }
+

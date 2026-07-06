@@ -21,7 +21,7 @@ export default function SellerEfficiencyMatrix() {
   return (
     <div className={`rounded-[1.5rem] sm:rounded-[2rem] border backdrop-blur-xl transition-all duration-500 shadow-xl p-4 sm:p-5 h-full flex flex-col overflow-hidden ${
       isDark 
-        ? 'bg-gradient-to-b from-[#133c34]/80 to-[#091a16] border-[#1a4a40] shadow-black/40' 
+        ? 'bg-gradient-to-b from-[var(--card)]/80 to-[var(--background)] border-white/10 shadow-black/40' 
         : 'bg-white/80 border-gray-200 shadow-gray-200/50'
     }`}>
       
@@ -133,3 +133,4 @@ export default function SellerEfficiencyMatrix() {
     </div>
   );
 }
+

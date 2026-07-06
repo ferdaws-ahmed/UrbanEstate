@@ -22,3 +22,4 @@ export async function GET(request) {
     return NextResponse.json({ count: 0 });
   }
 }
+

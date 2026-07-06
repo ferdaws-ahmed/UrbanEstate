@@ -81,15 +81,15 @@ function TopbarContent() {
   }
 
   return (
-    <header className={`w-full h-16 backdrop-blur-xl flex items-center justify-between px-4 md:px-10 border-b sticky top-0 z-40 transition-all duration-300 ${isDark ? 'bg-[#0f2e28]/90 border-[#1a4a40]/60 shadow-lg' : 'bg-white/90 border-gray-200 shadow-sm'}`}>
+    <header className={`w-full h-16 backdrop-blur-xl flex items-center justify-between px-4 md:px-10 border-b sticky top-0 z-40 transition-all duration-300 ${isDark ? 'bg-[var(--card)] border-white/10 shadow-lg' : 'bg-white/90 border-gray-200 shadow-sm'}`}>
 
       {/* Left Section: Welcome Message (Replaced Search) */}
       <div className="flex-1 flex items-center">
         <div>
-          <h1 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-gray-800'}`}>
+          <h1 className={`text-lg font-bold tracking-tight ${isDark ? 'text-[var(--foreground)]' : 'text-gray-800'}`}>
             Admin Dashboard
           </h1>
-          <p className={`text-[10px] font-medium uppercase tracking-[0.2em] ${isDark ? 'text-[#cddfa0]/60' : 'text-emerald-600/70'}`}>
+          <p className={`text-[10px] font-medium uppercase tracking-[0.2em] ${isDark ? 'text-[var(--accent)]/60' : 'text-emerald-600/70'}`}>
             Urban Estate Management
           </p>
         </div>
@@ -102,10 +102,10 @@ function TopbarContent() {
         <div className="relative hidden lg:block">
           <button
             onClick={() => { setIsDateMenuOpen(!isDateMenuOpen); setIsProfileOpen(false); setIsNotificationOpen(false); }}
-            className={`flex items-center gap-3 border rounded-xl px-4 py-2 transition-all duration-300 group ${isDark ? 'bg-[#133c34]/40 border-[#1a4a40] hover:bg-[#1a4a40]' : 'bg-gray-50 border-gray-200 hover:bg-white shadow-sm'}`}
+            className={`flex items-center gap-3 border rounded-xl px-4 py-2 transition-all duration-300 group ${isDark ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-gray-50 border-gray-200 hover:bg-white shadow-sm'}`}
           >
-            <Calendar className={`w-4 h-4 ${isDark ? 'text-[#cddfa0]' : 'text-emerald-600'}`} />
-            <span className={`text-xs font-bold tracking-wider transition-colors duration-300 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+            <Calendar className={`w-4 h-4 ${isDark ? 'text-[var(--accent)]' : 'text-emerald-600'}`} />
+            <span className={`text-xs font-bold tracking-wider transition-colors duration-300 ${isDark ? 'text-[var(--muted-foreground)]' : 'text-gray-700'}`}>
               {formattedDateTime}
             </span>
           </button>
@@ -115,13 +115,13 @@ function TopbarContent() {
         <div className="relative">
           <button
             onClick={() => { setIsNotificationOpen(!isNotificationOpen); setIsProfileOpen(false); setIsDateMenuOpen(false); }}
-            className={`relative p-2 rounded-xl border transition-all duration-300 group ${isDark ? 'bg-[#133c34]/40 border-[#1a4a40] hover:bg-[#1a4a40]' : 'bg-gray-50 border-gray-200 hover:bg-white shadow-sm'}`}
+            className={`relative p-2 rounded-xl border transition-all duration-300 group ${isDark ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-gray-50 border-gray-200 hover:bg-white shadow-sm'}`}
           >
-            <Bell className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${isDark ? 'text-gray-300 group-hover:text-[#cddfa0]' : 'text-gray-600'}`} />
+            <Bell className={`w-4 h-4 md:w-5 md:h-5 transition-colors ${isDark ? 'text-[var(--muted-foreground)] group-hover:text-[var(--accent)]' : 'text-gray-600'}`} />
             {unreadCount > 0 && (
               <span className="absolute -top-1 -right-1 flex h-4 w-4 md:h-5 md:w-5 items-center justify-center">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className={`relative inline-flex items-center justify-center rounded-full h-4 w-4 md:h-5 md:w-5 bg-red-600 border-2 text-[8px] md:text-[10px] font-black text-white shadow-lg ${isDark ? 'border-[#0a1a17]' : 'border-white'}`}>
+                <span className={`relative inline-flex items-center justify-center rounded-full h-4 w-4 md:h-5 md:w-5 bg-red-600 border-2 text-[8px] md:text-[10px] font-black text-white shadow-lg ${isDark ? 'border-[var(--card)]' : 'border-white'}`}>
                   {unreadCount}
                 </span>
               </span>
@@ -129,9 +129,9 @@ function TopbarContent() {
           </button>
 
           {isNotificationOpen && (
-            <div className={`absolute right-0 mt-4 w-72 md:w-96 backdrop-blur-xl border rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200 ${isDark ? 'bg-[#0a1a17]/95 border-[#1a4a40]' : 'bg-white/95 border-gray-200'}`}>
-              <div className={`px-5 py-4 border-b flex justify-between items-center ${isDark ? 'border-[#1a4a40]/50' : 'border-gray-100'}`}>
-                <h3 className={`text-sm font-black uppercase tracking-widest ${isDark ? 'text-white' : 'text-gray-800'}`}>Notifications</h3>
+            <div className={`absolute right-0 mt-4 w-72 md:w-96 backdrop-blur-xl border rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200 ${isDark ? 'bg-[var(--card)] border-white/10' : 'bg-white/95 border-gray-200'}`}>
+              <div className={`px-5 py-4 border-b flex justify-between items-center ${isDark ? 'border-white/10' : 'border-gray-100'}`}>
+                <h3 className={`text-sm font-black uppercase tracking-widest ${isDark ? 'text-[var(--foreground)]' : 'text-gray-800'}`}>Notifications</h3>
                 <span className="text-[10px] font-bold bg-red-500/10 text-red-500 px-2.5 py-1 rounded-full">{unreadCount} New Alerts</span>
               </div>
               <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
@@ -142,11 +142,11 @@ function TopbarContent() {
                   </div>
                 ) : notifications.length > 0 ? (
                   notifications.map((notif) => (
-                    <div key={notif._id || notif.id} className={`block px-5 py-4 border-b transition-colors cursor-pointer ${isDark ? 'border-[#1a4a40]/30 hover:bg-white/5' : 'border-gray-50 hover:bg-gray-50'} ${!notif.read ? (isDark ? 'bg-emerald-500/5' : 'bg-emerald-50/30') : ''}`}>
+                    <div key={notif._id || notif.id} className={`block px-5 py-4 border-b transition-colors cursor-pointer ${isDark ? 'border-white/10 hover:bg-white/5' : 'border-gray-50 hover:bg-gray-50'} ${!notif.read ? (isDark ? 'bg-[var(--primary)]/5' : 'bg-emerald-50/30') : ''}`}>
                       <div className="flex gap-3">
                         <div className="w-2 h-2 mt-1.5 rounded-full flex-shrink-0 bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
                         <div>
-                          <p className={`text-xs leading-relaxed ${!notif.read ? (isDark ? 'text-white font-bold' : 'text-gray-900 font-bold') : (isDark ? 'text-gray-400 font-medium' : 'text-gray-600 font-medium')}`}>
+                          <p className={`text-xs leading-relaxed ${!notif.read ? (isDark ? 'text-[var(--foreground)] font-bold' : 'text-gray-900 font-bold') : (isDark ? 'text-[var(--muted-foreground)] font-medium' : 'text-gray-600 font-medium')}`}>
                             {notif.text}
                           </p>
                           <p className="text-[10px] font-bold uppercase tracking-tighter text-gray-500 mt-1.5 flex items-center gap-1">
@@ -164,7 +164,7 @@ function TopbarContent() {
                 )}
               </div>
               <div className="px-5 py-3 border-t border-transparent text-center">
-                <button className={`text-[10px] font-black uppercase tracking-widest hover:underline ${isDark ? 'text-[#cddfa0]' : 'text-emerald-600'}`}>
+                <button className={`text-[10px] font-black uppercase tracking-widest hover:underline ${isDark ? 'text-[var(--accent)]' : 'text-emerald-600'}`}>
                   View All Activity Logs
                 </button>
               </div>
@@ -172,14 +172,14 @@ function TopbarContent() {
           )}
         </div>
 
-        <div className={`h-8 w-[1px] ${isDark ? 'bg-[#1a4a40]' : 'bg-gray-200'}`}></div>
+        <div className={`h-8 w-[1px] ${isDark ? 'bg-white/10' : 'bg-gray-200'}`}></div>
 
         {/* Theme Toggle & Profile Group */}
         <div className="flex items-center gap-3">
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className={`p-2 rounded-xl border transition-all duration-300 group ${isDark ? 'bg-[#133c34]/40 border-[#1a4a40] text-[#cddfa0] hover:bg-[#1a4a40]' : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-emerald-200 hover:bg-white shadow-sm'}`}
+            className={`p-2 rounded-xl border transition-all duration-300 group ${isDark ? 'bg-white/5 border-white/10 text-[var(--accent)] hover:bg-white/10' : 'bg-gray-50 border-gray-200 text-gray-600 hover:border-emerald-200 hover:bg-white shadow-sm'}`}
             title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {isDark ? <Sun className="w-4 h-4 md:w-5 md:h-5" /> : <Moon className="w-4 h-4 md:w-5 md:h-5" />}
@@ -189,36 +189,36 @@ function TopbarContent() {
           <div className="relative">
             <button
               onClick={() => { setIsProfileOpen(!isProfileOpen); setIsDateMenuOpen(false); setIsNotificationOpen(false); }}
-              className={`flex items-center gap-3 p-1 rounded-2xl border transition-all duration-300 group ${isDark ? 'hover:bg-white/5 border-transparent hover:border-[#1a4a40]' : 'hover:bg-gray-50 border-transparent hover:border-gray-200'}`}
+              className={`flex items-center gap-3 p-1 rounded-2xl border transition-all duration-300 group ${isDark ? 'hover:bg-white/5 border-transparent hover:border-white/10' : 'hover:bg-gray-50 border-transparent hover:border-gray-200'}`}
             >
               <div className="hidden sm:flex flex-col items-end">
-                <span className={`text-sm font-black tracking-tight transition-colors ${isDark ? 'text-white group-hover:text-[#cddfa0]' : 'text-gray-800 group-hover:text-emerald-700'}`}>{user.name}</span>
-                <span className={`text-[9px] font-black uppercase tracking-[0.2em] px-2 py-0.5 rounded-md ${isDark ? 'bg-[#cddfa0]/10 text-[#cddfa0]' : 'bg-emerald-100 text-emerald-700'}`}>{user.role || 'Administrator'}</span>
+                <span className={`text-sm font-black tracking-tight transition-colors ${isDark ? 'text-[var(--foreground)] group-hover:text-[var(--accent)]' : 'text-gray-800 group-hover:text-emerald-700'}`}>{user.name}</span>
+                <span className={`text-[9px] font-black uppercase tracking-[0.2em] px-2 py-0.5 rounded-md ${isDark ? 'bg-[var(--accent)]/10 text-[var(--accent)]' : 'bg-emerald-100 text-emerald-700'}`}>{user.role || 'Administrator'}</span>
               </div>
               <div className="relative flex-shrink-0 p-0.5 rounded-xl bg-gradient-to-tr from-emerald-500 to-[#cddfa0]">
-                <div className={`rounded-[10px] overflow-hidden border-2 ${isDark ? 'border-[#0a1a17]' : 'border-white'}`}>
+                <div className={`rounded-[10px] overflow-hidden border-2 ${isDark ? 'border-[var(--card)]' : 'border-white'}`}>
                   <img 
                     src={user.image || user.avatar || "https://ui-avatars.com/api/?name=Admin&background=10b981&color=fff"} 
                     alt="Profile" 
                     className="w-9 h-9 md:w-10 md:h-10 object-cover" 
                   />
                 </div>
-                <span className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 rounded-full shadow-lg ${isDark ? 'border-[#0a1a17]' : 'border-white'}`}></span>
+                <span className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 rounded-full shadow-lg ${isDark ? 'border-[var(--card)]' : 'border-white'}`}></span>
               </div>
             </button>
 
             {isProfileOpen && (
-              <div className={`absolute right-0 mt-4 w-56 md:w-64 backdrop-blur-xl border rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200 ${isDark ? 'bg-[#0a1a17]/95 border-[#1a4a40]' : 'bg-white/95 border-gray-200'}`}>
-                <div className={`px-5 py-4 border-b mx-1 -mt-2 rounded-t-xl ${isDark ? 'border-[#1a4a40]/50 bg-white/5' : 'border-gray-100 bg-gray-50/50'}`}>
-                  <p className={`text-sm font-black truncate ${isDark ? 'text-white' : 'text-gray-800'}`}>{user.name}</p>
+              <div className={`absolute right-0 mt-4 w-56 md:w-64 backdrop-blur-xl border rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200 ${isDark ? 'bg-[var(--card)] border-white/10' : 'bg-white/95 border-gray-200'}`}>
+                <div className={`px-5 py-4 border-b mx-1 -mt-2 rounded-t-xl ${isDark ? 'border-white/10 bg-white/5' : 'border-gray-100 bg-gray-50/50'}`}>
+                  <p className={`text-sm font-black truncate ${isDark ? 'text-[var(--foreground)]' : 'text-gray-800'}`}>{user.name}</p>
                   <p className={`text-[10px] font-bold mt-0.5 truncate text-gray-500 uppercase tracking-tighter`}>{user.email}</p>
                 </div>
                 <div className="py-2 px-1 space-y-1">
-                  <Link href="/dashboard/admin/profile" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl mx-2 transition-all ${isDark ? 'text-gray-300 hover:bg-white/10 hover:text-white' : 'text-gray-700 hover:bg-emerald-50 hover:text-emerald-700'}`}>
+                  <Link href="/dashboard/admin/profile" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl mx-2 transition-all ${isDark ? 'text-[var(--muted-foreground)] hover:bg-white/10 hover:text-[var(--foreground)]' : 'text-gray-700 hover:bg-emerald-50 hover:text-emerald-700'}`}>
                     <UserIcon className="w-4 h-4" />
                     Profile Settings
                   </Link>
-                  <Link href="/dashboard/admin/settings" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl mx-2 transition-all ${isDark ? 'text-gray-300 hover:bg-white/10 hover:text-white' : 'text-gray-700 hover:bg-emerald-50 hover:text-emerald-700'}`}>
+                  <Link href="/dashboard/admin/settings" className={`flex items-center gap-3 px-4 py-2.5 text-xs font-bold rounded-xl mx-2 transition-all ${isDark ? 'text-[var(--muted-foreground)] hover:bg-white/10 hover:text-[var(--foreground)]' : 'text-gray-700 hover:bg-emerald-50 hover:text-emerald-700'}`}>
                     <Settings className="w-4 h-4" />
                     Dashboard Config
                   </Link>

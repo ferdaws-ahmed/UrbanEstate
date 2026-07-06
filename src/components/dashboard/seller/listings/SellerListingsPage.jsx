@@ -101,7 +101,7 @@ export default function SellerListingsPage() {
               value={searchTerm}
               onChange={(e) => { setSearchTerm(e.target.value); setPage(1); }}
               className={`pl-12 pr-6 py-4 rounded-2xl border outline-none text-xs font-bold transition-all w-64 ${
-                isDark ? "bg-[#0b1f1a] border-[#1a4a40] text-white focus:border-[#cddfa0]" : "bg-white border-slate-200 focus:border-teal-500"
+                isDark ? "bg-[var(--card)] border-white/10 text-white focus:border-[#cddfa0]" : "bg-white border-slate-200 focus:border-teal-500"
               }`}
             />
           </div>
@@ -261,3 +261,4 @@ export default function SellerListingsPage() {
     </div>
   );
 }
+

@@ -33,11 +33,11 @@ export default function QuickActions({ actions }) {
 
   return (
     <div className={`p-4 rounded-[1.5rem] border backdrop-blur-xl transition-all duration-500 shadow-xl flex items-center justify-between gap-4 ${
-      isDark ? 'bg-[#133c34]/50 border-[#cddfa0]/20 shadow-black/40' : 'bg-white/80 border-gray-200 shadow-gray-200/50'
+      isDark ? 'bg-[var(--card)]/50 border-[#cddfa0]/20 shadow-black/40' : 'bg-white/80 border-gray-200 shadow-gray-200/50'
     }`}>
       
       {/* Left Title & Live Clock Section */}
-      <div className={`flex flex-col gap-1 pr-4 sm:pr-6 border-r shrink-0 ${isDark ? 'border-[#1a4a40]' : 'border-gray-200'}`}>
+      <div className={`flex flex-col gap-1 pr-4 sm:pr-6 border-r shrink-0 ${isDark ? 'border-white/10' : 'border-gray-200'}`}>
         <div className="flex items-center gap-2">
           <div className={`p-1.5 rounded-lg ${isDark ? 'bg-[#cddfa0]/10 text-[#cddfa0]' : 'bg-blue-100 text-blue-600'}`}>
             <Calendar className="w-4 h-4" />
@@ -78,7 +78,7 @@ export default function QuickActions({ actions }) {
               </div>
 
               {/* Dynamic Mini Progress Bar */}
-              <div className={`w-full h-1 mt-0.5 rounded-full overflow-hidden ${isDark ? 'bg-[#1a4a40]' : 'bg-gray-100'}`}>
+              <div className={`w-full h-1 mt-0.5 rounded-full overflow-hidden ${isDark ? 'bg-[var(--card)]' : 'bg-gray-100'}`}>
                 <div 
                   className={`h-full rounded-full transition-all duration-1000 ease-out ${
                     progressPercent >= 100 ? (isDark ? 'bg-[#cddfa0]' : 'bg-green-500') : 
@@ -95,3 +95,4 @@ export default function QuickActions({ actions }) {
     </div>
   );
 }
+

@@ -82,7 +82,7 @@ export default function UserFavorites() {
             <div 
               key={item.id}
               className={`group rounded-[2.5rem] border overflow-hidden transition-all hover:shadow-2xl hover:-translate-y-2 ${
-                isDark ? "bg-[#0b1f1a] border-[#1a4a40]/40" : "bg-white border-slate-100 shadow-sm"
+                isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-100 shadow-sm"
               }`}
             >
               <div className="relative aspect-[4/3] overflow-hidden">
@@ -138,3 +138,4 @@ export default function UserFavorites() {
     </div>
   );
 }
+

@@ -22,7 +22,6 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
     setMounted(true);
   }, []);
 
-  // Fetch notifications
   useEffect(() => {
     if (session?.user) {
       fetch("/api/notifications")
@@ -67,7 +66,6 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
     }
   };
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
@@ -87,7 +85,7 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
       className={`sticky top-0 z-[80] flex h-16 items-center justify-between gap-4 border-b px-4 sm:px-8 transition-all duration-300
       ${
         isDark
-          ? "bg-[#0b1f1a] border-[#1a4a40]/40"
+          ? "bg-[var(--card)] border-white/10"
           : "bg-white border-slate-200 shadow-sm"
       }`}
     >
@@ -95,12 +93,12 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
         <button
           onClick={onMenuClick}
           className={`md:hidden p-2 rounded-xl transition-colors ${
-            isDark ? "bg-white/5 text-slate-400" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+            isDark ? "bg-white/5 text-[var(--muted-foreground)]" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
           }`}
         >
           <Menu size={20} />
         </button>
-        <h1 className={`text-xl sm:text-2xl font-black tracking-tighter truncate ${isDark ? "text-white" : "text-slate-900"}`}>
+        <h1 className={`text-xl sm:text-2xl font-black tracking-tighter truncate ${isDark ? "text-[var(--foreground)]" : "text-slate-900"}`}>
           {title}
         </h1>
       </div>
@@ -112,8 +110,8 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
           aria-label="Help"
           className={`rounded-full p-2 transition-all ${
             isDark 
-              ? "text-slate-400 hover:bg-white/10 hover:text-[#cddfa0]" 
-              : "text-slate-500 hover:bg-slate-100 hover:text-teal-600"
+              ? "text-[var(--muted-foreground)] hover:bg-white/10 hover:text-[var(--accent)]" 
+              : "text-slate-500 hover:bg-slate-100 hover:text-[var(--primary)]"
           }`}
         >
           <HelpCircle className="h-5 w-5" />
@@ -127,28 +125,28 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
             aria-label="Notifications"
             className={`relative rounded-full p-2 transition-all ${
               isNotificationsOpen 
-                ? isDark ? "bg-white/10 text-[#cddfa0]" : "bg-teal-50 text-teal-600"
-                : isDark ? "text-slate-400 hover:bg-white/10" : "text-slate-500 hover:bg-slate-100"
+                ? isDark ? "bg-white/10 text-[var(--accent)]" : "bg-teal-50 text-teal-600"
+                : isDark ? "text-[var(--muted-foreground)] hover:bg-white/10" : "text-slate-500 hover:bg-slate-100"
             }`}
           >
             <Bell className="h-5 w-5" />
             {unreadCount > 0 && (
-              <span className={`absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ${isDark ? "ring-[#0b1f1a]" : "ring-white"}`} />
+              <span className={`absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ${isDark ? "ring-[var(--card)]" : "ring-white"}`} />
             )}
           </button>
 
           {isNotificationsOpen && (
             <div className={`absolute right-0 mt-2 w-80 rounded-2xl border shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 ${
-              isDark ? "bg-[#0b1f1a] border-[#1a4a40]/50" : "bg-white border-slate-200"
+              isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-200"
             }`}>
               <div className={`p-4 border-b flex justify-between items-center ${
-                isDark ? "border-[#1a4a40]/30 bg-white/5" : "border-slate-100 bg-slate-50"
+                isDark ? "border-white/10 bg-white/5" : "border-slate-100 bg-slate-50"
               }`}>
-                <h3 className={`font-black text-xs uppercase tracking-widest ${isDark ? "text-white" : "text-slate-900"}`}>Notifications</h3>
+                <h3 className={`font-black text-xs uppercase tracking-widest ${isDark ? "text-[var(--foreground)]" : "text-slate-900"}`}>Notifications</h3>
                 {unreadCount > 0 && (
                   <button 
                     onClick={markAllAsRead}
-                    className="text-[9px] text-teal-600 dark:text-[#cddfa0] hover:underline font-black uppercase tracking-wider"
+                    className="text-[9px] text-[var(--primary)] hover:underline font-black uppercase tracking-wider"
                   >
                     Clear All
                   </button>
@@ -162,15 +160,15 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
                       onClick={() => !notif.read && markAsRead(notif._id)}
                       className={`p-4 border-b last:border-0 transition-colors cursor-pointer group ${
                         isDark 
-                          ? `border-[#1a4a40]/20 hover:bg-white/5 ${!notif.read ? 'bg-teal-900/10' : ''}` 
+                          ? `border-white/10 hover:bg-white/5 ${!notif.read ? 'bg-[var(--primary)]/10' : ''}` 
                           : `border-slate-50 hover:bg-slate-50 ${!notif.read ? 'bg-teal-50/50' : ''}`
                       }`}
                     >
                       <p className={`text-xs ${
                         !notif.read 
-                          ? isDark ? 'text-white font-bold' : 'text-slate-900 font-bold' 
-                          : 'text-slate-500 dark:text-slate-400'
-                      } group-hover:text-teal-600 dark:group-hover:text-[#cddfa0] transition-colors`}>
+                          ? isDark ? 'text-[var(--foreground)] font-bold' : 'text-slate-900 font-bold' 
+                          : 'text-slate-500 dark:text-[var(--muted-foreground)]'
+                      } group-hover:text-[var(--primary)] transition-colors`}>
                         {notif.text}
                       </p>
                       <p className="text-[9px] text-slate-400 mt-1.5 font-bold uppercase tracking-tighter">
@@ -179,10 +177,10 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
                     </div>
                   ))
                 ) : (
-                  <div className="p-10 text-center">
-                    <Bell className={`h-8 w-8 mx-auto mb-3 opacity-20 ${isDark ? 'text-white' : 'text-slate-900'}`} />
-                    <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">No alerts detected</p>
-                  </div>
+                    <div className="p-10 text-center">
+                      <Bell className={`h-8 w-8 mx-auto mb-3 opacity-20 ${isDark ? 'text-[var(--foreground)]' : 'text-slate-900'}`} />
+                      <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">No alerts detected</p>
+                    </div>
                 )}
               </div>
             </div>
@@ -195,7 +193,7 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
           onClick={toggleTheme}
           className={`flex h-9 w-9 items-center justify-center rounded-xl border transition-all hover:scale-105 active:scale-95 ${
             isDark 
-              ? "border-[#1a4a40] bg-[#1a4a40]/40 text-[#cddfa0] hover:bg-[#1a4a40]" 
+              ? "border-white/20 bg-white/5 text-[var(--accent)] hover:bg-white/10" 
               : "border-slate-200 bg-white text-slate-700 hover:border-teal-500 hover:text-teal-600 shadow-sm"
           }`}
         >
@@ -211,13 +209,13 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
             <div
               suppressHydrationWarning
               className={`h-9 w-9 rounded-xl shadow-lg transition-transform group-hover:scale-105 overflow-hidden border-2 ${
-                isDark ? "border-[#1a4a40]" : "border-white"
+                isDark ? "border-white/20" : "border-white"
               }`}
             >
               {mounted && session?.user?.image ? (
                 <img src={session.user.image} alt="Profile" className="h-full w-full object-cover" />
               ) : (
-                <div className="h-full w-full bg-teal-600 flex items-center justify-center text-white font-black text-xs">
+                <div className="h-full w-full bg-[var(--primary)] flex items-center justify-center text-white font-black text-xs">
                   {mounted && session?.user?.name ? session.user.name.charAt(0) : "S"}
                 </div>
               )}
@@ -226,15 +224,15 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
 
           {isProfileOpen && (
             <div className={`absolute right-0 mt-3 w-64 rounded-2xl border shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 ${
-              isDark ? "bg-[#0b1f1a] border-[#1a4a40]/50" : "bg-white border-slate-200"
+              isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-200"
             }`}>
               <div className={`p-5 border-b transition-colors ${
-                isDark ? "border-[#1a4a40]/30 bg-white/5" : "border-slate-100 bg-slate-50"
+                isDark ? "border-white/10 bg-white/5" : "border-slate-100 bg-slate-50"
               }`}>
-                <p className={`text-xs font-black uppercase tracking-tighter truncate ${isDark ? "text-white" : "text-slate-900"}`}>
+                <p className={`text-xs font-black uppercase tracking-tighter truncate ${isDark ? "text-[var(--foreground)]" : "text-slate-900"}`}>
                   {session?.user?.name || "Seller Identity"}
                 </p>
-                <p className="text-[9px] font-bold text-slate-500 dark:text-slate-400 truncate mt-1">
+                <p className="text-[9px] font-bold text-slate-500 dark:text-[var(--muted-foreground)] truncate mt-1">
                   {session?.user?.email || "seller@urbanestate.com"}
                 </p>
               </div>
@@ -243,8 +241,8 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
                   href="/dashboard/seller/profile"
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                     isDark 
-                      ? "text-slate-400 hover:bg-white/5 hover:text-[#cddfa0]" 
-                      : "text-slate-600 hover:bg-slate-50 hover:text-teal-600"
+                      ? "text-[var(--muted-foreground)] hover:bg-white/5 hover:text-[var(--accent)]" 
+                      : "text-slate-600 hover:bg-slate-50 hover:text-[var(--primary)]"
                   }`}
                   onClick={() => setIsProfileOpen(false)}
                 >
@@ -255,8 +253,8 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
                   href="/"
                   className={`flex items-center gap-3 px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
                     isDark 
-                      ? "text-slate-400 hover:bg-white/5 hover:text-[#cddfa0]" 
-                      : "text-slate-600 hover:bg-slate-50 hover:text-teal-600"
+                      ? "text-[var(--muted-foreground)] hover:bg-white/5 hover:text-[var(--accent)]" 
+                      : "text-slate-600 hover:bg-slate-50 hover:text-[var(--primary)]"
                   }`}
                   onClick={() => setIsProfileOpen(false)}
                 >
@@ -271,4 +269,3 @@ export default function SellerTopbar({ title = "Dashboard", onMenuClick }) {
     </header>
   );
 }
-

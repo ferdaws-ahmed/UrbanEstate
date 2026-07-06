@@ -62,7 +62,7 @@ const MediaUpload = ({ images, updateImages }) => {
   };
 
   return (
-    <div className={`p-8 md:p-12 rounded-[2.5rem] border transition-all duration-500 group/section shadow-2xl ${isDark ? 'bg-[#0b1f1a] border-[#1a4a40]/30 shadow-none' : 'bg-white border-slate-200 shadow-slate-200/40'}`}>
+    <div className={`p-8 md:p-12 rounded-[2.5rem] border transition-all duration-500 group/section shadow-2xl ${isDark ? 'bg-[var(--card)] border-white/30 shadow-none' : 'bg-white border-slate-200 shadow-slate-200/40'}`}>
       
       <div className="mb-12">
         <div className="flex items-center gap-4 mb-3">
@@ -89,7 +89,7 @@ const MediaUpload = ({ images, updateImages }) => {
             flex flex-col items-center justify-center text-center group/dropzone
             ${isDragActive 
               ? 'border-teal-500 bg-teal-50/50 dark:bg-teal-900/10 scale-[0.98]' 
-              : (isDark ? 'border-[#1a4a40]/30 hover:border-teal-700 bg-[#061510]' : 'border-slate-200 hover:border-teal-400 bg-white shadow-inner')
+              : (isDark ? 'border-white/30 hover:border-teal-700 bg-[var(--card)]' : 'border-slate-200 hover:border-teal-400 bg-white shadow-inner')
             }
             ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}
           `}
@@ -106,7 +106,7 @@ const MediaUpload = ({ images, updateImages }) => {
             </div>
           ) : (
             <>
-              <div className={`w-24 h-24 rounded-[2rem] flex items-center justify-center mb-8 shadow-2xl group-hover/dropzone:scale-110 group-hover/dropzone:rotate-3 transition-all duration-500 ${isDark ? 'bg-[#1a4a40] shadow-none' : 'bg-slate-50 shadow-slate-200 border border-slate-100'}`}>
+              <div className={`w-24 h-24 rounded-[2rem] flex items-center justify-center mb-8 shadow-2xl group-hover/dropzone:scale-110 group-hover/dropzone:rotate-3 transition-all duration-500 ${isDark ? 'bg-[var(--card)] shadow-none' : 'bg-slate-50 shadow-slate-200 border border-slate-100'}`}>
                 <ImageIcon className="w-12 h-12 text-teal-600 dark:text-[#cddfa0]" />
               </div>
               <h3 className={`text-2xl font-black uppercase tracking-tight mb-3 ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>
@@ -129,7 +129,7 @@ const MediaUpload = ({ images, updateImages }) => {
                   initial={{ opacity: 0, scale: 0.8, y: 30 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.8, y: 30 }}
-                  className={`relative group aspect-square rounded-[2rem] overflow-hidden border-4 shadow-2xl ${isDark ? 'border-[#1a4a40]' : 'border-white'}`}
+                  className={`relative group aspect-square rounded-[2rem] overflow-hidden border-4 shadow-2xl ${isDark ? 'border-white/10' : 'border-white'}`}
                 >
                   <img 
                     src={url} 
@@ -158,7 +158,7 @@ const MediaUpload = ({ images, updateImages }) => {
 
         {/* INFO BOX */}
         <div className={`flex items-start gap-6 p-8 rounded-[2rem] border-2 ${isDark ? 'bg-blue-900/10 border-blue-900/30' : 'bg-blue-50 border-blue-100 shadow-sm'}`}>
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm ${isDark ? 'bg-[#0b1f1a]' : 'bg-white border border-blue-100'}`}>
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm ${isDark ? 'bg-[var(--card)]' : 'bg-white border border-blue-100'}`}>
             <Info className="w-5 h-5 text-blue-500" />
           </div>
           <div className={`text-xs leading-relaxed font-medium ${isDark ? 'text-blue-400' : 'text-blue-800'}`}>
@@ -173,3 +173,4 @@ const MediaUpload = ({ images, updateImages }) => {
 };
 
 export default MediaUpload;
+

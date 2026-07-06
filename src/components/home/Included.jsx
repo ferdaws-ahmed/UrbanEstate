@@ -80,7 +80,7 @@ export default function AtmosphericSimulator() {
   };
 
   return (
-    <section className={`relative w-full py-24 px-6 lg:px-12 ${isDark ? "bg-[#0f2e28]" : "bg-white"} overflow-hidden ${manrope.className} transition-colors duration-1000`}>
+    <section className={`relative w-full py-24 px-6 lg:px-12 ${isDark ? "bg-[var(--background)]" : "bg-white"} overflow-hidden ${manrope.className} transition-colors duration-1000`}>
       
       {/* Dynamic Ambient Glow matching the time of day */}
       <div 
@@ -92,11 +92,11 @@ export default function AtmosphericSimulator() {
         
         {/* Header Section */}
         <div className="flex flex-col items-center text-center mb-16">
-          <div className={`inline-flex items-center gap-2 ${isDark?"text-[#cddfa0]":"text-[#13332c]"} ${isDark?"font-bold":"font-light"} tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[#cddfa0]/10"}  px-5 py-2 rounded-full border  ${isDark ? "border-white/10" : "border-[#0f2e28]/10"} mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]`}>
+          <div className={`inline-flex items-center gap-2 ${isDark?"text-[var(--accent)]":"text-[var(--card-foreground)]"} ${isDark?"font-bold":"font-light"} tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[var(--primary)]/10"}  px-5 py-2 rounded-full border  ${isDark ? "border-white/10" : "border-[var(--primary)]/10"} mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]`}>
             <Wind size={14} className="animate-pulse" /> 4D Experience
           </div>
-          <h2 className={`text-4xl lg:text-5xl font-black ${isDark ? "text-white" : "text-[#13332c]"} mb-6 tracking-tight leading-[1.1]`}>
-            Atmospheric <span className="text-[#cddfa0] italic font-light">Simulator</span>
+          <h2 className={`text-4xl lg:text-5xl font-black ${isDark ? "text-white" : "text-[var(--card-foreground)]"} mb-6 tracking-tight leading-[1.1]`}>
+            Atmospheric <span className="text-[var(--accent)] italic font-light">Simulator</span>
           </h2>
           <p className={`text-lg leading-relaxed max-w-2xl mx-auto ${isDark ? "text-white/60" : "text-black/60"}`}>
             Experience the property's aura at any hour. Watch how the architecture, lighting, and smart systems adapt seamlessly from dawn till dusk.
@@ -104,7 +104,7 @@ export default function AtmosphericSimulator() {
         </div>
 
         {/* Main Simulator Layout */}
-        <div className={`relative bg-[#081d19]/80 backdrop-blur-2xl rounded-[2.5rem] border border-[#cddfa0]/20 ${isDark ? "shadow-[0_40px_100px_rgba(0,0,0,0.8)]" : ""} overflow-hidden`}>
+        <div className={`relative bg-[var(--card)]/80 backdrop-blur-2xl rounded-[2.5rem] border border-[var(--accent)]/20 ${isDark ? "shadow-[0_40px_100px_rgba(0,0,0,0.8)]" : ""} overflow-hidden`}>
           
           <div className="grid grid-cols-1 lg:grid-cols-12">
             
@@ -126,7 +126,7 @@ export default function AtmosphericSimulator() {
                 <h1 className="text-5xl lg:text-7xl font-black text-white tracking-tighter drop-shadow-lg mb-2">
                   {activeState.time}
                 </h1>
-                <p className="text-[#cddfa0] text-lg font-medium tracking-widest uppercase drop-shadow-md">
+                <p className="text-[var(--accent)] text-lg font-medium tracking-widest uppercase drop-shadow-md">
                   {activeState.label}
                 </p>
               </div>
@@ -149,22 +149,22 @@ export default function AtmosphericSimulator() {
                       onClick={() => handleTimeChange(state)}
                       className={`w-full flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 ${
                         activeState.id === state.id
-                          ? "bg-[#cddfa0] border-[#cddfa0] shadow-[0_0_20px_rgba(205,223,160,0.3)] transform scale-[1.02]"
+                          ? "bg-[var(--primary)] border-[var(--accent)] shadow-[0_0_20px_rgba(205,223,160,0.3)] transform scale-[1.02]"
                           : "bg-black/20 border-white/10 hover:bg-white/10 hover:border-white/20"
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className={`transition-colors ${activeState.id === state.id ? 'text-[#0f2e28]' : 'text-white/50'}`}>
+                        <div className={`transition-colors ${activeState.id === state.id ? 'text-[#099880]' : 'text-white/50'}`}>
                           {state.icon}
                         </div>
                         <div className="text-left">
-                          <h4 className={`font-bold tracking-wide transition-colors ${activeState.id === state.id ? 'text-[#0f2e28]' : 'text-white'}`}>
+                          <h4 className={`font-bold tracking-wide transition-colors ${activeState.id === state.id ? 'text-[#099880]' : 'text-white'}`}>
                             {state.label}
                           </h4>
                         </div>
                       </div>
                       {/* Active Dot Indicator */}
-                      <div className={`w-2 h-2 rounded-full transition-all ${activeState.id === state.id ? 'bg-[#0f2e28] shadow-[0_0_5px_#0f2e28]' : 'bg-transparent'}`}></div>
+                      <div className={`w-2 h-2 rounded-full transition-all ${activeState.id === state.id ? 'bg-[var(--background)] shadow-[0_0_5px_#099880]' : 'bg-transparent'}`}></div>
                     </button>
                   ))}
                 </div>
@@ -172,14 +172,14 @@ export default function AtmosphericSimulator() {
 
               {/* Dynamic Live Data based on Time */}
               <div className={`transition-all duration-500 transform ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
-                <p className="text-[#cddfa0] text-[10px] font-bold tracking-[0.3em] uppercase mb-5">
+                <p className="text-[var(--accent)] text-[10px] font-bold tracking-[0.3em] uppercase mb-5">
                   Live System Status
                 </p>
                 
                 <div className="space-y-4">
                   {/* Stat 1: Temperature */}
                   <div className="flex items-center gap-4 p-4 rounded-2xl bg-black/40 border border-white/5">
-                    <Thermometer size={18} className="text-[#cddfa0]" />
+                    <Thermometer size={18} className="text-[var(--accent)]" />
                     <div>
                       <p className="text-white/40 text-[9px] uppercase tracking-widest font-bold">Ambient Temp</p>
                       <p className="text-white text-sm font-semibold tracking-wide">{activeState.stats.temp}</p>
@@ -188,7 +188,7 @@ export default function AtmosphericSimulator() {
 
                   {/* Stat 2: Solar/Power */}
                   <div className="flex items-center gap-4 p-4 rounded-2xl bg-black/40 border border-white/5">
-                    <Zap size={18} className="text-[#cddfa0]" />
+                    <Zap size={18} className="text-[var(--accent)]" />
                     <div>
                       <p className="text-white/40 text-[9px] uppercase tracking-widest font-bold">Energy Grid</p>
                       <p className="text-white text-sm font-semibold tracking-wide">{activeState.stats.power}</p>
@@ -197,7 +197,7 @@ export default function AtmosphericSimulator() {
 
                   {/* Stat 3: Security */}
                   <div className="flex items-center gap-4 p-4 rounded-2xl bg-black/40 border border-white/5">
-                    <ShieldCheck size={18} className="text-[#cddfa0]" />
+                    <ShieldCheck size={18} className="text-[var(--accent)]" />
                     <div>
                       <p className="text-white/40 text-[9px] uppercase tracking-widest font-bold">Security Level</p>
                       <p className="text-white text-sm font-semibold tracking-wide">{activeState.stats.security}</p>
@@ -213,3 +213,4 @@ export default function AtmosphericSimulator() {
     </section>
   );
 }
+

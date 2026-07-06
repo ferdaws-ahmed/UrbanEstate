@@ -36,7 +36,7 @@ const Amenities = ({ amenities, updateAmenities }) => {
   };
 
   return (
-    <div className={`p-8 md:p-12 rounded-[2.5rem] border transition-all duration-500 group/section shadow-2xl ${isDark ? 'bg-[#0b1f1a] border-[#1a4a40]/30 shadow-none' : 'bg-white border-slate-200 shadow-slate-200/40'}`}>
+    <div className={`p-8 md:p-12 rounded-[2.5rem] border transition-all duration-500 group/section shadow-2xl ${isDark ? 'bg-[var(--card)] border-white/30 shadow-none' : 'bg-white border-slate-200 shadow-slate-200/40'}`}>
       
       {/* SECTION HEADER */}
       <div className="mb-12">
@@ -73,8 +73,8 @@ const Amenities = ({ amenities, updateAmenities }) => {
               className={`
                 relative group flex flex-col items-center justify-center p-8 rounded-[2rem] border-2 transition-all duration-500 transform
                 ${isSelected 
-                  ? (isDark ? 'border-teal-500 bg-[#1a4a40]/30 scale-[0.96] shadow-2xl shadow-teal-500/10' : 'border-teal-500 bg-teal-50/40 scale-[0.96] shadow-xl shadow-teal-500/20')
-                  : (isDark ? 'border-[#1a4a40]/10 bg-[#061510] hover:border-teal-800/50 hover:-translate-y-2' : 'border-slate-100 bg-slate-50 hover:border-teal-300 hover:-translate-y-2 hover:shadow-lg')
+                  ? (isDark ? 'border-teal-500 bg-[var(--card)]/30 scale-[0.96] shadow-2xl shadow-teal-500/10' : 'border-teal-500 bg-teal-50/40 scale-[0.96] shadow-xl shadow-teal-500/20')
+                  : (isDark ? 'border-white/10 bg-[var(--card)] hover:border-teal-800/50 hover:-translate-y-2' : 'border-slate-100 bg-slate-50 hover:border-teal-300 hover:-translate-y-2 hover:shadow-lg')
                 }
               `}
             >
@@ -101,7 +101,7 @@ const Amenities = ({ amenities, updateAmenities }) => {
       </div>
 
       {/* FOOTER COUNTER */}
-      <div className={`mt-12 flex items-center justify-between border-t pt-10 ${isDark ? 'border-[#1a4a40]/30' : 'border-slate-200'}`}>
+      <div className={`mt-12 flex items-center justify-between border-t pt-10 ${isDark ? 'border-white/30' : 'border-slate-200'}`}>
         <div className="flex items-center gap-3">
           <div className={`w-10 h-10 rounded-2xl flex items-center justify-center border ${isDark ? 'bg-teal-900/20 border-teal-900/30' : 'bg-teal-50 border-teal-200 shadow-sm'}`}>
             <span className={`text-sm font-black ${isDark ? 'text-[#cddfa0]' : 'text-teal-600'}`}>{amenities.length}</span>
@@ -117,7 +117,7 @@ const Amenities = ({ amenities, updateAmenities }) => {
             onClick={() => updateAmenities([])}
             className={`text-[10px] font-black uppercase tracking-[0.25em] transition-all flex items-center gap-2 group/clear ${isDark ? 'text-slate-600 hover:text-rose-400' : 'text-slate-500 hover:text-rose-600'}`}
           >
-            <div className={`w-6 h-6 rounded-lg flex items-center justify-center transition-colors ${isDark ? 'bg-[#061510] group-hover/clear:bg-rose-900/20' : 'bg-slate-100 group-hover/clear:bg-rose-100 shadow-sm'}`}>
+            <div className={`w-6 h-6 rounded-lg flex items-center justify-center transition-colors ${isDark ? 'bg-[var(--card)] group-hover/clear:bg-rose-900/20' : 'bg-slate-100 group-hover/clear:bg-rose-100 shadow-sm'}`}>
               <svg className="w-3.5 h-3.5 group-hover/clear:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -131,3 +131,4 @@ const Amenities = ({ amenities, updateAmenities }) => {
 };
 
 export default Amenities;
+

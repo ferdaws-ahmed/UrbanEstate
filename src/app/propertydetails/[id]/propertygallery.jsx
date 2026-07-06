@@ -23,16 +23,16 @@ export default function PropertyGallery({ images = [] }) {
       <div className="lg:col-span-9 flex flex-col gap-6">
         
         {/* বড় ইমেজ: এস্পেক্ট রেশিও মোবাইলেও ১৬:৯ রাখা হয়েছে */}
-        <div className="relative aspect-video w-full rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden border border-white/10 bg-[#040f0c] shadow-2xl">
+        <div className="relative aspect-video w-full rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden border border-white/10 bg-[var(--card)] shadow-2xl">
           <img 
             src={gallery[selectedImage]} 
             className="w-full h-full object-cover transition-all duration-500 ease-out" 
             alt="Main Asset View"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#061510]/40 to-transparent pointer-events-none"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#099880]/40 to-transparent pointer-events-none"></div>
           
           <div className="absolute bottom-4 left-4 md:bottom-6 md:left-6">
-            <span className="bg-black/40 backdrop-blur-md text-[#cddfa0] text-[8px] md:text-[9px] font-mono border border-white/10 px-3 py-1.5 md:px-4 md:py-2 rounded-full tracking-[0.2em] uppercase">
+            <span className="bg-black/40 backdrop-blur-md text-[var(--accent)] text-[8px] md:text-[9px] font-mono border border-white/10 px-3 py-1.5 md:px-4 md:py-2 rounded-full tracking-[0.2em] uppercase">
               Unit View 0{selectedImage + 1} // Active
             </span>
           </div>
@@ -46,7 +46,7 @@ export default function PropertyGallery({ images = [] }) {
               onClick={() => setSelectedImage(i)}
               className={`relative aspect-video rounded-xl md:rounded-2xl overflow-hidden border-2 transition-all duration-300 ${
                 selectedImage === i 
-                ? "border-[#cddfa0] scale-[0.98] shadow-lg" 
+                ? "border-[var(--accent)] scale-[0.98] shadow-lg" 
                 : "border-white/5 opacity-40 hover:opacity-100"
               }`}
             >
@@ -66,7 +66,7 @@ export default function PropertyGallery({ images = [] }) {
                 onClick={() => setSelectedImage(actualIndex)}
                 className={`relative flex-1 w-full rounded-2xl overflow-hidden border-2 transition-all duration-300 ${
                   selectedImage === actualIndex 
-                  ? "border-[#cddfa0] scale-[0.98]" 
+                  ? "border-[var(--accent)] scale-[0.98]" 
                   : "border-white/5 opacity-40 hover:opacity-100"
                 }`}
               >
@@ -84,7 +84,7 @@ export default function PropertyGallery({ images = [] }) {
       {/* মোবাইলের জন্য অতিরিক্ত ইমেজ (Hidden on Desktop) */}
       {allThumbnailsMobile.length > 0 && (
         <div className="lg:hidden mt-4">
-          <h4 className="text-[#cddfa0]/60 text-[10px] uppercase tracking-[0.3em] font-bold mb-3 px-1">Additional Angles</h4>
+          <h4 className="text-[var(--accent)]/60 text-[10px] uppercase tracking-[0.3em] font-bold mb-3 px-1">Additional Angles</h4>
           {/* স্ক্রলযোগ্য রো (Scrollable Row) */}
           <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
             {allThumbnailsMobile.map((img, i) => {
@@ -95,7 +95,7 @@ export default function PropertyGallery({ images = [] }) {
                   onClick={() => setSelectedImage(actualIndex)}
                   className={`relative flex-shrink-0 w-28 aspect-video rounded-xl overflow-hidden border-2 transition-all duration-300 ${
                     selectedImage === actualIndex 
-                    ? "border-[#cddfa0] scale-[0.98]" 
+                    ? "border-[var(--accent)] scale-[0.98]" 
                     : "border-white/5 opacity-40 hover:opacity-100"
                   }`}
                 >

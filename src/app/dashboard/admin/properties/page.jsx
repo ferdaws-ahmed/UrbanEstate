@@ -5,3 +5,4 @@ import Properties from "@/src/components/dashboard/admin/HomePageRelated/Propert
 export default function PropertiesPage() {
   return <Properties />;
 }
+

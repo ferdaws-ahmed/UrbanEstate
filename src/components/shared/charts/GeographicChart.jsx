@@ -18,7 +18,7 @@ export default function GeographicChart({ data }) {
       return (
         <div className="bg-white dark:bg-[#1a4a40] border border-gray-200 dark:border-[#1a4a40]/60 rounded-lg p-3 shadow-lg">
           <p className="text-sm font-medium text-gray-900 dark:text-white">{label}</p>
-          <p className="text-sm text-[#cddfa0]">{`Properties: ${data.properties}`}</p>
+          <p className="text-sm text-[var(--accent)]">{`Properties: ${data.properties}`}</p>
           <p className="text-sm text-blue-600 dark:text-blue-400">{`Sales: ${data.sales}`}</p>
           <p className="text-sm text-green-600 dark:text-green-400">{`Revenue: ${formatCurrency(data.revenue)}`}</p>
         </div>
@@ -70,3 +70,4 @@ export default function GeographicChart({ data }) {
     </div>
   );
 }
+

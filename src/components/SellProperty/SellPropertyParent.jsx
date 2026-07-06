@@ -165,7 +165,7 @@ const SellPropertyParent = () => {
           {/* Sticky Sidebar / Action Panel (Right Side) */}
           <div className="lg:col-span-1 sticky top-10 self-start h-fit z-30">
             <div className="space-y-8">
-              <div className={`p-8 md:p-10 rounded-[2.5rem] border transition-all duration-500 shadow-2xl ${isDark ? 'bg-[#0b1f1a] border-[#1a4a40]/40 shadow-none' : 'bg-white border-slate-200 shadow-slate-200/60'}`}>
+              <div className={`p-8 md:p-10 rounded-[2.5rem] border transition-all duration-500 shadow-2xl ${isDark ? 'bg-[var(--card)] border-white/40 shadow-none' : 'bg-white border-slate-200 shadow-slate-200/60'}`}>
                 <h3 className={`text-xl font-black mb-8 uppercase tracking-[0.2em] flex items-center gap-3 ${isDark ? 'text-white' : 'text-slate-900'}`}>
                   <span className="w-2.5 h-8 bg-teal-500 rounded-full shadow-[0_0_15px_rgba(20,184,166,0.4)]"></span>
                   Summary
@@ -188,7 +188,7 @@ const SellPropertyParent = () => {
                     </div>
                   </div>
 
-                  <div className={`pt-6 border-t ${isDark ? 'border-[#1a4a40]/30' : 'border-slate-200'}`}>
+                  <div className={`pt-6 border-t ${isDark ? 'border-white/30' : 'border-slate-200'}`}>
                     <div className="flex justify-between items-center">
                       <span className={`text-[10px] font-black uppercase tracking-[0.25em] ${isDark ? 'text-slate-500' : 'text-slate-500'}`}>Status</span>
                       <span className={`px-4 py-1.5 text-[10px] font-black rounded-full uppercase tracking-[0.2em] border ${isDark ? 'bg-teal-900/30 text-[#cddfa0] border-teal-800/50' : 'bg-teal-50 text-teal-700 border-teal-200'}`}>
@@ -217,7 +217,7 @@ const SellPropertyParent = () => {
                     type="button" 
                     onClick={handleSaveDraft}
                     disabled={loading || isDrafting}
-                    className={`w-full py-5 font-black rounded-[1.5rem] transition-all uppercase tracking-[0.2em] text-sm disabled:opacity-70 border ${isDark ? 'bg-[#061510] border-[#1a4a40]/60 text-slate-300 hover:bg-[#1a4a40]/40' : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50 shadow-sm'}`}
+                    className={`w-full py-5 font-black rounded-[1.5rem] transition-all uppercase tracking-[0.2em] text-sm disabled:opacity-70 border ${isDark ? 'bg-[var(--card)] border-white/60 text-slate-300 hover:bg-[var(--card)]/40' : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50 shadow-sm'}`}
                   >
                     {isDrafting ? "Saving..." : "Save as Draft"}
                   </button>
@@ -249,3 +249,4 @@ const SellPropertyParent = () => {
 };
 
 export default SellPropertyParent;
+

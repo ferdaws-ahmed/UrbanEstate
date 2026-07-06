@@ -2,33 +2,77 @@
 
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '@/src/components/Theme/ThemeContext'; 
-import { Search, Filter, MoreVertical, Edit, Trash2, Eye, LayoutGrid, List, User, Mail, Calendar, MapPin } from 'lucide-react';
+import { Search, Filter, MoreVertical, Edit, Trash2, Eye, LayoutGrid, List, User, Mail, Calendar, MapPin, Star } from 'lucide-react';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 export default function Properties() {
   const { isDark } = useTheme(); 
   const [properties, setProperties] = useState([]);
+  const [featuredPropertyIds, setFeaturedPropertyIds] = useState(new Set());
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'grid'
 
   useEffect(() => {
-    const fetchProperties = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch('/api/admin/properties');
-        if (!response.ok) throw new Error('Failed to fetch properties');
-        const data = await response.json();
-        setProperties(data);
+        const [propertiesRes, featuredRes] = await Promise.all([
+          fetch('/api/admin/properties'),
+          fetch('/api/featured-properties')
+        ]);
+        
+        if (!propertiesRes.ok) throw new Error('Failed to fetch properties');
+        const propertiesData = await propertiesRes.json();
+        setProperties(propertiesData);
+
+        if (featuredRes.ok) {
+          const featuredData = await featuredRes.json();
+          setFeaturedPropertyIds(new Set(featuredData.map(p => p._id || p.propertyId)));
+        }
       } catch (error) {
-        console.error("Error fetching properties:", error);
+        console.error("Error fetching data:", error);
         toast.error("Failed to load properties");
       } finally {
         setIsLoading(false);
       }
     };
-    fetchProperties();
+    fetchData();
   }, []);
+
+  const toggleFeatured = async (propertyId) => {
+    try {
+      const isCurrentlyFeatured = featuredPropertyIds.has(propertyId);
+      const method = isCurrentlyFeatured ? 'DELETE' : 'POST';
+      
+      const response = await fetch('/api/featured-properties', {
+        method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ propertyId })
+      });
+
+      if (response.ok) {
+        setFeaturedPropertyIds(prev => {
+          const newSet = new Set(prev);
+          if (isCurrentlyFeatured) {
+            newSet.delete(propertyId);
+          } else {
+            newSet.add(propertyId);
+          }
+          return newSet;
+        });
+        toast.success(isCurrentlyFeatured ? "Removed from featured" : "Added to featured");
+      } else {
+          toast.error("Failed to update featured status");
+        }
+    } catch (error) {
+      console.error("Error toggling featured:", error);
+      toast.error("Failed to update featured status");
+    }
+  };
 
   const categories = ['All', ...new Set(properties.map(p => p.category || p.type).filter(Boolean))];
 
@@ -66,7 +110,7 @@ export default function Properties() {
       
       {/* Category Sorting Navbar-like Header */}
       <div className={`sticky top-0 z-30 mb-8 p-2 rounded-2xl border backdrop-blur-md transition-all duration-300 ${
-        isDark ? 'bg-[#133c34]/80 border-[#1a4a40] shadow-xl shadow-black/20' : 'bg-white/80 border-gray-200 shadow-lg shadow-gray-200/50'
+        isDark ? 'bg-[var(--card)]/80 border-white/10 shadow-xl shadow-black/20' : 'bg-white/80 border-gray-200 shadow-lg shadow-gray-200/50'
       }`}>
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-2">
           {/* Categories */}
@@ -96,12 +140,12 @@ export default function Properties() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className={`w-full pl-10 pr-4 py-2 rounded-xl text-xs border focus:outline-none transition-all duration-300 ${
-                  isDark ? 'bg-black/20 border-[#1a4a40] text-white focus:border-emerald-500' : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-emerald-500'
+                  isDark ? 'bg-black/20 border-white/10 text-white focus:border-emerald-500' : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-emerald-500'
                 }`}
               />
             </div>
             
-            <div className={`flex items-center p-1 rounded-xl border ${isDark ? 'bg-black/20 border-[#1a4a40]' : 'bg-gray-50 border-gray-200'}`}>
+            <div className={`flex items-center p-1 rounded-xl border ${isDark ? 'bg-black/20 border-white/10' : 'bg-gray-50 border-gray-200'}`}>
               <button 
                 onClick={() => setViewMode('table')}
                 className={`p-1.5 rounded-lg transition-all ${viewMode === 'table' ? (isDark ? 'bg-emerald-500 text-white' : 'bg-white text-emerald-600 shadow-sm') : 'text-gray-500'}`}
@@ -121,11 +165,11 @@ export default function Properties() {
 
       {/* Property List */}
       {viewMode === 'table' ? (
-        <div className={`rounded-3xl border overflow-hidden transition-all duration-300 ${isDark ? 'bg-[#133c34]/40 border-[#1a4a40]' : 'bg-white border-gray-200 shadow-sm'}`}>
+        <div className={`rounded-3xl border overflow-hidden transition-all duration-300 ${isDark ? 'bg-[var(--card)]/40 border-white/10' : 'bg-white border-gray-200 shadow-sm'}`}>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className={`border-b ${isDark ? 'border-[#1a4a40] bg-black/20' : 'border-gray-100 bg-gray-50'}`}>
+                <tr className={`border-b ${isDark ? 'border-white/10 bg-black/20' : 'border-gray-100 bg-gray-50'}`}>
                   <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500">Property Details</th>
                   <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500">Seller Information</th>
                   <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-500">Price & Specs</th>
@@ -188,8 +232,14 @@ export default function Properties() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-white hover:bg-emerald-500/20' : 'bg-gray-100 text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'}`}>
+                        <Link href={`/propertydetails/${p._id}`} className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-white hover:bg-emerald-500/20' : 'bg-gray-100 text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'}`}>
                           <Eye size={16} />
+                        </Link>
+                        <button 
+                          onClick={() => toggleFeatured(p._id)}
+                          className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-white hover:bg-yellow-500/20' : 'bg-gray-100 text-gray-600 hover:text-yellow-600 hover:bg-yellow-50'} ${featuredPropertyIds.has(p._id) ? (isDark ? 'text-yellow-400 bg-yellow-500/20' : 'text-yellow-600 bg-yellow-50') : ''}`}
+                        >
+                          <Star size={16} fill={featuredPropertyIds.has(p._id) ? 'currentColor' : 'none'} />
                         </button>
                         <button className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-white hover:bg-blue-500/20' : 'bg-gray-100 text-gray-600 hover:text-blue-600 hover:bg-blue-50'}`}>
                           <Edit size={16} />
@@ -211,7 +261,7 @@ export default function Properties() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredProperties.map((p) => (
-            <div key={p._id} className={`group rounded-[2rem] border overflow-hidden transition-all duration-500 hover:scale-[1.02] ${isDark ? 'bg-[#133c34]/40 border-[#1a4a40] hover:bg-[#133c34]' : 'bg-white border-gray-200 hover:shadow-2xl shadow-gray-200/50'}`}>
+            <div key={p._id} className={`group rounded-[2rem] border overflow-hidden transition-all duration-500 hover:scale-[1.02] ${isDark ? 'bg-[var(--card)]/40 border-white/10 hover:bg-[var(--card)]' : 'bg-white border-gray-200 hover:shadow-2xl shadow-gray-200/50'}`}>
               <div className="relative h-48 overflow-hidden">
                 <img 
                   src={p.images?.[0] || "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400"} 
@@ -257,10 +307,22 @@ export default function Properties() {
                 <div className="flex items-center justify-between">
                   <p className={`text-sm font-black ${isDark ? 'text-[#cddfa0]' : 'text-emerald-700'}`}>$ {p.price?.toLocaleString()}</p>
                   <div className="flex gap-2">
-                    <button className={`p-2 rounded-xl ${isDark ? 'bg-white/5 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-600 hover:text-emerald-600'}`}>
+                    <Link href={`/propertydetails/${p._id}`} className={`p-2 rounded-xl ${isDark ? 'bg-white/5 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-600 hover:text-emerald-600'}`}>
+                      <Eye size={14} />
+                    </Link>
+                    <button 
+                      onClick={() => toggleFeatured(p._id)}
+                      className={`p-2 rounded-xl ${isDark ? 'bg-white/5 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-600 hover:text-yellow-600'} ${featuredPropertyIds.has(p._id) ? (isDark ? 'text-yellow-400 bg-yellow-500/20' : 'text-yellow-600 bg-yellow-50') : ''}`}
+                    >
+                      <Star size={14} fill={featuredPropertyIds.has(p._id) ? 'currentColor' : 'none'} />
+                    </button>
+                    <button className={`p-2 rounded-xl ${isDark ? 'bg-white/5 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-600 hover:text-blue-600'}`}>
                       <Edit size={14} />
                     </button>
-                    <button className={`p-2 rounded-xl ${isDark ? 'bg-white/5 text-gray-400 hover:text-red-400' : 'bg-gray-100 text-gray-600 hover:text-red-600'}`}>
+                    <button 
+                      onClick={() => handleDelete(p._id)}
+                      className={`p-2 rounded-xl ${isDark ? 'bg-white/5 text-gray-400 hover:text-red-400' : 'bg-gray-100 text-gray-600 hover:text-red-600'}`}
+                    >
                       <Trash2 size={14} />
                     </button>
                   </div>
@@ -280,3 +342,4 @@ export default function Properties() {
     </div>
   );
 }
+

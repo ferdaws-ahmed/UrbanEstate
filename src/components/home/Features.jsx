@@ -54,16 +54,16 @@ const Features = () => {
   const clearSelection = () => setSelected([]);
 
   return (
-    <section className={`w-full py-24 px-4 lg:px-10 ${isDark ? "bg-[#0f2e28]" : "bg-white"} ${manrope.className}`}>
+    <section className={`w-full py-24 px-4 lg:px-10 ${isDark ? "bg-[var(--background)]" : "bg-white"} ${manrope.className}`}>
       <div className="container mx-auto max-w-7xl">
         
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-16 space-y-4">
-          <div className={`flex items-center gap-2 ${isDark?"text-[#cddfa0]":"text-[#13332c]"} font-bold tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[#cddfa0]/10"} px-5 py-2 rounded-full border ${isDark ? "border-white/10" : "border-[#0f2e28]/10"}`}>
+          <div className={`flex items-center gap-2 ${isDark?"text-[var(--accent)]":"text-[var(--card-foreground)]"} font-bold tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[var(--primary)]/10"} px-5 py-2 rounded-full border ${isDark ? "border-white/10" : "border-[var(--primary)]/10"}`}>
             <ShieldCheck size={14} /> AI-Verified Premium Properties
           </div>
           <h2 className={`text-4xl lg:text-5xl font-bold ${isDark?"text-white":"text-black"} leading-tight`}>
-            Featured <span className={` italic font-light tracking-tight ${isDark?"text-[#cddfa0]":"text-[#1a3d36]"}`}>Properties</span>
+            Featured <span className={` italic font-light tracking-tight ${isDark?"text-[var(--accent)]":"text-[#1a3d36]"}`}>Properties</span>
           </h2>
         </div>
 
@@ -74,10 +74,10 @@ const Features = () => {
             return (
               <div 
                 key={p.id}
-                className={`group relative  ${isDark?"bg-[#13332c]":"bg-white"}  rounded-[2.2rem] overflow-hidden border transition-all duration-200 shadow-xl ${isSelected ? "border-[#cddfa0] ring-1 ring-[#cddfa0]/30" : "border-white/5 hover:border-[#cddfa0]/40"}`}
+                className={`group relative  ${isDark?"bg-[var(--card)]":"bg-white"}  rounded-[2.2rem] overflow-hidden border transition-all duration-200 shadow-xl ${isSelected ? "border-[var(--accent)] ring-1 ring-[#cddfa0]/30" : "border-white/5 hover:border-[var(--accent)]/40"}`}
               >
      
-                <div className={`relative h-56 w-full overflow-hidden ${isDark?"bg-[#1a3d36]":"bg-white"}`}>
+                <div className={`relative h-56 w-full overflow-hidden ${isDark?"bg-[#0a7a68]":"bg-white"}`}>
                   <img 
                     src={p.image} 
                     alt={p.title} 
@@ -85,23 +85,23 @@ const Features = () => {
                     loading="eager" 
                   />
                   <div className="absolute top-4 left-4">
-                    <div className={`bg-[#0f2e28]/90 backdrop-blur-md text-[#cddfa0] ${isDark?"text-[#cddfa0]":"text-[#13332c]"} text-[8px] font-bold px-3 py-1 rounded-full border border-white/10 tracking-widest uppercase`}>Featured</div>
+                    <div className={`bg-[var(--card)]/90 backdrop-blur-md text-[var(--accent)] ${isDark?"text-[var(--accent)]":"text-[var(--card-foreground)]"} text-[8px] font-bold px-3 py-1 rounded-full border border-white/10 tracking-widest uppercase`}>Featured</div>
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#13332c]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#066e5b]/80 via-transparent to-transparent opacity-60 pointer-events-none" />
                 </div>
 
                 <div className="p-6">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className={`font-bold text-[15px] ${isDark?"text-white":"text-black"} group-hover:text-[#cddfa0] transition-colors truncate pr-2`}>{p.title}</h3>
+                    <h3 className={`font-bold text-[15px] ${isDark?"text-white":"text-black"} group-hover:text-[var(--accent)] transition-colors truncate pr-2`}>{p.title}</h3>
                     <button onClick={() => toggleSelect(p)} className="flex items-center gap-2 cursor-pointer outline-none bg-transparent border-none">
-                      <span className={`text-[10px] font-black uppercase tracking-wider transition-colors ${isSelected ? "text-[#cddfa0]" : `${isDark?"text-white/40":"text-black/40"} group-hover:text-[#cddfa0]`}`}>COMPARE</span>
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${isSelected ? "bg-[#cddfa0] border-[#cddfa0] shadow-[0_0_10px_rgba(205,223,160,0.5)]" : ` ${isDark?"bg-[#13332c] border-white/20":"bg-white border-black/20"}` }`}>
-                        {isSelected && <Check size={14} className="text-[#0f2e28] stroke-[4]" />}
+                      <span className={`text-[10px] font-black uppercase tracking-wider transition-colors ${isSelected ? "text-[var(--accent)]" : `${isDark?"text-white/40":"text-black/40"} group-hover:text-[var(--accent)]`}`}>COMPARE</span>
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${isSelected ? "bg-[var(--primary)] border-[var(--accent)] shadow-[0_0_10px_rgba(205,223,160,0.5)]" : ` ${isDark?"bg-[var(--card)] border-white/20":"bg-white border-black/20"}` }`}>
+                        {isSelected && <Check size={14} className="text-[var(--card-foreground)] stroke-[4]" />}
                       </div>
                     </button>
                   </div>
 
-                  <div className="text-xl font-black text-[#cddfa0] mb-5 tracking-tight">{p.price}</div>
+                  <div className="text-xl font-black text-[var(--accent)] mb-5 tracking-tight">{p.price}</div>
 
                   <div className={`flex items-center justify-between border-y ${isDark?"border-white/5":"border-black/5"} py-4 mb-6 px-1`}>
                     <div className={`flex flex-col items-center gap-1 ${isDark?"text-white/40":"text-black/40"}`}>
@@ -122,9 +122,9 @@ const Features = () => {
 
               
                   <Link href={`/property/${p.id}`} prefetch={true}>
-                    <div className={`w-full flex items-center justify-center gap-2 ${isDark?"bg-[#0f2e28]":"bg-white"} ${isDark?"text-white":"text-black"} py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest border border-white/10 transition-all duration-200 group/btn shadow-lg active:scale-95 cursor-pointer`}>
-                      <span className="group-hover/btn:text-[#cddfa0] transition-colors">View Details</span>
-                      <ArrowUpRight size={16} className="group-hover/btn:text-[#cddfa0] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-all" />
+                    <div className={`w-full flex items-center justify-center gap-2 ${isDark?"bg-[var(--card)]":"bg-white"} ${isDark?"text-white":"text-black"} py-3.5 rounded-2xl text-[11px] font-black uppercase tracking-widest border border-white/10 transition-all duration-200 group/btn shadow-lg active:scale-95 cursor-pointer`}>
+                      <span className="group-hover/btn:text-[var(--accent)] transition-colors">View Details</span>
+                      <ArrowUpRight size={16} className="group-hover/btn:text-[var(--accent)] group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-all" />
                     </div>
                   </Link>
                 </div>
@@ -141,3 +141,4 @@ const Features = () => {
 };
 
 export default Features;
+

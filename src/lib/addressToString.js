@@ -32,3 +32,4 @@ export function addressToString(addr, location) {
   }
   return "";
 }
+

@@ -56,14 +56,14 @@ export default function SmartInventorySnapshot({ inventory }) {
       {/* Global Dynamic Toast Message */}
       <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[100] px-6 py-4 rounded-2xl backdrop-blur-xl border shadow-2xl flex items-center gap-3 transition-all duration-500 ease-out w-[90%] sm:w-auto justify-center ${
         toastMessage ? "translate-y-0 opacity-100 scale-100" : "-translate-y-10 opacity-0 scale-95 pointer-events-none"
-      } ${isDark ? "bg-[#133c34]/95 border-[#cddfa0]/50 text-[#cddfa0]" : "bg-white/95 border-emerald-200 text-emerald-600"}`}>
+      } ${isDark ? "bg-[var(--card)]/95 border-[#cddfa0]/50 text-[#cddfa0]" : "bg-white/95 border-emerald-200 text-emerald-600"}`}>
         <CheckCircle2 size={24} className="shrink-0" />
         <span className="text-[14px] sm:text-[16px] font-black tracking-wide">{toastMessage}</span>
       </div>
 
       <div className={`p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] border backdrop-blur-xl transition-all duration-500 shadow-xl h-full flex flex-col overflow-hidden relative ${
         isDark 
-          ? 'bg-gradient-to-b from-[#133c34]/80 to-[#091a16] border-[#1a4a40] shadow-black/40 text-white' 
+          ? 'bg-gradient-to-b from-[var(--card)]/80 to-[var(--background)] border-white/10 shadow-black/40 text-white' 
           : 'bg-white/80 border-gray-200 shadow-gray-200/50 text-gray-900'
       }`}>
         
@@ -112,13 +112,13 @@ export default function SmartInventorySnapshot({ inventory }) {
                     
                     <div className="flex items-center gap-2 mt-1.5 flex-wrap">
                       {/* ROI Indicator */}
-                      <div className={`flex items-center gap-1 text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded-sm ${isDark ? 'bg-[#1a4a40] text-gray-300' : 'bg-gray-200 text-gray-600'}`}>
+                      <div className={`flex items-center gap-1 text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded-sm ${isDark ? 'bg-[var(--card)] text-gray-300' : 'bg-gray-200 text-gray-600'}`}>
                         <TrendingUp size={10} className={isDark ? 'text-[#cddfa0]' : 'text-blue-500'} />
                         <span>ROI: <span className={isDark ? 'text-[#cddfa0]' : 'text-blue-600'}>{item.roi}</span></span>
                       </div>
                       
                       {/* Days on Market Indicator */}
-                      <div className={`flex items-center gap-1 text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded-sm ${isDark ? 'bg-[#1a4a40] text-gray-400' : 'bg-gray-200 text-gray-500'}`}>
+                      <div className={`flex items-center gap-1 text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded-sm ${isDark ? 'bg-[var(--card)] text-gray-400' : 'bg-gray-200 text-gray-500'}`}>
                         <span>{item.daysOnMarket} Days</span>
                       </div>
                     </div>
@@ -147,7 +147,7 @@ export default function SmartInventorySnapshot({ inventory }) {
                   {/* Dropdown Menu */}
                   {openDropdownIndex === index && (
                     <div className={`absolute right-0 top-full mt-1.5 w-24 rounded-lg shadow-xl border z-50 overflow-hidden backdrop-blur-xl ${
-                      isDark ? "bg-[#091a16]/95 border-[#1a4a40]" : "bg-white/95 border-gray-200"
+                      isDark ? "bg-[var(--background)]/95 border-white/10" : "bg-white/95 border-gray-200"
                     }`}>
                       {statusOptions.map(opt => (
                         <button
@@ -181,7 +181,7 @@ export default function SmartInventorySnapshot({ inventory }) {
             background: transparent;
           }
           .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: ${isDark ? '#1a4a40' : '#e2e8f0'};
+            background: ${isDark ? 'var(--card)' : '#e2e8f0'};
             border-radius: 10px;
           }
           .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -195,3 +195,4 @@ export default function SmartInventorySnapshot({ inventory }) {
     </>
   );
 }
+

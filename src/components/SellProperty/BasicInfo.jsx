@@ -25,14 +25,14 @@ const BasicInfo = ({ formData, updateField }) => {
     w-full px-6 py-4.5 rounded-[1.25rem] 
     border-2 outline-none transition-all duration-300 shadow-sm
     ${isDark 
-      ? 'border-[#1a4a40]/40 bg-[#061510] text-slate-100 placeholder-slate-500 focus:ring-teal-500/10 focus:border-teal-500/50 focus:bg-[#0b1f1a] hover:border-teal-800/60' 
+      ? 'border-white/40 bg-[var(--card)] text-slate-100 placeholder-slate-500 focus:ring-teal-500/10 focus:border-teal-500/50 focus:bg-[var(--card)] hover:border-teal-800/60' 
       : 'border-slate-200 bg-white text-slate-900 placeholder-slate-500 focus:ring-teal-500/10 focus:border-teal-500/50 focus:bg-white hover:border-teal-300 shadow-inner'}
   `;
 
   const labelStyle = `block text-[10px] font-black mb-2.5 ml-2 uppercase tracking-[0.25em] ${isDark ? 'text-slate-500' : 'text-slate-600'}`;
 
   return (
-    <div className={`p-8 md:p-12 rounded-[2.5rem] border transition-all duration-500 group/section shadow-2xl ${isDark ? 'bg-[#0b1f1a] border-[#1a4a40]/30 shadow-none' : 'bg-white border-slate-200 shadow-slate-200/40'}`}>
+    <div className={`p-8 md:p-12 rounded-[2.5rem] border transition-all duration-500 group/section shadow-2xl ${isDark ? 'bg-[var(--card)] border-white/30 shadow-none' : 'bg-white border-slate-200 shadow-slate-200/40'}`}>
       
       <div className="mb-12">
         <div className="flex items-center gap-4 mb-3">
@@ -94,11 +94,11 @@ const BasicInfo = ({ formData, updateField }) => {
                 onChange={(e) => updateField("category", e.target.value)}
                 required
               >
-                <option value="" className={isDark ? "bg-[#061510]" : "bg-white"}>Select Category</option>
-                <option value="Residential" className={isDark ? "bg-[#061510]" : "bg-white"}>Residential</option>
-                <option value="Commercial" className={isDark ? "bg-[#061510]" : "bg-white"}>Commercial</option>
-                <option value="Industrial" className={isDark ? "bg-[#061510]" : "bg-white"}>Industrial</option>
-                <option value="Land" className={isDark ? "bg-[#061510]" : "bg-white"}>Land/Plot</option>
+                <option value="" className={isDark ? "bg-[var(--card)]" : "bg-white"}>Select Category</option>
+                <option value="Residential" className={isDark ? "bg-[var(--card)]" : "bg-white"}>Residential</option>
+                <option value="Commercial" className={isDark ? "bg-[var(--card)]" : "bg-white"}>Commercial</option>
+                <option value="Industrial" className={isDark ? "bg-[var(--card)]" : "bg-white"}>Industrial</option>
+                <option value="Land" className={isDark ? "bg-[var(--card)]" : "bg-white"}>Land/Plot</option>
               </select>
               <div className={`absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none ${isDark ? 'text-slate-500' : 'text-slate-600'}`}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -113,7 +113,7 @@ const BasicInfo = ({ formData, updateField }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           <div>
             <label className={labelStyle}>Listing Status</label>
-            <div className={`flex p-2 rounded-[1.5rem] border-2 transition-all duration-500 ${isDark ? 'bg-[#061510] border-[#1a4a40]/40' : 'bg-slate-100 border-slate-200 shadow-inner'}`}>
+            <div className={`flex p-2 rounded-[1.5rem] border-2 transition-all duration-500 ${isDark ? 'bg-[var(--card)] border-white/40' : 'bg-slate-100 border-slate-200 shadow-inner'}`}>
               {['For Sale', 'For Rent'].map((status) => (
                 <button
                   key={status}
@@ -122,7 +122,7 @@ const BasicInfo = ({ formData, updateField }) => {
                   className={`
                     flex-1 py-3.5 px-6 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500
                     ${formData.status === status 
-                      ? (isDark ? 'bg-[#1a4a40] text-[#cddfa0] shadow-xl shadow-teal-500/10' : 'bg-white text-teal-600 shadow-lg shadow-teal-500/10 border-slate-100')
+                      ? (isDark ? 'bg-[var(--card)] text-[#cddfa0] shadow-xl shadow-teal-500/10' : 'bg-white text-teal-600 shadow-lg shadow-teal-500/10 border-slate-100')
                       : (isDark ? 'text-slate-500 hover:text-slate-200' : 'text-slate-600 hover:text-slate-900')
                     }
                   `}
@@ -141,13 +141,13 @@ const BasicInfo = ({ formData, updateField }) => {
                 value={formData.propertyType}
                 onChange={(e) => updateField("propertyType", e.target.value)}
               >
-                <option value="" className={isDark ? "bg-[#061510]" : "bg-white"}>Select Type</option>
-                <option value="Apartment" className={isDark ? "bg-[#061510]" : "bg-white"}>Apartment</option>
-                <option value="House" className={isDark ? "bg-[#061510]" : "bg-white"}>House</option>
-                <option value="Villa" className={isDark ? "bg-[#061510]" : "bg-white"}>Villa</option>
-                <option value="Office" className={isDark ? "bg-[#061510]" : "bg-white"}>Office Space</option>
-                <option value="Studio" className={isDark ? "bg-[#061510]" : "bg-white"}>Studio</option>
-                <option value="Land" className={isDark ? "bg-[#061510]" : "bg-white"}>Land</option>
+                <option value="" className={isDark ? "bg-[var(--card)]" : "bg-white"}>Select Type</option>
+                <option value="Apartment" className={isDark ? "bg-[var(--card)]" : "bg-white"}>Apartment</option>
+                <option value="House" className={isDark ? "bg-[var(--card)]" : "bg-white"}>House</option>
+                <option value="Villa" className={isDark ? "bg-[var(--card)]" : "bg-white"}>Villa</option>
+                <option value="Office" className={isDark ? "bg-[var(--card)]" : "bg-white"}>Office Space</option>
+                <option value="Studio" className={isDark ? "bg-[var(--card)]" : "bg-white"}>Studio</option>
+                <option value="Land" className={isDark ? "bg-[var(--card)]" : "bg-white"}>Land</option>
               </select>
               <div className={`absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none ${isDark ? 'text-slate-500' : 'text-slate-600'}`}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,3 +185,4 @@ const BasicInfo = ({ formData, updateField }) => {
 };
 
 export default BasicInfo;
+

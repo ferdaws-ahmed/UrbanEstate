@@ -5,3 +5,4 @@ import Analytics from "@/src/components/dashboard/admin/AnalyticsRelated/Analyti
 export default function AnalyticsPage() {
   return <Analytics />;
 }
+

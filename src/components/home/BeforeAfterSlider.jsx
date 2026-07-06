@@ -57,13 +57,13 @@ export default function FuturisticAIStaging() {
   return (
     <section
       className={`w-full py-24 px-6 lg:px-12 ${
-        isDark ? "bg-[#0f2e28]" : "bg-white"
+        isDark ? "bg-[var(--background)]" : "bg-white"
       } relative overflow-hidden ${manrope.className}`}
     >
       {/* Background Cyber Glow */}
       <div
         className={`absolute top-1/4 left-1/3 w-[600px] h-[600px] ${
-          isDark ? "bg-[#cddfa0]/10" : "bg-[#0f2e28]/10"
+          isDark ? "bg-[var(--primary)]/10" : "bg-[var(--background)]/10"
         } blur-[150px] rounded-full pointer-events-none z-0`}
       ></div>
 
@@ -132,7 +132,7 @@ export default function FuturisticAIStaging() {
         <div className="flex flex-col items-center text-center mb-16">
           <div
             className={`inline-flex items-center gap-2 ${
-              isDark ? "text-[#cddfa0]" : "text-[#0f2e28]"
+              isDark ? "text-[var(--accent)]" : "text-[#099880]"
             } font-bold tracking-[0.4em] text-[10px] uppercase ${
               isDark ? "bg-white/5" : "bg-black/5"
             } px-5 py-2 rounded-full border ${
@@ -143,15 +143,15 @@ export default function FuturisticAIStaging() {
           </div>
           <h2
             className={`text-4xl lg:text-5xl font-black ${
-              isDark ? "text-white" : "text-[#0f2e28]"
+              isDark ? "text-white" : "text-[#099880]"
             } mb-6 tracking-tight leading-[1.1]`}
           >
             Unveil the{" "}
-            <span className="text-[#cddfa0] italic font-light">Future</span>
+            <span className="text-[var(--accent)] italic font-light">Future</span>
           </h2>
           <p
             className={`${
-              isDark ? "text-white/60" : "text-[#0f2e28]/60"
+              isDark ? "text-white/60" : "text-[#099880]/60"
             } text-lg leading-relaxed max-w-2xl mx-auto`}
           >
             Scan the blueprint. Our AI rendering engine instantly visualizes the
@@ -163,9 +163,9 @@ export default function FuturisticAIStaging() {
         <div className="max-w-5xl mx-auto relative group">
           <div
             className={`p-2 lg:p-3 ${
-              isDark ? "bg-[#081d19]/80" : "bg-white/80"
+              isDark ? "bg-[var(--card)]/80" : "bg-white/80"
             } backdrop-blur-xl rounded-[2.5rem] border ${
-              isDark ? "border-[#cddfa0]/20" : "border-[#0f2e28]/20"
+              isDark ? "border-[var(--accent)]/20" : "border-[var(--primary)]/20"
             } shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative`}
           >
             {/* Top Bar for Sci-Fi Look */}
@@ -174,7 +174,7 @@ export default function FuturisticAIStaging() {
                 <div className="w-2 h-2 rounded-full bg-[#ef4444] animate-pulse"></div>
                 <span
                   className={`${
-                    isDark ? "text-white/70" : "text-[#0f2e28]/70"
+                    isDark ? "text-white/70" : "text-[#099880]/70"
                   } text-[10px] font-bold tracking-[0.3em] uppercase`}
                 >
                   Rec / Scan Active
@@ -183,7 +183,7 @@ export default function FuturisticAIStaging() {
               <div
                 ref={dataTextRef}
                 className={`${
-                  isDark ? "text-[#cddfa0]" : "text-[#0f2e28]"
+                  isDark ? "text-[var(--accent)]" : "text-[#099880]"
                 } text-[10px] font-mono tracking-widest ${
                   isDark ? "bg-black/50" : "bg-white/50"
                 } px-3 py-1 rounded`}
@@ -228,15 +228,15 @@ export default function FuturisticAIStaging() {
 
           {/* Aesthetic Bottom Details */}
           <div className="flex justify-center mt-8 items-center gap-4">
-            <div className="w-16 h-[1px] bg-[#cddfa0]/30"></div>
+            <div className="w-16 h-[1px] bg-[var(--primary)]/30"></div>
             <span
               className={`text-[10px] ${
-                isDark ? "text-[#cddfa0]/60" : "text-[#0f2e28]/60"
+                isDark ? "text-[var(--accent)]/60" : "text-[#099880]/60"
               } font-black tracking-[0.4em] uppercase`}
             >
               Interactive Mode
             </span>
-            <div className="w-16 h-[1px] bg-[#cddfa0]/30"></div>
+            <div className="w-16 h-[1px] bg-[var(--primary)]/30"></div>
           </div>
         </div>
       </div>
@@ -253,3 +253,4 @@ export default function FuturisticAIStaging() {
     </section>
   );
 }
+

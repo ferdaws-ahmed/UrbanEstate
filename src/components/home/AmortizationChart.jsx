@@ -58,7 +58,7 @@ export default function AmortizationChart({ loanAmount, annualRate, years }) {
         data: {
           labels,
           datasets: [
-            { label: "Principal", data: principalData, backgroundColor: "#0f2e28" },
+            { label: "Principal", data: principalData, backgroundColor: "#099880" },
             { label: "Interest", data: interestData, backgroundColor: "#94a894" },
           ],
         },
@@ -81,3 +81,4 @@ export default function AmortizationChart({ loanAmount, annualRate, years }) {
 
   return <div style={{ height: 260 }} className="mt-6"><canvas ref={canvasRef} /></div>;
 }
+

@@ -54,3 +54,4 @@ export default function FloatingReportButton() {
     </motion.div>
   );
 }
+

@@ -75,10 +75,9 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
       </AnimatePresence>
 
       <aside 
-        // 🔴 Reduced lag by specifying transition properties and adding will-change
         className={`fixed top-0 left-0 min-h-screen z-[90] transition-[width,transform] duration-300 ease-in-out border-r will-change-[width]
         ${isDark 
-          ? 'bg-[#0b1f1a] border-[#1a4a40]/60 shadow-[10px_0_30px_rgba(0,0,0,0.5)]' 
+          ? 'bg-[var(--card)] border-white/10 shadow-[10px_0_30px_rgba(0,0,0,0.5)]' 
           : 'bg-white border-gray-200 shadow-[10px_0_30px_rgba(0,0,0,0.05)]'
         }
         ${isCollapsed ? 'w-[90px]' : 'w-[260px]'} 
@@ -96,7 +95,7 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
           style={{ y: yTop }} 
           onClick={handleLockToggle}
           className={`hidden lg:flex absolute top-10 right-0 translate-x-1/2 z-50 p-2.5 rounded-full shadow-xl border transition-colors duration-300
-            ${isDark ? 'bg-[#133c34] border-[#1a4a40] text-[#cddfa0] hover:bg-[#1a4a40]' : 'bg-white border-emerald-200 text-emerald-600 hover:bg-emerald-50'}
+            ${isDark ? 'bg-[var(--primary)]/20 border-white/20 text-[var(--accent)] hover:bg-[var(--primary)]/30' : 'bg-white border-emerald-200 text-emerald-600 hover:bg-emerald-50'}
           `}
         >
           {isCollapsed ? <Unlock size={20} /> : <Lock size={20} />}
@@ -106,7 +105,7 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
           style={{ y: yBottom }} 
           onClick={handleLockToggle}
           className={`hidden lg:flex absolute bottom-12 right-0 translate-x-1/2 z-50 p-2.5 rounded-full shadow-xl border transition-colors duration-300
-            ${isDark ? 'bg-[#133c34] border-[#1a4a40] text-[#cddfa0] hover:bg-[#1a4a40]' : 'bg-white border-emerald-200 text-emerald-600 hover:bg-emerald-50'}
+            ${isDark ? 'bg-[var(--primary)]/20 border-white/20 text-[var(--accent)] hover:bg-[var(--primary)]/30' : 'bg-white border-emerald-200 text-emerald-600 hover:bg-emerald-50'}
           `}
         >
           {isCollapsed ? <Unlock size={20} /> : <Lock size={20} />}
@@ -121,7 +120,7 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
               <div 
                 key={key}
                 suppressHydrationWarning
-                className={`absolute inset-0 transition-opacity duration-1000 ${isVisible ? (isDark ? 'opacity-60' : 'opacity-50') : 'opacity-0'}`}
+                className={`absolute inset-0 transition-opacity duration-1000 ${isVisible ? (isDark ? 'opacity-30' : 'opacity-50') : 'opacity-0'}`}
                 style={{ 
                   backgroundImage: `url('${url}')`, 
                   backgroundSize: 'cover', 
@@ -130,7 +129,7 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
               />
             );
           })}
-          <div className={`absolute inset-0 transition-colors duration-500 ${isDark ? 'bg-[#0b1f1a]/80' : 'bg-white/80'}`} />
+          <div className={`absolute inset-0 transition-colors duration-500 ${isDark ? 'bg-[var(--card)]/90' : 'bg-white/80'}`} />
         </div>
 
         <div className="relative z-10 h-full flex flex-col">
@@ -143,8 +142,8 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
                 </g>
               </svg>
               {!isCollapsed && (
-                <span className={`text-xl font-black italic whitespace-nowrap ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                  Urban<span className={isDark ? "text-[#cddfa0]" : "text-emerald-600"}>E</span>state
+                <span className={`text-xl font-black italic whitespace-nowrap ${isDark ? 'text-[var(--foreground)]' : 'text-gray-900'}`}>
+                  Urban<span className={isDark ? "text-[var(--accent)]" : "text-emerald-600"}>E</span>state
                 </span>
               )}
             </Link>
@@ -163,11 +162,11 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
                       className={`flex items-center py-3 rounded-xl transition-all duration-300 relative group
                         ${isCollapsed ? 'justify-center px-0' : 'gap-4 px-4'}
                         ${isActive 
-                          ? (isDark ? 'bg-[#133c34] text-[#cddfa0]' : 'bg-emerald-50 text-emerald-700 font-bold border border-emerald-100') 
-                          : (isDark ? 'text-gray-300 hover:bg-white/5' : 'text-gray-600 hover:bg-gray-100')}
+                          ? (isDark ? 'bg-[var(--primary)]/20 text-[var(--accent)]' : 'bg-emerald-50 text-emerald-700 font-bold border border-emerald-100') 
+                          : (isDark ? 'text-[var(--muted-foreground)] hover:bg-white/5 hover:text-[var(--foreground)]' : 'text-gray-600 hover:bg-gray-100')}
                       `}
                     >
-                      <span className={`flex-shrink-0 transition-transform duration-300 ${isActive ? (isDark ? 'text-[#cddfa0]' : 'text-emerald-600') : ''} ${isCollapsed && isActive ? 'scale-125' : ''}`}>
+                      <span className={`flex-shrink-0 transition-transform duration-300 ${isActive ? (isDark ? 'text-[var(--accent)]' : 'text-emerald-600') : ''} ${isCollapsed && isActive ? 'scale-125' : ''}`}>
                         {item.icon}
                       </span>
                       
@@ -185,7 +184,7 @@ export default function Sidebar({ isOpen, setIsOpen, isCollapsed, setIsCollapsed
 
                       {isCollapsed && (
                         <div className={`absolute left-full ml-4 px-3 py-1.5 rounded-lg text-sm font-medium opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 whitespace-nowrap shadow-xl z-50
-                          ${isDark ? 'bg-[#133c34] text-[#cddfa0] border border-[#1a4a40]' : 'bg-emerald-600 text-white border border-emerald-500'}
+                          ${isDark ? 'bg-[var(--card)] text-[var(--accent)] border border-white/10' : 'bg-emerald-600 text-white border border-emerald-500'}
                         `}>
                           {item.name}
                         </div>

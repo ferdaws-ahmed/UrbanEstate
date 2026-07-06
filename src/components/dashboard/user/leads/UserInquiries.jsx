@@ -75,7 +75,7 @@ export default function UserInquiries() {
           <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">Track your interactions and alerts</p>
         </div>
         
-        <div className={`flex p-1.5 rounded-2xl border transition-all ${isDark ? "bg-[#0b1f1a] border-[#1a4a40]/40" : "bg-white border-slate-100 shadow-sm"}`}>
+        <div className={`flex p-1.5 rounded-2xl border transition-all ${isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-100 shadow-sm"}`}>
           {[
             { id: "messages", icon: MessageSquare, label: "My Messages" },
             { id: "activity", icon: History, label: "My History" },
@@ -105,7 +105,7 @@ export default function UserInquiries() {
               <div 
                 key={item.id}
                 className={`p-8 rounded-[2.5rem] border transition-all hover:shadow-2xl relative group ${
-                  isDark ? "bg-[#0b1f1a] border-[#1a4a40]/40" : "bg-white border-slate-100 shadow-sm"
+                  isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-100 shadow-sm"
                 }`}
               >
                 {/* INQUIRY CARD CONTENT (ALREADY THERE) */}
@@ -176,7 +176,7 @@ export default function UserInquiries() {
         <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* LIKES HISTORY */}
-            <div className={`p-8 rounded-[2.5rem] border ${isDark ? "bg-[#0b1f1a] border-[#1a4a40]/40" : "bg-white border-slate-100 shadow-sm"}`}>
+            <div className={`p-8 rounded-[2.5rem] border ${isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-100 shadow-sm"}`}>
               <h3 className={`text-xl font-black mb-6 flex items-center gap-3 ${isDark ? "text-white" : "text-slate-900"}`}>
                 <Heart className="text-rose-500" fill="currentColor" size={20} /> Property Saves
               </h3>
@@ -200,7 +200,7 @@ export default function UserInquiries() {
             </div>
 
             {/* COMMENTS HISTORY */}
-            <div className={`p-8 rounded-[2.5rem] border ${isDark ? "bg-[#0b1f1a] border-[#1a4a40]/40" : "bg-white border-slate-100 shadow-sm"}`}>
+            <div className={`p-8 rounded-[2.5rem] border ${isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-100 shadow-sm"}`}>
               <h3 className={`text-xl font-black mb-6 flex items-center gap-3 ${isDark ? "text-white" : "text-slate-900"}`}>
                 <MessageSquare className="text-blue-500" size={20} /> My Comments
               </h3>
@@ -228,7 +228,7 @@ export default function UserInquiries() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {purchases.map((p) => (
                 <div key={p.id} className={`p-6 rounded-[2.5rem] border transition-all hover:shadow-2xl ${
-                  isDark ? "bg-[#0b1f1a] border-[#1a4a40]/40" : "bg-white border-slate-100 shadow-sm"
+                  isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-100 shadow-sm"
                 }`}>
                   <div className="relative aspect-video rounded-2xl overflow-hidden mb-6 border border-white/10">
                     <img src={p.image} className="w-full h-full object-cover" alt="" />
@@ -266,7 +266,7 @@ export default function UserInquiries() {
 
       {activeTab === "alerts" && (
         <div className={`p-10 rounded-[3rem] border animate-in slide-in-from-bottom-4 duration-500 ${
-          isDark ? "bg-[#0b1f1a] border-[#1a4a40]/40" : "bg-white border-slate-100 shadow-sm"
+          isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-100 shadow-sm"
         }`}>
           <div className="flex items-center justify-between mb-10">
              <h3 className={`text-xl font-black tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>Real-time Alert Feed</h3>
@@ -309,3 +309,4 @@ export default function UserInquiries() {
     </div>
   );
 }
+

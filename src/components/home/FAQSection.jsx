@@ -37,7 +37,7 @@ const FAQSection = () => {
   return (
     <section
       className={`relative py-24 px-4 overflow-hidden ${
-        isDark ? "bg-[#0f2e28]" : "bg-white"
+        isDark ? "bg-[var(--background)]" : "bg-white"
       }`}
     >
       {/* Background radial glow */}
@@ -54,7 +54,7 @@ const FAQSection = () => {
         <div className="text-center mb-16">
           <span
             className={`font-mono tracking-[0.3em] text-[10px] uppercase mb-4 block font-bold ${
-              isDark ? "text-[#cddfa0]" : "text-[#0f2e28]"
+              isDark ? "text-[var(--accent)]" : "text-[#099880]"
             }`}
           >
             Common Inquiries
@@ -62,14 +62,14 @@ const FAQSection = () => {
 
           <h2
             className={`text-4xl md:text-5xl font-black mb-6 tracking-tight ${
-              isDark ? "text-white" : "text-[#0f2e28]"
+              isDark ? "text-white" : "text-[#099880]"
             }`}
           >
             Frequently Asked{" "}
-            <span className="italic font-light text-[#cddfa0]">Questions</span>
+            <span className="italic font-light text-[var(--accent)]">Questions</span>
           </h2>
 
-          <div className="w-20 h-1 bg-[#cddfa0]/40 mx-auto rounded-full" />
+          <div className="w-20 h-1 bg-[var(--primary)]/40 mx-auto rounded-full" />
         </div>
 
         {/* FAQ List */}
@@ -83,16 +83,16 @@ const FAQSection = () => {
                 className={`group relative overflow-hidden rounded-2xl border transition-all duration-500 ${
                   isOpen
                     ? isDark
-                      ? "bg-white/[0.05] border-[#cddfa0]/40"
-                      : "bg-[#0f2e28]/5 border-[#0f2e28]/20"
+                      ? "bg-white/[0.05] border-[var(--accent)]/40"
+                      : "bg-[var(--background)]/5 border-[var(--primary)]/20"
                     : isDark
-                    ? "border-white/10 hover:border-[#cddfa0]/30"
-                    : "border-black/10 hover:border-[#0f2e28]/30"
+                    ? "border-white/10 hover:border-[var(--accent)]/30"
+                    : "border-black/10 hover:border-[var(--primary)]/30"
                 }`}
               >
                 {/* Active indicator */}
                 <div
-                  className={`absolute left-0 top-0 bottom-0 w-1 bg-[#cddfa0] transition-opacity ${
+                  className={`absolute left-0 top-0 bottom-0 w-1 bg-[var(--primary)] transition-opacity ${
                     isOpen ? "opacity-100" : "opacity-0"
                   }`}
                 />
@@ -104,10 +104,10 @@ const FAQSection = () => {
                   <span
                     className={`text-lg md:text-xl font-bold transition-colors ${
                       isOpen
-                        ? isDark?"text-[#cddfa0]":"text-black"
+                        ? isDark?"text-[var(--accent)]":"text-black"
                         : isDark
                         ? "text-white/80 group-hover:text-white"
-                        : "text-[#0f2e28]/80 group-hover:text-[#0f2e28]"
+                        : "text-[#099880]/80 group-hover:text-[#099880]"
                     }`}
                   >
                     {faq.question}
@@ -141,7 +141,7 @@ const FAQSection = () => {
                   <div className="overflow-hidden">
                     <p
                       className={`p-7 md:px-10 pt-0 text-base md:text-lg leading-relaxed ${
-                        isDark ? "text-white/60" : "text-[#0f2e28]/70"
+                        isDark ? "text-white/60" : "text-[#099880]/70"
                       }`}
                     >
                       {faq.answer}
@@ -158,3 +158,4 @@ const FAQSection = () => {
 };
 
 export default FAQSection;
+

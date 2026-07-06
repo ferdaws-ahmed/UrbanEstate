@@ -47,21 +47,21 @@ export default function ArchitecturalOriginStory() {
   const { isDark } = useTheme();
 
   return (
-    <section className={`w-full py-28 px-6 lg:px-12 ${isDark ? "bg-[#0f2e28]" : "bg-white"} relative overflow-hidden ${manrope.className}`}>
+    <section className={`w-full py-28 px-6 lg:px-12 ${isDark ? "bg-[var(--background)]" : "bg-white"} relative overflow-hidden ${manrope.className}`}>
       
       {/* Background Blueprint Pattern Overlay */}
       <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/blueprint-grid.png')] opacity-10 pointer-events-none z-0"></div>
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#cddfa0]/5 blur-[180px] rounded-full pointer-events-none z-0"></div>
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[var(--primary)]/5 blur-[180px] rounded-full pointer-events-none z-0"></div>
 
       <div className="container mx-auto max-w-6xl relative z-10">
         
         {/* Header */}
         <div className="text-center mb-20">
-          <div className={`inline-flex items-center gap-2 ${isDark?"text-[#cddfa0]":"text-[#13332c]"} ${isDark?"font-bold":"font-light"} tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[#cddfa0]/10"}  px-5 py-2 rounded-full border  ${isDark ? "border-white/10" : "border-[#0f2e28]/10"} mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]`}>
+          <div className={`inline-flex items-center gap-2 ${isDark?"text-[var(--accent)]":"text-[var(--card-foreground)]"} ${isDark?"font-bold":"font-light"} tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[var(--primary)]/10"}  px-5 py-2 rounded-full border  ${isDark ? "border-white/10" : "border-[var(--primary)]/10"} mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]`}>
             <PenTool size={14} /> The Blueprint Narrative
           </div>
-          <h2 className={`text-4xl lg:text-5xl font-black ${isDark ? "text-white" : "text-[#13332c]"} tracking-tight leading-[1.1]`}>
-            Architectural <span className={`text-[#cddfa0] italic font-light ${isDark ? "text-[#cddfa0]" : "text-[#13332c]"}`}>Origin Story</span>
+          <h2 className={`text-4xl lg:text-5xl font-black ${isDark ? "text-white" : "text-[var(--card-foreground)]"} tracking-tight leading-[1.1]`}>
+            Architectural <span className={`text-[var(--accent)] italic font-light ${isDark ? "text-[var(--accent)]" : "text-[var(--card-foreground)]"}`}>Origin Story</span>
           </h2>
         </div>
 
@@ -71,9 +71,9 @@ export default function ArchitecturalOriginStory() {
           <div className="lg:col-span-5 relative pl-8">
             
             {/* Glowing Vertical Timeline Bar */}
-            <div className={`absolute left-0 top-4 bottom-4 w-0.5 bg-white/10 ${isDark ? "bg-[#cddfa0]/10" : "bg-white/10"}`}>
+            <div className={`absolute left-0 top-4 bottom-4 w-0.5 bg-white/10 ${isDark ? "bg-[var(--primary)]/10" : "bg-white/10"}`}>
               <div 
-                className={`absolute top-0 w-0.5 ${isDark ? "bg-[#cddfa0]" : "bg-white"} shadow-[0_0_15px_#cddfa0] transition-all duration-700 ease-in-out`}
+                className={`absolute top-0 w-0.5 ${isDark ? "bg-[var(--primary)]" : "bg-white"} shadow-[0_0_15px_#cddfa0] transition-all duration-700 ease-in-out`}
                 style={{ height: `${(activeChapter.id / storyChapters.length) * 100}%` }}
               ></div>
             </div>
@@ -86,21 +86,21 @@ export default function ArchitecturalOriginStory() {
                   className={`relative group cursor-pointer transition-all duration-300 pl-6 ${activeChapter.id === chapter.id ? 'scale-105' : 'opacity-50 hover:opacity-80'}`}
                 >
                   {/* Timeline Node Indicator */}
-                  <div className={`absolute -left-[33px] top-1 w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${activeChapter.id === chapter.id ? 'bg-[#0f2e28] border-[#cddfa0] shadow-[0_0_20px_#cddfa0] text-[#cddfa0]' : 'bg-[#0f2e28] border-white/20 text-white/40'}`}>
+                  <div className={`absolute -left-[33px] top-1 w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${activeChapter.id === chapter.id ? 'bg-[var(--background)] border-[var(--accent)] shadow-[0_0_20px_#cddfa0] text-[var(--accent)]' : 'bg-[var(--background)] border-white/20 text-white/40'}`}>
                     {activeChapter.id === chapter.id ? chapter.icon : <div className={`w-2 h-2 ${isDark ? "bg-white/40" : "bg-black"} rounded-full`}></div>}
                   </div>
 
                   {/* Chapter Text */}
                   <div>
-                    <span className={`text-[10px] font-bold uppercase tracking-widest mb-1 block ${activeChapter.id === chapter.id ? isDark ? "text-[#cddfa0]" : "text-black" : isDark ? "text-[#cddfa0]" : "text-black"}`}>
+                    <span className={`text-[10px] font-bold uppercase tracking-widest mb-1 block ${activeChapter.id === chapter.id ? isDark ? "text-[var(--accent)]" : "text-black" : isDark ? "text-[var(--accent)]" : "text-black"}`}>
                       Chapter 0{chapter.id}
                     </span>
-                    <h3 className={`text-2xl font-black mb-2 transition-colors ${activeChapter.id === chapter.id ? isDark ? "text-[#cddfa0]" : "text-black" : isDark ? "text-[#cddfa0]" : "text-black"}`}>
+                    <h3 className={`text-2xl font-black mb-2 transition-colors ${activeChapter.id === chapter.id ? isDark ? "text-[var(--accent)]" : "text-black" : isDark ? "text-[var(--accent)]" : "text-black"}`}>
                       {chapter.title}
                     </h3>
                      {/* Expandable Details for Active Item (Mobile friendly approach) */}
                      <div className={`lg:hidden overflow-hidden transition-all duration-500 ${activeChapter.id === chapter.id ? 'max-h-40 opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
-                        <p className={` text-sm leading-relaxed border-l-2 border-[#cddfa0]/30 pl-4 ${isDark ? "text-white/60" : "text-black/60"}`}>
+                        <p className={` text-sm leading-relaxed border-l-2 border-[var(--accent)]/30 pl-4 ${isDark ? "text-white/60" : "text-black/60"}`}>
                           {chapter.desc}
                         </p>
                      </div>
@@ -120,7 +120,7 @@ export default function ArchitecturalOriginStory() {
                 className={`absolute inset-0 transition-all duration-700 ease-in-out transform ${activeChapter.id === chapter.id ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-12 scale-95 pointer-events-none'}`}
               >
                 {/* Glassmorphism Content Card */}
-                <div className={`relative h-full bg-[#081d19]/80 backdrop-blur-xl rounded-[2.5rem] border border-[#cddfa0]/20 ${isDark ? "shadow-[0_40px_100px_rgba(0,0,0,0.6)]" : ""} overflow-hidden group`}>
+                <div className={`relative h-full bg-[var(--card)]/80 backdrop-blur-xl rounded-[2.5rem] border border-[var(--accent)]/20 ${isDark ? "shadow-[0_40px_100px_rgba(0,0,0,0.6)]" : ""} overflow-hidden group`}>
                   
                   {/* Image Section (Top Half) */}
                   <div className="h-2/3 relative overflow-hidden">
@@ -129,22 +129,22 @@ export default function ArchitecturalOriginStory() {
                       alt={chapter.title} 
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-[30%]"
                     />
-                    <div className="absolute inset-0 bg-[#0f2e28] mix-blend-multiply opacity-60"></div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#081d19] via-transparent to-transparent"></div>
+                    <div className="absolute inset-0 bg-[var(--background)] mix-blend-multiply opacity-60"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#066e5b] via-transparent to-transparent"></div>
                     
                     {/* Architectural Overlay Lines */}
-                    <div className="absolute inset-0 border-[1px] border-[#cddfa0]/10 m-4 rounded-2xl pointer-events-none"></div>
-                    <Crosshair size={30} className="absolute top-8 right-8 text-[#cddfa0]/50 animate-spin-slow" strokeWidth={1} />
+                    <div className="absolute inset-0 border-[1px] border-[var(--accent)]/10 m-4 rounded-2xl pointer-events-none"></div>
+                    <Crosshair size={30} className="absolute top-8 right-8 text-[var(--accent)]/50 animate-spin-slow" strokeWidth={1} />
                   </div>
 
                   {/* Text Section (Bottom Half) */}
                   <div className="absolute bottom-0 left-0 right-0 p-8 pb-10">
-                     <div className="w-12 h-1 bg-[#cddfa0] mb-6"></div>
-                     <h4 className="text-[#cddfa0] font-light italic text-lg mb-3">{chapter.subtitle}</h4>
+                     <div className="w-12 h-1 bg-[var(--primary)] mb-6"></div>
+                     <h4 className="text-[var(--accent)] font-light italic text-lg mb-3">{chapter.subtitle}</h4>
                      <p className="text-white/70 text-lg leading-relaxed max-w-lg">
                        {chapter.desc}
                      </p>
-                     <div className="absolute bottom-6 right-8 text-[#cddfa0]/20">
+                     <div className="absolute bottom-6 right-8 text-[var(--accent)]/20">
                        <ChevronRight size={40} />
                      </div>
                   </div>
@@ -166,3 +166,4 @@ export default function ArchitecturalOriginStory() {
 }
 
 import { Crosshair } from "lucide-react";
+

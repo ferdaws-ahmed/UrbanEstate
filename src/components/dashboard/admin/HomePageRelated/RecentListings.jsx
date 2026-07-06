@@ -19,7 +19,7 @@ export default function RecentListings() {
 
   return (
     <div className={`p-5 sm:p-6 rounded-[2rem] border backdrop-blur-xl transition-all duration-500 shadow-xl shadow-gray-200/50 dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] ${
-      isDark ? 'bg-[#133c34]/50 border-[#1a4a40]/60' : 'bg-white/80 border-white'
+      isDark ? 'bg-[var(--card)]/50 border-[var(--card)]/60' : 'bg-white/80 border-white'
     }`}>
       
       {/* Header Section */}
@@ -30,7 +30,7 @@ export default function RecentListings() {
           </h3>
           <p className="text-[9px] sm:text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Freshly added properties</p>
         </div>
-        <button className={`p-2 rounded-xl transition-colors ${isDark ? 'bg-[#1a4a40] text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[#091a16]' : 'bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
+        <button className={`p-2 rounded-xl transition-colors ${isDark ? 'bg-[var(--card)] text-[#cddfa0] hover:bg-[#cddfa0] hover:text-[var(--background)]' : 'bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
           <ArrowUpRight size={18} />
         </button>
       </div>
@@ -42,7 +42,7 @@ export default function RecentListings() {
             key={listing.id} 
             className={`group relative flex items-center gap-3 sm:gap-4 p-3 rounded-2xl border transition-all duration-300 cursor-pointer ${
               isDark 
-                ? 'bg-[#0f2e28]/40 border-[#1a4a40]/30 hover:bg-[#1a4a40]/60 hover:border-[#cddfa0]/30' 
+                ? 'bg-[var(--primary)]/40 border-[var(--card)]/30 hover:bg-[var(--card)]/60 hover:border-[#cddfa0]/30' 
                 : 'bg-gray-50/50 border-gray-100 hover:bg-white hover:border-blue-100 hover:shadow-lg'
             }`}
           >
@@ -85,7 +85,7 @@ export default function RecentListings() {
       {/* View All Button */}
       <button className={`w-full mt-6 py-3 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all duration-300 border ${
         isDark 
-          ? 'bg-[#1a4a40]/50 border-[#1a4a40] text-gray-300 hover:bg-[#cddfa0] hover:text-[#091a16]' 
+          ? 'bg-[var(--card)]/50 border-white/10 text-gray-300 hover:bg-[#cddfa0] hover:text-[var(--background)]' 
           : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-900 hover:text-white'
       }`}>
         Explore All {staticListings.length} Listings
@@ -99,10 +99,11 @@ export default function RecentListings() {
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: ${isDark ? '#1a4a40' : '#e5e7eb'};
+          background: ${isDark ? 'var(--card)' : '#e5e7eb'};
           border-radius: 10px;
         }
       `}</style>
     </div>
   );
 }
+

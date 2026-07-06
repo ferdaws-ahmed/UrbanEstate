@@ -8,8 +8,8 @@ export default function UserGrowthChart({ data }) {
   const { isDark } = useTheme();
 
   const colors = {
-    bg: isDark ? 'bg-[#133c34]/50' : 'bg-white/80',
-    border: isDark ? 'border-[#1a4a40]/60' : 'border-white',
+    bg: isDark ? 'bg-[var(--card)]/50' : 'bg-white/80',
+    border: isDark ? 'border-[var(--card)]/60' : 'border-white',
     lineStroke: isDark ? '#cddfa0' : '#2563eb',
     grid: isDark ? 'rgba(26, 74, 64, 0.4)' : 'rgba(229, 231, 235, 0.5)',
     text: isDark ? '#9ca3af' : '#64748b'
@@ -66,7 +66,7 @@ export default function UserGrowthChart({ data }) {
             content={({ active, payload }) => {
               if (active && payload && payload.length) {
                 return (
-                  <div className={`p-4 rounded-2xl border shadow-2xl backdrop-blur-2xl ${isDark ? 'bg-[#0a2e26]/95 border-[#cddfa0]/30' : 'bg-white/95 border-blue-100'}`}>
+                  <div className={`p-4 rounded-2xl border shadow-2xl backdrop-blur-2xl ${isDark ? 'bg-[var(--primary)]/95 border-[#cddfa0]/30' : 'bg-white/95 border-blue-100'}`}>
                     <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                       {payload[0].payload.month}
                     </p>
@@ -90,7 +90,7 @@ export default function UserGrowthChart({ data }) {
             strokeWidth={4} 
             fillOpacity={1} 
             fill="url(#userGradient)"
-            dot={{ r: 4, fill: colors.lineStroke, strokeWidth: 2, stroke: isDark ? "#091a16" : "#fff" }}
+            dot={{ r: 4, fill: colors.lineStroke, strokeWidth: 2, stroke: isDark ? "var(--background)" : "#fff" }}
             activeDot={{ r: 6, fill: colors.lineStroke, strokeWidth: 2, stroke: isDark ? "#fff" : "#fff" }}
             animationDuration={2500}
           />
@@ -99,3 +99,4 @@ export default function UserGrowthChart({ data }) {
     </div>
   );
 }
+

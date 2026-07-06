@@ -33,13 +33,13 @@ export default function TopSellers({ Sellers = [] }) {
       case 0: return "bg-gradient-to-br from-amber-300 to-amber-600 shadow-amber-500/20";
       case 1: return "bg-gradient-to-br from-slate-300 to-slate-500 shadow-slate-400/20";
       case 2: return "bg-gradient-to-br from-orange-300 to-orange-600 shadow-orange-500/20";
-      default: return isDark ? "bg-[#1a4a40] text-gray-400" : "bg-gray-100 text-gray-500";
+      default: return isDark ? "bg-[var(--card)] text-gray-400" : "bg-gray-100 text-gray-500";
     }
   };
 
   if (isLoading) {
     return (
-      <div className={`p-6 rounded-[2rem] border h-full flex items-center justify-center ${isDark ? 'bg-[#133c34]/50 border-[#1a4a40]/60' : 'bg-white/80 border-white'}`}>
+      <div className={`p-6 rounded-[2rem] border h-full flex items-center justify-center ${isDark ? 'bg-[var(--card)]/50 border-[var(--card)]/60' : 'bg-white/80 border-white'}`}>
         <div className={`w-8 h-8 border-4 rounded-full border-t-transparent animate-spin ${isDark ? 'border-[#cddfa0]' : 'border-blue-600'}`}></div>
       </div>
     );
@@ -47,7 +47,7 @@ export default function TopSellers({ Sellers = [] }) {
 
   return (
     <div className={`p-6 rounded-[2rem] border backdrop-blur-xl transition-all duration-500 shadow-xl shadow-gray-200/50 dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] flex flex-col h-full ${
-      isDark ? 'bg-[#133c34]/50 border-[#1a4a40]/60' : 'bg-white/80 border-white'
+      isDark ? 'bg-[var(--card)]/50 border-[var(--card)]/60' : 'bg-white/80 border-white'
     }`}>
       
       {/* Header Section */}
@@ -76,7 +76,7 @@ export default function TopSellers({ Sellers = [] }) {
             key={Seller.id}
             className={`relative flex items-center gap-4 p-3 rounded-2xl border transition-all duration-300 group cursor-pointer ${
               isDark 
-                ? 'bg-[#0f2e28]/40 border-[#1a4a40]/30 hover:bg-[#1a4a40]/60' 
+                ? 'bg-[var(--primary)]/40 border-[var(--card)]/30 hover:bg-[var(--card)]/60' 
                 : 'bg-gray-50/50 border-gray-100 hover:bg-white hover:shadow-lg hover:border-blue-100'
             }`}
           >
@@ -91,10 +91,10 @@ export default function TopSellers({ Sellers = [] }) {
                 src={Seller.avatar || `https://ui-avatars.com/api/?name=${Seller.name}&background=random`}
                 alt={Seller.name}
                 className={`w-11 h-11 rounded-xl object-cover border-2 transition-transform duration-500 group-hover:scale-110 ${
-                  isDark ? 'border-[#1a4a40]' : 'border-white shadow-sm'
+                  isDark ? 'border-white/10' : 'border-white shadow-sm'
                 }`}
               />
-              <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white dark:border-[#0f2e28] rounded-full shadow-sm"></div>
+              <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white dark:border-[var(--primary)] rounded-full shadow-sm"></div>
             </div>
 
             {/* Info Section */}
@@ -119,7 +119,7 @@ export default function TopSellers({ Sellers = [] }) {
               </div>
 
               {/* Modern Progress Bar */}
-              <div className={`w-full h-1.5 rounded-full overflow-hidden ${isDark ? 'bg-[#0f2e28]' : 'bg-gray-100'}`}>
+              <div className={`w-full h-1.5 rounded-full overflow-hidden ${isDark ? 'bg-[var(--primary)]' : 'bg-gray-100'}`}>
                 <div
                   className={`h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_10px_rgba(205,223,160,0.5)] ${
                     isDark ? 'bg-[#cddfa0]' : 'bg-blue-600'
@@ -133,10 +133,10 @@ export default function TopSellers({ Sellers = [] }) {
       </div>
 
       {/* Footer Stats */}
-      <div className={`mt-6 pt-4 border-t flex items-center justify-between ${isDark ? 'border-[#1a4a40]' : 'border-gray-100'}`}>
+      <div className={`mt-6 pt-4 border-t flex items-center justify-between ${isDark ? 'border-white/10' : 'border-gray-100'}`}>
         <span className="text-[11px] font-black uppercase tracking-widest text-gray-500">Active Roster</span>
         <div className={`px-4 py-1.5 rounded-xl font-black text-xs ${
-          isDark ? 'bg-[#1a4a40] text-[#cddfa0]' : 'bg-gray-900 text-white shadow-lg'
+          isDark ? 'bg-[var(--card)] text-[#cddfa0]' : 'bg-gray-900 text-white shadow-lg'
         }`}>
           {Sellers.filter(a => a.status === 'Active').length} Members
         </div>
@@ -144,3 +144,4 @@ export default function TopSellers({ Sellers = [] }) {
     </div>
   );
 }
+

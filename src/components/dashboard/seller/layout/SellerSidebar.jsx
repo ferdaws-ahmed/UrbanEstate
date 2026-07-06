@@ -44,16 +44,14 @@ export default function SellerSidebar({ isOpen, onClose }) {
   const { data: session } = useSession();
   const [stats, setStats] = useState({ unreadMessages: 0, unreadReports: 0 });
 
-  // Polling for unread messages (Same logic as user sidebar)
   useEffect(() => {
     if (!session) return;
     
     const fetchStats = async () => {
       try {
-        const res = await fetch("/api/user/dashboard"); // Reuse the dashboard API for stats
+        const res = await fetch("/api/user/dashboard"); 
         const data = await res.json();
         if (res.ok) {
-          // Fetch unread reports count
           const reportsRes = await fetch("/api/reports/unread-count");
           const reportsData = await reportsRes.json();
           setStats({ 
@@ -65,7 +63,7 @@ export default function SellerSidebar({ isOpen, onClose }) {
     };
 
     fetchStats();
-    const interval = setInterval(fetchStats, 10000); // Poll every 10s
+    const interval = setInterval(fetchStats, 10000); 
     return () => clearInterval(interval);
   }, [session]);
 
@@ -85,12 +83,12 @@ export default function SellerSidebar({ isOpen, onClose }) {
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           ${
             isDark
-              ? "bg-[#0b1f1a] border-[#1a4a40]/50"
+              ? "bg-[var(--card)] border-white/10"
               : "bg-white border-slate-200 shadow-xl"
           }`}
       >
         <div suppressHydrationWarning className={`flex items-center justify-between px-6 py-6 border-b transition-colors duration-300 ${
-          isDark ? "border-[#1a4a40]/50" : "border-slate-100 bg-slate-50/50"
+          isDark ? "border-white/10" : "border-slate-100 bg-slate-50/50"
         }`}>
           <Link 
             href="/" 
@@ -102,16 +100,16 @@ export default function SellerSidebar({ isOpen, onClose }) {
             <div
               suppressHydrationWarning
               className={`flex h-10 w-10 items-center justify-center rounded-xl shadow-inner transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 ${
-                isDark ? "bg-[#1a4a40]/80 text-[#cddfa0]" : "bg-teal-600 text-white shadow-teal-200"
+                isDark ? "bg-[var(--primary)]/20 text-[var(--accent)]" : "bg-[var(--primary)] text-white shadow-teal-200"
               }`}
             >
               <Home className="h-5 w-5" />
             </div>
             <div suppressHydrationWarning>
-              <p className={`font-black text-sm tracking-tight transition-colors duration-300 ${isDark ? "text-white" : "text-slate-900"} group-hover:text-teal-600`}>
+              <p className={`font-black text-sm tracking-tight transition-colors duration-300 ${isDark ? "text-[var(--foreground)]" : "text-slate-900"} group-hover:text-[var(--primary)]`}>
                 UrbanEstate
               </p>
-              <p className="text-[10px] uppercase font-black tracking-widest text-teal-600/80 dark:text-[#cddfa0]/70">
+              <p className="text-[10px] uppercase font-black tracking-widest" style={{ color: 'var(--accent)' }}>
                 Seller Hub
               </p>
             </div>
@@ -137,11 +135,11 @@ export default function SellerSidebar({ isOpen, onClose }) {
                 ${
                   active
                     ? isDark
-                      ? "bg-[#1a4a40]/60 text-[#cddfa0] shadow-inner border border-white/5"
-                      : "bg-teal-600 text-white shadow-lg shadow-teal-100 border border-teal-500"
+                      ? "bg-[var(--primary)]/20 text-[var(--accent)] shadow-inner border border-white/5"
+                      : "bg-[var(--primary)] text-white shadow-lg shadow-teal-100 border border-teal-500"
                     : isDark
-                      ? "text-slate-400 hover:bg-white/5 hover:text-white"
-                      : "text-slate-600 hover:bg-slate-50 hover:text-teal-600 border border-transparent"
+                      ? "text-[var(--muted-foreground)] hover:bg-white/5 hover:text-[var(--foreground)]"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-[var(--primary)] border border-transparent"
                 } group`}
             >
               <div className="flex items-center gap-3">
@@ -150,7 +148,7 @@ export default function SellerSidebar({ isOpen, onClose }) {
               </div>
               {badgeValue > 0 && (
                 <span className={`px-2 py-0.5 rounded-full text-[8px] font-black ${
-                  active ? "bg-white text-teal-600" : "bg-teal-600 text-white animate-pulse"
+                  active ? "bg-white text-[var(--primary)]" : "bg-[var(--primary)] text-white animate-pulse"
                 }`}>
                   {badgeValue}
                 </span>
@@ -160,13 +158,13 @@ export default function SellerSidebar({ isOpen, onClose }) {
         })}
       </nav>
 
-      <div className={`p-4 space-y-3 border-t transition-colors duration-300 ${isDark ? "border-[#1a4a40]/40" : "border-slate-100 bg-slate-50/30"}`}>
+      <div className={`p-4 space-y-3 border-t transition-colors duration-300 ${isDark ? "border-white/10" : "border-slate-100 bg-slate-50/30"}`}>
         <Link
           href="/"
           className={`flex items-center gap-3 rounded-xl px-4 py-3.5 text-[10px] font-black uppercase tracking-widest transition-all duration-300
             ${
               isDark
-                ? "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white border border-white/5"
+                ? "bg-white/5 text-[var(--muted-foreground)] hover:bg-white/10 hover:text-[var(--foreground)] border border-white/5"
                 : "bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200 shadow-sm"
             }`}
         >
@@ -175,7 +173,7 @@ export default function SellerSidebar({ isOpen, onClose }) {
         </Link>
         <div
           className={`px-4 pt-1 text-[9px] font-bold uppercase tracking-widest transition-colors duration-300 ${
-            isDark ? "text-slate-500" : "text-slate-400"
+            isDark ? "text-[var(--muted-foreground)]" : "text-slate-400"
           }`}
         >
           © {new Date().getFullYear()} UrbanEstate v1.0
@@ -183,7 +181,5 @@ export default function SellerSidebar({ isOpen, onClose }) {
       </div>
     </aside>
   </>
-);
+  );
 }
-  
-

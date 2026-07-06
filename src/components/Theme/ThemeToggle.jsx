@@ -26,23 +26,23 @@ const ThemeToggle = ({ className = "", size = "md" }) => {
         ${sizeClasses[size]}
         ${className}
         rounded-full 
-        bg-white/10 
-        hover:bg-white/20 
-        border border-white/20 
+        bg-[var(--foreground)]/10 
+        hover:bg-[var(--foreground)]/20 
+        border border-[var(--border)] 
         backdrop-blur-md
         transition-all 
         duration-300 
         flex 
         items-center 
         justify-center
-        text-white
-        hover:text-[#cddfa0]
+        text-[var(--foreground)]
+        hover:text-[var(--accent)]
         hover:scale-105
         hover:shadow-lg
-        hover:shadow-[#cddfa0]/20
+        hover:shadow-[var(--accent)]/20
         focus:outline-none
         focus:ring-2
-        focus:ring-[#cddfa0]/50
+        focus:ring-[var(--accent)]/50
         relative
         overflow-hidden
       `}
@@ -88,7 +88,7 @@ const ThemeToggle = ({ className = "", size = "md" }) => {
         absolute 
         inset-0 
         rounded-full 
-        bg-[#cddfa0]/20 
+        bg-[var(--accent)]/20 
         opacity-0 
         transition-opacity 
         duration-300
@@ -100,3 +100,4 @@ const ThemeToggle = ({ className = "", size = "md" }) => {
 };
 
 export default ThemeToggle;
+

@@ -38,3 +38,4 @@ export async function connect(collectionName) {
   const db = client.db(process.env.DB_NAME);
   return db.collection(collectionName);
 }
+

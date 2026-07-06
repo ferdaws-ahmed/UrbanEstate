@@ -11,7 +11,7 @@ export default function RecentInquiries({ items = [] }) {
   return (
     <div
       className={`h-full flex flex-col rounded-[2rem] border p-6 shadow-sm transition-all duration-300 ${
-        isDark ? "border-[#1a4a40]/50 bg-[#0b1f1a]" : "border-slate-100 bg-white"
+        isDark ? "border-white/10 bg-[var(--card)]" : "border-slate-100 bg-white"
       }`}
     >
       <div className="mb-6 flex items-center justify-between">
@@ -42,12 +42,11 @@ export default function RecentInquiries({ items = [] }) {
             <div
               key={item.id}
               className={`group flex gap-4 rounded-2xl p-3 transition-all duration-300 hover:scale-[1.02] ${
-                isDark ? "bg-[#061510]/50 hover:bg-[#1a4a40]/30" : "bg-slate-50 hover:bg-teal-50/50"
-              }`}
-            >
+                isDark ? "bg-white/5 hover:bg-white/10" : "bg-slate-50 hover:bg-teal-50/50"
+              }`}>
               <div
                 className={`h-12 w-12 shrink-0 rounded-xl overflow-hidden border-2 transition-colors ${
-                  isDark ? "bg-[#1a4a40] border-white/5 group-hover:border-[#cddfa0]/30" : "bg-teal-100 border-white group-hover:border-teal-200"
+                  isDark ? "bg-[var(--card)] border-white/5 group-hover:border-[#cddfa0]/30" : "bg-teal-100 border-white group-hover:border-teal-200"
                 }`}
               >
                 {item.avatar ? (
@@ -84,4 +83,5 @@ export default function RecentInquiries({ items = [] }) {
     </div>
   );
 }
+
 

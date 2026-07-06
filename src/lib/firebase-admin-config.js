@@ -24,3 +24,4 @@ if (!admin.apps.length) {
 const adminAuth = admin.apps.length ? admin.auth() : null;
 
 export { adminAuth };
+

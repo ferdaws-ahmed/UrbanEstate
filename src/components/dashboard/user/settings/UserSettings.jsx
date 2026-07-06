@@ -32,9 +32,9 @@ export default function UserSettings() {
     <div className="max-w-4xl space-y-10 animate-in fade-in duration-700 pb-20">
       {/* Account Control Section */}
       <section className={`p-8 rounded-[2.5rem] border ${
-        isDark ? "bg-[#0b1f1a] border-[#1a4a40]/40" : "bg-white border-slate-100 shadow-sm"
+        isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-100 shadow-sm"
       }`}>
-        <h3 className={`text-xl font-black mb-8 flex items-center gap-3 ${isDark ? "text-white" : "text-slate-900"}`}>
+        <h3 className={`text-xl font-black mb-8 flex items-center gap-3 ${isDark ? "text-[var(--foreground)]" : "text-slate-900"}`}>
           <ShieldAlert className="text-blue-600" size={24} /> Account Control
         </h3>
         
@@ -47,7 +47,7 @@ export default function UserSettings() {
                 <KeyRound size={20} />
               </div>
               <div className="text-left">
-                <p className={`text-sm font-bold ${isDark ? "text-white" : "text-slate-900"}`}>Update Security Credentials</p>
+                <p className={`text-sm font-bold ${isDark ? "text-[var(--foreground)]" : "text-slate-900"}`}>Update Security Credentials</p>
                 <p className="text-[10px] text-slate-500 font-medium">Change your password or auth provider settings</p>
               </div>
             </div>
@@ -58,9 +58,9 @@ export default function UserSettings() {
 
       {/* Notifications Section */}
       <section className={`p-8 rounded-[2.5rem] border ${
-        isDark ? "bg-[#0b1f1a] border-[#1a4a40]/40" : "bg-white border-slate-100 shadow-sm"
+        isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-100 shadow-sm"
       }`}>
-        <h3 className={`text-xl font-black mb-8 flex items-center gap-3 ${isDark ? "text-white" : "text-slate-900"}`}>
+        <h3 className={`text-xl font-black mb-8 flex items-center gap-3 ${isDark ? "text-[var(--foreground)]" : "text-slate-900"}`}>
           <BellRing className="text-amber-500" size={24} /> Communication
         </h3>
         
@@ -68,7 +68,7 @@ export default function UserSettings() {
           {Object.entries(notifications).map(([key, val]) => (
             <div key={key} className="flex items-center justify-between px-2">
               <div>
-                <p className={`text-sm font-bold capitalize ${isDark ? "text-white" : "text-slate-900"}`}>{key} Notifications</p>
+                <p className={`text-sm font-bold capitalize ${isDark ? "text-[var(--foreground)]" : "text-slate-900"}`}>{key} Notifications</p>
                 <p className="text-[10px] text-slate-500 font-medium">Receive alerts about your {key} activity</p>
               </div>
               <button 
@@ -108,3 +108,4 @@ export default function UserSettings() {
 }
 
 import { KeyRound } from "lucide-react";
+

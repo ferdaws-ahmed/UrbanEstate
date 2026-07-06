@@ -17,7 +17,7 @@ export default function RevenueChart({ data }) {
       return (
         <div className="bg-white dark:bg-[#1a4a40] border border-gray-200 dark:border-[#1a4a40]/60 rounded-lg p-3 shadow-lg">
           <p className="text-sm font-medium text-gray-900 dark:text-white">{`Month: ${label}`}</p>
-          <p className="text-sm text-[#cddfa0]">{`Revenue: ${formatCurrency(payload[0].value)}`}</p>
+          <p className="text-sm text-[var(--accent)]">{`Revenue: ${formatCurrency(payload[0].value)}`}</p>
           {payload[1] && (
             <p className="text-sm text-gray-500 dark:text-gray-400">{`Target: ${formatCurrency(payload[1].value)}`}</p>
           )}
@@ -77,3 +77,4 @@ export default function RevenueChart({ data }) {
     </div>
   );
 }
+

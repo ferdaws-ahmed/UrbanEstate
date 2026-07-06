@@ -84,22 +84,41 @@ export default function ExploreLocations() {
   );
 
   return (
-    <section className={`w-full py-24 px-6 lg:px-12  ${isDark ? "bg-[#0d2b25]" : "bg-white"} relative overflow-hidden ${manrope.className}`}>
+    <section 
+      className={`w-full py-24 px-6 lg:px-12 relative overflow-hidden ${manrope.className}`}
+      style={{ backgroundColor: "var(--background)" }}
+    >
       
       {/* Background Blurs for Theme */}
-      <div className={`absolute top-1/4 left-1/4 w-[400px] h-[400px] ${isDark ? "bg-[#cddfa0]/5" : "bg-[#cddfa0]/5"} blur-[150px] rounded-full pointer-events-none`}></div>
+      <div 
+        className="absolute top-1/4 left-1/4 w-[400px] h-[400px] blur-[150px] rounded-full pointer-events-none"
+        style={{ backgroundColor: "rgba(var(--primary), 0.05)" }}
+      ></div>
       
       <div className="container mx-auto max-w-6xl relative z-10">
         
         {/* Section Header - Centered */}
         <div className="flex flex-col items-center text-center mb-16">
-          <div className={`inline-flex items-center gap-2  ${isDark?"text-[#cddfa0]":"text-[#13332c]"} font-bold tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[#cddfa0]/10"}  px-5 py-2 rounded-full border ${isDark ? "border-white/10" : "border-[#0f2e28]/10"} mb-4 backdrop-blur-md`}>
+          <div 
+            className="inline-flex items-center gap-2 font-bold tracking-[0.4em] text-[10px] uppercase px-5 py-2 rounded-full border mb-4 backdrop-blur-md"
+            style={{
+              color: "var(--accent)",
+              backgroundColor: isDark ? "rgba(255,255,255,0.05)" : "rgba(var(--primary), 0.1)",
+              borderColor: isDark ? "rgba(255,255,255,0.1)" : "rgba(var(--primary), 0.1)"
+            }}
+          >
             <MapPin size={14} /> Prime Neighborhoods
           </div>
-          <h2 className={`text-4xl lg:text-5xl font-black ${isDark ? "text-white" : "text-black"} tracking-tight leading-tight`}>
-            Explore Popular <span className="text-[#cddfa0] italic font-light">Locations</span>
+          <h2 
+            className="text-4xl lg:text-5xl font-black tracking-tight leading-tight"
+            style={{ color: "var(--foreground)" }}
+          >
+            Explore Popular <span style={{ color: "var(--accent)" }} className="italic font-light">Locations</span>
           </h2>
-          <p className={` ${isDark ? "text-white/60" : "text-black/60"} font-medium mt-4 max-w-xl`}>
+          <p 
+            className="font-medium mt-4 max-w-xl"
+            style={{ color: "var(--muted-foreground)" }}
+          >
             Discover the most sought-after neighborhoods and premium real estate markets around the globe.
           </p>
         </div>
@@ -126,23 +145,29 @@ export default function ExploreLocations() {
                   <img src={currentLocations[0].image} alt={currentLocations[0].name} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
                   
                   <div className="absolute top-6 left-6 z-20">
-                    <div className="bg-[#cddfa0] text-[#0f2e28] text-xs px-4 py-1.5 rounded-full font-black uppercase tracking-widest shadow-lg">
+                    <div 
+                      className="text-xs px-4 py-1.5 rounded-full font-black uppercase tracking-widest shadow-lg"
+                      style={{ 
+                        backgroundColor: "var(--primary)",
+                        color: "var(--primary-foreground)"
+                      }}
+                    >
                       Featured
                     </div>
                   </div>
 
-                  <div className="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-[#0f2e28] via-[#0f2e28]/80 to-transparent z-20 flex justify-between items-end">
+                  <div className="absolute bottom-0 left-0 w-full p-8 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/80 to-transparent z-20 flex justify-between items-end">
                     <div>
                       <h3 className="text-4xl font-black text-white mb-2 tracking-tight">{currentLocations[0].name}</h3>
                       <div className="flex items-center gap-2 text-white/80 font-semibold tracking-wide">
-                        <Building2 size={16} className="text-[#cddfa0]" /> {currentLocations[0].subtitle}
+                        <Building2 size={16} style={{ color: "var(--accent)" }} /> {currentLocations[0].subtitle}
                       </div>
                     </div>
                     
                     {/* Arrow Button - Updated with onClick handler */}
                     <button 
                       onClick={handleNextSlide}
-                      className="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:scale-110 group-hover:bg-[#cddfa0] group-hover:text-[#0f2e28] group-hover:border-[#cddfa0] transition-all transform group-hover:-rotate-45 relative z-30"
+                      className="w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:scale-110 group-hover:bg-[var(--primary)] group-hover:text-[var(--card-foreground)] group-hover:border-[var(--accent)] transition-all transform group-hover:-rotate-45 relative z-30"
                       aria-label="Next Slide"
                     >
                       <ArrowRight size={24} />
@@ -159,8 +184,8 @@ export default function ExploreLocations() {
                   onClick={handleNextSlide}
                   className="col-span-1 md:col-span-2 lg:col-span-4 row-span-1 relative rounded-3xl overflow-hidden group cursor-pointer shadow-lg"
                 >
-                  <div className="absolute inset-0 bg-[#0f2e28]/40 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f2e28] to-transparent opacity-80 z-10"></div>
+                  <div className="absolute inset-0 bg-[var(--card)]/40 group-hover:bg-transparent transition-colors duration-500 z-10"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] to-transparent opacity-80 z-10"></div>
                   
                   <img src={loc.image} alt={loc.name} className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
                   
@@ -170,7 +195,7 @@ export default function ExploreLocations() {
 
                   <div className="absolute bottom-5 left-5 z-20">
                     <h3 className="text-xl font-bold text-white tracking-wide">{loc.name}</h3>
-                    <p className="text-xs text-[#cddfa0] mt-1 font-semibold tracking-wider flex items-center gap-1 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                    <p className="text-xs mt-1 font-semibold tracking-wider flex items-center gap-1 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300" style={{ color: "var(--accent)" }}>
                       Explore <ArrowRight size={12} />
                     </p>
                   </div>
@@ -187,7 +212,13 @@ export default function ExploreLocations() {
             <button
               key={i}
               onClick={() => setCurrentPage(i)}
-              className={`transition-all duration-500 rounded-full ${i === currentPage ? "w-8 h-1.5 bg-[#cddfa0] shadow-[0_0_10px_#cddfa0]" : "w-1.5 h-1.5 bg-white/20 hover:bg-white/50"}`}
+              className="transition-all duration-500 rounded-full"
+              style={{
+                width: i === currentPage ? "2rem" : "0.375rem",
+                height: "0.375rem",
+                backgroundColor: i === currentPage ? "var(--primary)" : (isDark ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.2)"),
+                boxShadow: i === currentPage ? "0 0 10px #cddfa0" : "none"
+              }}
               aria-label={`Go to slide ${i + 1}`}
             />
           ))}
@@ -197,3 +228,4 @@ export default function ExploreLocations() {
     </section>
   );
 }
+

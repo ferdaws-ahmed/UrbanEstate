@@ -12,11 +12,7 @@ export default function DashboardParent({ children, title = "Dashboard" }) {
   return (
     <div
       suppressHydrationWarning
-      className="flex min-h-screen w-full transition-all duration-300"
-      style={{ 
-        backgroundColor: 'var(--ue-background)', 
-        color: 'var(--ue-text-main)' 
-      }}
+      className={`flex min-h-screen w-full transition-all duration-300 ${isDark ? 'bg-[var(--background)]' : 'bg-gray-50'}`}
     >
       <SellerSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       <div suppressHydrationWarning className="flex flex-1 flex-col min-w-0 md:pl-64 transition-all duration-300">
@@ -24,7 +20,6 @@ export default function DashboardParent({ children, title = "Dashboard" }) {
         <main 
           suppressHydrationWarning 
           className="flex-1 overflow-x-hidden overflow-y-auto p-6 sm:p-10 lg:p-12 custom-scrollbar transition-all duration-300"
-          style={{ backgroundColor: 'var(--ue-background)' }}
         >
           {children}
         </main>
@@ -32,3 +27,4 @@ export default function DashboardParent({ children, title = "Dashboard" }) {
     </div>
   );
 }
+

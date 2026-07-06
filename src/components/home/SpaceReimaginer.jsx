@@ -80,7 +80,7 @@ export default function SpaceReimaginer() {
   return (
     <section
       className={`w-full py-24 px-6 lg:px-12 ${
-        isDark ? "bg-[#0f2e28]" : "bg-white"
+        isDark ? "bg-[var(--background)]" : "bg-white"
       } overflow-hidden ${manrope.className}`}
     >
       <div className="max-w-6xl mx-auto">
@@ -88,7 +88,7 @@ export default function SpaceReimaginer() {
         <div className="flex flex-col items-center text-center mb-12 gap-4">
           <div
             className={`flex items-center gap-2 ${
-              isDark ? "text-[#cddfa0]" : "text-[#0f2e28]"
+              isDark ? "text-[var(--accent)]" : "text-[#099880]"
             } font-bold tracking-[0.4em] text-[10px] uppercase ${
               isDark ? "bg-white/5" : "bg-black/5"
             } px-5 py-2 rounded-full border ${
@@ -99,17 +99,17 @@ export default function SpaceReimaginer() {
           </div>
           <h3
             className={`text-4xl lg:text-5xl font-extrabold ${
-              isDark ? "text-white" : "text-[#0f2e28]"
+              isDark ? "text-white" : "text-[#099880]"
             } tracking-tight`}
           >
             Space{" "}
-            <span className="text-[#cddfa0] italic font-light">
+            <span className="text-[var(--accent)] italic font-light">
               Re-Imaginer
             </span>
           </h3>
           <p
             className={`${
-              isDark ? "text-white/60" : "text-[#0f2e28]/60"
+              isDark ? "text-white/60" : "text-[#099880]/60"
             } font-medium max-w-2xl`}
           >
             Watch your empty space transform into a fully furnished masterpiece
@@ -125,11 +125,11 @@ export default function SpaceReimaginer() {
                 onClick={() => startTransform(key)}
                 className={`px-5 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all duration-300 border ${
                   preset === key
-                    ? "bg-[#cddfa0] text-[#0f2e28] border-[#cddfa0] shadow-[0_0_20px_rgba(205,223,160,0.3)]"
+                    ? "bg-[var(--primary)] text-[#099880] border-[var(--accent)] shadow-[0_0_20px_rgba(205,223,160,0.3)]"
                     : `bg-transparent ${
                         isDark
-                          ? "text-white/70 border-white/20 hover:border-[#cddfa0]/50 hover:text-white"
-                          : "text-[#0f2e28]/70 border-[#0f2e28]/20 hover:border-[#cddfa0]/50 hover:text-[#0f2e28]"
+                          ? "text-white/70 border-white/20 hover:border-[var(--accent)]/50 hover:text-white"
+                          : "text-[#099880]/70 border-[var(--primary)]/20 hover:border-[var(--accent)]/50 hover:text-[#099880]"
                       }`
                 } ${
                   animating ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
@@ -146,7 +146,7 @@ export default function SpaceReimaginer() {
           className={`relative rounded-[2.5rem] overflow-hidden border ${
             isDark ? "border-white/10" : "border-black/10"
           } shadow-2xl h-[500px] lg:h-[650px] w-full ${
-            isDark ? "bg-[#13332c]" : "bg-white"
+            isDark ? "bg-[var(--card)]" : "bg-white"
           }`}
         >
           {/* 1. Original Background */}
@@ -175,10 +175,10 @@ export default function SpaceReimaginer() {
               className="absolute top-0 bottom-0 z-20 pointer-events-none flex items-center"
               style={{ left: `calc(${width}% - 1px)` }}
             >
-              <div className="w-[2px] h-full bg-[#cddfa0] shadow-[0_0_15px_#cddfa0]"></div>
+              <div className="w-[2px] h-full bg-[var(--primary)] shadow-[0_0_15px_#cddfa0]"></div>
               <div className="absolute right-0 h-full w-32 bg-gradient-to-r from-transparent to-[#cddfa0]/20"></div>
 
-              <div className="absolute left-4 bg-[#cddfa0] text-[#0f2e28] px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
+              <div className="absolute left-4 bg-[var(--primary)] text-[#099880] px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
                 Scanning {Math.round(width)}%
               </div>
             </div>
@@ -187,17 +187,17 @@ export default function SpaceReimaginer() {
           {/* 4. Labels */}
           <div className="absolute bottom-8 left-8 right-8 flex justify-between z-30 pointer-events-none">
             <div
-              className={`bg-[#0f2e28]/80 backdrop-blur-md border ${
+              className={`bg-[var(--background)]/80 backdrop-blur-md border ${
                 isDark ? "border-white/10" : "border-black/10"
               } ${
-                isDark ? "text-white/70" : "text-[#0f2e28]/70"
+                isDark ? "text-white/70" : "text-[#099880]/70"
               } px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest`}
             >
               Before
             </div>
 
             {width > 20 && (
-              <div className="bg-[#cddfa0] text-[#0f2e28] px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg">
+              <div className="bg-[var(--primary)] text-[#099880] px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg">
                 After: {PRESETS[preset].label}
               </div>
             )}
@@ -207,3 +207,4 @@ export default function SpaceReimaginer() {
     </section>
   );
 }
+

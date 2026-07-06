@@ -49,23 +49,42 @@ export default function TestimonialSlider() {
   };
 
   return (
-    <section className={`w-full py-24 px-6 lg:px-12 ${isDark ? "bg-[#0f2e28]" : "bg-white"} overflow-hidden relative ${manrope.className}`}>
+    <section 
+      className={`w-full py-24 px-6 lg:px-12 overflow-hidden relative ${manrope.className}`}
+      style={{ backgroundColor: "var(--background)" }}
+    >
       
       {/* Background Glows */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#cddfa0]/10 blur-[150px] rounded-full pointer-events-none"></div>
-      <div className={`absolute bottom-0 right-1/4 w-[400px] h-[400px] ${isDark?"bg-[#13332c]/50 blur-[120px]":"bg-white/10 blur-[120px]"} rounded-full pointer-events-none`}></div>
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[var(--primary)]/10 blur-[150px] rounded-full pointer-events-none"></div>
+      <div 
+        className="absolute bottom-0 right-1/4 w-[400px] h-[400px] blur-[120px] rounded-full pointer-events-none"
+        style={{ backgroundColor: isDark ? "rgba(var(--card), 0.5)" : "rgba(255, 255, 255, 0.1)" }}
+      ></div>
 
       <div className="container mx-auto max-w-6xl relative z-10">
         
         {/* Header Section */}
         <div className="text-center mb-16">
-          <div className={`inline-flex items-center gap-2 ${isDark ? "text-[#cddfa0]" : "text-[#13332c]"} ${isDark ? "font-bold" : "font-light"} tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[#cddfa0]/10"} px-5 py-2 rounded-full border ${isDark ? "border-white/10" : "border-[#0f2e28]/10"} mb-4 backdrop-blur-md shadow-[0_0_15px_rgba(205,223,160,0.2)]`}>
+          <div 
+            className="inline-flex items-center gap-2 font-bold tracking-[0.4em] text-[10px] uppercase px-5 py-2 rounded-full border mb-4 backdrop-blur-md shadow-[0_0_15px_rgba(205,223,160,0.2)]"
+            style={{
+              color: "var(--accent)",
+              backgroundColor: isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(var(--primary), 0.1)",
+              borderColor: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(var(--primary), 0.1)"
+            }}
+          >
             <Sparkles size={14} /> AI-Powered Success
           </div>
-          <h2 className={`text-4xl lg:text-5xl font-black ${isDark ? "text-white" : "text-black"} mb-4 tracking-tight`}>
-            Trusted by <span className="text-[#cddfa0] italic font-light drop-shadow-[0_0_10px_rgba(205,223,160,0.5)]">Thousands</span>
+          <h2 
+            className="text-4xl lg:text-5xl font-black mb-4 tracking-tight"
+            style={{ color: "var(--foreground)" }}
+          >
+            Trusted by <span style={{ color: "var(--accent)" }} className="italic font-light drop-shadow-[0_0_10px_rgba(205,223,160,0.5)]">Thousands</span>
           </h2>
-          <p className={` font-medium max-w-xl mx-auto ${isDark ? "text-white/60" : "text-black/60"}`}>
+          <p 
+            className="font-medium max-w-xl mx-auto"
+            style={{ color: "var(--muted-foreground)" }}
+          >
             See how our AI-powered real estate platform is changing lives through cutting-edge technology.
           </p>
         </div>
@@ -84,31 +103,47 @@ export default function TestimonialSlider() {
                   animate={style}
                   transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
         
-                  className="absolute w-[320px] md:w-[420px] bg-[#13332c]/90 backdrop-blur-2xl border border-[#cddfa0]/20 rounded-[2.5rem] px-10 pb-10 pt-14 text-center shadow-[0_30px_70px_rgba(15,46,40,0.5)] origin-center group overflow-visible"
+                  className="absolute w-[320px] md:w-[420px] bg-[var(--card)]/90 backdrop-blur-2xl border border-[var(--accent)]/20 rounded-[2.5rem] px-10 pb-10 pt-14 text-center shadow-[0_30px_70px_rgba(15,46,40,0.5)] origin-center group overflow-visible"
                   style={{ transformStyle: "preserve-3d" }}
                 >
                   {/* Subtle internal glow */}
                   <div className="absolute inset-0 bg-gradient-to-b from-[#cddfa0]/5 to-transparent pointer-events-none rounded-[2.5rem]"></div>
 
-                  <Quote size={40} className="text-[#cddfa0]/30 absolute top-8 left-8" />
+                  <Quote size={40} className="text-[var(--accent)]/30 absolute top-8 left-8" />
                   
                
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 z-20">
-                    <div className="absolute inset-0 bg-[#cddfa0] rounded-full animate-pulse blur-md opacity-80 shadow-[0_0_20px_#cddfa0]"></div>
-                    <img src={t.avatar} alt={t.name} className="relative w-full h-full rounded-full border-4 border-[#13332c] object-cover shadow-xl" />
+                    <div className="absolute inset-0 bg-[var(--primary)] rounded-full animate-pulse blur-md opacity-80 shadow-[0_0_20px_#cddfa0]"></div>
+                    <img 
+                      src={t.avatar} 
+                      alt={t.name} 
+                      className="relative w-full h-full rounded-full border-4 object-cover shadow-xl"
+                      style={{ borderColor: "var(--primary)" }}
+                    />
                   </div>
                   
-                  <div className="flex justify-center gap-1 mb-5 text-[#cddfa0] drop-shadow-[0_0_5px_rgba(205,223,160,0.5)] z-20 relative mt-4">
+                  <div className="flex justify-center gap-1 mb-5 text-[var(--accent)] drop-shadow-[0_0_5px_rgba(205,223,160,0.5)] z-20 relative mt-4">
                     {[...Array(5)].map((_, idx) => <span key={idx}>★</span>)}
                   </div>
                   
-                  <p className="text-white/80 text-lg font-medium leading-relaxed mb-6 h-[90px] overflow-hidden z-20 relative flex items-center justify-center">
+                  <p 
+                    className="text-lg font-medium leading-relaxed mb-6 h-[90px] overflow-hidden z-20 relative flex items-center justify-center"
+                    style={{ color: isDark ? "rgba(255, 255, 255, 0.8)" : "rgba(0, 0, 0, 0.8)" }}
+                  >
                     "{t.text}"
                   </p>
                   
-                  <div className="border-t border-white/10 pt-5 relative z-20">
-                    <p className="font-black text-white text-lg tracking-wide">{t.name}</p>
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-[#cddfa0] mt-1 ">{t.title}</p>
+                  <div 
+                    className="border-t pt-5 relative z-20"
+                    style={{ borderColor: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)" }}
+                  >
+                    <p 
+                      className="font-black text-lg tracking-wide"
+                      style={{ color: "var(--foreground)" }}
+                    >
+                      {t.name}
+                    </p>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--accent)] mt-1">{t.title}</p>
                   </div>
                 </motion.div>
               );
@@ -121,7 +156,13 @@ export default function TestimonialSlider() {
           {testimonials.map((_, i) => (
             <div
               key={i}
-              className={`transition-all duration-700 rounded-full ${i === index ? "w-12 h-1.5 bg-[#cddfa0] shadow-[0_0_15px_#cddfa0]" : "w-1.5 h-1.5 bg-white/20"}`}
+              className="transition-all duration-700 rounded-full"
+              style={{
+                width: i === index ? "3rem" : "0.375rem",
+                height: "0.375rem",
+                backgroundColor: i === index ? "var(--primary)" : (isDark ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)"),
+                boxShadow: i === index ? "0 0 15px #cddfa0" : "none"
+              }}
             />
           ))}
         </div>
@@ -130,3 +171,4 @@ export default function TestimonialSlider() {
     </section>
   );
 }
+

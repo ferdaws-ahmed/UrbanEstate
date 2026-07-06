@@ -9,70 +9,70 @@
     --card-foreground: #0f172a;
     --popover: #ffffff;
     --popover-foreground: #0f172a;
-    --primary: #0f2e28;
+    --primary: #099880;
     --primary-foreground: #ffffff;
     --secondary: #f1f5f9;
     --secondary-foreground: #0f172a;
     --muted: #f1f5f9;
     --muted-foreground: #64748b;
-    --accent: #cddfa0;
-    --accent-foreground: #0f2e28;
+    --accent: #0d9488; /* Teal for light mode, better contrast */
+    --accent-foreground: #ffffff;
     --destructive: #ef4444;
     --destructive-foreground: #ffffff;
     --border: #e2e8f0;
     --input: #e2e8f0;
-    --ring: #0f2e28;
+    --ring: #099880;
     --radius: 0.5rem;
   }
 
-  /* টেলউইন্ডের ডার্ক মোড ক্লাস হ্যান্ডেল করার জন্য */
+  /* Professional Dark Mode - Slate/Charcoal Theme */
   .dark {
     --background: #0f172a;
     --foreground: #f8fafc;
     --card: #1e293b;
     --card-foreground: #f8fafc;
-    --popover: #0f172a;
+    --popover: #1e293b;
     --popover-foreground: #f8fafc;
-    --primary: #cddfa0;
-    --primary-foreground: #0f2e28;
-    --secondary: #334155;
+    --primary: #099880;
+    --primary-foreground: #ffffff;
+    --secondary: #1e293b;
     --secondary-foreground: #f8fafc;
     --muted: #1e293b;
     --muted-foreground: #94a3b8;
-    --accent: #0f2e28;
-    --accent-foreground: #cddfa0;
-    --destructive: #7f1d1d;
-    --destructive-foreground: #fecaca;
-    --border: #334155;
-    --input: #334155;
-    --ring: #cddfa0;
+    --accent: #cddfa0;
+    --accent-foreground: #0f172a;
+    --destructive: #ef4444;
+    --destructive-foreground: #ffffff;
+    --border: rgba(255, 255, 255, 0.1);
+    --input: #1e293b;
+    --ring: #099880;
     --radius: 0.5rem;
   }
 
-  /* UrbanEstate Custom Theme Variables */
+  /* UrbanEstate Custom Theme Variables - synced with default Tailwind variables */
   .light {
-    --ue-primary: #0d9488; /* teal-600 */
-    --ue-secondary: #f0fdfa; /* teal-50 */
-    --ue-background: #f8fafc; /* slate-50 */
-    --ue-card: #ffffff;
+    --ue-primary: var(--primary);
+    --ue-secondary: var(--secondary);
+    --ue-background: var(--background);
+    --ue-card: var(--card);
     --ue-card-hover: #f1f5f9;
-    --ue-border: #e2e8f0;
-    --ue-text-main: #0f172a; /* slate-900 */
-    --ue-text-muted: #64748b; /* slate-500 */
-    --ue-accent: #cddfa0;
+    --ue-border: var(--border);
+    --ue-text-main: var(--foreground);
+    --ue-text-muted: var(--muted-foreground);
+    --ue-accent: var(--accent);
     --ue-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
 
   .dark {
-    --ue-primary: #cddfa0;
-    --ue-secondary: #0f2e28;
-    --ue-background: #061510;
-    --ue-card: #0b1f1a;
-    --ue-card-hover: #133c34;
-    --ue-border: rgba(26, 74, 64, 0.5);
-    --ue-text-main: #f8fafc;
-    --ue-text-muted: #94a3b8;
-    --ue-accent: #cddfa0;
+    --ue-primary: var(--primary);
+    --ue-secondary: var(--secondary);
+    --ue-background: var(--background);
+    --ue-card: var(--card);
+    --ue-card-hover: #334155;
+    --ue-border: var(--border);
+    --ue-text-main: var(--foreground);
+    --ue-text-muted: var(--muted-foreground);
+    --ue-accent: var(--accent);
     --ue-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
   }
 }
@@ -108,7 +108,7 @@
   }
 
   .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #1a4a40;
+    background: #334155;
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -124,3 +124,4 @@
     scrollbar-width: none;
   }
 }
+

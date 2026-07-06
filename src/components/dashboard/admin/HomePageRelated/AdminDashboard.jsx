@@ -56,7 +56,7 @@ export default function AdminDashboard() {
 
   if (isLoading) {
     return (
-      <div className={`min-h-[calc(100vh-200px)] flex items-center justify-center ${isDark ? 'bg-[#091a16]' : 'bg-[#f4f7f6]'}`}>
+      <div className={`min-h-[calc(100vh-200px)] flex items-center justify-center ${isDark ? 'bg-[var(--background)]' : 'bg-[#f4f7f6]'}`}>
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
           <p className={`text-sm font-bold uppercase tracking-widest ${isDark ? 'text-white' : 'text-gray-800'}`}>Loading Secure Systems...</p>
@@ -91,7 +91,7 @@ export default function AdminDashboard() {
 
       {/* middle section*/}
       <div className="xl:col-span-4 flex flex-col gap-6 w-full">
-        <div className="w-full shrink-0 h-[400px] md:h-[600px] rounded-[2.5rem] overflow-hidden border shadow-sm dark:border-[#1a4a40] bg-gray-50 dark:bg-[#133c34]">
+        <div className={`w-full shrink-0 h-[400px] md:h-[600px] rounded-[2.5rem] overflow-hidden border shadow-sm ${isDark ? 'border-white/10 bg-[var(--card)]' : 'border-gray-200 bg-gray-50'}`}>
           <PropertyMap properties={dashboardData.properties} mapCenter={dashboardData.mapCenter} />
         </div>
         <SmartInventorySnapshot inventory={dashboardData.smartInventory} />
@@ -116,3 +116,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

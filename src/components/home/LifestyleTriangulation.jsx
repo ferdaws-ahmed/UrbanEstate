@@ -149,7 +149,7 @@ export default function LifestyleTriangulation() {
                     <div className="text-sm text-gray-500 mt-1">{p.distance} m from ideal location</div>
                   </div>
                   <div>
-                    <button className="px-3 py-1 bg-[#0f2e28] text-white rounded">View</button>
+                    <button className="px-3 py-1 bg-[var(--background)] text-white rounded">View</button>
                   </div>
                 </div>
               ))}
@@ -160,3 +160,4 @@ export default function LifestyleTriangulation() {
     </div>
   );
 }
+

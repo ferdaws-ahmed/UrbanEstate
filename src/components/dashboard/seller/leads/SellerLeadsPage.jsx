@@ -138,7 +138,7 @@ export default function SellerLeadsPage() {
 
       {/* STATS NAVBAR */}
       <div className={`grid grid-cols-2 md:grid-cols-5 gap-4 p-2 rounded-[2rem] border transition-all ${
-        isDark ? "bg-[#0b1f1a] border-white/5" : "bg-white border-slate-100 shadow-sm"
+        isDark ? "bg-[var(--card)] border-white/5" : "bg-white border-slate-100 shadow-sm"
       }`}>
         {tabs.map((tab) => (
           <button
@@ -172,7 +172,7 @@ export default function SellerLeadsPage() {
 
         {sortedAndFilteredLeads.length === 0 ? (
           <div className={`p-24 text-center rounded-[3rem] border border-dashed ${
-            isDark ? "border-[#1a4a40] text-slate-500" : "border-slate-200 text-slate-400"
+            isDark ? "border-white/10 text-slate-500" : "border-slate-200 text-slate-400"
           }`}>
             <MessageSquare size={48} className="mx-auto mb-4 opacity-10" />
             <p className="font-black uppercase tracking-widest text-sm">No Messages In This Category</p>
@@ -191,8 +191,8 @@ export default function SellerLeadsPage() {
                 <div 
                   className={`group w-full lg:w-[48%] p-6 md:p-8 rounded-[2.5rem] border transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 shadow-sm dark:shadow-[0_20px_25px_-5px_rgb(0,0,0,0.3)] relative ${
                     isUnread 
-                      ? (isDark ? "border-teal-500/50 bg-[#0f2e28]/40 ring-1 ring-teal-500/20" : "border-teal-200 bg-teal-50/50 ring-1 ring-teal-100")
-                      : (isDark ? "bg-[#0b1f1a] border-white/5" : "bg-white border-slate-100")
+                      ? (isDark ? "border-teal-500/50 bg-teal-500/10 ring-1 ring-teal-500/20" : "border-teal-200 bg-teal-50/50 ring-1 ring-teal-100")
+                      : (isDark ? "bg-[var(--card)] border-white/5" : "bg-white border-slate-100")
                   }`}
                   style={{ 
                     borderColor: isUnread ? undefined : 'var(--ue-border)' 
@@ -202,7 +202,7 @@ export default function SellerLeadsPage() {
                   {isUnread && (
                     <div className="absolute -top-1 -right-1 flex h-4 w-4">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 border-2 border-white dark:border-[#0b1f1a]"></span>
+                      <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 border-2 border-white dark:border-[var(--card)]"></span>
                     </div>
                   )}
 
@@ -220,7 +220,7 @@ export default function SellerLeadsPage() {
                   <div className="flex flex-col gap-6">
                     <div className="flex items-center gap-4">
                       <div className={`h-14 w-14 shrink-0 rounded-2xl overflow-hidden border-2 transition-colors ${
-                        isDark ? "bg-[#1a4a40] border-white/5" : "bg-white border-slate-100 shadow-sm"
+                        isDark ? "bg-[var(--card)] border-white/5" : "bg-white border-slate-100 shadow-sm"
                       }`}>
                         {lead.avatar ? (
                           <img src={lead.avatar} className="h-full w-full object-cover" alt="" />
@@ -304,3 +304,4 @@ export default function SellerLeadsPage() {
     </div>
   );
 }
+

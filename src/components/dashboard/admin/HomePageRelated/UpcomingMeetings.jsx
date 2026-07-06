@@ -19,7 +19,7 @@ export default function UpcomingMeetings() {
   return (
     <div className={`p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] border backdrop-blur-xl transition-all duration-500 shadow-xl h-full flex flex-col overflow-hidden relative ${
       isDark 
-        ? 'bg-gradient-to-b from-[#133c34]/80 to-[#091a16] border-[#1a4a40] shadow-black/40 text-white' 
+        ? 'bg-gradient-to-b from-[var(--card)]/80 to-[var(--background)] border-white/10 shadow-black/40 text-white' 
         : 'bg-white/80 border-gray-200 shadow-gray-200/50 text-gray-900'
     }`}>
       
@@ -91,7 +91,7 @@ export default function UpcomingMeetings() {
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: ${isDark ? '#1a4a40' : '#e2e8f0'};
+          background: ${isDark ? 'var(--card)' : '#e2e8f0'};
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -104,3 +104,4 @@ export default function UpcomingMeetings() {
     </div>
   );
 }
+

@@ -87,7 +87,7 @@ export default function UserManagement() {
         </div>
 
         <div className="flex items-center gap-3">
-          <div className={`flex items-center p-1 rounded-2xl border ${isDark ? 'bg-[#133c34]/40 border-[#1a4a40]' : 'bg-white border-gray-200 shadow-sm'}`}>
+          <div className={`flex items-center p-1 rounded-2xl border ${isDark ? 'bg-[var(--card)]/40 border-white/10' : 'bg-white border-gray-200 shadow-sm'}`}>
             <button onClick={() => setViewMode('table')} className={`p-2 rounded-xl transition-all ${viewMode === 'table' ? (isDark ? 'bg-emerald-500 text-white' : 'bg-emerald-600 text-white shadow-lg') : 'text-gray-400'}`}><List size={20} /></button>
             <button onClick={() => setViewMode('grid')} className={`p-2 rounded-xl transition-all ${viewMode === 'grid' ? (isDark ? 'bg-emerald-500 text-white' : 'bg-emerald-600 text-white shadow-lg') : 'text-gray-400'}`}><LayoutGrid size={20} /></button>
           </div>
@@ -95,7 +95,7 @@ export default function UserManagement() {
       </div>
 
       <div className={`mb-8 p-3 rounded-[2rem] border backdrop-blur-md transition-all duration-300 ${
-        isDark ? 'bg-[#133c34]/80 border-[#1a4a40] shadow-2xl' : 'bg-white/80 border-gray-200 shadow-xl shadow-gray-200/50'
+        isDark ? 'bg-[var(--card)]/80 border-white/10 shadow-2xl' : 'bg-white/80 border-gray-200 shadow-xl shadow-gray-200/50'
       }`}>
         <div className="flex flex-col lg:flex-row items-center gap-4">
           <div className="relative flex-1 w-full">
@@ -106,7 +106,7 @@ export default function UserManagement() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className={`w-full pl-12 pr-4 py-3 rounded-2xl text-sm border focus:outline-none transition-all duration-300 ${
-                isDark ? 'bg-black/20 border-[#1a4a40] text-white focus:border-emerald-500' : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-emerald-500'
+                isDark ? 'bg-black/20 border-white/10 text-white focus:border-emerald-500' : 'bg-gray-50 border-gray-200 text-gray-900 focus:border-emerald-500'
               }`}
             />
           </div>
@@ -129,11 +129,11 @@ export default function UserManagement() {
       </div>
 
       {viewMode === 'table' ? (
-        <div className={`rounded-[2.5rem] border overflow-hidden transition-all duration-300 ${isDark ? 'bg-[#133c34]/40 border-[#1a4a40]' : 'bg-white border-gray-200 shadow-sm'}`}>
+        <div className={`rounded-[2.5rem] border overflow-hidden transition-all duration-300 ${isDark ? 'bg-[var(--card)]/40 border-white/10' : 'bg-white border-gray-200 shadow-sm'}`}>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className={`border-b ${isDark ? 'border-[#1a4a40] bg-black/20' : 'border-gray-100 bg-gray-50'}`}>
+                <tr className={`border-b ${isDark ? 'border-white/10 bg-black/20' : 'border-gray-100 bg-gray-50'}`}>
                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">User Details</th>
                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500">Contact Info</th>
                   <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-500 text-center">Activity</th>
@@ -148,7 +148,7 @@ export default function UserManagement() {
                       <div className="flex items-center gap-4">
                         <div className="relative">
                           <img src={u.avatar} alt={u.name} className="w-12 h-12 rounded-2xl object-cover border-2 border-emerald-500/20" />
-                          <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 ${isDark ? 'border-[#0b1f1a]' : 'border-white'} ${
+                          <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 ${isDark ? 'border-[var(--card)]' : 'border-white'} ${
                             u.status === 'Active' ? 'bg-emerald-500' : u.status === 'Frozen' ? 'bg-blue-500' : 'bg-red-500'
                           }`}></div>
                         </div>
@@ -212,13 +212,13 @@ export default function UserManagement() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {paginatedUsers.map((u) => (
             <div key={u.id} className={`group rounded-[2.5rem] border overflow-hidden transition-all duration-500 hover:scale-[1.02] relative ${
-              isDark ? 'bg-[#133c34]/40 border-[#1a4a40] hover:bg-[#133c34]' : 'bg-white border-gray-200 shadow-lg shadow-gray-200/20'
+              isDark ? 'bg-[var(--card)]/40 border-white/10 hover:bg-[var(--card)]' : 'bg-white border-gray-200 shadow-lg shadow-gray-200/20'
             } ${u.status === 'Terminated' ? 'opacity-60 grayscale' : ''}`}>
               <div className="p-6">
                 <div className="flex items-start justify-between mb-6">
                   <div className="relative">
                     <img src={u.avatar} alt={u.name} className="w-16 h-16 rounded-[1.5rem] object-cover border-4 border-emerald-500/10 shadow-xl" />
-                    <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-4 ${isDark ? 'border-[#133c34]' : 'border-white'} ${
+                    <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-4 ${isDark ? 'border-[var(--card)]' : 'border-white'} ${
                       u.status === 'Active' ? 'bg-emerald-500' : u.status === 'Frozen' ? 'bg-blue-500' : 'bg-red-500'
                     }`}></div>
                   </div>
@@ -245,7 +245,7 @@ export default function UserManagement() {
 
                 <div className="flex gap-2">
                   {u.status !== 'Active' && (
-                    <button onClick={() => handleUpdateStatus(u.id, 'Active')} className={`flex-1 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${isDark ? 'bg-emerald-500 text-[#091a16]' : 'bg-emerald-600 text-white'}`}>
+                    <button onClick={() => handleUpdateStatus(u.id, 'Active')} className={`flex-1 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all ${isDark ? 'bg-emerald-500 text-[var(--background)]' : 'bg-emerald-600 text-white'}`}>
                       <ShieldCheck size={14} /> Activate
                     </button>
                   )}
@@ -269,7 +269,7 @@ export default function UserManagement() {
           <button 
             disabled={currentPage === 1}
             onClick={() => setCurrentPage(p => p - 1)}
-            className={`p-3 rounded-2xl border transition-all ${currentPage === 1 ? 'opacity-30' : (isDark ? 'hover:bg-white/5 border-[#1a4a40]' : 'hover:bg-white border-gray-200 shadow-sm')}`}
+            className={`p-3 rounded-2xl border transition-all ${currentPage === 1 ? 'opacity-30' : (isDark ? 'hover:bg-white/5 border-white/10' : 'hover:bg-white border-gray-200 shadow-sm')}`}
           >
             <ChevronLeft size={20} />
           </button>
@@ -280,7 +280,7 @@ export default function UserManagement() {
                 onClick={() => setCurrentPage(i + 1)}
                 className={`w-10 h-10 rounded-2xl text-xs font-black transition-all ${
                   currentPage === i + 1 
-                    ? (isDark ? 'bg-emerald-500 text-[#091a16]' : 'bg-emerald-600 text-white shadow-lg') 
+                    ? (isDark ? 'bg-emerald-500 text-[var(--background)]' : 'bg-emerald-600 text-white shadow-lg') 
                     : (isDark ? 'text-gray-500 hover:bg-white/5' : 'text-gray-400 hover:bg-white')
                 }`}
               >
@@ -291,7 +291,7 @@ export default function UserManagement() {
           <button 
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage(p => p + 1)}
-            className={`p-3 rounded-2xl border transition-all ${currentPage === totalPages ? 'opacity-30' : (isDark ? 'hover:bg-white/5 border-[#1a4a40]' : 'hover:bg-white border-gray-200 shadow-sm')}`}
+            className={`p-3 rounded-2xl border transition-all ${currentPage === totalPages ? 'opacity-30' : (isDark ? 'hover:bg-white/5 border-white/10' : 'hover:bg-white border-gray-200 shadow-sm')}`}
           >
             <ChevronRight size={20} />
           </button>
@@ -300,3 +300,4 @@ export default function UserManagement() {
     </div>
   );
 }
+

@@ -15,7 +15,7 @@ import { useTheme } from "@/src/components/Theme/ThemeContext";
 export default function ListingViewsChart({ data = [] }) {
   const { isDark } = useTheme();
   const fill = isDark ? "#cddfa0" : "#0d9488";
-  const fill2 = isDark ? "#1a4a40" : "#ccfbf1";
+  const fill2 = isDark ? "var(--card)" : "#ccfbf1";
 
   const rows = Array.isArray(data) ? data : [];
   const chartData = rows.map((d, i) => ({
@@ -27,7 +27,7 @@ export default function ListingViewsChart({ data = [] }) {
   return (
     <div
       className={`min-w-0 h-full min-h-[320px] rounded-[2rem] border p-6 shadow-sm transition-all duration-300 ${
-        isDark ? "border-[#1a4a40]/50 bg-[#0b1f1a]" : "border-slate-200 bg-white"
+        isDark ? "border-white/10 bg-[var(--card)]" : "border-slate-200 bg-white"
       }`}
     >
       <div className="mb-6 flex items-center justify-between">
@@ -44,7 +44,7 @@ export default function ListingViewsChart({ data = [] }) {
       <div className="h-[220px] w-full min-w-0">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={chartData} margin={{ top: 0, right: 0, left: -25, bottom: 0 }}>
-            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={isDark ? "#1a4a40" : "#f1f5f9"} />
+            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={isDark ? "var(--card)" : "#f1f5f9"} />
             <XAxis 
               dataKey="day" 
               axisLine={false}
@@ -59,8 +59,8 @@ export default function ListingViewsChart({ data = [] }) {
             <Tooltip
               cursor={{ fill: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)' }}
               contentStyle={{
-                background: isDark ? "#0b1f1a" : "#fff",
-                border: isDark ? "1px solid #1a4a40" : "1px solid #e2e8f0",
+                background: isDark ? "var(--card)" : "#fff",
+                border: isDark ? "1px solid var(--card)" : "1px solid #e2e8f0",
                 borderRadius: 16,
                 fontSize: 12,
                 fontWeight: 700,
@@ -78,4 +78,5 @@ export default function ListingViewsChart({ data = [] }) {
     </div>
   );
 }
+
 

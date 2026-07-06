@@ -147,7 +147,7 @@ const PropertyLocation = ({ formData, updateLocation, updateField }) => {
   };
 
   return (
-    <div className={`p-8 md:p-12 rounded-[2.5rem] border transition-all duration-500 group/section shadow-2xl ${isDark ? 'bg-[#0b1f1a] border-[#1a4a40]/30 shadow-none' : 'bg-white border-slate-200 shadow-slate-200/40'}`}>
+    <div className={`p-8 md:p-12 rounded-[2.5rem] border transition-all duration-500 group/section shadow-2xl ${isDark ? 'bg-[var(--card)] border-white/30 shadow-none' : 'bg-white border-slate-200 shadow-slate-200/40'}`}>
       
       <div className="mb-12">
         <div className="flex items-center gap-4 mb-3">
@@ -189,13 +189,13 @@ const PropertyLocation = ({ formData, updateLocation, updateField }) => {
 
           {/* SUGGESTIONS DROPDOWN */}
           {suggestions.length > 0 && (
-            <div className={`absolute top-full left-0 right-0 mt-2 rounded-2xl border shadow-2xl z-[1000] overflow-hidden ${isDark ? 'bg-[#0b1f1a] border-[#1a4a40] text-slate-200' : 'bg-white border-slate-100 text-slate-700'}`}>
+            <div className={`absolute top-full left-0 right-0 mt-2 rounded-2xl border shadow-2xl z-[1000] overflow-hidden ${isDark ? 'bg-[var(--card)] border-white/10 text-slate-200' : 'bg-white border-slate-100 text-slate-700'}`}>
               {suggestions.map((s, idx) => (
                 <button
                   key={idx}
                   type="button"
                   onClick={() => handleSelectSuggestion(s)}
-                  className={`w-full text-left px-6 py-4 text-sm transition-colors border-b last:border-none ${isDark ? 'border-[#1a4a40]/30 hover:bg-[#1a4a40]/50' : 'border-slate-50 hover:bg-slate-50'}`}
+                  className={`w-full text-left px-6 py-4 text-sm transition-colors border-b last:border-none ${isDark ? 'border-white/30 hover:bg-[var(--card)]/50' : 'border-slate-50 hover:bg-slate-50'}`}
                 >
                   <p className="font-bold truncate">{s.display_name}</p>
                 </button>
@@ -211,7 +211,14 @@ const PropertyLocation = ({ formData, updateLocation, updateField }) => {
             style={{ height: '100%', width: '100%' }}
             ref={mapRef}
           >
-            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            <TileLayer 
+              url={isDark 
+                ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" 
+                : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"}
+              attribution={isDark 
+                ? '&copy; OpenStreetMap &copy; CARTO' 
+                : '&copy; OpenStreetMap contributors'}
+            />
             <Marker position={position} />
             <MapClickHandler updateLocation={updateLocation} />
           </MapContainer>
@@ -253,3 +260,4 @@ const PropertyLocation = ({ formData, updateLocation, updateField }) => {
 };
 
 export default PropertyLocation;
+

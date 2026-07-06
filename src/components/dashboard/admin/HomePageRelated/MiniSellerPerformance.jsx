@@ -26,7 +26,7 @@ export default function MiniSellerPerformance() {
   return (
     <div className={`p-3 sm:p-4 rounded-[1.5rem] sm:rounded-[2rem] border backdrop-blur-xl transition-all duration-500 shadow-xl h-full flex flex-col overflow-hidden relative ${
       isDark 
-        ? 'bg-gradient-to-b from-[#133c34]/80 to-[#091a16] border-[#1a4a40] shadow-black/40 text-white' 
+        ? 'bg-gradient-to-b from-[var(--card)]/80 to-[var(--background)] border-white/10 shadow-black/40 text-white' 
         : 'bg-white/80 border-gray-200 shadow-gray-200/50 text-gray-900'
     }`}>
       
@@ -51,7 +51,7 @@ export default function MiniSellerPerformance() {
          <div className="flex items-end gap-1 h-full opacity-80 shrink-0 pt-1">
             {[40, 70, 30, 90, 50, 100].map((h, i) => (
               <div key={i} className={`w-1 sm:w-1.5 rounded-t-sm transition-all duration-500 ${
-                i === 5 ? (isDark ? 'bg-[#cddfa0] shadow-[0_0_6px_rgba(205,223,160,0.5)]' : 'bg-blue-600') : (isDark ? 'bg-[#1a4a40]' : 'bg-blue-200')
+                i === 5 ? (isDark ? 'bg-[#cddfa0] shadow-[0_0_6px_rgba(205,223,160,0.5)]' : 'bg-blue-600') : (isDark ? 'bg-[var(--card)]' : 'bg-blue-200')
               }`} style={{ height: `${h}%` }}></div>
             ))}
          </div>
@@ -112,7 +112,7 @@ export default function MiniSellerPerformance() {
               
               {/* Score Box */}
               <div className={`flex items-center justify-center min-w-[22px] sm:min-w-[26px] px-1 py-0.5 rounded border shrink-0 ${
-                isDark ? 'bg-[#133c34]/50 border-[#1a4a40] text-[#cddfa0]' : 'bg-blue-50 border-blue-100 text-blue-600'
+                isDark ? 'bg-[var(--card)]/50 border-white/10 text-[#cddfa0]' : 'bg-blue-50 border-blue-100 text-blue-600'
               }`}>
                 <span className="text-[8px] sm:text-[9px] font-black">
                   {Seller.sales}
@@ -134,7 +134,7 @@ export default function MiniSellerPerformance() {
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: ${isDark ? '#1a4a40' : '#e2e8f0'};
+          background: ${isDark ? 'var(--card)' : '#e2e8f0'};
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -147,3 +147,4 @@ export default function MiniSellerPerformance() {
     </div>
   );
 }
+

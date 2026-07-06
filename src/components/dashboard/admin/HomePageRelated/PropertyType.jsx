@@ -19,7 +19,7 @@ export default function PropertyType() {
     
     <div className={`p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-500 shadow-2xl flex flex-col overflow-hidden relative w-full h-full ${
       isDark 
-        ? 'bg-gradient-to-b from-[#103029] to-[#071713] border-[#1a4a40] text-white' 
+        ? 'bg-gradient-to-b from-[#103029] to-[#071713] border-white/10 text-white' 
         : 'bg-white border-gray-200 text-gray-900'
     }`}>
       
@@ -34,7 +34,7 @@ export default function PropertyType() {
             Portfolio Breakdown
           </p>
         </div>
-        <button className={`p-1.5 rounded-lg shrink-0 transition-colors ${isDark ? 'bg-[#1a4a40] hover:bg-[#cddfa0]/20' : 'bg-gray-100 hover:bg-gray-200'}`}>
+        <button className={`p-1.5 rounded-lg shrink-0 transition-colors ${isDark ? 'bg-[var(--card)] hover:bg-[#cddfa0]/20' : 'bg-gray-100 hover:bg-gray-200'}`}>
           <MoreHorizontal size={14} className={isDark ? 'text-[#cddfa0]' : 'text-gray-600'} />
         </button>
       </div>
@@ -46,7 +46,7 @@ export default function PropertyType() {
           return (
             <div key={index} className={`flex flex-col gap-2.5 p-3 rounded-[1.2rem] transition-all duration-300 border group cursor-default ${
               isDark 
-                ? 'bg-[#153b32]/40 border-[#1a4a40] hover:bg-[#1a4a40]/60 hover:border-[#cddfa0]/30 shadow-sm' 
+                ? 'bg-[#153b32]/40 border-white/10 hover:bg-[var(--card)]/60 hover:border-[#cddfa0]/30 shadow-sm' 
                 : 'bg-gray-50 border-gray-100 hover:bg-white hover:shadow-md hover:border-emerald-200'
             }`}>
               
@@ -56,7 +56,7 @@ export default function PropertyType() {
                   
                   {/* Icon Box with futuristic glow on hover */}
                   <div className={`p-1.5 sm:p-2 rounded-lg shrink-0 transition-all duration-300 ${
-                    isDark ? 'bg-[#091a16] border border-[#1a4a40] text-emerald-400 group-hover:text-[#cddfa0] group-hover:shadow-[0_0_8px_rgba(205,223,160,0.2)]' : 'bg-white border border-gray-100 text-emerald-500 shadow-sm group-hover:shadow-md'
+                    isDark ? 'bg-[var(--background)] border border-white/10 text-emerald-400 group-hover:text-[#cddfa0] group-hover:shadow-[0_0_8px_rgba(205,223,160,0.2)]' : 'bg-white border border-gray-100 text-emerald-500 shadow-sm group-hover:shadow-md'
                   }`}>
                     <Icon size={12} className="sm:w-3.5 sm:h-3.5" />
                   </div>
@@ -72,14 +72,14 @@ export default function PropertyType() {
                   <span className={`text-[11px] sm:text-[13px] font-black drop-shadow-sm ${isDark ? 'text-[#cddfa0]' : 'text-emerald-600'}`}>
                     {type.percentage}%
                   </span>
-                  <div className={`px-1.5 py-0.5 rounded text-[7px] sm:text-[8px] font-bold border ${isDark ? 'bg-[#1a4a40] text-gray-300 border-[#1a4a40]' : 'bg-gray-100 text-gray-600 border-gray-200'}`}>
+                  <div className={`px-1.5 py-0.5 rounded text-[7px] sm:text-[8px] font-bold border ${isDark ? 'bg-[var(--card)] text-gray-300 border-white/10' : 'bg-gray-100 text-gray-600 border-gray-200'}`}>
                     ({type.count})
                   </div>
                 </div>
               </div>
               
               {/* Futuristic Animated Progress Bar */}
-              <div className={`w-full h-1.5 sm:h-2 rounded-full overflow-hidden relative border ${isDark ? 'bg-[#050e0c] border-[#1a4a40]/60' : 'bg-gray-200 border-transparent'}`}>
+              <div className={`w-full h-1.5 sm:h-2 rounded-full overflow-hidden relative border ${isDark ? 'bg-[#050e0c] border-[var(--card)]/60' : 'bg-gray-200 border-transparent'}`}>
                 
                 {/* Striped Background Pattern for Dark Mode (Cyberpunk vibe) */}
                 {isDark && (
@@ -113,3 +113,4 @@ export default function PropertyType() {
     </div>
   );
 }
+

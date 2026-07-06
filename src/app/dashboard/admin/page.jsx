@@ -5,3 +5,4 @@ import AdminDashboard from "@/src/components/dashboard/admin/HomePageRelated/Adm
 export default function AdminOverviewPage() {
   return <AdminDashboard />;
 }
+

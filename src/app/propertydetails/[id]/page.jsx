@@ -90,16 +90,16 @@ export default async function PropertyPage({ params, searchParams }) {
 
   if (!property) {
     return (
-      <div className="h-screen bg-[#061510] flex flex-col items-center justify-center gap-4 text-[#cddfa0]">
+      <div className="h-screen bg-[var(--background)] flex flex-col items-center justify-center gap-4 text-[var(--accent)]">
         <div className="font-mono text-[12px] tracking-[0.4em] animate-pulse uppercase">
           ERROR: Asset {id?.slice(-6)} Not Found
         </div>
-        <Link href="/" className="text-[10px] uppercase border border-[#cddfa0]/30 px-6 py-2 rounded-full hover:bg-[#cddfa0] hover:text-[#061510] transition-all">
+        <Link href="/" className="text-[10px] uppercase border border-[var(--accent)]/30 px-6 py-2 rounded-full hover:bg-[var(--primary)] hover:text-[#099880] transition-all">
           Return to Base
         </Link>
       </div>
     );
-  }
+  } 
 
   return <PropertyDetailsClient property={property} />;
-}
+}  

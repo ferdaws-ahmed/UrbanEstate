@@ -20,14 +20,14 @@ const PropertyDetails = ({ formData, updateField }) => {
     w-full px-6 py-4.5 rounded-[1.25rem] 
     border-2 outline-none transition-all duration-300 shadow-sm
     ${isDark 
-      ? 'border-[#1a4a40]/40 bg-[#061510] text-slate-100 placeholder-slate-500 focus:ring-teal-500/10 focus:border-teal-500/50 focus:bg-[#0b1f1a] hover:border-teal-800/60' 
+      ? 'border-white/40 bg-[var(--card)] text-slate-100 placeholder-slate-500 focus:ring-teal-500/10 focus:border-teal-500/50 focus:bg-[var(--card)] hover:border-teal-800/60' 
       : 'border-slate-200 bg-white text-slate-900 placeholder-slate-500 focus:ring-teal-500/10 focus:border-teal-500/50 focus:bg-white hover:border-teal-300 shadow-inner'}
   `;
 
   const labelStyle = `block text-[10px] font-black mb-2.5 ml-2 uppercase tracking-[0.25em] ${isDark ? 'text-slate-500' : 'text-slate-600'}`;
 
   return (
-    <div className={`p-8 md:p-12 rounded-[2.5rem] border transition-all duration-500 group/section shadow-2xl ${isDark ? 'bg-[#0b1f1a] border-[#1a4a40]/30 shadow-none' : 'bg-white border-slate-200 shadow-slate-200/40'}`}>
+    <div className={`p-8 md:p-12 rounded-[2.5rem] border transition-all duration-500 group/section shadow-2xl ${isDark ? 'bg-[var(--card)] border-white/30 shadow-none' : 'bg-white border-slate-200 shadow-slate-200/40'}`}>
       
       <div className="mb-12">
         <div className="flex items-center gap-4 mb-3">
@@ -100,3 +100,4 @@ const PropertyDetails = ({ formData, updateField }) => {
 };
 
 export default PropertyDetails;
+

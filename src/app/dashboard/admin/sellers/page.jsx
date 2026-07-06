@@ -5,3 +5,4 @@ import SellerManagement from "@/src/components/dashboard/admin/SellerRelated/Sel
 export default function SellersPage() {
   return <SellerManagement />;
 }
+

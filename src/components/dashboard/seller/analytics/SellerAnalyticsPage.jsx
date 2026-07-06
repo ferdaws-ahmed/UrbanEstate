@@ -94,7 +94,7 @@ export default function SellerAnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((s, i) => (
           <div key={i} className={`p-8 rounded-[2.5rem] border shadow-xl transition-all duration-500 hover:-translate-y-1 ${
-            isDark ? "bg-[#0b1f1a] border-[#1a4a40]" : "bg-white border-slate-100"
+            isDark ? "bg-[var(--card)] border-white/10" : "bg-white border-slate-100"
           }`}>
             <div className="flex items-start justify-between">
               <div className={`p-3 rounded-2xl ${s.bg} ${s.color}`}>
@@ -134,3 +134,4 @@ export default function SellerAnalyticsPage() {
     </div>
   );
 }
+

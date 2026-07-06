@@ -20,7 +20,7 @@ export default function MarketingCampaignROI({ campaigns }) {
   return (
    
     <div className={`p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-500 shadow-2xl flex flex-col overflow-hidden relative h-[380px] sm:h-[400px] w-full ${
-      isDark ? 'bg-gradient-to-b from-[#103029] to-[#071713] border-[#1a4a40] text-white' : 'bg-white border-gray-200 text-gray-900'
+      isDark ? 'bg-gradient-to-b from-[#103029] to-[#071713] border-white/10 text-white' : 'bg-white border-gray-200 text-gray-900'
     }`}>
       
       {/* Header */}
@@ -58,7 +58,7 @@ export default function MarketingCampaignROI({ campaigns }) {
                   </p>
                 </div>
               </div>
-              <div className={`w-full h-1.5 sm:h-2 rounded-full overflow-hidden relative border ${isDark ? 'bg-[#050e0c] border-[#1a4a40]/60' : 'bg-gray-200 border-transparent'}`}>
+              <div className={`w-full h-1.5 sm:h-2 rounded-full overflow-hidden relative border ${isDark ? 'bg-[#050e0c] border-[var(--card)]/60' : 'bg-gray-200 border-transparent'}`}>
                 {isDark && <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 2px, #fff 2px, #fff 4px)' }}></div>}
                 <div className={`h-full rounded-full ${camp.color} relative z-10 opacity-90 group-hover:opacity-100 transition-all duration-1000 ease-out`} style={{ width: `${camp.progress}%`, boxShadow: isDark ? `0 0 8px ${camp.glow}, 0 0 12px ${camp.glow}` : 'none' }}>
                   <div className="absolute right-0 top-0 bottom-0 w-4 bg-white/50 rounded-full blur-[2px]"></div>
@@ -72,10 +72,11 @@ export default function MarketingCampaignROI({ campaigns }) {
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar { width: 3px; height: 0px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; border: none; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: ${isDark ? '#1a4a40' : '#e2e8f0'}; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: ${isDark ? 'var(--card)' : '#e2e8f0'}; border-radius: 10px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: ${isDark ? '#cddfa0' : '#3b82f6'}; }
       `}</style>
       <div className="absolute top-[-10%] right-[-10%] w-32 h-32 bg-[#cddfa0]/5 rounded-full blur-3xl pointer-events-none z-0"></div>
     </div>
   );
 }
+

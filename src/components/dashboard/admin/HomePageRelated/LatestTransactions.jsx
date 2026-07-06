@@ -20,7 +20,7 @@ export default function LatestTransactions() {
   return (
     <div className={`p-4 sm:p-5 rounded-[1.5rem] sm:rounded-[2rem] border backdrop-blur-xl transition-all duration-500 shadow-xl h-full flex flex-col overflow-hidden relative ${
       isDark 
-        ? 'bg-gradient-to-b from-[#133c34]/80 to-[#091a16] border-[#1a4a40] shadow-black/40 text-white' 
+        ? 'bg-gradient-to-b from-[var(--card)]/80 to-[var(--background)] border-white/10 shadow-black/40 text-white' 
         : 'bg-white/80 border-gray-200 shadow-gray-200/50 text-gray-900'
     }`}>
       
@@ -54,7 +54,7 @@ export default function LatestTransactions() {
               {/* Left Side: Icon & Details */}
               <div className="flex items-center gap-2.5 min-w-0 flex-1">
                 <div className={`p-1.5 rounded-lg shrink-0 transition-colors ${
-                  isDark ? 'bg-[#133c34] text-emerald-400 group-hover:text-[#cddfa0]' : 'bg-white text-emerald-500 shadow-sm'
+                  isDark ? 'bg-[var(--card)] text-emerald-400 group-hover:text-[#cddfa0]' : 'bg-white text-emerald-500 shadow-sm'
                 }`}>
                   <CheckCircle2 size={12} />
                 </div>
@@ -94,7 +94,7 @@ export default function LatestTransactions() {
           background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: ${isDark ? '#1a4a40' : '#e2e8f0'};
+          background: ${isDark ? 'var(--card)' : '#e2e8f0'};
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
@@ -107,3 +107,4 @@ export default function LatestTransactions() {
     </div>
   );
 }
+
