@@ -119,7 +119,9 @@ export default function Hero() {
                   className="h-full w-full bg-cover bg-center"
                   style={{ backgroundImage: `url('${slide.image}')` }}
                 >
-                  <div className={`absolute inset-0 ${isDark ? 'bg-black/40' : 'bg-gradient-to-br from-gray-900/80 via-gray-900/70 to-black/90'}`}></div>
+                  {/* Darker overlay only in the center where text is */}
+                  <div className={`absolute inset-0 ${isDark ? 'bg-black/40' : 'bg-black/25'}`}></div>
+                  <div className={`absolute inset-0 ${isDark ? '' : 'bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.7)_0%,rgba(0,0,0,0.4)_40%,rgba(0,0,0,0.15)_100%)]'}`}></div>
                   <div
                     className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/30 to-[var(--background)]"
                   ></div>
