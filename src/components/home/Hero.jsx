@@ -119,7 +119,7 @@ export default function Hero() {
                   className="h-full w-full bg-cover bg-center"
                   style={{ backgroundImage: `url('${slide.image}')` }}
                 >
-                  <div className={`absolute inset-0 ${isDark ? 'bg-black/40' : 'bg-black/60'} mix-blend-multiply`}></div>
+                  <div className={`absolute inset-0 ${isDark ? 'bg-black/40' : 'bg-gradient-to-br from-gray-900/80 via-gray-900/70 to-black/90'}`}></div>
                   <div
                     className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/30 to-[var(--background)]"
                   ></div>
