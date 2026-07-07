@@ -61,6 +61,15 @@ const MediaUpload = ({ images, updateImages }) => {
     updateImages(updatedImages);
   };
 
+  // Helper to get image URL from string or object
+  const getImageUrl = (image) => {
+    if (typeof image === 'string') return image;
+    if (image && typeof image === 'object') {
+      return image.url || image.secure_url || image.src || '';
+    }
+    return '';
+  };
+
   return (
     <div className={`p-8 md:p-12 rounded-[2.5rem] border transition-all duration-500 group/section shadow-2xl ${isDark ? 'bg-[var(--card)] border-white/30 shadow-none' : 'bg-white border-slate-200 shadow-slate-200/40'}`}>
       
@@ -123,16 +132,18 @@ const MediaUpload = ({ images, updateImages }) => {
         <AnimatePresence>
           {images.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8">
-              {images.map((url, index) => (
+              {images.map((image, index) => {
+                const imgUrl = getImageUrl(image);
+                return (
                 <motion.div
-                  key={url}
+                  key={`${index}-${imgUrl || Math.random()}`}
                   initial={{ opacity: 0, scale: 0.8, y: 30 }}
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.8, y: 30 }}
                   className={`relative group aspect-square rounded-[2rem] overflow-hidden border-4 shadow-2xl ${isDark ? 'border-white/10' : 'border-white'}`}
                 >
                   <img 
-                    src={url} 
+                    src={imgUrl} 
                     alt={`Property ${index}`} 
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-125 group-hover:rotate-3"
                   />
@@ -151,7 +162,8 @@ const MediaUpload = ({ images, updateImages }) => {
                     </div>
                   )}
                 </motion.div>
-              ))}
+              );
+              })}
             </div>
           )}
         </AnimatePresence>

@@ -11,7 +11,7 @@ import PropertyLocation from "@/src/components/SellProperty/PropertyLocation";
 import Amenities from "@/src/components/SellProperty/Amenities";
 import MediaUpload from "@/src/components/SellProperty/MediaUpload";
 
-export default function SellerUpdatePropertyPage({ propertyId }) {
+export default function AdminUpdatePropertyPage({ propertyId }) {
   const router = useRouter();
   const { isDark } = useTheme();
   const [loading, setLoading] = useState(true);
@@ -69,7 +69,7 @@ export default function SellerUpdatePropertyPage({ propertyId }) {
       } catch (error) {
         console.error("Error:", error);
         toast.error("Could not load property data");
-        router.push("/dashboard/seller/listings");
+        router.push("/dashboard/admin/properties");
       } finally {
         setLoading(false);
       }
@@ -109,7 +109,7 @@ export default function SellerUpdatePropertyPage({ propertyId }) {
       if (!res.ok) throw new Error("Update failed");
 
       toast.success("Property updated successfully!", { id: tid });
-      router.push("/dashboard/seller/listings");
+      router.push("/dashboard/admin/properties");
     } catch (error) {
       toast.error("Failed to update property", { id: tid });
     } finally {
@@ -133,16 +133,16 @@ export default function SellerUpdatePropertyPage({ propertyId }) {
             Edit Property Listing
           </h1>
           <p className="text-sm font-bold text-teal-600 dark:text-[#cddfa0] uppercase tracking-[0.2em] mt-1">
-            Update your property details
+            Update property details
           </p>
         </div>
         <button 
-          onClick={() => router.push("/dashboard/seller/listings")}
+          onClick={() => router.push("/dashboard/admin/properties")}
           className={`flex items-center gap-3 font-black text-[10px] uppercase tracking-[0.2em] transition-all px-6 py-3 rounded-xl border ${
             isDark ? "border-white/10 text-slate-400 hover:text-white hover:bg-white/5" : "border-slate-200 text-slate-500 hover:text-teal-600 hover:bg-slate-50"
           }`}
         >
-          <ArrowLeft size={14} /> Back to My Listings
+          <ArrowLeft size={14} /> Back to Properties
         </button>
       </div>
 
@@ -249,4 +249,3 @@ export default function SellerUpdatePropertyPage({ propertyId }) {
     </div>
   );
 }
-

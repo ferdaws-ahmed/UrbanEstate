@@ -87,9 +87,20 @@ export default function Properties() {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this property?")) {
       try {
-        // Implementation for delete would go here
-        toast.success("Property deleted successfully");
-        setProperties(properties.filter(p => p._id !== id));
+        const response = await fetch('/api/admin/properties', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id })
+        });
+
+        if (response.ok) {
+          toast.success("Property deleted successfully");
+          setProperties(properties.filter(p => p._id !== id));
+        } else {
+          toast.error("Failed to delete property");
+        }
       } catch (error) {
         toast.error("Failed to delete property");
       }
@@ -232,25 +243,25 @@ export default function Properties() {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Link href={`/propertydetails/${p._id}`} className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-white hover:bg-emerald-500/20' : 'bg-gray-100 text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'}`}>
-                          <Eye size={16} />
-                        </Link>
-                        <button 
-                          onClick={() => toggleFeatured(p._id)}
-                          className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-white hover:bg-yellow-500/20' : 'bg-gray-100 text-gray-600 hover:text-yellow-600 hover:bg-yellow-50'} ${featuredPropertyIds.has(p._id) ? (isDark ? 'text-yellow-400 bg-yellow-500/20' : 'text-yellow-600 bg-yellow-50') : ''}`}
-                        >
-                          <Star size={16} fill={featuredPropertyIds.has(p._id) ? 'currentColor' : 'none'} />
-                        </button>
-                        <button className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-white hover:bg-blue-500/20' : 'bg-gray-100 text-gray-600 hover:text-blue-600 hover:bg-blue-50'}`}>
-                          <Edit size={16} />
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(p._id)}
-                          className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-red-400 hover:bg-red-500/20' : 'bg-gray-100 text-gray-600 hover:text-red-600 hover:bg-red-50'}`}
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
+            <Link href={`/propertydetails/${p._id}`} className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-white hover:bg-emerald-500/20' : 'bg-gray-100 text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'}`}>
+              <Eye size={16} />
+            </Link>
+            <button 
+              onClick={() => toggleFeatured(p._id)}
+              className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-white hover:bg-yellow-500/20' : 'bg-gray-100 text-gray-600 hover:text-yellow-600 hover:bg-yellow-50'} ${featuredPropertyIds.has(p._id) ? (isDark ? 'text-yellow-400 bg-yellow-500/20' : 'text-yellow-600 bg-yellow-50') : ''}`}
+            >
+              <Star size={16} fill={featuredPropertyIds.has(p._id) ? 'currentColor' : 'none'} />
+            </button>
+            <Link href={`/dashboard/admin/edit/${p._id}`} className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-white hover:bg-blue-500/20' : 'bg-gray-100 text-gray-600 hover:text-blue-600 hover:bg-blue-50'}`}>
+              <Edit size={16} />
+            </Link>
+            <button 
+              onClick={() => handleDelete(p._id)}
+              className={`p-2 rounded-xl transition-all ${isDark ? 'bg-white/5 text-gray-400 hover:text-red-400 hover:bg-red-500/20' : 'bg-gray-100 text-gray-600 hover:text-red-600 hover:bg-red-50'}`}
+            >
+              <Trash2 size={16} />
+            </button>
+          </div>
                     </td>
                   </tr>
                 ))}
@@ -316,9 +327,9 @@ export default function Properties() {
                     >
                       <Star size={14} fill={featuredPropertyIds.has(p._id) ? 'currentColor' : 'none'} />
                     </button>
-                    <button className={`p-2 rounded-xl ${isDark ? 'bg-white/5 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-600 hover:text-blue-600'}`}>
+                    <Link href={`/dashboard/admin/edit/${p._id}`} className={`p-2 rounded-xl ${isDark ? 'bg-white/5 text-gray-400 hover:text-white' : 'bg-gray-100 text-gray-600 hover:text-blue-600'}`}>
                       <Edit size={14} />
-                    </button>
+                    </Link>
                     <button 
                       onClick={() => handleDelete(p._id)}
                       className={`p-2 rounded-xl ${isDark ? 'bg-white/5 text-gray-400 hover:text-red-400' : 'bg-gray-100 text-gray-600 hover:text-red-600'}`}

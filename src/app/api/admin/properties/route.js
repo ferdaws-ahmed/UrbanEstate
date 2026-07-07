@@ -58,3 +58,30 @@ export async function GET(request) {
   }
 }
 
+export async function DELETE(request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user || session.user.role !== "admin") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { id } = await request.json();
+    if (!id) {
+      return NextResponse.json({ error: "Property ID is required" }, { status: 400 });
+    }
+
+    const propertiesCollection = await connect("properties");
+    const { ObjectId } = require('mongodb');
+    
+    const result = await propertiesCollection.deleteOne({ _id: new ObjectId(id) });
+    
+    if (result.deletedCount === 0) {
+      return NextResponse.json({ error: "Property not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: "Property deleted successfully" });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
