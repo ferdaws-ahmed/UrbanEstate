@@ -23,7 +23,6 @@ const PropertyMap = dynamic(() => import("../components/home/PropertyMap"), { ss
 const AeroTopoScanner = dynamic(() => import("../components/home/AeroTopoScanner"), { ssr: false });
 const Property3D = dynamic(() => import("../components/home/Property3D"), { ssr: false });
 const SwipeDeck = dynamic(() => import("../components/home/SwipeDeck"), { ssr: false });
-const VoiceSearch = dynamic(() => import("../components/home/VoiceSearch"), { ssr: false });
 
 export default function Home() {
   return (
@@ -31,7 +30,6 @@ export default function Home() {
       
   <Hero /> 
   <FeaturedProperties />
-  <VoiceSearch /> 
   <ExploreLocations /> 
   <SwipeDeck />
   <PropertyMap />
