@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import Navbar from "../components/shared/Navbar"; 
 import Hero from "../components/home/Hero"; 
-import Features from "../components/home/Features"; 
 import EMICalculator from "../components/home/EMICalculator";
 import ExploreLocations from "../components/home/ExploreLocations";
 import TestimonialSlider from "../components/home/TestimonialSlider";
@@ -31,10 +30,9 @@ export default function Home() {
     <main>
       
   <Hero /> 
-  <Features />
+  <FeaturedProperties />
   <VoiceSearch /> 
   <ExploreLocations /> 
-  <FeaturedProperties />
   <SwipeDeck />
   <PropertyMap />
   <Property3D /> 
