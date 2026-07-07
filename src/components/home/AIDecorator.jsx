@@ -92,12 +92,12 @@ export default function SmartHomeCommandCenter() {
       {/* Background Cybernetic Glow */}
       <div
         className={`absolute -top-32 -left-32 w-[600px] h-[600px] ${
-          isDark ? "bg-[var(--primary)]/10 blur-[150px]" : "bg-white/10"
+          isDark ? "bg-[var(--primary)]/10 blur-[150px]" : "bg-[var(--primary)]/10 blur-[150px]"
         } rounded-full pointer-events-none z-0`}
       ></div>
       <div
         className={`absolute bottom-0 right-0 w-[500px] h-[500px] ${
-          isDark ? "bg-[var(--card)] blur-[100px]" : "bg-white blur-[100px]"
+          isDark ? "bg-[var(--card)] blur-[100px]" : "bg-[var(--primary)]/20 blur-[100px]"
         } rounded-full pointer-events-none z-0`}
       ></div>
 
@@ -154,7 +154,7 @@ export default function SmartHomeCommandCenter() {
             className={`inline-flex items-center gap-2 ${
               isDark ? "text-[var(--accent)]" : "text-[#099880]"
             } font-bold tracking-[0.4em] text-[10px] uppercase ${
-              isDark ? "bg-[var(--primary)]/5" : "bg-[var(--background)]/5"
+              isDark ? "bg-white/5" : "bg-[var(--primary)]/10"
             } px-5 py-2 rounded-full border ${
               isDark ? "border-[var(--accent)]/20" : "border-[var(--primary)]/20"
             } mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]`}
@@ -163,7 +163,7 @@ export default function SmartHomeCommandCenter() {
           </div>
           <h2
             className={`text-4xl lg:text-5xl font-black ${
-              isDark ? "text-white" : "text-[#099880]"
+              isDark ? "text-white" : "text-black"
             } mb-6 tracking-tight leading-[1.1]`}
           >
             Space Command{" "}
@@ -171,7 +171,7 @@ export default function SmartHomeCommandCenter() {
           </h2>
           <p
             className={`${
-              isDark ? "text-white/60" : "text-[#099880]/60"
+              isDark ? "text-white/60" : "text-black/60"
             } text-lg leading-relaxed max-w-2xl mx-auto`}
           >
             Interact with the holographic blueprint to explore the invisible
@@ -188,7 +188,7 @@ export default function SmartHomeCommandCenter() {
               className={`p-3 ${
                 isDark ? "bg-[var(--card)]/80" : "bg-white/80"
               } backdrop-blur-2xl rounded-[2.5rem] border ${
-                isDark ? "border-[var(--accent)]/20 shadow-[0_40px_100px_rgba(0,0,0,0.8)]" : "border-[var(--primary)]/20"
+                isDark ? "border-[var(--accent)]/20 shadow-[0_40px_100px_rgba(0,0,0,0.8)]" : "border-[var(--primary)]/20 shadow-lg"
               }  relative overflow-hidden`}
             >
               {/* Sci-Fi Top Bar Overlay */}
@@ -225,7 +225,7 @@ export default function SmartHomeCommandCenter() {
               {/* Main Hologram Image Area */}
               <div
                 className={`relative w-full aspect-[4/3] rounded-[1.8rem] overflow-hidden ${
-                  isDark ? "bg-[var(--card)]" : "bg-gray-200"
+                  isDark ? "bg-[var(--card)]" : "bg-gray-100"
                 } flex items-center justify-center border ${
                   isDark ? "border-white/5" : "border-black/5"
                 }`}
@@ -236,7 +236,7 @@ export default function SmartHomeCommandCenter() {
                   alt="Smart Building"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-105"
                   style={{
-                    filter: "brightness(0.65) contrast(1.15) saturate(0.6)",
+                    filter: isDark ? "brightness(0.65) contrast(1.15) saturate(0.6)" : "brightness(0.85) contrast(1.1) saturate(0.9)",
                   }}
                 />
 
@@ -244,13 +244,13 @@ export default function SmartHomeCommandCenter() {
                 <div
                   className={`absolute inset-0 ${
                     isDark ? "bg-[var(--background)]" : "bg-[var(--primary)]"
-                  } mix-blend-color opacity-60 pointer-events-none z-0`}
+                  } mix-blend-color opacity-40 pointer-events-none z-0`}
                 ></div>
                 <div
                   className={`absolute inset-0 bg-gradient-to-tr ${
-                    isDark ? "from-[#066e5b]/90" : "from-white/90"
+                    isDark ? "from-[#066e5b]/90" : "from-[var(--primary)]/70"
                   } via-transparent ${
-                    isDark ? "to-[#066e5b]/50" : "to-white/50"
+                    isDark ? "to-[#066e5b]/50" : "to-[var(--primary)]/40"
                   } pointer-events-none z-0`}
                 ></div>
 
@@ -335,7 +335,7 @@ export default function SmartHomeCommandCenter() {
                 {/* Deep Vignette Shadow for Focus */}
                 <div
                   className={`absolute inset-0 shadow-[inset_0_0_100px_rgba(4,15,12,${
-                    isDark ? "0.9" : "0.3"
+                    isDark ? 0.9 : 0.2
                   })] pointer-events-none z-20`}
                 ></div>
               </div>
@@ -357,9 +357,7 @@ export default function SmartHomeCommandCenter() {
           <div className="lg:col-span-5 flex flex-col gap-6 relative z-10 mt-8 lg:mt-0">
             {/* Dynamic Active System Display Card */}
             <div
-              className={`bg-[var(--card)]/40 backdrop-blur-xl border border-[var(--accent)]/20 p-8 rounded-[2rem] relative overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.4)] ${
-                isDark ? "" : "bg-white/40 border-[var(--primary)]/20"
-              }`}
+              className={`${isDark ? "bg-[var(--card)]/40" : "bg-white/40"} backdrop-blur-xl border ${isDark ? "border-[var(--accent)]/20" : "border-[var(--primary)]/20"} p-8 rounded-[2rem] relative overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.1)]`}
             >
               {/* Subtle accent glow inside card */}
               <div className="absolute top-0 right-0 w-40 h-40 bg-[var(--primary)]/10 blur-[60px] rounded-full pointer-events-none"></div>
@@ -371,7 +369,7 @@ export default function SmartHomeCommandCenter() {
                 <div>
                   <h3
                     className={`text-2xl font-bold ${
-                      isDark ? "text-white" : "text-[#099880]"
+                      isDark ? "text-white" : "text-black"
                     } tracking-wide`}
                   >
                     {activeSystem.name}
@@ -389,18 +387,18 @@ export default function SmartHomeCommandCenter() {
 
               <p
                 className={`${
-                  isDark ? "text-white/60" : "text-[#099880]/60"
+                  isDark ? "text-white/60" : "text-black/60"
                 } text-sm leading-relaxed mb-8 relative z-10`}
               >
                 {activeSystem.desc}
               </p>
 
               {/* Data Stat Box */}
-              <div className="bg-black/40 backdrop-blur-md border border-[var(--accent)]/10 rounded-2xl p-5 flex justify-between items-center relative z-10">
+              <div className={`${isDark ? "bg-black/40 border border-[var(--accent)]/10" : "bg-[var(--primary)]/10 border border-[var(--primary)]/20"} backdrop-blur-md rounded-2xl p-5 flex justify-between items-center relative z-10`}>
                 <div>
                   <p
                     className={`${
-                      isDark ? "text-white/40" : "text-[#099880]/40"
+                      isDark ? "text-white/40" : "text-black/40"
                     } text-[10px] uppercase tracking-widest font-bold mb-1`}
                   >
                     {activeSystem.label}
@@ -442,11 +440,11 @@ export default function SmartHomeCommandCenter() {
                     activeSystem.id === sys.id
                       ? (isDark
                           ? "bg-[var(--primary)]/20 border-[var(--accent)]/50"
-                          : "bg-[var(--background)]/20 border-[var(--primary)]/50") +
+                          : "bg-[var(--primary)]/20 border-[var(--primary)]/50") +
                         " shadow-[0_0_20px_rgba(205,223,160,0.1)]"
                       : isDark
                       ? "bg-[var(--card)]/40 backdrop-blur-md border-white/5 hover:bg-[var(--primary)]/5 hover:border-[var(--accent)]/20"
-                      : "bg-white/40 backdrop-blur-md border-black/5 hover:bg-[var(--background)]/5 hover:border-[var(--primary)]/20"
+                      : "bg-white/40 backdrop-blur-md border-black/5 hover:bg-[var(--primary)]/10 hover:border-[var(--primary)]/20"
                   }`}
                 >
                   <div
@@ -457,7 +455,7 @@ export default function SmartHomeCommandCenter() {
                           : "text-[#099880]"
                         : isDark
                         ? "text-white/40"
-                        : "text-[#099880]/40"
+                        : "text-black/40"
                     }`}
                   >
                     {sys.icon}
@@ -467,10 +465,10 @@ export default function SmartHomeCommandCenter() {
                       activeSystem.id === sys.id
                         ? isDark
                           ? "text-white"
-                          : "text-[#099880]"
+                          : "text-black"
                         : isDark
                         ? "text-white/50"
-                        : "text-[#099880]/50"
+                        : "text-black/50"
                     }`}
                   >
                     {sys.id}
@@ -484,4 +482,3 @@ export default function SmartHomeCommandCenter() {
     </section>
   );
 }
-

@@ -99,7 +99,7 @@ export default function SpaceReimaginer() {
           </div>
           <h3
             className={`text-4xl lg:text-5xl font-extrabold ${
-              isDark ? "text-white" : "text-[#099880]"
+              isDark ? "text-white" : "text-black"
             } tracking-tight`}
           >
             Space{" "}
@@ -109,7 +109,7 @@ export default function SpaceReimaginer() {
           </h3>
           <p
             className={`${
-              isDark ? "text-white/60" : "text-[#099880]/60"
+              isDark ? "text-white/60" : "text-black/60"
             } font-medium max-w-2xl`}
           >
             Watch your empty space transform into a fully furnished masterpiece
@@ -129,7 +129,7 @@ export default function SpaceReimaginer() {
                     : `bg-transparent ${
                         isDark
                           ? "text-white/70 border-white/20 hover:border-[var(--accent)]/50 hover:text-white"
-                          : "text-[#099880]/70 border-[var(--primary)]/20 hover:border-[var(--accent)]/50 hover:text-[#099880]"
+                          : "text-black/70 border-[var(--primary)]/20 hover:border-[var(--accent)]/50 hover:text-black"
                       }`
                 } ${
                   animating ? "opacity-50 cursor-not-allowed" : "cursor-pointer"

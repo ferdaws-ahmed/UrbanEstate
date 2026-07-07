@@ -40,7 +40,7 @@ const timeStates = [
     time: "06:15 PM",
     label: "Golden Hour",
     icon: <Sunset size={24} />,
-    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=1600&auto=format&fit=crop", // Warm sunset lighting
+    image: "https://images.unsplash.com/photo-156401379919-ab600027ffc6?q=80&w=1600&auto=format&fit=crop", // Warm sunset lighting
     glow: "rgba(249, 115, 22, 0.2)", 
     stats: {
       temp: "25°C",
@@ -65,7 +65,7 @@ const timeStates = [
   }
 ];
 
-export default function AtmosphericSimulator() {
+export default function Included() {
   const [activeState, setActiveState] = useState(timeStates[0]);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const { isDark } = useTheme();
@@ -92,10 +92,10 @@ export default function AtmosphericSimulator() {
         
         {/* Header Section */}
         <div className="flex flex-col items-center text-center mb-16">
-          <div className={`inline-flex items-center gap-2 ${isDark?"text-[var(--accent)]":"text-[var(--card-foreground)]"} ${isDark?"font-bold":"font-light"} tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[var(--primary)]/10"}  px-5 py-2 rounded-full border  ${isDark ? "border-white/10" : "border-[var(--primary)]/10"} mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]`}>
+          <div className={`inline-flex items-center gap-2 ${isDark?"text-[var(--accent)]":"text-[#099880]"} font-bold tracking-[0.4em] text-[10px] uppercase ${isDark ? "bg-white/5" : "bg-[var(--primary)]/10"}  px-5 py-2 rounded-full border  ${isDark ? "border-white/10" : "border-[var(--primary)]/10"} mb-6 shadow-[0_0_15px_rgba(205,223,160,0.1)]`}>
             <Wind size={14} className="animate-pulse" /> 4D Experience
           </div>
-          <h2 className={`text-4xl lg:text-5xl font-black ${isDark ? "text-white" : "text-[var(--card-foreground)]"} mb-6 tracking-tight leading-[1.1]`}>
+          <h2 className={`text-4xl lg:text-5xl font-black ${isDark ? "text-white" : "text-black"} mb-6 tracking-tight leading-[1.1]`}>
             Atmospheric <span className="text-[var(--accent)] italic font-light">Simulator</span>
           </h2>
           <p className={`text-lg leading-relaxed max-w-2xl mx-auto ${isDark ? "text-white/60" : "text-black/60"}`}>
@@ -104,7 +104,7 @@ export default function AtmosphericSimulator() {
         </div>
 
         {/* Main Simulator Layout */}
-        <div className={`relative bg-[var(--card)]/80 backdrop-blur-2xl rounded-[2.5rem] border border-[var(--accent)]/20 ${isDark ? "shadow-[0_40px_100px_rgba(0,0,0,0.8)]" : ""} overflow-hidden`}>
+        <div className={`relative ${isDark ? "bg-[var(--card)]/80" : "bg-white/80"} backdrop-blur-2xl rounded-[2.5rem] border ${isDark ? "border-[var(--accent)]/20" : "border-[var(--primary)]/20"} ${isDark ? "shadow-[0_40px_100px_rgba(0,0,0,0.8)]" : "shadow-lg"} overflow-hidden`}>
           
           <div className="grid grid-cols-1 lg:grid-cols-12">
             
@@ -134,10 +134,10 @@ export default function AtmosphericSimulator() {
             </div>
 
             {/* Right Control & Data Panel (4 Cols) */}
-            <div className="lg:col-span-4 p-8 lg:p-10 flex flex-col justify-between bg-white/5 relative z-10 border-l border-white/10">
+            <div className={`lg:col-span-4 p-8 lg:p-10 flex flex-col justify-between ${isDark ? "bg-white/5" : "bg-white"} relative z-10 border-l ${isDark ? "border-white/10" : "border-black/10"}`}>
               
               <div>
-                <p className="text-white/40 text-[10px] font-bold tracking-[0.3em] uppercase mb-8 border-b border-white/10 pb-4">
+                <p className={`${isDark ? "text-white/40" : "text-black/40"} text-[10px] font-bold tracking-[0.3em] uppercase mb-8 border-b ${isDark ? "border-white/10" : "border-black/10"} pb-4`}>
                   Select Time Phase
                 </p>
 
@@ -150,15 +150,17 @@ export default function AtmosphericSimulator() {
                       className={`w-full flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 ${
                         activeState.id === state.id
                           ? "bg-[var(--primary)] border-[var(--accent)] shadow-[0_0_20px_rgba(205,223,160,0.3)] transform scale-[1.02]"
-                          : "bg-black/20 border-white/10 hover:bg-white/10 hover:border-white/20"
+                          : isDark 
+                            ? "bg-black/20 border-white/10 hover:bg-white/10 hover:border-white/20" 
+                            : "bg-[var(--primary)]/10 border-[var(--primary)]/20 hover:bg-[var(--primary)]/20 hover:border-[var(--accent)]/30"
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className={`transition-colors ${activeState.id === state.id ? 'text-[#099880]' : 'text-white/50'}`}>
+                        <div className={`transition-colors ${activeState.id === state.id ? 'text-[#099880]' : isDark ? 'text-white/50' : 'text-black/50'}`}>
                           {state.icon}
                         </div>
                         <div className="text-left">
-                          <h4 className={`font-bold tracking-wide transition-colors ${activeState.id === state.id ? 'text-[#099880]' : 'text-white'}`}>
+                          <h4 className={`font-bold tracking-wide transition-colors ${activeState.id === state.id ? 'text-[#099880]' : isDark ? 'text-white' : 'text-black'}`}>
                             {state.label}
                           </h4>
                         </div>
@@ -178,29 +180,29 @@ export default function AtmosphericSimulator() {
                 
                 <div className="space-y-4">
                   {/* Stat 1: Temperature */}
-                  <div className="flex items-center gap-4 p-4 rounded-2xl bg-black/40 border border-white/5">
+                  <div className={`flex items-center gap-4 p-4 rounded-2xl ${isDark ? "bg-black/40 border border-white/5" : "bg-[var(--primary)]/10 border border-[var(--primary)]/20"}`}>
                     <Thermometer size={18} className="text-[var(--accent)]" />
                     <div>
-                      <p className="text-white/40 text-[9px] uppercase tracking-widest font-bold">Ambient Temp</p>
-                      <p className="text-white text-sm font-semibold tracking-wide">{activeState.stats.temp}</p>
+                      <p className={`${isDark ? "text-white/40" : "text-black/40"} text-[9px] uppercase tracking-widest font-bold`}>Ambient Temp</p>
+                      <p className={`${isDark ? "text-white" : "text-black"} text-sm font-semibold tracking-wide`}>{activeState.stats.temp}</p>
                     </div>
                   </div>
 
                   {/* Stat 2: Solar/Power */}
-                  <div className="flex items-center gap-4 p-4 rounded-2xl bg-black/40 border border-white/5">
+                  <div className={`flex items-center gap-4 p-4 rounded-2xl ${isDark ? "bg-black/40 border border-white/5" : "bg-[var(--primary)]/10 border border-[var(--primary)]/20"}`}>
                     <Zap size={18} className="text-[var(--accent)]" />
                     <div>
-                      <p className="text-white/40 text-[9px] uppercase tracking-widest font-bold">Energy Grid</p>
-                      <p className="text-white text-sm font-semibold tracking-wide">{activeState.stats.power}</p>
+                      <p className={`${isDark ? "text-white/40" : "text-black/40"} text-[9px] uppercase tracking-widest font-bold`}>Energy Grid</p>
+                      <p className={`${isDark ? "text-white" : "text-black"} text-sm font-semibold tracking-wide`}>{activeState.stats.power}</p>
                     </div>
                   </div>
 
                   {/* Stat 3: Security */}
-                  <div className="flex items-center gap-4 p-4 rounded-2xl bg-black/40 border border-white/5">
+                  <div className={`flex items-center gap-4 p-4 rounded-2xl ${isDark ? "bg-black/40 border border-white/5" : "bg-[var(--primary)]/10 border border-[var(--primary)]/20"}`}>
                     <ShieldCheck size={18} className="text-[var(--accent)]" />
                     <div>
-                      <p className="text-white/40 text-[9px] uppercase tracking-widest font-bold">Security Level</p>
-                      <p className="text-white text-sm font-semibold tracking-wide">{activeState.stats.security}</p>
+                      <p className={`${isDark ? "text-white/40" : "text-black/40"} text-[9px] uppercase tracking-widest font-bold`}>Security Level</p>
+                      <p className={`${isDark ? "text-white" : "text-black"} text-sm font-semibold tracking-wide`}>{activeState.stats.security}</p>
                     </div>
                   </div>
                 </div>
@@ -213,4 +215,3 @@ export default function AtmosphericSimulator() {
     </section>
   );
 }
-

@@ -68,7 +68,7 @@ export default function SwipeDeck() {
       <section className={`w-full py-24 px-6 ${isDark ? 'bg-[var(--background)]' : 'bg-white'} ${isDark ? 'text-white' : 'text-black'} flex flex-col items-center justify-center min-h-[80vh] ${manrope.className}`}>
         <Sparkles size={64} className="text-[var(--accent)] mb-6 animate-bounce" />
         <h2 className="text-4xl lg:text-5xl font-black mb-4 tracking-tight">You're All Caught Up!</h2>
-        <p className="text-white/60 mb-10 text-lg">We'll notify you when new properties match your profile.</p>
+        <p className={`${isDark ? 'text-white/60' : 'text-black/60'} mb-10 text-lg`}>We'll notify you when new properties match your profile.</p>
         <button onClick={() => {setIndex(0); setSaved([]);}} className="bg-[var(--primary)] text-[#099880] px-10 py-4 rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-white hover:scale-105 transition-all shadow-[0_0_30px_rgba(205,223,160,0.3)]">
           Restart Matchmaker
         </button>
@@ -195,16 +195,16 @@ export default function SwipeDeck() {
 
           {/* Mobile Controls (Visible only on small screens) */}
           <div className="flex lg:hidden justify-center items-center gap-4 mt-10 relative z-20">
-            <button onClick={() => handleSwipe("left")} className="w-14 h-14 flex items-center justify-center bg-white/5 border border-white/10 rounded-full text-white/50 shadow-xl active:scale-90 transition-transform">
+            <button onClick={() => handleSwipe("left")} className={`w-14 h-14 flex items-center justify-center ${isDark ? 'bg-white/5 border border-white/10 text-white/50' : 'bg-black/5 border border-black/10 text-black/50'} rounded-full shadow-xl active:scale-90 transition-transform hover:bg-red-500/20 hover:text-red-500 hover:border-red-500/50`}>
               <X size={24} strokeWidth={3} />
             </button>
-            <button onClick={undoSwipe} disabled={index === 0} className={`w-10 h-10 flex items-center justify-center rounded-full shadow-xl active:scale-90 transition-transform ${index === 0 ? 'bg-white/5 text-white/20 border border-white/5' : 'bg-white/10 border border-white/20 text-white'}`}>
+            <button onClick={undoSwipe} disabled={index === 0} className={`w-10 h-10 flex items-center justify-center rounded-full shadow-xl active:scale-90 transition-transform ${index === 0 ? (isDark ? 'bg-white/5 text-white/20 border border-white/5' : 'bg-black/5 text-black/20 border border-black/5') : (isDark ? 'bg-white/10 border border-white/20 text-white' : 'bg-black/10 border border-black/20 text-black')}`}>
               <Undo2 size={18} strokeWidth={2.5} />
             </button>
             <button onClick={() => handleSwipe("right")} className="w-14 h-14 flex items-center justify-center bg-[var(--primary)]/10 border border-[var(--accent)]/30 rounded-full text-[var(--accent)] shadow-xl active:scale-90 transition-transform">
               <Heart size={24} strokeWidth={3} fill="currentColor" />
             </button>
-            <button onClick={() => handleSwipe("skip")} className="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-full text-white/70 shadow-xl active:scale-90 transition-transform">
+            <button onClick={() => handleSwipe("skip")} className={`w-12 h-12 flex items-center justify-center ${isDark ? 'bg-white/5 border border-white/10 text-white/70' : 'bg-black/5 border border-black/10 text-black/70'} rounded-full shadow-xl active:scale-90 transition-transform`}>
               <ArrowRight size={20} strokeWidth={3} />
             </button>
           </div>
@@ -213,15 +213,15 @@ export default function SwipeDeck() {
       </div>
 
       {/* Shortlisted Mini-tray (Fixed at bottom) */}
-      <div className="absolute bottom-0 left-0 w-full bg-[var(--card)]/80 backdrop-blur-xl border-t border-white/10 z-30 transition-transform duration-500" style={{ transform: saved.length > 0 ? 'translateY(0)' : 'translateY(100%)' }}>
+      <div className={`absolute bottom-0 left-0 w-full ${isDark ? 'bg-[var(--card)]/80' : 'bg-white/80'} backdrop-blur-xl border-t ${isDark ? 'border-white/10' : 'border-black/10'} z-30 transition-transform duration-500`} style={{ transform: saved.length > 0 ? 'translateY(0)' : 'translateY(100%)' }}>
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center gap-6 overflow-x-auto custom-scrollbar">
-          <div className="flex-shrink-0 text-white">
+          <div className={`flex-shrink-0 ${isDark ? 'text-white' : 'text-black'}`}>
             <div className="text-xs font-bold uppercase tracking-widest text-[var(--accent)] mb-1">Shortlisted</div>
-            <div className="text-2xl font-black">{saved.length} <span className="text-sm font-medium text-white/50">Properties</span></div>
+            <div className="text-2xl font-black">{saved.length} <span className={`text-sm font-medium ${isDark ? 'text-white/50' : 'text-black/50'}`}>Properties</span></div>
           </div>
-          <div className="w-px h-10 bg-white/10 flex-shrink-0" />
+          <div className={`w-px h-10 ${isDark ? 'bg-white/10' : 'bg-black/10'} flex-shrink-0`} />
           {saved.map((item, i) => (
-            <div key={i} className="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border border-white/20 relative group cursor-pointer shadow-lg">
+            <div key={i} className={`flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border ${isDark ? 'border-white/20' : 'border-black/20'} relative group cursor-pointer shadow-lg`}>
               <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-[var(--background)]/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <Heart size={16} className="text-[var(--accent)]" fill="currentColor" />
