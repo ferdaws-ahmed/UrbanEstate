@@ -65,6 +65,7 @@ const sliderData = [
 export default function Hero() {
   const targetRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const { isDark } = useTheme();
 
   const { scrollYProgress } = useScroll({
     target: targetRef,
@@ -118,7 +119,7 @@ export default function Hero() {
                   className="h-full w-full bg-cover bg-center"
                   style={{ backgroundImage: `url('${slide.image}')` }}
                 >
-                  <div className="absolute inset-0 bg-black/40 mix-blend-multiply"></div>
+                  <div className={`absolute inset-0 ${isDark ? 'bg-black/40' : 'bg-black/60'} mix-blend-multiply`}></div>
                   <div
                     className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--background)]/30 to-[var(--background)]"
                   ></div>
@@ -144,7 +145,7 @@ export default function Hero() {
                 className="mb-4"
               >
                 <span
-                  className="flex items-center gap-2 bg-[var(--foreground)]/10 text-[var(--accent)] backdrop-blur-md px-5 py-2 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border border-[var(--border)]"
+                  className="flex items-center gap-2 bg-black/30 text-white backdrop-blur-md px-5 py-2 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase border border-white/20"
                 >
                   <Sparkles size={14} /> Premium Marketplace
                 </span>
@@ -158,7 +159,7 @@ export default function Hero() {
                   opacity: useTransform(scrollYProgress, [0, 0.4], [1, 0]),
                   y: useTransform(scrollYProgress, [0, 0.4], [0, -30]),
                 }}
-                className="text-5xl md:text-7xl font-bold mb-6 drop-shadow-2xl leading-tight text-[var(--foreground)]"
+                className="text-5xl md:text-7xl font-bold mb-6 drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)] leading-tight text-white"
               >
                 {sliderData[activeIndex].title.split("").map((char, index) => (
                   <motion.span
@@ -181,7 +182,7 @@ export default function Hero() {
                 style={{
                   opacity: useTransform(scrollYProgress, [0, 0.4], [1, 0]),
                 }}
-                className="max-w-2xl mx-auto text-base md:text-lg font-medium mb-10 drop-shadow-md text-[var(--muted-foreground)]"
+                className="max-w-2xl mx-auto text-base md:text-lg font-medium mb-10 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] text-white/90"
               >
                 {sliderData[activeIndex].desc}
               </motion.p>
@@ -194,7 +195,7 @@ export default function Hero() {
                 style={{
                   opacity: useTransform(scrollYProgress, [0, 0.4], [1, 0]),
                 }}
-                className="bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--accent)] px-10 py-4 rounded-full font-bold text-base transition-all shadow-xl flex items-center gap-2 group"
+                className="bg-white text-gray-900 hover:bg-[var(--accent)] hover:text-white px-10 py-4 rounded-full font-bold text-base transition-all shadow-[0_10px_40px_rgba(0,0,0,0.3)] flex items-center gap-2 group"
               >
                 Explore More{" "}
                 <ArrowRight
